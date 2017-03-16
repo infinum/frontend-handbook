@@ -1,6 +1,6 @@
 Based on [Airbnb JavaScript style guide](https://github.com/airbnb/javascript).
 
-This styleguide contains only changes since ES5. For other rules, check out [ES5 styleguide](05 JS Styleguide.md).
+This styleguide contains only changes since ES5. For other rules, check out [ES5 styleguide](JS%20Styleguide.md).
 
 ## References
 
