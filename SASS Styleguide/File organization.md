@@ -340,7 +340,7 @@ Animations should be prefixed with the keyframe prefix, while mixins using it sh
 }
 ```
 
-###SASS style guide
+### SASS style guide
 
 For a reference of sass functionality refer to this page: [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 
