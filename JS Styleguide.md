@@ -1,6 +1,6 @@
 Based on [Airbnb ES5 JavaScript style guide](https://github.com/airbnb/javascript/tree/master/es5).
 
-[Updated styleguide for ES2015+](06 JS ES2015 Styleguide.md).
+[Updated styleguide for ES2015+](JS%20ES2015%20Styleguide.md).
 
 ## Objects
 
