@@ -2,7 +2,7 @@
 
 ## Social media optimisation
 
-###Facebook
+### Facebook
 To be able to display the website as an object in a social graph (that is, display it with more verbosity on social networks) the [Open Graph protocol](http://ogp.me/) will be used. Meta tags are used to describe the properties of an object of interest. Regarding Facebook, the four required properties for every page are:
 
 * ``og:title``
@@ -16,7 +16,7 @@ To be able to display the website as an object in a social graph (that is, displ
 
 Beside these, it's encouraged to use others if applicable. For a more detailed overview of tags, please advise the [comprehensive list of Facebook tags](https://developers.facebook.com/docs/sharing/webmasters)
 
-###Twitter
+### Twitter
 
 Similar to the the [Open Graph protocol](http://ogp.me/), [Twitter Cards](https://dev.twitter.com/cards/overview) are used to display the website on the Twitter social network. There are various types of cards, the most basic being the [Summary Card](https://dev.twitter.com/cards/types/summary). At least the summary card should be implemented. Of course, if it's possible, implement a more detailed one =).
 
@@ -25,7 +25,7 @@ Similar to the the [Open Graph protocol](http://ogp.me/), [Twitter Cards](https:
 ###Icons
 In order to add support for icons to the website, several meta tags must be added. As a result, the icon may show up in many places, including the browser tab, recent app switch, the new (or recently visited) tab page, and more. It's necessary to provide icon support for all of the major **browsers** as well for most of the **mobile platforms**. A handy tool for the task is the [Real Favicon Generator](http://realfavicongenerator.net/).
 
-###Colors
+### Colors
 In accordance with the designers wishes, it's possible to color browsers and elements of the platform. For further info, check out what [Google Developers](https://developers.google.com/web/fundamentals/design-and-ui/browser-customization/theme-color?hl=en) have to say about it.
 
 ## Google analytics
