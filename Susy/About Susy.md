@@ -54,8 +54,8 @@ $susy: (
 `column-width` can be set to either `false` (or `null`), and this is the default as for fluid widths it only sets the outer maximum width or a static unit such as `200px` or `10em`.
 
 ### Output
-`output` handles the way columns positions are generated. `float` is the default and uses float to position elements, while isolate uses a negative margin trick.  
-**Use float** as it's slightly more performant and much easier to spot errors and debug with. Isolate is only useful when facing sub-pixel rounding errors, which it can avoid.
+`output` handles the way columns positions are generated. `float` is the default and uses float to position elements, while `isolate` uses a negative margin trick.  
+**Use float** as it's slightly more performant and much easier to spot errors and debug with. `isolate` is only useful when facing sub-pixel rounding errors, which it can avoid.
 
 ### Container and container position
 `container` is used to set the max-width of the element with the applied container mixin. This can be either a relative or a static unit. If using static layouts, this is best left at auto, in order to avoid sub-pixel rounding errors.
