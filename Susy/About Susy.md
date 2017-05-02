@@ -54,11 +54,11 @@ $susy: (
 `column-width` can be set to either `false` (or `null`), and this is the default as for fluid widths it only sets the outer maximum width or a static unit such as `200px` or `10em`.
 
 ### Output
-`output` handles the way columns positions are generated. `float` is the default and uses float to position elements, while isolate uses a negative margin trick.  
-**Use float** as it's slightly more performant and much easier to spot errors and debug with. Isolate is only useful when facing sub-pixel rounding errors, which it can avoid.
+`output` handles the way columns positions are generated. `float` is the default and uses float to position elements, while `isolate` uses a negative margin trick.  
+**Use float** as it's slightly more performant and much easier to spot errors and debug with. `isolate` is only useful when facing sub-pixel rounding errors, which it can avoid.
 
 ### Container and container position
-`container` is used to set the max-width of the element with the applied container mixin. This can be either a relative or a static unit. If using static layouts, this is best left at auto, in order to avoid sub-pixel rounding errors.
+`container` is used to set the max-width of the element with the applied container mixin. This can be either a relative or a static unit. If using static layouts, this is best left at `auto`, in order to avoid sub-pixel rounding errors.
 
 Container position sets where the columns will be positioned relative to the container. Center is usually preferred.
 
@@ -85,7 +85,7 @@ _**This does NOT set box-sizing globally.**_
 There is a mixin for that which will be explained in the guide section.
 
 ### Other
-There are also debug and custom options, which are not important for the purpose for this guide, and as such you can read about those in the documentation.
+There are also [debug](http://susydocs.oddbird.net/en/latest/settings/#debug) and [custom options](http://susydocs.oddbird.net/en/latest/settings/#custom-support), which are not important for the purpose for this guide, and as such you can read about those in the documentation.
 
 [Susy documentation](http://susydocs.oddbird.net/en/latest/)  
 For anything that is unclear check the documentation for details.

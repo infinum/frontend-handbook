@@ -156,7 +156,7 @@ $some-block-background-color: $base-red-color;
 $some-block__some-element-color: $primary-text-color;
 ```
 
-Text is the only property that can be omitted, as it the property name in css is color as well.
+Text is the only property that can be omitted, as its property name in css is color as well.
 
 ### Z-indexes
 
