@@ -193,7 +193,7 @@ Use global prefix so that when it is used in other files, it is clear where the 
 
 Media file should contain the variables and mixins used to define the media queries and breakpoints on the site.
 
-**Usage of the media [mixin](/resources/media.scss) is highly recommended as it is explicit and will standardize media queries.** Inside the file there is a comment on how to use and configure the media mixin.
+**Usage of the media [mixin](https://github.com/infinum/media-blender) is highly recommended as it is explicit and will standardize media queries.** The readme in the repository explains configuration and usage of the mixin.
 
 Otherwise, syntax is as follows.
 
