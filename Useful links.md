@@ -8,7 +8,7 @@ Here are some links that might help you with your frontend troubles.
 
 
 ## Useful files
-* [Media mixin](/resources/media.scss)
+* [Media mixin](https://github.com/infinum/media-blender)
 
 
 ## Lint files
