@@ -68,7 +68,7 @@ Similar to the former case, add the [roboto](https://github.com/LaunchAcademy/ro
 
 As soon as you've deployed your site you should check its speed, performance and mobile usability.
 
-You can check your site's performance with [Lighthouse](https://developers.google.com/web/tools/lighthouse/), [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/) and
+You can check your site's performance with [Lighthouse](https://developers.google.com/web/tools/lighthouse/), [TestMySite](https://testmysite.withgoogle.com/), [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/) and
 with [WebPage Test](http://www.webpagetest.org/). All three tools sum up a list of potential problems and usually advise you on
 how to fix them.
 
