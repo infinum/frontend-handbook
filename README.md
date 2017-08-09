@@ -20,5 +20,5 @@
 - [ ] Newsletters
 - [ ] Podcasts
 - [ ] Documentation
-- [ ] Git flow
+- [ ] Flex bugs
 

@@ -85,7 +85,7 @@ _**This does NOT set box-sizing globally.**_
 There is a mixin for that which will be explained in the guide section.
 
 ### Other
-There are also [debug](http://susydocs.oddbird.net/en/latest/settings/#debug) and [custom options](http://susydocs.oddbird.net/en/latest/settings/#custom-support), which are not important for the purpose for this guide, and as such you can read about those in the documentation.
+There are also [debug](http://susy.readthedocs.io/settings/#debug) and [custom options](http://susy.readthedocs.io/settings/#custom-support), which are not important for the purpose for this guide, and as such you can read about those in the documentation.
 
-[Susy documentation](http://susydocs.oddbird.net/en/latest/)  
+[Susy documentation](http://susy.readthedocs.io/)  
 For anything that is unclear check the documentation for details.
