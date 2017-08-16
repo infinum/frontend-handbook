@@ -312,7 +312,7 @@ class ComponentName extends Component {
 ```
 
 - when using TypeScript with React, use built in types instead of React's `prop-types` package
-- add `?` at the end of parameter that are optional
+- add `?` at the end of parameters that are optional
 
 ``` javascript
 class componentName extends Component<{
@@ -324,8 +324,8 @@ class componentName extends Component<{
 }
 ```
 
-- if you want cleaner component declaration, or if the component receives a great number of props, use interfaces
-- use **"I"** prefix in interface names
+- if you want a cleaner component declaration, or if a component receives a great number of props, use an interface
+- use **"I"** prefixes in interface names
 
 
 ``` javascript
