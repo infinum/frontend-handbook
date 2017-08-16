@@ -1,5 +1,5 @@
 
-### File organization and naming
+## File organization and naming
 - as it is a good practice to divide React components as controllers and presentational components, you should place them in separate folders (example: **containers** and **components**)
 
 ```
@@ -30,7 +30,7 @@
 ...
 ```
 
-### Component Declaration
+## Component Declaration
 - don't use React.createClass
 - use ES2015 **class syntax** for component declaration
 
@@ -78,9 +78,9 @@ const ComponentName = ({message}) => {
 };
 ```
 
-### Formatting
+## Formatting
 - use self-closing tags if the element doesn't have children
-- put a **single space** before the self-closing tag
+- put a **single space** before self-closing tags
 
 ``` javascript
 // bad
@@ -91,8 +91,7 @@ const ComponentName = ({message}) => {
 <ChildComponent onClick={this.onClickHandler} />
 ```
 
-- if props don't fit on one line separate them with line breaks
-- put opening and closing tags in separate lines
+- if props don't fit on one line separate them with line breaks, and also put opening and closing tags in separate lines
 
 ``` javascript
 // bad
@@ -145,7 +144,7 @@ render() {
   return <ChildComponent />;
 }
 
-// ...
+// good
 render() {
   // ...
   return (
@@ -157,7 +156,7 @@ render() {
 ```
 
 
-### Imports
+## Imports
 - import specific React modules, such as **Component**, to avoid accessing them with the React namespace every time
 
 ``` javascript
@@ -178,7 +177,7 @@ class ComponentName extends Component {
 export default ComponentName;
 ```
 
-### Exports
+## Exports
 - each React file should have a single exported component
  
 ``` javascript
@@ -195,7 +194,7 @@ class ComponentName extends Component {
 export default ComponentName;
 ```
 
-### Passing Props
+## Passing Props
 
 - use camelCase for props
 - use double quotes for JSX attribute values if you are passing them a *string*
@@ -251,7 +250,7 @@ Omit boolean values if default value is **true**:
 />
 ```
 
-### Receiving Props
+## Receiving Props
 - always use type checking for props
 - use `defaultProps` if you need to set default values in cases when the prop value isn't received
 
@@ -356,7 +355,7 @@ function ComponentName(props: IComponentProps) {
 ```
 
 
-### Conditional Rendering
+## Conditional Rendering
 - use ternary operators for conditional rendering
 - return **null** if condition is not met
 
@@ -375,7 +374,7 @@ render() {
 }
 ```
 
-### Rendering Arrays of Data
+## Rendering Arrays of Data
 - use array's **map** method to render items from an array
 - you should have a unique key for each element
 - don't use array's index as a key
@@ -395,7 +394,7 @@ render() {
 }
 ```
 
-### Binding
+## Binding
 - bind component's methods inside it's constructor
 
 
@@ -439,7 +438,7 @@ class ComponentName extends Component {
 }
 ```
 
-### CSS Modules And Components
+## CSS Modules And Components
 - each component should have it's own stylesheet CSS is needed for it
 
 ```
