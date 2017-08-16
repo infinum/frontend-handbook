@@ -9,9 +9,7 @@
 ...
 ```
 
-- each component should have it's own folder containing it's logic in a JSX file and it's stylesheet file.
- (If the app is (or becomes) more complex the components can be placed in additional logically separated sub-folders for better readability and organization).
-- use **camelCase** for general folder naming and **PacalCase** for React components, their stylesheet files and their containing folders 
+- use **camelCase** for general folder naming and **PascalCase** for React components, their stylesheet files and their containing folders 
 - each component type's root folder should have an **index.jsx** file which exports all components, so you can later import them from a single place
 
 ```
@@ -80,6 +78,85 @@ const ComponentName = ({message}) => {
 };
 ```
 
+### Formatting
+- use self-closing tags if the element doesn't have children
+- put a **single space** before the self-closing tag
+
+``` javascript
+// bad
+<ChildComponent onClick={this.onClickHandler}></>
+}
+
+// good
+<ChildComponent onClick={this.onClickHandler} />
+```
+
+- if props don't fit on one line separate them with line breaks
+- put opening and closing tags in separate lines
+
+``` javascript
+// bad
+<ChildComponent className={styles.specialStyling}
+  title={this.title}
+  onClick={this.onClickHandler}
+/>
+
+// good
+<ChildComponent
+  className={styles.specialStyling}
+  title={this.title}
+  onClick={this.onClickHandler}
+/>
+
+// good
+<OuterChildComponent
+  className={styles.outerChild}
+  title={this.title}
+  onClick={this.onClickHandler}
+>
+  <InnerChildComponent className={styles.innerChild} />
+</OuterChildComponent>
+}
+```
+
+- always wrap *render* method's return statement in parentheses (with the exception of returning a single line)
+
+``` javascript
+// bad 
+render() {
+  // ...
+  return <div>
+      <ChildComponent />
+    </div>;
+}
+
+// bad 
+render() {
+  // ...
+  return
+    <div>
+      <ChildComponent />
+    </div>;
+}
+
+// good
+render() {
+  // ...
+  return <ChildComponent />;
+}
+
+// ...
+render() {
+  // ...
+  return (
+    <div>
+      <ChildComponent />
+    </div>
+  );
+}
+```
+
+
 ### Imports
 - import specific React modules, such as **Component**, to avoid accessing them with the React namespace every time
 
@@ -102,7 +179,7 @@ export default ComponentName;
 ```
 
 ### Exports
-- each JSX file should have a single exported component
+- each React file should have a single exported component
  
 ``` javascript
 export default class ComponentName extends Component {
@@ -118,11 +195,10 @@ class ComponentName extends Component {
 export default ComponentName;
 ```
 
-### Props Passing
+### Passing Props
 
 - use camelCase for props
 - use double quotes for JSX attribute values if you are passing them a *string*
-- use self-closing tags if the element doesn't have children
 
 ``` javascript
 class ComponentName extends Component {
@@ -175,7 +251,7 @@ Omit boolean values if default value is **true**:
 />
 ```
 
-### Props Receiving
+### Receiving Props
 - always use type checking for props
 - use `defaultProps` if you need to set default values in cases when the prop value isn't received
 
@@ -237,26 +313,51 @@ class ComponentName extends Component {
 }
 ```
 
-### Component Local State
-- if you have local state modified by the component, preffer using a single object member
+- when using TypeScript with React, use built in types instead of React's `prop-types` package
+- add `?` at the end of parameter that are optional
 
 ``` javascript
-class ComponentName extends Component {
-    // ...
-    
-    const componentState = {
-        pageTitle: 'Client Work',
-        pageSubtitle: 'See who we work with',
-    }
-    
-    render() {
-        return (
-          <h2>{this.componentState.pageTitle}</h2>
-          <h3>{this.componentState.pageSubtitle}</h3>
-        );
-    }
+class componentName extends Component<{
+  className?: string;
+  isConditionMet: boolean;
+  onClick?: (event: any) => void;
+}, {}> {
+  // ...
 }
 ```
+
+- if you want cleaner component declaration, or if the component receives a great number of props, use interfaces
+- use **"I"** prefix in interface names
+
+
+``` javascript
+interface IComponentProps {
+  className?: string;
+  isConditionMet: boolean;
+  onClick?: (event: any) => void;
+}
+
+class ComponentName extends Component<{IComponentProps}, {}> {
+  // ...
+}
+
+// in pure function components
+interface IComponentProps {
+  className?: string;
+  isConditionMet: boolean;
+  onClick?: (event: any) => void;
+}
+
+function ComponentName(props: IComponentProps) {
+  return (
+    // ...
+  );
+}
+
+
+
+```
+
 
 ### Conditional Rendering
 - use ternary operators for conditional rendering
@@ -279,6 +380,8 @@ render() {
 
 ### Rendering Arrays of Data
 - use array's **map** method to render items from an array
+- you should have a unique key for each element
+- don't use array's index as a key
 
 ``` javascript
 render() {
@@ -287,7 +390,7 @@ render() {
         <ul>
             {
                 booksArray.map((book) => {
-                    <li>{book.title}></li> 
+                    <ListItem key={book.id}>{book.title}></ListItem> 
                 }); 
             }
         </ul>
