@@ -353,9 +353,6 @@ function ComponentName(props: IComponentProps) {
     // ...
   );
 }
-
-
-
 ```
 
 
@@ -440,9 +437,6 @@ class ComponentName extends Component {
         );
     }
 }
-
-// good
-
 ```
 
 ### CSS Modules And Components
