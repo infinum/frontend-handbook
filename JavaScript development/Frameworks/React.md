@@ -385,7 +385,7 @@ render() {
         <ul>
             {
                 booksArray.map((book) => {
-                    <ListItem key={book.id}>{book.title}></ListItem> 
+                    <ListItem key={book.id}>{book.title}</ListItem> 
                 }); 
             }
         </ul>
@@ -438,7 +438,7 @@ class ComponentName extends Component {
 ```
 
 ## CSS Modules And Components
-- each component should have it's own stylesheet CSS is needed for it
+- each component should have it's own stylesheet if CSS is needed for it
 
 ```
 ├── Login
