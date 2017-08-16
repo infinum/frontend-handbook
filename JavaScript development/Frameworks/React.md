@@ -119,8 +119,6 @@ export default ComponentName;
 ```
 
 ### Props Passing
-> Props should ideally be handled only by containers (also called "smart" components, controllers, etc.)
-
 
 - use camelCase for props
 - use double quotes for JSX attribute values if you are passing them a *string*
