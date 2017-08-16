@@ -80,7 +80,7 @@ const ComponentName = ({message}) => {
 
 ## Formatting
 - use self-closing tags if the element doesn't have children
-- put a **single space** before self-closing tags
+- put **single spaces** before self-closing tags
 
 ``` javascript
 // bad
@@ -195,9 +195,8 @@ export default ComponentName;
 ```
 
 ## Passing Props
-
 - use camelCase for props
-- use double quotes for JSX attribute values if you are passing them a *string*
+- use double quotes for JSX attribute values if you are passing them as a *string*
 
 ``` javascript
 class ComponentName extends Component {
@@ -336,7 +335,7 @@ interface IComponentProps {
   onClick?: (event: any) => void;
 }
 
-class ComponentName extends Component<{IComponentProps}, {}> {
+class ComponentName extends Component<IComponentProps, {}> {
   // ...
 }
 
