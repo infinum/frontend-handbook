@@ -469,7 +469,7 @@ class ComponentName extends Component {
 }
 ```
 
-- if you need to pass more than one CSS class name to a component, use the [`classnames`](https://www.npmjs.com/package/classnames) library
+- if you need to pass more than one CSS class name to a component or want to use conditional classes, use the [`classnames`](https://www.npmjs.com/package/classnames) library
 
 ``` javascript
 import classNames from 'classnames';
