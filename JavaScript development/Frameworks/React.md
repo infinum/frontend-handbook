@@ -13,23 +13,23 @@
 ```
 
 - use **camelCase** for general folder naming and **PascalCase** for React components, their stylesheet files and their containing folders 
-- each component type's root folder should have an **index.jsx** file which exports all components, so you can later import them from a single place
+- each component type's root folder should have an **index.js** file which exports all components, so you can later import them from a single place
 
 ```
 ...
 ├─ components
 ⎮   ├─ LoginContent
-⎮   ⎮   └─ LoginContent.jsx
+⎮   ⎮   └─ LoginContent.js
 ⎮   ⎮   └─ LoginContent.scss
 ⎮   ├─ LoginHeader
-⎮   ⎮   └─ LoginHeader.jsx
+⎮   ⎮   └─ LoginHeader.js
 ⎮   ⎮   └─ LoginHeader.scss
-⎮   └─ index.jsx
+⎮   └─ index.js
 ├─ containers 
 ⎮   ├─ Login
-⎮   ⎮   └─ Login.jsx
+⎮   ⎮   └─ Login.js
 ⎮   ⎮   └─ Login.scss 
-⎮   └─ index.jsx
+⎮   └─ index.js
 ...
 ```
 
@@ -446,8 +446,8 @@ class ComponentName extends Component {
 ```
 ...
 ├─ Login
-⎮   └─ Login.jsx
-⎮   └─ Login.jsx
+⎮   └─ Login.js
+⎮   └─ Login.js
 ...
 ```
 
