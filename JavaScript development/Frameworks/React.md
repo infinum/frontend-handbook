@@ -197,7 +197,7 @@ Omit values for boolean props if default value is **true**.
 
 In class components:
 - always use prop validation
-- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#Exporting Components))
+- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#exporting-components))
 - use *defaultProps* if you need to set default values
 
 ``` jsx
