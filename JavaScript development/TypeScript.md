@@ -100,12 +100,7 @@ class ComponentName extends Component<{}, {}> {
     // ...
   };
 
-  public componentWillMount() {
-    // ...
-  }
-
-  // Note: lifecycle methods also have to be wrapped as "actions" if they modify state
-  @action public componentDidMount() {
+  public componentDidMount() {
     // ...
   }
 

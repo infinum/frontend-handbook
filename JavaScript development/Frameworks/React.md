@@ -3,7 +3,7 @@
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
 ### File Organization and Naming
-As it is a good practice to divide React components as container and presentational components, you should place them in separate folders (this example uses **containers** and **components** for folder naming, but there are other naming conventions, depending on the use case and preferrence of developers).
+As it is a good practice to divide React components as container and presentational components, you should place them in separate folders (this example uses **containers** and **components** for folder naming, but there are other naming conventions, depending on the use case and preference of developers).
 
 ```
 ...
@@ -58,12 +58,11 @@ function PureComponent({message}) {
 
 ### Formatting
 
-Use a self-closing tag, separated with an empty space, if an element doesn't have children.
+Use self-closing tags, separated with an empty space, for element that don't have children.
 
 ``` jsx
 // bad
-<ChildComponent onClick={this.onClickHandler}><ChildComponent/>
-}
+<ChildComponent onClick={this.onClickHandler}></ChildComponent>
 
 // good
 <ChildComponent onClick={this.onClickHandler} />
@@ -198,7 +197,7 @@ Omit values for boolean props if default value is **true**.
 
 In class components:
 - always use prop validation
-- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#Exports))
+- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#Exporting Components))
 - use *defaultProps* if you need to set default values
 
 ``` jsx
@@ -211,7 +210,9 @@ export default class ComponentName extends React.Component {
   static defaultProps = {
     name: 'John Doe',
   };
+
   // ...
+
   render() {
     const {name} = this.props;
 
@@ -402,12 +403,12 @@ class ComponentName extends React.Component {
 ```
 
 ## React + MobX
-*For general information about MobX, checkout the official documentation at * [`mobx.js.org`](https://mobx.js.org/).
+*For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
 
 ## Decorators
 Use decorators wherever you can because it makes code more readable and declarative.
 
-### React.Component Declaration
+### Component Declaration
 Wrap components that handle app's state with *observer* from the `mobx-react` library.
 
 ``` jsx
@@ -419,7 +420,7 @@ class ComponentName extends React.Component {
 }
 ```
 
-### Local React.Component State
+### Local Component State
 If MobX is used for state management:
 - preffer using MobX *observable* instead of *this.state* for component's local state; don't use both
 - wrap local state in a single object just as it would be in the built in state
@@ -486,6 +487,15 @@ class ComponentName extends React.Component {
   @observable componentState = {
     counter: 0,
   };
+
+  public componentWillMount() {
+    // ...
+  }
+
+  // Note: lifecycle methods also have to be wrapped as "actions" if they modify state
+  @action public componentDidMount() {
+    // ...
+  }
 
   @action.bound increaseCounter() {
     this.componentState.counter++;
