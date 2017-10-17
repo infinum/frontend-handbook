@@ -1,9 +1,5 @@
 # TypeScript
 
-- add TypeScript general guidelines
-- add TypeScript + Angular guidelines
-
-
 ## TypeScript+React
 *For general info on using JSX with TypeScript checkout the guidelines in TypeScript's official documentation [JSX · TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)*.
 
@@ -48,7 +44,7 @@ export default ({className?: string, title: string}): JSX.Element => {
 }
 ```
 
-Use interfaces for props when you have a great amount of props/state to validate or when you have a set of common props used in more than a few components.
+Use interfaces for props when you have a great amount of props/state to validate or when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
 
 ``` typescript
 interface IComponentNameProps {
@@ -59,7 +55,7 @@ interface IComponentNameState {
   // state types
 }
 
-class ComponentName extends Component<IComponentNameProps, IComponentNameState> {
+class ComponentName extends Component<{}, {}> {
   // ...
 }
 ```
@@ -69,8 +65,8 @@ React's lifecycle hooks and render method have to be declared public. Local data
 
 ``` typescript
 class ComponentName extends Component<IComponentNameProps, IComponentNameState> {
-  constructor() {
-    super();
+  constructor(args) {
+    super(args);
     // ...
   }
 
@@ -94,9 +90,9 @@ Example with MobX:
 
 ``` typescript
 @observer
-class ComponentName extends Component<IComponentNameProps, {}> {
-  constructor() {
-    super();
+class ComponentName extends Component<{}, {}> {
+  constructor(args) {
+    super(args);
     // ...
   }
 
@@ -104,11 +100,16 @@ class ComponentName extends Component<IComponentNameProps, {}> {
     // ...
   };
 
-  public componentDidMount() {
+  public componentWillMount() {
     // ...
   }
 
-  @action private handleLocalData() {
+  // Note: lifecycle methods also have to be wrapped as "actions" if they modify state
+  @action public componentDidMount() {
+    // ...
+  }
+
+  @action.bound private handleLocalData() {
     // ...
   }
 

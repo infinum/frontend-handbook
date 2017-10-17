@@ -2,10 +2,8 @@
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
-// TODO: find a consistant example theme and rewrite all
-
 ### File Organization and Naming
-As it is a good practice to divide React components as container and presentational components, you should place them in separate folders (example: **containers** and **components**):
+As it is a good practice to divide React components as container and presentational components, you should place them in separate folders (this example uses **containers** and **components** for folder naming, but there are other naming conventions, depending on the use case and preferrence of developers).
 
 ```
 ...
@@ -14,8 +12,7 @@ As it is a good practice to divide React components as container and presentatio
 ...
 ```
 
-- use **camelCase** for general folder naming and **PascalCase** for React components, their stylesheet files and their containing folders 
-- each component type's root folder should have an **index.js** file which exports all components, so you can later import them from a single place
+Use **camelCase** for general folder naming and **PascalCase** for React components, their stylesheet files and their containing folders.
 
 ```
 ...
@@ -23,22 +20,20 @@ As it is a good practice to divide React components as container and presentatio
 ⎮   ├─ LoginContent
 ⎮   ⎮   └─ LoginContent.js
 ⎮   ⎮   └─ LoginContent.scss
-⎮   ├─ LoginHeader
-⎮   ⎮   └─ LoginHeader.js
-⎮   ⎮   └─ LoginHeader.scss
-⎮   └─ index.js
+⎮   └─ LoginHeader
+⎮       └─ LoginHeader.js
+⎮       └─ LoginHeader.scss
 ├─ containers 
-⎮   ├─ Login
-⎮   ⎮   └─ Login.js
-⎮   ⎮   └─ Login.scss 
-⎮   └─ index.js
+⎮   └─ Login
+⎮       └─ Login.js
+⎮       └─ Login.scss 
 ...
 ```
 
-### Component Declaration
+### React.Component Declaration
 
 For declaring class components:
-- use ES2015 **class syntax** for component declaration
+- use ES2015 **class syntax**
 - don't use *React.createClass*
 
 ``` jsx
@@ -48,22 +43,22 @@ const ComponentName = React.createClass({
 });
 
 // good
-export default class ComponentName extends Component {
+export default class ComponentName extends React.Component {
   // ...
 }
 ```
 
-If components don't have and don't change state, use **pure functions**:
+If components don't have or change state, use **pure functions**:
 
 ``` jsx
-function PureComponent({message}) => {
+function PureComponent({message}) {
   // ...
 };
 ```
 
 ### Formatting
 
-Use the self-closing tag, separated with an empty space, if the element doesn't have children.
+Use a self-closing tag, separated with an empty space, if an element doesn't have children.
 
 ``` jsx
 // bad
@@ -98,10 +93,9 @@ If props don't fit on one line separate them with line breaks and also, put open
 >
   <InnerChildComponent className={styles.innerChild} />
 </OuterChildComponent>
-}
 ```
 
-- always wrap *render* method's return statement in parentheses (it's optional while returning a single line of JSX)
+- always wrap *render* method's return statement in parentheses (it's optional if it's returning a single line of JSX)
 
 ``` jsx
 // bad 
@@ -124,6 +118,16 @@ render() {
 // good
 render() {
   // ...
+  return (
+    <div>
+      <ChildComponent />
+    </div>
+  );
+}
+
+// good
+render() {
+  // ...
   return <ChildComponent />;
 }
 
@@ -134,23 +138,13 @@ render() {
     <ChildComponent />
   );
 }
-
-// good
-render() {
-  // ...
-  return (
-    <div>
-      <ChildComponent />
-    </div>
-  );
-}
 ```
 
 ### Passing Props
 Use camelCase for prop names and double quotes for JSX attribute values if you are passing them as a *string*.
 
 ``` jsx
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   render () {
     return (
@@ -170,7 +164,7 @@ Declare functions before passing them as props instead of passing inline anonymo
 <ChildComponent onClick={() => { /* ... */ } />
     
 // good
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   onClickHandler() {
     // ...
   }
@@ -200,15 +194,15 @@ Omit values for boolean props if default value is **true**.
 ```
 
 ### Receiving Props
-*Checkout [`prop-types`](https://github.com/facebook/prop-types) library.*
+*Checkout [`prop-types`](https://github.com/facebook/prop-types) lib on GitHub for general info.*
 
-In class component:
+In class components:
 - always use prop validation
-- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exports" section](#Exports))
+- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#Exports))
 - use *defaultProps* if you need to set default values
 
 ``` jsx
-export default class ComponentName extends Component {
+export default class ComponentName extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string,
@@ -216,7 +210,7 @@ export default class ComponentName extends Component {
 
   static defaultProps = {
     name: 'John Doe',
-  }
+  };
   // ...
   render() {
     const {name} = this.props;
@@ -228,8 +222,7 @@ export default class ComponentName extends Component {
 }
 ```
 
-In stateless components:
-- use PropTypes for type checking but use native JS for default values
+In stateless components, use PropTypes for type checking but use native JS for setting default values.
 
 ``` jsx
 function ComponentName({id, name = 'John Doe'}) {
@@ -247,7 +240,7 @@ ComponentName.propTypes = {
 If you are using more than one property in a method, preffer accessing them with **object destructuring**.
 
 ``` jsx
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   render() {
     const {id, name, onClickHandler} = this.props;
@@ -256,36 +249,27 @@ class ComponentName extends Component {
 }
 ```
 
-### Imports
-Import specific React modules, such as **Component**, to avoid accessing them with the React namespace every time.
-
+### Importing React
 ``` jsx
-// bad
-import React from 'react';
+import * as React from 'react';
 
 class ComponentName extends React.Component {
   // ...
 }
-
-// good
-import React, {Component} from 'react';
-
-export default class ComponentName extends Component {
-  // ...
-}
 ```
 
-### Exports
+### Exporting Components
 Each React component file should have a single exported component.
  
+Exporting class components:
 ``` jsx
-// class component
-export default class ComponentName extends Component {
+// preferred way of exporting
+export default class ComponentName extends React.Component {
   // ...
 }
 
-// class component when static members are not supported
-class ComponentName extends Component {
+// exporting when static members are not supported by the transpiler:
+class ComponentName extends React.Component {
   // ...
 }
 
@@ -294,7 +278,10 @@ ComponentName.propTypes = {
 };
 
 export default ComponentName;
+```
 
+Exporting stateless components:
+``` jsx
 // stateless components
 function PureComponent(/* props */) {
   // ...
@@ -308,7 +295,6 @@ export default PureComponent;
 
 // stateless components with no prop validation
 export default () => (/* ... */);
-
 ```
 
 ### Rendering Arrays of Data
@@ -337,7 +323,7 @@ render() {
 Don't bind functions inline, bind them in the class constructor.
 ``` jsx
 // bad
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   onClickHandler() {
     // ...
   }
@@ -350,9 +336,9 @@ class ComponentName extends Component {
 }
     
 // good
-class ComponentName extends Component {
-  constructor() {
-    super();
+class ComponentName extends React.Component {
+  constructor(args) {
+    super(args);
 
     this.onClickHandler = this.onClickHandler.bind(this);
   }
@@ -384,15 +370,13 @@ Importing:
 
 ``` jsx
 // ...
-import * as styles from './ComponentName.scss';
+import styles from './ComponentName.scss';
 
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   render() {
     return (
-      <Heading
-        className={styles.specialHeading}
-      />
+      <Heading className={styles.specialHeading} />
     );
   }
 }
@@ -403,9 +387,9 @@ If you need to pass more than one CSS class name to a component or want to use c
 ``` jsx
 import classNames from 'classnames';
 // ...
-import * as styles from './ComponentName.scss';
+import styles from './ComponentName.scss';
 
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   render() {
     return (
@@ -418,24 +402,24 @@ class ComponentName extends Component {
 ```
 
 ## React + MobX
-*For general information about MobX, checkout* [`mobx.js.org`](https://mobx.js.org/).
+*For general information about MobX, checkout the official documentation at * [`mobx.js.org`](https://mobx.js.org/).
 
 ## Decorators
 Use decorators wherever you can because it makes code more readable and declarative.
 
-### Component Declaration
+### React.Component Declaration
 Wrap components that handle app's state with *observer* from the `mobx-react` library.
 
 ``` jsx
 import {observer} from 'mobx-react';
 // ...
 @observer
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
 }
 ```
 
-### Local Component State
+### Local React.Component State
 If MobX is used for state management:
 - preffer using MobX *observable* instead of *this.state* for component's local state; don't use both
 - wrap local state in a single object just as it would be in the built in state
@@ -445,7 +429,7 @@ import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 // ...
 @observer
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     selectedTitle: 'React+MobX',
@@ -472,7 +456,7 @@ import {observer} from 'mobx-react';
 // ...
 
 @observer
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     firstName: 'John',
@@ -492,44 +476,12 @@ class ComponentName extends Component {
 ```
 
 ### Actions
-Wrap methods and functions that modify state with *@action*.
-
+Wrap methods and functions that modify state with *@action*. For binding action methods use the *bound* modifier.
 ``` jsx
   import {action, observable} from 'mobx';
   import {observer} from 'mobx-react';
 // ...
-class ComponentName extends Component {
-  constructor() {
-    super();
-
-    this.increaseCounter = this.increaseCounter.bind(this);
-  }
-
-  @observable componentState = {
-    counter: 0,
-  };
-
-  @action increaseCounter() {
-    this.componentState.counter++;
-  }
-
-  render() {
-    return (
-      <div>
-        <div>{this.componentState.counter}</div>
-        <button onClick={this.increaseCounter}>Increase by One</button>
-      </div>
-    );
-  }
-}
-```
-
-For binding action methods, you can use *bound* modifier.
-``` jsx
-  import {action, observable} from 'mobx';
-  import {observer} from 'mobx-react';
-// ...
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     counter: 0,
@@ -551,13 +503,13 @@ class ComponentName extends Component {
 ```
 
 ### Async Await
-In actions implemented as async functions, after each await, any code that modifies the state should be wrapped in a *runInAction* utility. This is because *async await* is just syntax sugar, and in reallity, a new function is run after each await.
+In actions implemented as *async* functions, after each *await*, any code that modifies the state should be wrapped in a *runInAction* utility. This is because *async await* is just syntax sugar, and in reallity, a new function is created after each *await*.
 
 ``` jsx
   import {action, observable, runInAction} from 'mobx';
   import {observer} from 'mobx-react';
 // ...
-class ComponentName extends Component {
+class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     userData: null,
@@ -566,14 +518,9 @@ class ComponentName extends Component {
   @action.bound async saveToLocalState() {
     const userData = await getUserData();
     // ...
-    runInAction(() => {this.componentState.userData = userData});
+    runInAction(() => (this.componentState.userData = userData));
   }
 
   render() { /* ... */ }
 }
 ```
-
-// TODO: add additional MobX stuff if needed
-
-
-// TODO: remove all TODO comments
