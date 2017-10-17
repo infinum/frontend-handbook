@@ -362,7 +362,7 @@ Each component should have it's own stylesheet if CSS is needed for it.
 ...
 ├─ Login
 ⎮   └─ Login.js
-⎮   └─ Login.js
+⎮   └─ Login.scss
 ...
 ```
 
