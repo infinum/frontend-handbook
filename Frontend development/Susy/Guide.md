@@ -1,3 +1,5 @@
+**Important:** this guide is made for Susy 2. For information about Susy 3 checkout [Susy 3 Docs](http://oddbird.net/susy/docs/).
+
 ## Setting up
 
 ### Importing
