@@ -8,7 +8,7 @@
 When declaring a React class component in TypeScript, set two generic types that describe props and state.
 
 ``` typescript
-export class ComponentName extends Component<{/*prop types*/}, {/*state types*/}> {
+export class ComponentName extends React.Component<{/*prop types*/}, {/*state types*/}> {
     // ...
 }
 ```
@@ -28,7 +28,7 @@ For validating props in TypeScript classes:
 - if no local component state is set, use **{}** (when MobX is used for state management this is usually always the case)
 
 ``` typescript
-export class ComponentName extends Component<{
+export class ComponentName extends React.Component<{
   className?: string;
   isConditionMet: boolean;
   onClick?: (event: any) => void;
@@ -47,11 +47,15 @@ export const FunctionalComponent = ({classname, title}: {className?: string, tit
 Use interfaces when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
 
 ``` typescript
-interface SpecificProps {
+interface CommonProps {
   // prop types
 }
+``` 
 
-export class ComponentName extends Component<SpecificProps, {}> {
+``` typescript
+import {CommonProps} from 'interfaces/CommonProps';
+
+export class ComponentName extends React.Component<CommonProps, {}> {
   // ...
 }
 ```
@@ -60,7 +64,7 @@ export class ComponentName extends Component<SpecificProps, {}> {
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
-export class ComponentName extends Component<{}, {}> {
+export class ComponentName extends React.Component<{}, {}> {
   constructor(args) {
     super(args);
     // ...
@@ -86,7 +90,7 @@ Example with MobX:
 
 ``` typescript
 @observer
-export class ComponentName extends Component<{}, {}> {
+export class ComponentName extends React.Component<{}, {}> {
   constructor(args) {
     super(args);
     // ...

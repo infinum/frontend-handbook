@@ -215,7 +215,7 @@ export class ComponentName extends React.Component {
 ```
 
 ### Receiving Props
-*Checkout [`prop-types`](https://github.com/facebook/prop-types) lib on GitHub for general info.*
+*Checkout [`Typechecking With PropTypes`](https://reactjs.org/docs/typechecking-with-proptypes.html) in React's official documentation for general info.*
 
 *Note: when using TypeScript with React, use TypeScript's built in types for type checking. For more info, checkout the [`JSX Handbook`](https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking) in TypeScript's official documentation.*
 
@@ -223,7 +223,7 @@ In class components:
 - always use prop validation
 - use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#exporting-components))
 - use *defaultProps* if you need to set default values
-- prop types shoud be as detaild as possible (use *arrayOf* to describe arrays and *shape* to describe objects)
+- prop types shoud be as detailed as possible 
 
 ``` jsx
 export default class ComponentName extends React.Component {
@@ -330,7 +330,7 @@ export function FunctionalComponent() {
 };
 
 
-// stateless components
+// stateless components with static prop validation
 function FunctionalComponent(/* props */) {
   // ...
 }
@@ -347,7 +347,7 @@ export {FunctionalComponent};
 For iterating arrays:
 - use **map** method to render items
 - you should have a unique key for each element
-- **don't use array's index as a key**, unless you have no choice (no unique property in eacth array's element)
+- **don't use array's index as a key**, unless you have no choice (no unique property in each element of the array)
 
 ``` jsx
 render() {
@@ -463,7 +463,7 @@ export class ComponentName extends React.Component {
 ## React + MobX
 *For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
 
-## Decorators
+### Decorators
 Use decorators wherever you can if your transpiler support's it, because it makes code more readable and declarative.
 
 ### Component Declaration
@@ -481,7 +481,7 @@ export class ComponentName extends React.Component {
 ### Local Component State
 If MobX is used for state management:
 - preffer using MobX *observable* instead of *this.state* for component's local state; don't use both
-- wrap local state in a single object named **componentState**
+- wrap local state in a single observable object named **componentState**
 
 ``` jsx
 import {observable} from 'mobx';
