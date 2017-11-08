@@ -30,7 +30,7 @@ Use **camelCase** for general folder naming and **PascalCase** for React compone
 ...
 ```
 
-### React.Component Declaration
+### Component Declaration
 
 For declaring class components:
 - use ES2015 **class syntax**
@@ -38,27 +38,33 @@ For declaring class components:
 
 ``` jsx
 // bad
-const ComponentName = React.createClass({
+export const ComponentName = React.createClass({
   // ...
 });
 
 // good
-export default class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
 }
 ```
 
-If components don't have or change state, use **pure functions**:
+If components are stateless (they don't change state), use **functional components**:
 
 ``` jsx
-function PureComponent({message}) {
+export function FunctionalComponent({message}) {
   // ...
 };
+
+// or
+
+export const FunctionalComponent = ({message}) => (
+  // ...
+);
 ```
 
 ### Formatting
 
-Use self-closing tags, separated with an empty space, for element that don't have children.
+Use self-closing tags, separated with an empty space, for elements that don't have children.
 
 ``` jsx
 // bad
@@ -68,7 +74,7 @@ Use self-closing tags, separated with an empty space, for element that don't hav
 <ChildComponent onClick={this.onClickHandler} />
 ```
 
-If props don't fit on one line separate them with line breaks and also, put opening and closing tags in separate lines.
+If there is more than one prop, separate them with line breaks and also, put opening and closing tags in separate lines.
 
 ``` jsx
 // bad
@@ -143,7 +149,7 @@ render() {
 Use camelCase for prop names and double quotes for JSX attribute values if you are passing them as a *string*.
 
 ``` jsx
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   render () {
     return (
@@ -154,6 +160,22 @@ class ComponentName extends React.Component {
     );
   }
 }
+```
+
+Omit values for boolean props if default value is **true**.
+
+``` jsx
+// bad
+<ChildComponent
+  onClick={this.onClickHandler}
+  isPropActive={true}
+/>
+
+// good
+<ChildComponent
+  onClick={this.onClickHandler}
+  isPropActive
+/>
 ```
 
 Declare functions before passing them as props instead of passing inline anonymous (arrow) functions. They will be needlessy re-rendered each time, thus effecting performance.
@@ -176,39 +198,49 @@ class ComponentName extends React.Component {
 }
 ```
 
-Omit values for boolean props if default value is **true**.
+Avoid writing any logic inline. Extract it to the outer scope.
 
 ``` jsx
-// bad
-<ChildComponent
-  onClick={this.onClickHandler}
-  isPropActive={true}
-/>
+export class ComponentName extends React.Component {
+  // ...
 
-// good
-<ChildComponent
-  onClick={this.onClickHandler}
-  isPropActive
-/>
+  render () {
+    const title = specialTitle || defaultTitle;
+    
+    return (
+      <ChildComponent title={title} />
+    );
+  }
+}
 ```
 
 ### Receiving Props
 *Checkout [`prop-types`](https://github.com/facebook/prop-types) lib on GitHub for general info.*
 
+*Note: when using TypeScript with React, use TypeScript's built in types for type checking. For more info, checkout the [`JSX Handbook`](https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking) in TypeScript's official documentation.*
+
 In class components:
 - always use prop validation
 - use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#exporting-components))
 - use *defaultProps* if you need to set default values
+- prop types shoud be as detaild as possible (use *arrayOf* to describe arrays and *shape* to describe objects)
 
 ``` jsx
 export default class ComponentName extends React.Component {
   static propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string,
+    heading: PropTypes.string,
+    users: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        age: PropTypes.number
+      })
+    ).isRequired,
   };
 
   static defaultProps = {
-    name: 'John Doe',
+    heading: 'Default Heading',
   };
 
   // ...
@@ -241,7 +273,7 @@ ComponentName.propTypes = {
 If you are using more than one property in a method, preffer accessing them with **object destructuring**.
 
 ``` jsx
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   render() {
     const {id, name, onClickHandler} = this.props;
@@ -252,23 +284,32 @@ class ComponentName extends React.Component {
 
 ### Importing React
 ``` jsx
-import * as React from 'react';
+import React from 'react';
 
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
 }
 ```
 
 ### Exporting Components
-Each React component file should have a single exported component.
+- each React component file should have a single exported component
+- don't use default exports, always use named exports instead
  
 Exporting class components:
 ``` jsx
-// preferred way of exporting
+// bad
 export default class ComponentName extends React.Component {
   // ...
 }
 
+// good
+export class ComponentName extends React.Component {
+  // ...
+}
+```
+
+Exporting class components when you need to declare static members afterwards:
+``` jsx
 // exporting when static members are not supported by the transpiler:
 class ComponentName extends React.Component {
   // ...
@@ -278,24 +319,27 @@ ComponentName.propTypes = {
   // ..
 };
 
-export default ComponentName;
+export {ComponentName};
 ```
 
-Exporting stateless components:
+Exporting functional components:
 ``` jsx
-// stateless components
-function PureComponent(/* props */) {
-  // ...
-}
-
-PureComponent.propTypes = {
+// stateless components with no prop validation
+export function FunctionalComponent() {
   // ...
 };
 
-export default PureComponent;
 
-// stateless components with no prop validation
-export default () => (/* ... */);
+// stateless components
+function FunctionalComponent(/* props */) {
+  // ...
+}
+
+FunctionalComponent.propTypes = {
+  // ...
+};
+
+export {FunctionalComponent};
 ```
 
 ### Rendering Arrays of Data
@@ -303,7 +347,7 @@ export default () => (/* ... */);
 For iterating arrays:
 - use **map** method to render items
 - you should have a unique key for each element
-- **don't use array's index as a key**
+- **don't use array's index as a key**, unless you have no choice (no unique property in eacth array's element)
 
 ``` jsx
 render() {
@@ -311,9 +355,11 @@ render() {
   return (
     <ul>
       {
-        booksArray.map((book) => {
-          <ListItem key={book.id} title={book.title} /> 
-        }); 
+        booksArray.map((book) => (
+          <li key={book.id}>
+            <a href={book.href}>{book.title}</a>
+          </li> 
+        )); 
       }
     </ul>
   );
@@ -321,13 +367,13 @@ render() {
 ```
 
 ### Binding
-Don't bind functions inline, bind them in the class constructor.
+- don't bind functions inline or in a class constructor
+- use [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
+
 ``` jsx
 // bad
-class ComponentName extends React.Component {
-  onClickHandler() {
-    // ...
-  }
+export class ComponentName extends React.Component {
+  onClickHandler(e) {/**/}
 
   render() {
     return (
@@ -335,18 +381,28 @@ class ComponentName extends React.Component {
     );
   }
 }
-    
-// good
-class ComponentName extends React.Component {
+
+// bad
+export class ComponentName extends React.Component {
   constructor(args) {
     super(args);
-
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  onClickHandler() {
-    // ...
+  onClickHandler(e) {/**/}
+
+  render() {
+    return (
+      <ChildComponent onClick={this.onClickHandler} />
+    );
   }
+}
+
+// good
+export class ComponentName extends React.Component {
+
+  @bind
+  onClickHandler(e) {/**/}
 
   render() {
     return (
@@ -373,7 +429,7 @@ Importing:
 // ...
 import styles from './ComponentName.scss';
 
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   render() {
     return (
@@ -390,12 +446,14 @@ import classNames from 'classnames';
 // ...
 import styles from './ComponentName.scss';
 
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   render() {
     return (
       <Heading
-        className={classNames(styles.specialHeading, styles.largeHeading)}
+        className={classNames(styles.largeHeading, {
+          [styles.importantHeading]: isImportant,
+        })}
       />
     );
   }
@@ -406,7 +464,7 @@ class ComponentName extends React.Component {
 *For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
 
 ## Decorators
-Use decorators wherever you can because it makes code more readable and declarative.
+Use decorators wherever you can if your transpiler support's it, because it makes code more readable and declarative.
 
 ### Component Declaration
 Wrap components that handle app's state with *observer* from the `mobx-react` library.
@@ -415,7 +473,7 @@ Wrap components that handle app's state with *observer* from the `mobx-react` li
 import {observer} from 'mobx-react';
 // ...
 @observer
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
 }
 ```
@@ -423,14 +481,14 @@ class ComponentName extends React.Component {
 ### Local Component State
 If MobX is used for state management:
 - preffer using MobX *observable* instead of *this.state* for component's local state; don't use both
-- wrap local state in a single object just as it would be in the built in state
+- wrap local state in a single object named **componentState**
 
 ``` jsx
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
 // ...
 @observer
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     selectedTitle: 'React+MobX',
@@ -457,7 +515,7 @@ import {observer} from 'mobx-react';
 // ...
 
 @observer
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     firstName: 'John',
@@ -477,12 +535,12 @@ class ComponentName extends React.Component {
 ```
 
 ### Actions
-Wrap methods and functions that modify state with *@action*. For binding action methods use the *bound* modifier.
+Wrap methods and functions that modify state with *@action*. For binding action methods, use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) lib.
 ``` jsx
   import {action, observable} from 'mobx';
   import {observer} from 'mobx-react';
 // ...
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     counter: 0,
@@ -497,7 +555,9 @@ class ComponentName extends React.Component {
     // ...
   }
 
-  @action.bound increaseCounter() {
+  @bind
+  @action
+  increaseCounter() {
     this.componentState.counter++;
   }
 
@@ -519,13 +579,15 @@ In actions implemented as *async* functions, after each *await*, any code that m
   import {action, observable, runInAction} from 'mobx';
   import {observer} from 'mobx-react';
 // ...
-class ComponentName extends React.Component {
+export class ComponentName extends React.Component {
   // ...
   @observable componentState = {
     userData: null,
   };
 
-  @action.bound async saveToLocalState() {
+  @bind
+  @action
+  async saveToLocalState() {
     const userData = await getUserData();
     // ...
     runInAction(() => (this.componentState.userData = userData));

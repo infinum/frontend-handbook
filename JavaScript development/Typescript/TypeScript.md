@@ -8,15 +8,15 @@
 When declaring a React class component in TypeScript, set two generic types that describe props and state.
 
 ``` typescript
-export default class ComponentName extends Component<{/*prop types*/}, {/*state types*/}> {
+export class ComponentName extends Component<{/*prop types*/}, {/*state types*/}> {
     // ...
 }
 ```
 
-Declare stateless components as arrow functions
+Declare functional components as arrow functions
 
 ``` typescript
-export default (/*props*/): JSX.Element => {
+export const FunctionalComponent = (/*props*/): JSX.Element => {
   // ...
 }
 ```
@@ -25,10 +25,10 @@ export default (/*props*/): JSX.Element => {
 
 For validating props in TypeScript classes:
 - use TypeScript's built in types instead of `prop-types`
-- if no state (or prop) is set, use **{}** (when MobX is used for state management this is usually always the case)
+- if no local component state is set, use **{}** (when MobX is used for state management this is usually always the case)
 
 ``` typescript
-class ComponentName extends Component<{
+export class ComponentName extends Component<{
   className?: string;
   isConditionMet: boolean;
   onClick?: (event: any) => void;
@@ -39,23 +39,19 @@ class ComponentName extends Component<{
 
 In stateless components, use regular object destructuring with TypeScript's type annotations.
 ``` typescript
-export default ({className?: string, title: string}): JSX.Element => {
+export const FunctionalComponent = ({classname, title}: {className?: string, title: string}): JSX.Element => {
     // ...
 }
 ```
 
-Use interfaces for props when you have a great amount of props/state to validate or when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
+Use interfaces when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
 
 ``` typescript
-interface IComponentNameProps {
+interface SpecificProps {
   // prop types
 }
 
-interface IComponentNameState {
-  // state types
-}
-
-class ComponentName extends Component<{}, {}> {
+export class ComponentName extends Component<SpecificProps, {}> {
   // ...
 }
 ```
@@ -64,7 +60,7 @@ class ComponentName extends Component<{}, {}> {
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
-class ComponentName extends Component<IComponentNameProps, IComponentNameState> {
+export class ComponentName extends Component<{}, {}> {
   constructor(args) {
     super(args);
     // ...
@@ -90,7 +86,7 @@ Example with MobX:
 
 ``` typescript
 @observer
-class ComponentName extends Component<{}, {}> {
+export class ComponentName extends Component<{}, {}> {
   constructor(args) {
     super(args);
     // ...
@@ -104,7 +100,9 @@ class ComponentName extends Component<{}, {}> {
     // ...
   }
 
-  @action.bound private handleLocalData() {
+  @bind
+  @action
+  private handleLocalData() {
     // ...
   }
 
