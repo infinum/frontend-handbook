@@ -20,7 +20,7 @@ log.setConfig({
     application: 'app-name'
   },
   adapterOptions: {
-    host: 'dreznik.infinum.co' // graylog host should be configured via secrets
+    host: 'host-name' // graylog host should be configured via secrets
   }
 });
 ```
