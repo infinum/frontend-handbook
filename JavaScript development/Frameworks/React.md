@@ -34,7 +34,7 @@ Use **camelCase** for general folder naming and **PascalCase** for React compone
 
 For declaring class components:
 - use ES2015 **class syntax**
-- don't use *React.createClass*
+- if you **need** `React.createClass` use [`create-react-class`](https://www.npmjs.com/package/create-react-class) (`createClass` was removed in Reactr 16)
 
 ``` jsx
 // bad
