@@ -1,6 +1,6 @@
 # TypeScript
 
-## TypeScript+React
+## TypeScript + React
 *For general info on using JSX with TypeScript checkout the guidelines in TypeScript's official documentation [JSX · TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)*.
 
 ### Component Declaration
@@ -9,14 +9,6 @@ When declaring a React class component in TypeScript, set two generic types that
 
 ``` typescript
 export class ComponentName extends React.Component<{/*prop types*/}, {/*state types*/}> {
-    // ...
-}
-```
-
-Declare functional components as arrow functions
-
-``` typescript
-export const FunctionalComponent = (/*props*/): JSX.Element => {
   // ...
 }
 ```
@@ -55,7 +47,7 @@ interface CommonProps {
 ``` typescript
 import {CommonProps} from 'interfaces/CommonProps';
 
-export class ComponentName extends React.Component<CommonProps, {}> {
+export class ComponentName extends React.Component<CommonProps & {active?: boolean}, {}> {
   // ...
 }
 ```
@@ -74,38 +66,6 @@ export class ComponentName extends React.Component<{}, {}> {
     // ...
   }
 
-  private handleLocalData() {
-    // ...
-  }
-
-  public render() {
-    return {
-      // ...
-    };
-  }
-}
-```
-
-Example with MobX:
-
-``` typescript
-@observer
-export class ComponentName extends React.Component<{}, {}> {
-  constructor(args) {
-    super(args);
-    // ...
-  }
-
-  @observable private componentState = {
-    // ...
-  };
-
-  public componentDidMount() {
-    // ...
-  }
-
-  @bind
-  @action
   private handleLocalData() {
     // ...
   }

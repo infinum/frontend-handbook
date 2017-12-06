@@ -536,7 +536,6 @@ export class ComponentName extends React.Component {
   };
 
   @bind
-  @action
   async saveToLocalState() {
     const userData = await getUserData();
     // ...
