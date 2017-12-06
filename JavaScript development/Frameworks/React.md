@@ -48,18 +48,12 @@ export class ComponentName extends React.Component {
 }
 ```
 
-If components are stateless (they don't change state), use **functional components**:
+If components are stateless (they don't change state), use **pure components**:
 
 ``` jsx
-export function FunctionalComponent({message}) {
+export class FunctionalComponent extends React.PureComponent {
   // ...
-};
-
-// or
-
-export const FunctionalComponent = ({message}) => (
-  // ...
-);
+}
 ```
 
 ### Formatting
@@ -178,7 +172,7 @@ Omit values for boolean props if default value is **true**.
 />
 ```
 
-Declare functions before passing them as props instead of passing inline anonymous (arrow) functions. They will be needlessy re-rendered each time, thus effecting performance.
+Declare functions before passing them as props instead of passing inline anonymous (arrow) functions. They will be needlessy instanced each time, thus effecting performance.
 
 ``` jsx
 // bad
@@ -198,7 +192,7 @@ class ComponentName extends React.Component {
 }
 ```
 
-Avoid writing any logic inline. Extract it to the outer scope.
+Avoid writing any logic inline. Extract it to the outside of the JSX block.
 
 ``` jsx
 export class ComponentName extends React.Component {
@@ -255,19 +249,6 @@ export default class ComponentName extends React.Component {
 }
 ```
 
-In stateless components, use PropTypes for type checking but use native JS for setting default values.
-
-``` jsx
-function ComponentName({id, name = 'John Doe'}) {
-  // ...
-};
-
-ComponentName.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string
-}
-```
-
 ### Using props
 
 If you are using more than one property in a method, preffer accessing them with **object destructuring**.
@@ -308,46 +289,12 @@ export class ComponentName extends React.Component {
 }
 ```
 
-Exporting class components when you need to declare static members afterwards:
-``` jsx
-// exporting when static members are not supported by the transpiler:
-class ComponentName extends React.Component {
-  // ...
-}
-
-ComponentName.propTypes = {
-  // ..
-};
-
-export {ComponentName};
-```
-
-Exporting functional components:
-``` jsx
-// stateless components with no prop validation
-export function FunctionalComponent() {
-  // ...
-};
-
-
-// stateless components with static prop validation
-function FunctionalComponent(/* props */) {
-  // ...
-}
-
-FunctionalComponent.propTypes = {
-  // ...
-};
-
-export {FunctionalComponent};
-```
-
 ### Rendering Arrays of Data
 
 For iterating arrays:
 - use **map** method to render items
 - you should have a unique key for each element
-- **don't use array's index as a key**, unless you have no choice (no unique property in each element of the array)
+- **don't use array's index as a key**, unless you have no choice (no unique property in each element of the array) then make sure that you do not modify the order of that array
 
 ``` jsx
 render() {
@@ -459,6 +406,9 @@ export class ComponentName extends React.Component {
   }
 }
 ```
+
+## Maximum file line number
+Make sure that your components stay readable and extract complex parts into separate and smaller components. This way you'll avoid huge files. A good rule of thumb for *presentional* components is around 150 lines, and for *containers* and *pages* around 300 loc.
 
 ## React + MobX
 *For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
@@ -573,7 +523,7 @@ export class ComponentName extends React.Component {
 ```
 
 ### Async Await
-In actions implemented as *async* functions, after each *await*, any code that modifies the state should be wrapped in a *runInAction* utility. This is because *async await* is just syntax sugar, and in reallity, a new function is created after each *await*.
+In actions implemented as *async* functions, after each *await*, any code that modifies the state should be wrapped in a *runInAction* utility.
 
 ``` jsx
   import {action, observable, runInAction} from 'mobx';
