@@ -414,7 +414,7 @@ Make sure that your components stay readable and extract complex parts into sepa
 *For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
 
 ### Decorators
-Use decorators wherever you can if your transpiler support's it, because it makes code more readable and declarative.
+Use decorators wherever you can if your transpiler supports it, because it makes code more readable and declarative.
 
 ### Component Declaration
 Wrap components that handle app's state with *observer* from the `mobx-react` library.
@@ -485,7 +485,8 @@ export class ComponentName extends React.Component {
 ```
 
 ### Actions
-Wrap methods and functions that modify state with *@action*. For binding action methods, use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) lib.
+Wrap methods and functions that modify state with *@action*. For binding action methods, use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) library.
+
 ``` jsx
   import {action, observable} from 'mobx';
   import {observer} from 'mobx-react';
