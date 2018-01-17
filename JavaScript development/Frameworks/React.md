@@ -34,7 +34,7 @@ Use **camelCase** for general folder naming and **PascalCase** for React compone
 
 For declaring class components:
 - use ES2015 **class syntax**
-- if you **need** `React.createClass` use [`create-react-class`](https://www.npmjs.com/package/create-react-class) (`createClass` was removed in Reactr 16)
+- if you **need** `React.createClass` use [`create-react-class`](https://www.npmjs.com/package/create-react-class) (`createClass` was removed in React 16)
 
 ``` jsx
 // bad
@@ -314,8 +314,9 @@ render() {
 ```
 
 ### Binding
-- don't bind functions inline or in a class constructor
+- don't bind functions inline or in a class constructor if you have decorators
 - use [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
+- don't use arrow functions as class properties
 
 ``` jsx
 // bad
@@ -329,7 +330,7 @@ export class ComponentName extends React.Component {
   }
 }
 
-// bad
+// bad if you have decorators
 export class ComponentName extends React.Component {
   constructor(args) {
     super(args);
@@ -337,6 +338,17 @@ export class ComponentName extends React.Component {
   }
 
   onClickHandler(e) {/**/}
+
+  render() {
+    return (
+      <ChildComponent onClick={this.onClickHandler} />
+    );
+  }
+}
+
+// bad
+export class ComponentName extends React.Component {
+  onClickHandler = () => {}
 
   render() {
     return (
