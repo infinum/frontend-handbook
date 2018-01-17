@@ -28,13 +28,6 @@ export class ComponentName extends React.Component<{
 }
 ```
 
-In stateless components, use regular object destructuring with TypeScript's type annotations.
-``` typescript
-export const FunctionalComponent = ({classname, title}: {className?: string, title: string}): JSX.Element => {
-    // ...
-}
-```
-
 Use interfaces when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
 
 ``` typescript
