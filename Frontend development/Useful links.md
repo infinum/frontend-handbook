@@ -6,10 +6,5 @@ Here are some links that might help you with your frontend troubles.
 * [Susy documentation](http://susydocs.oddbird.net/en/latest/)
 * [Tips and tricks for DevTools](https://developer.chrome.com/devtools/docs/tips-and-tricks)
 
-
-## Useful files
-* [Media mixin](https://github.com/infinum/media-blender)
-
-
-## Lint files
+## Linters
 * [Infinum dotfiles repo](https://github.com/infinum/dotfiles/tree/master/code-linters)
