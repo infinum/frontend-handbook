@@ -313,6 +313,17 @@ render() {
 }
 ```
 
+### Conditional Rendering
+When you want to render either something or nothing, you can use the && operator.
+```
+// bad
+{condition ? (<span />) : null}
+
+// good
+{condition && (<span />)}
+```
+
+
 ### Binding
 - don't bind functions inline or in a class constructor if you have decorators
 - use [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
