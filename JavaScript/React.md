@@ -315,12 +315,23 @@ render() {
 
 ### Conditional Rendering
 When you want to render either something or nothing, you can use the && operator.
+Make sure condition is boolean, if not cast it to boolean.
 ```
 // bad
-{condition ? (<span />) : null}
+{
+  condition ? 
+  <div>
+    // ...some stuff
+  </div> : 
+  null
+}
 
 // good
-{condition && (<span />)}
+{condition && 
+  <div>
+    // ...some stuff
+  </div>
+}
 ```
 
 ### Binding
