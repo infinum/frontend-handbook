@@ -313,6 +313,27 @@ render() {
 }
 ```
 
+### Conditional Rendering
+When you want to render either something or nothing, you can use the && operator.
+Make sure condition is boolean, if not cast it to boolean.
+```
+// bad
+{
+  condition ? 
+  <div>
+    // ...some stuff
+  </div> : 
+  null
+}
+
+// good
+{condition && 
+  <div>
+    // ...some stuff
+  </div>
+}
+```
+
 ### Binding
 - don't bind functions inline or in a class constructor if you have decorators
 - use [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
