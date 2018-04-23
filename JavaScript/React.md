@@ -316,7 +316,7 @@ render() {
 ### Conditional Rendering
 When you want to render either something or nothing, you can use the && operator.
 Make sure condition is boolean, if not cast it to boolean.
-```
+```javascript
 // bad
 {
   condition ? 
