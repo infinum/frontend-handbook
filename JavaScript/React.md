@@ -277,6 +277,7 @@ export class ComponentName extends React.Component {
 - don't use default exports, always use named exports instead
  
 Exporting class components:
+
 ``` jsx
 // bad
 export default class ComponentName extends React.Component {
@@ -316,6 +317,7 @@ render() {
 ### Conditional Rendering
 When you want to render either something or nothing, you can use the && operator.
 Make sure condition is boolean, if not cast it to boolean.
+
 ```javascript
 // bad
 {
