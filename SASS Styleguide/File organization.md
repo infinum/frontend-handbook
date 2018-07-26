@@ -128,12 +128,16 @@ When you're working on a project with `_shame.scss` always check the file when y
 The colors file should only contain color variables of the base and global kind.
 All colors for blocks or elements should go into their local file on the top.
 
-Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors. Syntax and example:
+Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors. 
+
+When naming color variables avoid using names that correspond to the actual colors, better use some fictive names like `silver`, `wood`, `mercury`, etc...
+
+Syntax and example:
 
 Syntax: `base-[value]-color`
 
 ```scss
-$base-red-color: #FF0000;
+$base-rouge-color: #FF0000;
 ```
 
 Only in base colors is the name of the color ok to use.
@@ -255,7 +259,7 @@ Example usage of a global placeholder.
 
 ### Mixins
 
-The mixins file should contain any global mixin that can help organize sass better.
+The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins it is reccomended that you put them in a separate files and groupe according to their purpose. Then put all those filed inside a new folder called **mixins**.
 For instance adding clearfix.
 
 ```scss
@@ -267,6 +271,18 @@ For instance adding clearfix.
   }
 }
 ```
+
+Example of structure:
+* **utils**
+  * **mixins**
+    * \_buttons.scss
+    * \_containers.scss
+    * \_forms.scss
+    * \_general.scss
+    * \_sections.scss
+    * \_sypography.scss
+
+
 
 ### Fonts
 
@@ -316,6 +332,7 @@ e.g.
 }
 
 ```
+If you project uses postCss there are libs that will make all this font-face declarations for you.
 
 ### Animations
 
