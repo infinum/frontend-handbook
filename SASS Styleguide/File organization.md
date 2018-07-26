@@ -259,7 +259,7 @@ Example usage of a global placeholder.
 
 ### Mixins
 
-The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins it is reccomended that you put them in a separate files and groupe according to their purpose. Then put all those filed inside a new folder called **mixins**.
+The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins it is recommended that you put them in a separate files and group according to their purpose. Then put all those files inside a new folder called **mixins**.
 For instance adding clearfix.
 
 ```scss
@@ -332,7 +332,7 @@ e.g.
 }
 
 ```
-If you project uses postCss there are libs that will make all this font-face declarations for you.
+If you project uses PostCSS there are libs that will make all this font-face declarations for you.
 
 ### Animations
 
