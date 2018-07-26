@@ -130,7 +130,7 @@ All colors for blocks or elements should go into their local file on the top.
 
 Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors. 
 
-When naming color variables avoid using names that correspond to the actual colors, better use some fictive names like `silver`, `wood`, `mercury`, etc...
+When naming color variables avoid using names that correspond to the actual colors, better use some thing like `silver`, `wood`, `mercury`, etc...
 
 Syntax and example:
 
@@ -280,7 +280,7 @@ Example of structure:
     * \_forms.scss
     * \_general.scss
     * \_sections.scss
-    * \_sypography.scss
+    * \_typography.scss
 
 
 
@@ -332,7 +332,7 @@ e.g.
 }
 
 ```
-If you project uses PostCSS there are libs that will make all this font-face declarations for you.
+If you project uses PostCSS there are libs that will make all these font-face declarations for you.
 
 ### Animations
 
