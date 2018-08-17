@@ -2,7 +2,7 @@ Based on [Airbnb JavaScript style guide](https://github.com/airbnb/javascript).
 
 This styleguide contains only changes since ES5. For other rules, check out [ES5 styleguide](JS%20Styleguide).
 
-## References
+## [References](#references)
 
 Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases use ``let``.
 
@@ -30,7 +30,7 @@ Also, keep [temporal dead zones](http://jsrocks.org/2015/01/temporal-dead-zone-t
 }
 ```
 
-## Objects
+## [Objects](#objects)
 Use computed property names when creating objects with dynamic property names.
 
 ```js
@@ -104,7 +104,7 @@ const obj = {
 
 Only quote properties that are invalid identifiers.
 
-## Arrays
+## [Arrays](#arrays)
 Use array spreads `...` to copy arrays.
 
 ```js
@@ -128,7 +128,7 @@ const foo = document.querySelectorAll('.foo');
 const nodes = Array.from(foo);
 ```
 
-## Destructuring
+## [Destructuring](#destructuring)
 Use object destructuring when accessing and using multiple properties of an object.
 
 ```js
@@ -211,7 +211,7 @@ function sayHi(name) {
 }
 ```
 
-## Functions
+## [Functions](#functions)
 
 Never use `arguments`, opt to use rest syntax `...` instead.
 
@@ -266,7 +266,7 @@ function handleThings(name, opts = {}) {
 }
 ```
 
-## Arrow Functions
+## [Arrow Functions](#arrow-functions)
 
 When you must use function expressions (as when passing an anonymous function), use arrow function notation.
 
@@ -332,7 +332,7 @@ const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize
 const itemHeight = (item) => { return item.height > 256 ? item.largeSize : item.smallSize; }
 ```
 
-## Modules
+## [Modules](#modules)
 
 Always use modules (`import`/`export`) over a non-standard module system. You can always transpile to your preferred module system.
 
@@ -350,7 +350,7 @@ import { es6 } from './AirbnbStyleGuide';
 export default es6;
 ```
 
-## Variables
+## [Variables](#variables)
 
 Group all your `const`s and then group all your `let`s.
 
@@ -411,7 +411,7 @@ function checkName(hasName) {
 }
 ```
 
-## Hoisting
+## [Hoisting](#hoisting)
 
 `var` declarations get hoisted to the top of their scope, their assignment does not. `const` and `let` declarations have [Temporal Dead Zones (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). It's important to know why [typeof is no longer safe](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15).
 
@@ -448,7 +448,7 @@ function example() {
 }
 ```
 
-## Commas
+## [Commas](#commas)
 
 Use additional trailing comma. This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code which means you don't have to worry about the trailing comma problem in legacy browsers.
 
@@ -491,7 +491,7 @@ const heroes = [
 ];
 ```
 
-## Naming conventions
+## [Naming conventions](#naming-conventions)
 
 Don't save references to `this`. Use arrow functions or Function#bind.
 
