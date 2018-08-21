@@ -130,7 +130,7 @@ All colors for blocks or elements should go into their local file on the top.
 
 Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors. 
 
-When naming color variables avoid using names that correspond to the actual colors, better use some thing like `silver`, `wood`, `mercury`, etc...
+When naming color variables avoid using names that correspond to the actual colors, better use some thing like `rouge`, `wood`, `mercury`, etc...
 
 Syntax and example:
 
@@ -259,7 +259,7 @@ Example usage of a global placeholder.
 
 ### Mixins
 
-The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins it is recommended that you put them in a separate files and group according to their purpose. Then put all those files inside a new folder called **mixins**.
+The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins it is recommended that you put them in separate files and group according to their purpose. Then put all those files inside a new folder called **mixins**.
 For instance adding clearfix.
 
 ```scss
@@ -332,7 +332,7 @@ e.g.
 }
 
 ```
-If you project uses PostCSS there are libs that will make all these font-face declarations for you.
+If your project uses PostCSS there are libs that will make all these font-face declarations for you.
 
 ### Animations
 
