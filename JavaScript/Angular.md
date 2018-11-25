@@ -12,8 +12,13 @@ Install Angular CLI globally with `npm install -g @angular/cli` and check out wh
 
 #### Creating a new project
 
-Make sure to use SCSS for styling. You can change this later if you forget but it can be tedious. Default is plain CSS
-`ng new my-app --style=scss`
+Use Angular CLI for initial project setup:
+
+```bash
+ng new my-app
+```
+
+As of version 7 there will be a quick wizard-like setup prompting you about routing and styling. Choose with routing and SCSS styling.
 
 #### Creating new components
 
@@ -25,15 +30,24 @@ Use `ng g s MyService` to generate new service. NOTE: unlike during component ge
 
 #### Ejecting
 
-If you **ABSOLUTELY HAVE TO**, you can eject the application with `ng eject`. Please avoid this. Doing this will expose all config files (e.g. webpack config). This also means that you will no longer be able to run your app with `ng serve`, instead you will have to use `npm start serve`. You will still be able to use scaffolding functionality of the Angular CLI, but that is pretty much it.
+Do not do it, but if you **ABSOLUTELY HAVE TO** edit the webpack config manually, you can eject the application with `ng eject`. Unfortunately there is no way to extend webpack config.
 
-Most importantly, this means that you will have to maintain webpack config yourself, whereas non-ejected projects might see behind-the-scenes webpack config updates when updating app's angular-cli dependency version. Great example would be updating from webpack 3 to 4, which happens automatically if the project is not ejected.
+#### Devserver proxy
 
-One of the reasons why you might want to eject is if you want to use OS environment variables and/or inject things like git commit hash into your code. Currently Angular CLI has no support for those things. *There are* ways to do it without ejecting, but it requires running custom scripts before compiling the code. If you need to do something like that, make sure to discuss it with other developers on the project and decide what the best course of action is.
+If you have issues with CORS, for development purpuses it is OK to temporarily use Webpack Devserver proxy. You can do this without ejecting the webpack config, [as per instructions](https://angular.io/guide/build#proxying-to-a-backend-server).
 
 #### Other commands
 
 This handbook will not cover all `ng` commands, please check out the [wiki](https://github.com/angular/angular-cli/wiki).
+
+### Typings
+
+If you are using some JS library which is now written in TypeScript, you can usually install typings separately. Install typings as dev-dependency, for example:
+
+```bash
+npm install --save d3
+npm install --save-dev @types/d3
+```
 
 ### [RxJS](https://github.com/ReactiveX/rxjs)
 
@@ -82,8 +96,17 @@ Some common operators are:
 - `debounceTime`
 - `distinctUntilChanged`
 - `catchError` (replaces `.catch`)
+- `switchMap`
+
+Avoid doing a lot of logic in `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching and side-effects via operators.
 
 You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
+
+#### async/await
+
+You can use async/await to await completion of observables. Keep in mind that this will not work if the observable emits more than one value. For example, it is ok for things like HTTP requests.
+
+To convert an observable to a promise, just call `obs$.toPromise()`.
 
 ### Recommended Editor
 
@@ -105,7 +128,7 @@ Classes which might be used throughout the application (e.g. generic `Dictionary
 
 Entity models (`User`, `Post`, etc.) should be in `app/models`.
 
-If you are using some JS libs which do not have typing, add your own custom typing in `app/custom-typings`.
+If you are using some JS libs which do not have typings, add your own custom typing in `app/custom-typings`.
 
 Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. Good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exportst what is basically a dictionary with enum values used as keys and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translation: 'Success' } }`
 
@@ -125,11 +148,11 @@ If you have any `NgModule`s which are not components (e.g. a module which import
 
 TypeScript `type` declarations should be placed in `app/types`.
 
-As defined in angular-cli, assets placed in `assets` will be served statically. `assets/styles` dir has very similar structure as that described in SASS Styleguide, so please check it out.
+As defined in angular-cli, assets placed in `assets` will be served statically.
+
+Global styles should be placed in `src/app/styles` dir. Styles dir has very similar structure as that described in SASS Styleguide, so please check it out.
 
 All environment files are placed in `environments`.
-
-Save all your mock models, services and data in `testing`. Make sure that dir is excluded from code coverage calculations.
 
 When it all comes together, your src folder might look something like this:
 *(please note the postfixes in filenames like .guard, .interface, .model, etc.)*
@@ -189,15 +212,6 @@ When it all comes together, your src folder might look something like this:
       - material.module.ts
   - types/
     - sorting-function.type.ts
-- assets/
-  - fonts/
-    - CustomFont.eot
-    - CustomFont.ttf
-    - CustomFont.woff
-    - CustomFont.woff2
-  - images/
-    - icons/
-      - app-icon.svg
   - styles/
     - components/
       - _title.scss
@@ -213,20 +227,22 @@ When it all comes together, your src folder might look something like this:
       - _mixins.scss
       - _shared-variables.scss
       - _z-indices.scss
-    - main.scss
     - _core.scss
+    - main.scss
+- assets/
+  - fonts/
+    - CustomFont.eot
+    - CustomFont.ttf
+    - CustomFont.woff
+    - CustomFont.woff2
+  - images/
+    - icons/
+      - app-icon.svg
 - environments/
   - environment.base.ts
   - environment.prod.ts
   - environment.staging.ts
   - environment.ts
-- testing/
-  - stub-services/
-    - user.service.stub.ts
-  - stub-models/
-    - user.model.stub.ts
-  - stub-data/
-    - some-json-api-response.json
 
 ## Presentational and Container Components
 
@@ -245,20 +261,18 @@ Design your components to be as small as possible and reuse them as much as poss
     - control UX flow
     - work with services to make things happen (fetch, store, change state)
     - can be loaded directly or lazy loaded when routing
+    - use `changeDetection: ChangeDetectionStrategy.OnPush` and pass data down using `async` pipe
 
-More on this philosophy can be found in various articles [Google]. Some articles have framework-specific information, but the core concepts apply no matter which framework you are using.
+More on this philosophy can be found in various online articles. Some articles have framework-specific information, but the core concepts apply no matter which framework you are using.
 
 ## Environments
 
-Currently there is no way to use OS environment variables if you are using `angular-cli` to build the app. If something is different depending on the environment, it should be defined in a variable in corresponding environment file. Every environment should have its own environment file which extends base environment file and overrides any values which are different. All environments have to be defined in `.angular-cli.json` as well.
+Environment files should be used for some global configuration changes which can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and can not be changed after the build. This can be an issue if application is deployed using Docker - in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files.
 
-Example:
-
-Define interface `/src/app/interfaces/environment.interface`:
+Define interface for the environment: `/src/app/interfaces/environment.interface`:
 ```typescript
 export interface IEnvironment {
   production: boolean;
-  apiBaseUrl: string;
 }
 ```
 
@@ -268,7 +282,6 @@ import { IEnvironment } from 'app/interfaces/environment.interface';
 
 export const baseEnvironment: IEnvironment = {
   production: false,
-  apiBaseUrl: 'https://api.dev.myapp.com',
 }
 ```
 
@@ -282,16 +295,6 @@ export const environment: IEnvironment = {
 };
 ```
 
-This is the staging environment: `/src/environments/environment.ts`:
-```typescript
-import { baseEnvironment } from './environment.base';
-
-export const environment: IEnvironment = {
-  ...baseEnvironment,
-  apiBaseUrl: 'https://api.staging.myapp.com',
-};
-```
-
 This is the production environment: `/src/environments/environment.prod.ts`:
 ```typescript
 import { baseEnvironment } from './environment.base';
@@ -299,26 +302,10 @@ import { baseEnvironment } from './environment.base';
 export const environment: IEnvironment = {
   ...baseEnvironment,
   production: true,
-  apiBaseUrl: 'https://api.myapp.com',
 };
 ```
 
-Define environments in `.angular-cli.json`:
-```json
-{
-  ...
-  "apps": [{
-    ...
-    "environments": {
-      "dev": "environments/environment.ts",
-      "prod": "environments/environment.prod.ts",
-      "staging": "environments/environment.staging.ts"
-    }
-    ...
-  }]
-  ...
-}
-```
+Make sure to update `angular.json` if you add/remove environment files.
 
 After all is defined, run/build the app for different environments by specifying the environment in `ng` command: `ng build --env=prod` for production build; `ng build --env=staging` for staging build; `ng build` will use default `dev` environment.
 
@@ -326,20 +313,19 @@ After all is defined, run/build the app for different environments by specifying
 
 ### In Templates
 
-
-For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `.angular-cli.json` like so: `"prefix": "my-app",`.
+For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like so: `"prefix": "my-app",`.
 
 ----
 
 Try to fit all inputs, outputs and regular HTML attributes in one line. If there is simply too many of them, break it up like so:
 
 ```html
-// bad
+<!-- bad -->
 <my-app-component *ngFor="let item of items" class="foo" [bar]="something ? 'foo' : 'oof'" (click)="onClick($event)">
   <div>Transcluded Content</div>
 </my-app-component>
 
-// bad
+<!-- bad -->
 <my-app-component
   *ngFor="let item of items"
   class="foo"
@@ -348,7 +334,7 @@ Try to fit all inputs, outputs and regular HTML attributes in one line. If there
   <div>Transcluded Content</div>
 </my-app-component>
 
-// maybe could be good?
+<!-- maybe could be good? -->
 <my-app-component
   *ngFor="let item of items"
   class="foo"
@@ -358,7 +344,7 @@ Try to fit all inputs, outputs and regular HTML attributes in one line. If there
   <div>Transcluded Content</div>
 </my-app-component>
 
-// good
+<!-- good -->
 <my-app-component
   *ngFor="let item of items"
   class="foo"
@@ -374,10 +360,10 @@ Try to fit all inputs, outputs and regular HTML attributes in one line. If there
 If you are passing data to a component, use property binding only if necessary:
 
 ```html
-// bad
+<!-- bad -->
 <my-app-component [name]="'Steve'"></my-app-component>
 
-// good
+<!-- good -->
 <my-app-component name="Steve"></my-app-component>
 ```
 
@@ -386,16 +372,16 @@ If you are passing data to a component, use property binding only if necessary:
 Prefix output handlers with `on`:
 
 ```html
-// bad
+<!-- bad -->
 <my-app-component (somethingHappened)="onSomethingHappened($event)">
 
-// bad
+<!-- bad -->
 <my-app-component (onSomethingHappened)="onSomethingHappened($event)">
 
-// bad
+<!-- bad -->
 <my-app-component (somethingHappened)="somethingHappened($event)">
 
-// good
+<!-- good -->
 <my-app-component (somethingHappened)="onSomethingHappened($event)">
 ```
 
@@ -404,13 +390,13 @@ Prefix output handlers with `on`:
 Use `ng-container` when possible to reduce the amount of generated DOM elements:
 
 ```html
-// bad
+<!-- bad -->
 <div *ngIf="something"></div>
 
-// good
+<!-- good -->
 <ng-container *ngIf="something"></ng-container>
 
-// good
+<!-- good -->
 <div class="i-need-this-class" *ngIf="something"></div>
 ```
 
@@ -419,11 +405,11 @@ Use `ng-container` when possible to reduce the amount of generated DOM elements:
 Use `*ngIf; else`:
 
 ```html
-// bad
+<!-- bad -->
 <ng-container *ngIf="something"></ng-container>
 <ng-container *ngIf="!something"></ng-container>
 
-// good
+<!-- good -->
 <ng-container *ngIf="something; else anotherThing"></ng-container>
 <ng-template #anotherThing></ng-template>
 ```
@@ -450,6 +436,8 @@ export class ArticlesList {
 </my-app-article-details>
 ```
 
+`async` pipe is especially useful if `changeDetection` is `OnPush` since it subscribes, calls change detection manually on changes and unsubscribes when component is destroyed.
+
 ----
 
 Use attributes for transclusion selectors:
@@ -470,14 +458,230 @@ Use attributes for transclusion selectors:
 
 ### In Code
 
+TODO
+
+## Dependency Injection
+
+In Angular, DI is utilized heavily, primarily for providing instances of either primitive values or class instances.
+
+Make sure to check out the [official DI guide](https://angular.io/guide/dependency-injection) and you can also have a look at [this repo](https://github.com/fvoska/angular-di-demo) for some examples.
+
+As of Angular 6, make sure to use `{ providedIn: 'root' }` [for singletons](https://angular.io/guide/singleton-services#providing-a-singleton-service) whenever possible.
+
+DI is very useful for testing purposes, as shown in next chapter.
+
+## Testing
+
+When unit testing, if the unit which you are testing is injectable, use `TestBed` for easier instance creation and easy providing of stub units. 'unit' in this context can be a component, service, pipe, etc - anything injectable.
+
+### Testing a service example
+
+```ts
+// service/user/user.service.interface.ts
+export interface IUserService {
+  user$: Observable<UserModel>;
+}
+
+// service/user/user.service.ts
+@Injectable({ providedIn: 'root' })
+export class UserService implements IUserService {
+  public user$: Observable<UserModel>;
+  //...
+}
+
+// service/user/user.testing.service.ts
+// no need for @Injectable decorator
+export class UserTestingService implements IUserService {
+  public user$: Observable<UserModel> = of(new UserModelStub('steve'));
+}
+```
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class SomeService {
+  constructor(private userService: UserService)
+}
+```
+
+```ts
+let service: SomeService;
+
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    providers: [
+      { provide: UserService, useClass: UserTestingService },
+    ],
+  });
+
+  service = TestBed.get(SomeService);
+});
+
+it('should create a service instance', () => {
+  expect(service).toBeTruthy();
+});
+```
+
+### Testing a component example
+
+When testing complex components which use multiple services and render other components, make sure to provide them with stub services and components.
+
+```ts
+@Component({
+  selector: 'my-app-component-to-be-tested',
+  template: `
+    <div *ngIf="userService.user$ | async as user">
+      User: {{ user.name }}
+    </div>
+
+    <my-app-some-other-component></my-app-some-other-component>
+  `
+})
+export class ComponentToBeTested {
+  constructor(public userService: UserService) { }
+}
+```
+
+SomeOtherComponent folder structure should look like this:
+
+- components/
+  - some-other/
+    - some-other.module.ts
+      > `export class SomeOtherModule`
+
+      > should declare and export `SomeOtherComponent`
+    - some-other.component.ts
+      > `export class SomeOtherComponent implements ISomeOtherComponent`
+    - some-other.component.spec.ts
+    - some-other.component.interface.ts
+      > `export interface ISomeOtherComponent`
+
+      > interface should include all `@Input()`s and `@Output()`s
+    - some-other.testing.component.ts
+      > `export class SomeOtherTestingComponent implements ISomeOtherComponent`
+
+      > **important** - should have the same selector as `SomeOtherComponent`
+    - some-other.testing.module.ts
+      > `export class SomeOtherTestingModule`
+
+      > should declare and export `SomeOtherTestingComponent`
+
+Make sure to exclude `*.testing.*` files from code coverage reports.
+
+Test should look like this:
+
+```ts
+let component: ComponentToBeTested;
+let fixture: ComponentFixture<ComponentToBeTested>;
+
+beforeEach(async(() => {
+  TestBed.configureTestingModule({
+    imports: [SomeOtherTestingModule], // use testing child component
+    declarations: [ComponentToBeTested],
+    providers: [
+      { provide: UserService, useClass: UserTestingService }, // use testing service
+    ],
+  })
+  .compileComponents();
+}));
+
+beforeEach(() => {
+  fixture = TestBed.createComponent(ComponentToBeTested);
+  component = fixture.componentInstance;
+  fixture.detectChanges();
+});
+
+it('should create', () => {
+  expect(component).toBeTruthy();
+});
+```
+
+### Testing component inputs
+
+If you want to test a component under different conditions, you will probably have to change some of its `@Input()` values and check if it emits `@Output()`s when expected.
+
+To change components input, you can simply:
+
+```ts
+@Component(...)
+class SomeComponent {
+  @Input() someInput: string;
+}
+```
+
+```ts
+component.someInput = 'foo';
+fixture.detectChanges(); // To update the view
+```
+
+If you are doing stuff in `ngOnChanges`, you will have to call it manually since in tests `ngOnChanges` is not called automatically during programmatic input changes.
+
+```ts
+component.someInput = 'foo';
+component.ngOnChanges({ someInput: { currentValue: 'foo' } } as any);
+fixture.detectChanges();
+```
+
+### Testing component outputs
+
+To test component outputs, simply spy on output emit function:
+
+```ts
+@Component(
+  template: `<button (click)="onButtonClicked()">`
+)
+export class ComponentWithOutput {
+  @Output() public buttonClicked: EventEmitter<void> = new EventEmitter();
+
+  public onButtonClicked(): void {
+    this.buttonClicked.emit();
+  }
+}
+```
+
+```ts
+spyOn(component.buttonClicked, 'emit');
+
+expect(component.buttonClicked.emit).not.toHaveBeenCalled();
+
+fixture.debugElement.query(By.css('button')).nativeElement.click();
+
+expect(component.buttonClicked.emit).toHaveBeenCalled();
+```
+
+### Testing components with `OnPush` change detection
+
+If the component you are testing is using `OnPush` change detection, `fixture.detectChanges()` will not work. To fix this, you can override the CD just during testing:
+
+```ts
+beforeEach(async(() => {
+  TestBed.configureTestingModule({
+    declarations: [ComponentWithInputComponent]
+  })
+  .overrideComponent(ComponentWithInputComponent, {
+    set: { changeDetection: ChangeDetectionStrategy.Default },
+  })
+  .compileComponents();
+}));
+```
+
+## Angular Universal (Server-side Rendering)
+
+When setting up server-side rendering, follow the [official guide](https://angular.io/guide/universal).
+
+There are many trick with SSR even after all the setup is done. You can check out [this repo](https://github.com/fvoska/angular-universal-demo) to see how many issues can be solved. This includes reading environment variables at runtime, so it is worth checking out.
+
 ## Routing and Lazy Loading
 
-## Importing
-
-## Server-side Rendering
+TODO
 
 ## Working with JSON API
 
+TODO
+
 ## Working with Forms
 
+TODO
+
 ## Inner Workings and Common Pitfalls
+
+TODO
