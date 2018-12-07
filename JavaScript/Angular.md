@@ -377,7 +377,7 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 ----
 
-Try to fit all inputs, outputs and regular HTML attributes in one line. If there is simply too many of them, break it up like so:
+#### Try to fit all inputs, outputs and regular HTML attributes in one line. If there is simply too many of them, break it up like so:
 
 ```html
 <!-- bad -->
@@ -417,7 +417,53 @@ Try to fit all inputs, outputs and regular HTML attributes in one line. If there
 
 ----
 
-If you are passing data to a component, use property binding only if necessary:
+#### Closing elements and angle brackets placement:
+
+```html
+<!-- bad -->
+<my-component
+  class="foo"
+  [someInput]="someValue"
+  (click)="onSomeClick()"
+>
+</my-component>
+
+<!-- good -->
+<my-component
+  class="foo"
+  [someInput]="someValue"
+  (click)="onSomeClick()"
+></my-component>
+
+<!-- bad -->
+<my-component
+  class="foo"
+  [someInput]="someValue"
+  (click)="onSomeClick()"
+>Some content</my-component>
+
+<!-- bad -->
+<my-component
+  class="foo"
+  [someInput]="someValue"
+  (click)="onSomeClick()">
+
+  Some content
+</my-component>
+
+<!-- good -->
+<my-component
+  class="foo"
+  [someInput]="someValue"
+  (click)="onSomeClick()"
+>
+  Some content
+</my-component>
+```
+
+----
+
+#### If you are passing data to a component, use property binding only if necessary:
 
 ```html
 <!-- bad -->
@@ -427,9 +473,9 @@ If you are passing data to a component, use property binding only if necessary:
 <my-app-component name="Steve"></my-app-component>
 ```
 
----
+----
 
-Prefix output handlers with `on`:
+#### Prefix output handlers with `on`:
 
 ```html
 <!-- bad -->
@@ -447,7 +493,7 @@ Prefix output handlers with `on`:
 
 ----
 
-Name click handlers in a descriptive manner:
+#### Name click handlers in a descriptive manner:
 
 ```html
 <!-- bad -->
@@ -465,7 +511,7 @@ Name click handlers in a descriptive manner:
 
 ----
 
-Use safe navigation operator:
+#### Use safe navigation operator:
 
 ```html
 <!-- bad -->
@@ -477,7 +523,7 @@ Use safe navigation operator:
 
 ----
 
-Add space around interpolation curly brackets:
+#### Add space around interpolation curly brackets:
 
 ```html
 <!-- bad -->
@@ -489,7 +535,7 @@ Add space around interpolation curly brackets:
 
 ----
 
-Use `ng-container` when possible to reduce the amount of generated DOM elements:
+#### Use `ng-container` when possible to reduce the amount of generated DOM elements:
 
 ```html
 <!-- bad -->
@@ -504,7 +550,7 @@ Use `ng-container` when possible to reduce the amount of generated DOM elements:
 
 ----
 
-Use `*ngIf; else`:
+#### Use `*ngIf; else`:
 
 ```html
 <!-- bad -->
@@ -518,7 +564,7 @@ Use `*ngIf; else`:
 
 ----
 
-Subscribe to observables with `async` pipe if possible:
+#### Subscribe to observables with `async` pipe if possible:
 
 ```typescript
 // component
@@ -542,7 +588,7 @@ export class ArticlesList {
 
 ----
 
-Use attributes for transclusion selectors:
+#### Use attributes for transclusion selectors:
 
 ```html
 // Wrapper component
@@ -560,7 +606,7 @@ Use attributes for transclusion selectors:
 
 ----
 
-Order attributes and bindings:
+#### Order attributes and bindings:
 
 1. Structural directives (`*ngFor`, `*ngIf`, etc.)
 2. Element reference (`#myComponent`)
@@ -573,16 +619,15 @@ Order attributes and bindings:
 ```html
 <!-- bad -->
 <my-app-component
-  *ngIf="shouldShow"
-  #myComponent
-  class="foo"
-  foo="bar"
-  [foo]="theBar"
-  [(ngModel)]="fooBar"
   (click)="onClick($event)"
+  [(ngModel)]="fooBar"
+  class="foo"
+  #myComponent
+  [foo]="theBar"
+  foo="bar"
+  *ngIf="shouldShow"
   (someEvent)="onSomeEvent($event)"
->
-</my-app-component>
+></my-app-component>
 
 <!-- good -->
 <my-app-component
@@ -594,13 +639,12 @@ Order attributes and bindings:
   [(ngModel)]="fooBar"
   (click)="onClick($event)"
   (someEvent)="onSomeEvent($event)"
->
-</my-app-component>
+></my-app-component>
 ```
 
 ----
 
-Prefer `[class]` over `[ngClass]` syntax:
+#### Prefer `[class]` over `[ngClass]` syntax:
 
 ```html
 <!-- bad -->
