@@ -42,9 +42,8 @@ Here are some links that might help you with your frontend troubles.
 * [classnames](https://github.com/JedWatson/classnames)
 
 ### React
+* [CRA starter](https://www.npmjs.com/package/@infinumjs/cra-starter)
 * [react-router](https://github.com/ReactTraining/react-router)
-* [create-react-app](https://github.com/facebookincubator/create-react-app)
-* [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript)
 * [next.js](https://github.com/zeit/next.js)
 * [enzyme](https://github.com/airbnb/enzyme)
 * [storybook](https://github.com/storybooks/storybook)
@@ -54,8 +53,7 @@ Here are some links that might help you with your frontend troubles.
 ### MobX
 * [mobx](https://github.com/mobxjs/mobx)
 * [mobx-react](https://github.com/mobxjs/mobx-react)
-* [mobx-collection-store](https://www.npmjs.com/package/mobx-collection-store)
-* [mobx-jsonapi-store](https://www.npmjs.com/package/mobx-jsonapi-store)
+* [datx](https://www.npmjs.com/package/datx)
 
 ### Angular
 * [ngx-form-object](https://www.npmjs.com/package/ngx-form-object)
