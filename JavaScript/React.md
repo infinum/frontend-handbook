@@ -581,3 +581,6 @@ export class ComponentName extends React.Component {
   render() { /* ... */ }
 }
 ```
+
+### Fragments
+When using React fragments, always use the explicit syntax with either `<Fragment></Fragment>` or `<React.Fragment></React.Fragment>`.
