@@ -37,9 +37,9 @@ interface CommonProps {
 ``` 
 
 ``` typescript
-import {CommonProps} from 'interfaces/CommonProps';
+import { CommonProps } from 'interfaces/CommonProps';
 
-export class ComponentName extends React.Component<CommonProps & {active?: boolean}, {}> {
+export class ComponentName extends React.Component<CommonProps & { active?: boolean }, {}> {
   // ...
 }
 ```
