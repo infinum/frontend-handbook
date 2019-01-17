@@ -23,7 +23,7 @@ export class ComponentName extends React.Component<{
   className?: string;
   isConditionMet: boolean;
   onClick?: (event: any) => void;
-}, {}> {
+}> {
   // ...
 }
 ```
@@ -39,7 +39,7 @@ interface CommonProps {
 ``` typescript
 import { CommonProps } from 'interfaces/CommonProps';
 
-export class ComponentName extends React.Component<CommonProps & { active?: boolean }, {}> {
+export class ComponentName extends React.Component<CommonProps & { active?: boolean }> {
   // ...
 }
 ```
@@ -48,7 +48,7 @@ export class ComponentName extends React.Component<CommonProps & { active?: bool
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
-export class ComponentName extends React.Component<{}, {}> {
+export class ComponentName extends React.Component {
   constructor(args) {
     super(args);
     // ...
