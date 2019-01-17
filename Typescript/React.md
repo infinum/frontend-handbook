@@ -22,7 +22,7 @@ For validating props in TypeScript classes:
 export class ComponentName extends React.Component<{
   className?: string;
   isConditionMet: boolean;
-  onClick?: (event: any) => void;
+  onClick?(event: any): void;
 }> {
   // ...
 }
