@@ -27,6 +27,7 @@ Here are some links that might help you with your frontend troubles.
 
 ### Dates
 * [Moment.js](http://momentjs.com/)
+* [date-fns](https://date-fns.org/)
 * [fecha](https://github.com/taylorhakes/fecha)
 * [Pikaday](https://github.com/dbushell/Pikaday)
 
