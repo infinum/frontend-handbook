@@ -30,6 +30,24 @@ Use **camelCase** for general folder naming and **PascalCase** for React compone
 ...
 ```
 
+### File importing
+
+JS Imports should be grouped in three categories:
+1. 3rd party dependencies
+2. Project modules
+3. Assets
+
+Example:
+```javascript
+import {css} from 'emotion';
+import React from 'react';
+
+import {Home} from '../containers/Home';
+import {User} from '../state/models/User';
+
+import logo from '../assets/logo.svg';
+```
+
 ### Component Declaration
 
 For declaring class components:
