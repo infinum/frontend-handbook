@@ -39,11 +39,11 @@ JS Imports should be grouped in three categories:
 
 Example:
 ```javascript
-import {css} from 'emotion';
+import { css } from 'emotion';
 import React from 'react';
 
-import {Home} from '../containers/Home';
-import {User} from '../state/models/User';
+import { Home } from '../containers/Home';
+import { User } from '../state/models/User';
 
 import logo from '../assets/logo.svg';
 ```
@@ -258,7 +258,7 @@ export default class ComponentName extends React.Component {
   // ...
 
   render() {
-    const {name} = this.props;
+    const { name } = this.props;
 
     return (
       <div>{name}</div>
@@ -275,7 +275,7 @@ If you are using more than one property in a method, preffer accessing them with
 export class ComponentName extends React.Component {
   // ...
   render() {
-    const {id, name, onClickHandler} = this.props;
+    const { id, name, onClickHandler } = this.props;
     // ...
   }
 }
@@ -473,7 +473,7 @@ Use decorators wherever you can if your transpiler supports it, because it makes
 Wrap components that handle app's state with *observer* from the `mobx-react` library.
 
 ``` jsx
-import {observer} from 'mobx-react';
+import { observer } from 'mobx-react';
 // ...
 @observer
 export class ComponentName extends React.Component {
@@ -483,12 +483,12 @@ export class ComponentName extends React.Component {
 
 ### Local Component State
 If MobX is used for state management:
-- preffer using MobX *observable* instead of *this.state* for component's local state; don't use both
+- prefer using MobX *observable* instead of *this.state* for component's local state; don't use both
 - wrap local state in a single observable object named **componentState**
 
 ``` jsx
-import {observable} from 'mobx';
-import {observer} from 'mobx-react';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 // ...
 @observer
 export class ComponentName extends React.Component {
@@ -513,8 +513,8 @@ export class ComponentName extends React.Component {
 If you need values derived from observable data, use *@computed*.
 
 ``` jsx
-import {observable, computed} from 'mobx';
-import {observer} from 'mobx-react';
+import { observable, computed } from 'mobx';
+import { observer } from 'mobx-react';
 // ...
 
 @observer
@@ -541,8 +541,8 @@ export class ComponentName extends React.Component {
 Wrap methods and functions that modify state with *@action*. For binding action methods, use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) library.
 
 ``` jsx
-  import {action, observable} from 'mobx';
-  import {observer} from 'mobx-react';
+  import { action, observable } from 'mobx';
+  import { observer } from 'mobx-react';
 // ...
 export class ComponentName extends React.Component {
   // ...
@@ -580,8 +580,8 @@ export class ComponentName extends React.Component {
 In actions implemented as *async* functions, after each *await*, any code that modifies the state should be wrapped in a *runInAction* utility.
 
 ``` jsx
-  import {action, observable, runInAction} from 'mobx';
-  import {observer} from 'mobx-react';
+  import { action, observable, runInAction } from 'mobx';
+  import { observer } from 'mobx-react';
 // ...
 export class ComponentName extends React.Component {
   // ...

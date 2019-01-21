@@ -16,14 +16,14 @@ export class ComponentName extends React.Component<{/*prop types*/}, {/*state ty
 
 For validating props in TypeScript classes:
 - use TypeScript's built in types instead of `prop-types`
-- if no local component state is set, use **{}** (when MobX is used for state management this is usually always the case)
+- if no local component state is set, skip it (when MobX is used for state management this is usually always the case)
 
 ``` typescript
 export class ComponentName extends React.Component<{
   className?: string;
   isConditionMet: boolean;
-  onClick?: (event: any) => void;
-}, {}> {
+  onClick?(event: any): void;
+}> {
   // ...
 }
 ```
@@ -37,9 +37,9 @@ interface CommonProps {
 ``` 
 
 ``` typescript
-import {CommonProps} from 'interfaces/CommonProps';
+import { CommonProps } from 'interfaces/CommonProps';
 
-export class ComponentName extends React.Component<CommonProps & {active?: boolean}, {}> {
+export class ComponentName extends React.Component<CommonProps & { active?: boolean }> {
   // ...
 }
 ```
@@ -48,7 +48,7 @@ export class ComponentName extends React.Component<CommonProps & {active?: boole
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
-export class ComponentName extends React.Component<{}, {}> {
+export class ComponentName extends React.Component {
   constructor(args) {
     super(args);
     // ...
