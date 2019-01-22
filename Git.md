@@ -40,8 +40,6 @@ The `master` branch is one of the two branches with an infinite lifetime. The so
 
 When the source code in the `development` branch reaches a stable point and is ready to be released, all of the changes should be merged back into `master` and tagged with a release number.
 
-Usually, an automatic build and deploy to production server hook is triggered everytime a commit is pushed to `master`.
-
 ### Feature
 
 Next to the main `master` and `development` branches the Flow model uses a veriety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for profuction releases and to assist in quickly fixing live production problems.
