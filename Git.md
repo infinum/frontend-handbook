@@ -77,4 +77,4 @@ Writing good commit messages is important. A clear commit log will be easier to 
 
 Avoid creating pull requests that contain a lot of changes. If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which result in multiple pull requests.
 
-Smaller pull requests are easier to review and will therefor be merged sooner.
+Smaller pull requests are easier to review and will therefore be merged sooner.
