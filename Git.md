@@ -1,5 +1,3 @@
-https://guides.github.com/introduction/flow/
-
 ## Configuration
 
 Configure your global gitingore file, usually in your home directory named `.gitignore_global`. It should contain ignore rules specific for your operating system and editor of choice. You can find these ignore rules [here](https://github.com/github/gitignore/tree/master/Global) and add them to your global gitignore file.
