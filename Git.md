@@ -74,3 +74,9 @@ Writing good commit messages is important. A clear commit log will be easier to 
 Avoid creating pull requests that contain a lot of changes. If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which result in multiple pull requests.
 
 Smaller pull requests are easier to review and will therefore be merged sooner.
+
+## Optional
+
+### Codeowners
+
+You can use a CODEOWNERS file to define individuals or teams that are responsible for code in a repository. Code owners are automatically requested for review when someone opens a pull request that modifies code that they own. [More about code owners](https://help.github.com/articles/about-code-owners/).
