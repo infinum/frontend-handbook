@@ -34,25 +34,25 @@ We use the [Git Flow](https://nvie.com/files/Git-branching-model.pdf) workflow m
 ### Master
 The `master` branch is one of the two branches with an infinite lifetime. The source code of `HEAD` always reflects a production-ready state.
 
-### Development
+### Develop
 
-`development` is the second branch with an infinite lifetime. The `development` branch source code of `HEAD` always reflects a state with the latest delivered development changes for the next releases.
+`develop` is the second branch with an infinite lifetime. The `develop` branch source code of `HEAD` always reflects a state with the latest delivered development changes for the next releases.
 
-When the source code in the `development` branch reaches a stable point and is ready to be released, all of the changes should be merged back into `master` and tagged with a release number.
+When the source code in `develop` branch reaches a stable point and is ready to be released, all of the changes should be merged back into `master` and tagged with a release number.
 
 ### Feature
 
-Next to the main `master` and `development` branches the Flow model uses a variety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for production releases, and to assist in quickly fixing live production problems.
+Next to the main `master` and `develop` branches the Flow model uses a variety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for production releases, and to assist in quickly fixing live production problems.
 Unlike the two main branches, these branches have a limited lifetime.
 
-Feature branches may branch of from `development` and must be merged back into `development`. Feature branch naming convention is as follows: `feature/*`, for example `feature/login-page`
+Feature branches may branch of from `develop` and must be merged back into `develop`. Feature branch naming convention is as follows: `feature/*`, for example `feature/login-page`
 
-Feature branches are used to develop new features for the upcoming or a distant future release. These branches exist as long as the feature is in development. Eventually, they are merged back into `development` or are discarded.
+Feature branches are used to develop new features for the upcoming or a distant future release. These branches exist as long as the feature is in development. Eventually, they are merged back into `develop` or are discarded.
 
 
 ### Hotfix
 
-Hotfix branches are created if you need to immediately act upon an undesired state of a live production version. If a critical bug in production must be resolved immediately, a hotfix branch can be branched off from `master` branch. Similar to the feature branches, the hotfix branches are named `hotfix/*`. A hotfix branch should be merged back into `master` and `development`.
+Hotfix branches are created if you need to immediately act upon an undesired state of a live production version. If a critical bug in production must be resolved immediately, a hotfix branch can be branched off from `master` branch. Similar to the feature branches, the hotfix branches are named `hotfix/*`. A hotfix branch should be merged back into `master` and `develop`.
 
 
 ## Committing
