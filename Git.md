@@ -42,7 +42,7 @@ When the source code in the `development` branch reaches a stable point and is r
 
 ### Feature
 
-Next to the main `master` and `development` branches the Flow model uses a veriety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for profuction releases and to assist in quickly fixing live production problems.
+Next to the main `master` and `development` branches the Flow model uses a variety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for production releases, and to assist in quickly fixing live production problems.
 Unlike the two main branches, these branches have a limited lifetime.
 
 Feature branches may branch of from `development` and must be merged back into `development`. Feature branch naming convention is as follows: `feature/*`, for example `feature/login-page`
@@ -52,14 +52,14 @@ Feature branches are used to develop new features for the upcoming or a distant 
 
 ### Hotfix
 
-Hotfix branches are created if you need to immediately act upon an undesired state of a live production version. If a critical bug in production must be resolved immediately, a hotfix branch can be branched off from the master branch. Similar to the feature branches, the hotfix branches are named `hotfix/*`. The hotfix branch should be merged back into `master` and `development`.
+Hotfix branches are created if you need to immediately act upon an undesired state of a live production version. If a critical bug in production must be resolved immediately, a hotfix branch can be branched off from `master` branch. Similar to the feature branches, the hotfix branches are named `hotfix/*`. A hotfix branch should be merged back into `master` and `development`.
 
 
 ## Committing
 
-A commit should round up only the related changes. For example, fixing two different bugs should produce two separate commits. Small commits make it easier for other developers to understand the changes and roll them back if needed.
+A commit should round up only the related changes. For example, fixing two different bugs should produce two separate commits. Small, atomic commits make it easier for other developers to understand the changes and roll them back if needed.
 
-Committing often will keep your commits small and help you commit only related changes, it will also allow you to share your code more frequently with others. Furthermore, it will help with avoiding merge conflicts.
+Committing often will keep your commits small and help you commit only related changes. It will also allow you to share your code more frequently with others. Furthermore, it will help with avoiding merge conflicts.
 
 Don't use `git add -A` to stage changes. If you have a lot of changes you can filter through them with `git add -p` and stage only relevant changes.
 
@@ -71,7 +71,7 @@ Writing good commit messages is important. A clear commit log will be easier to 
 
 ## Pull requests
 
-Avoid creating pull requests that contain a lot of changes. If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which result in multiple pull requests.
+Avoid creating pull requests that contain a lot of changes. If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which results in multiple pull requests.
 
 Smaller pull requests are easier to review and will therefore be merged sooner.
 
