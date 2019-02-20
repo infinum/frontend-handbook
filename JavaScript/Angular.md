@@ -1,5 +1,7 @@
 # Angular Guidelines and Best Practices
 
+<center><img style="width: 100%; max-width: 1000px" src="assets/angular.svg"></center>
+
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
 ## Core Libraries, Configuration and Tools
@@ -82,7 +84,7 @@ Use `ng g s MyService` to generate new service. NOTE: unlike during component ge
 
 #### Ejecting
 
-Do not do it, but if you _absolutely have to_ edit the webpack config manually, you can eject the CLI's webpack config with `ng eject`.
+Do not do it, but if you *absolutely have to* edit the webpack config manually, you can eject the CLI's webpack config with `ng eject`.
 
 #### Extending Angular CLI's webpack config
 
@@ -111,7 +113,9 @@ If there are no typings available, you can create your own `typings.d.ts` file a
 
 ### [Recommended Editor](https://xkcd.com/378/)
 
-At Infinum we recommended [VSCode](https://code.visualstudio.com/) for Angular development as it has great integration with TypeScript and has some handy Angular plugins:
+<center><img style="width: 100%; max-width: 740px" src="assets/real_programmers.png"></center>
+
+At Infinum we recommended using [VSCode](https://code.visualstudio.com/) for Angular development as it has great integration with TypeScript and has some handy Angular plugins:
 
 - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) - Intellisense in templates
 - [Angular 7 Snippets](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
@@ -803,6 +807,58 @@ As of Angular 6, make sure to use `{ providedIn: 'root' }` [for singletons](http
 
 DI is very useful for testing purposes, as shown in next chapter.
 
+## Angular Universal (Server-side Rendering)
+
+When setting up server-side rendering, follow the [official guide](https://angular.io/guide/universal).
+
+There are many tricks with SSR even after all the setup is done. You can check out [this repo](https://github.com/fvoska/angular-universal-demo) to see how many issues can be solved. This includes reading environment variables at runtime, so it is worth checking out.
+
+## Two-way binding
+
+Just like AngularJS, Angular has support for two-way binding, even though it works quite a bit differently and is a lot less magical than it was in AngularJS.
+
+Angular's [Binding syntax](https://angular.io/guide/template-syntax#binding-syntax-an-overview) offers three direction:
+- One-way from data source to view target (`[someInput]="expression"`)
+- One-way from view target to data source (`(someEvent)="onSomeEvent()"`)
+- Two-way (`[(ngModel)]="value"`)
+
+If you worked with template-driven forms, you probably came across `ngModel` and used two-way data binding. Just like you can use two-way binding with `ngModel`, you can also use two-way binding of any input of your custom component.
+
+This Handbook will not cover how to implement custom two-way binding for your components. We suggest checking out this article:[Two-way data binding in Angular](https://blog.thoughtram.io/angular/2016/10/13/two-way-data-binding-in-angular-2.html) which breaks down how two-way binding works and how you can implement your own.
+
+One key takeaway which we will repeat in this Handbook is how two-way binding is de-sugared.
+
+```html
+<my-counter [(value)]="counterValue"></my-counter>
+<my-counter [value]="counterValue" (valueChange)="counterValue=$event"></my-counter>
+```
+
+These two lines do exactly the same thing - that might give you an idea how to go about implementing custom two-way binding for your components :) For more details we suggest reading the official docs and article links which we mentioned a bit earlier.
+
+### Should you use two-way binding?
+
+If you checked out the docs and the article, you probably noticed that implementing two-way binding for your components isn't rocket science. You might be thinking "OH MY GOD I WILL ENABLE TWO-WAY BINDING FOR ALL MY COMPONENTS". Hold on, you might not actually need it.
+
+We recommend implementing two-way binding for components which hold some internal state and you want to be able to pass values down and you also want to update outer component value if something changes internally. Good example would be some kind of counter component.
+
+Another type of component for which you might consider implementing two-way binding are components which are used in a similar manner as inputs, checkboxes and similar elements used within forms. For such cases it is usually better to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead.
+
+## Routing and Lazy Loading
+
+TODO
+
+## Working with Angular Material
+
+TODO
+
+## Working with JSON API
+
+TODO
+
+## Working with Forms
+
+TODO
+
 ## Testing
 
 When unit testing, if the unit which you are testing is injectable, use `TestBed` for easier instance creation and easy providing of stub units. "unit" in this context can be a component, service, pipe, etc - anything injectable.
@@ -1090,38 +1146,180 @@ it('should log the user in when Log in button is clicked', () => {
 
 ### Testing HTTP requests
 
-TODO: HttpClientTestingModule, HttpTestingController, expectOne, flush, errors, ...
+Most likely your application will be making requests left and right so it is important to test how your app behaves when requests succeed and fail.
 
-### Testing asynchronous actions
+We will go through the whole process from service creation to testing success/failure states.
 
-TODO: using async/await in tests, fakeAsync and tick()
+#### Service setup
+
+We will create a simple `DadJokeService` which will be used for fetching jokes from `https://icanhazdadjoke.com`.
+
+The service looks like this:
+
+```ts
+@Injectable({
+  providedIn: 'root'
+})
+export class DadJokeService {
+  static I_CAN_HAZ_DAD_JOKE_URL = 'https://icanhazdadjoke.com';
+  static DEFAULT_JOKE = 'No joke for you!';
+
+  constructor(private http: HttpClient) { }
+
+  getJoke(): Observable<string> {
+    const options = {
+      headers: new HttpHeaders({
+        'Accept': 'application/json'
+      })
+    };
+
+    return this.http.get(DadJokeService.I_CAN_HAZ_DAD_JOKE_URL, options).pipe(
+      catchError(() => {
+        const noJoke: Partial<IJoke> = { joke: DadJokeService.DEFAULT_JOKE };
+
+        return observableOf(noJoke);
+      }),
+      map((response: IJoke) => {
+        return response.joke;
+      })
+    );
+  }
+}
+```
+
+You notice that our service depends on `HttpClient` which it injects using DI. It also catches any request errors and returns some "default" joke.
+
+We also have an interface which defines how the response JSON is structured:
+
+```ts
+export interface IJoke {
+  id: string;
+  joke: string;
+  status: number;
+}
+```
+
+#### Tests setup
+
+Let's start by creating a most basic test, which just ensures that our `DadJokeService` instantiates correctly.
+
+If you generated your service using Angular CLI, the `spec` file will probably look something like this:
+
+```ts
+describe('DadJokeService', () => {
+  beforeEach(() => TestBed.configureTestingModule({}));
+
+  it('should be created', () => {
+    const service: DadJokeService = TestBed.get(DadJokeService);
+    expect(service).toBeTruthy();
+  });
+});
+```
+
+Scaffolding tends to change from version to version and this particular example was generated using Angular CLI version 7.
+
+We will modify this default `spec` file a bit, by moving DadJokeService instance fetching from `it` block into a `beforeEach` hook, right after configuring the `TestBed`:
+
+```ts
+describe('DadJokeService', () => {
+  let service: DadJokeService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({ });
+
+    service = TestBed.get(DadJokeService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+```
+
+This transformation of default `spec` file is something that we usually do for all services that we test.
+
+If you run the tests now, they will fail because our service injects `HttpClient` and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule` which you can import from `@angular/common/http/testing` which provides a complete mocking backend for `HttpClient` service. We just have to import it in our `TestBed` module:
+
+```ts
+TestBed.configureTestingModule({
+  imports: [
+    HttpClientTestingModule,
+  ]
+});
+```
+
+Our basic test now passes.
+
+#### Mocking HTTP requests in tests
+
+This is where the fun part comes in - we would like to test how our service behaves if request succeeds or fails.
+
+We wil start by testing a successful request:
+
+```ts
+describe('DadJokeService', () => {
+  let service: DadJokeService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+      ]
+    });
+
+    service = TestBed.get(DadJokeService);
+    httpMock = TestBed.get(HttpTestingController);
+  });
+
+  it('should return the joke if request succeeds', () => {
+    const jokeResponse: IJoke = {
+      id: '42',
+      joke: 'What is brown and sticky? A stick.',
+      status: 200,
+    };
+
+    service.getJoke().subscribe((joke) => {
+      expect(joke).toBe(jokeResponse.joke);
+    });
+
+    const mockRequest = httpMock.expectOne(DadJokeService.I_CAN_HAZ_DAD_JOKE_URL);
+
+    mockRequest.flush(jokeResponse);
+  });
+});
+```
+
+We added `httpMock` variable to our `describe` block and we assign it to an instance of `HttpTestingController` which is provided by `HttpClientTestingModule`.
+
+We also defined a `jokeResponse` variable which is formatted in the same way as a real response JSON would be.
+
+Remember that `getJoke` method returns an Observable over a string because it maps the response JSON using the `map` operator. We subscribe to `getJoke()` and in success callback we assert that the value which our service returns is mapped correctly to be a string value of `joke` property from response JSON.
+
+We call `expectOne` method on `httpMock` object and we pass it a URL to which we are expecting a call to be made. No actual calls will be made during the test run. `expectOne` returns a `TestRequest` object on which we can call `flush` method and pass it response body.
+
+Since all this is executed synchronously, after we flush the response, success callback (which we passed when subscribing) is called immediately and the assertion is checked.
+
+Error catching can be tested in a similar manner:
+
+```ts
+it('should return a default joke if request fails', () => {
+  service.getJoke().subscribe((joke) => {
+    expect(joke).toBe(DadJokeService.DEFAULT_JOKE);
+  });
+
+  const mockRequest = httpMock.expectOne(DadJokeService.I_CAN_HAZ_DAD_JOKE_URL);
+
+  mockRequest.error(null);
+});
+```
+
+In our specific example it was not important which particular error happened because our error catching implementation in `catchError` operator has no logic which would determine different behaviour depending on error code. For example, if we wanted to test how our error handling handles 500 server errors, we could do something like this:
+```ts
+mockRequest.error(new ErrorEvent('server_down'), { status: 500 });
+```
+This allows us to test more complex error handling which usually includes some logic for displaying different error messages depending on error code and, as shown, that is completely doable using the `error` method of `TestRequest` object.
 
 ### Testing helpers
 
-TODO: basically test them like plain JS functions like you would in any other application in any other framework - no need for TestBed - vanilla Jasmine.
-
-## Angular Universal (Server-side Rendering)
-
-When setting up server-side rendering, follow the [official guide](https://angular.io/guide/universal).
-
-There are many tricks with SSR even after all the setup is done. You can check out [this repo](https://github.com/fvoska/angular-universal-demo) to see how many issues can be solved. This includes reading environment variables at runtime, so it is worth checking out.
-
-## Routing and Lazy Loading
-
-TODO
-
-## Working with Angular Material
-
-TODO
-
-## Working with JSON API
-
-TODO
-
-## Working with Forms
-
-TODO
-
-## Two-way binding
-
-TODO
+If you have helper functions, testing them is basically the same as in any other application in any other framework (or even vanilla JS). You do not need TestBed, you just need good old Jasmine and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.
