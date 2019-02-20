@@ -1,6 +1,6 @@
 # Angular Guidelines and Best Practices
 
-<center><img style="width: 100%; max-width: 1000px" src="assets/angular.svg"></center>
+<center><img style="width: 100%; max-width: 1000px" src="/img/angular.svg"></center>
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
@@ -113,7 +113,7 @@ If there are no typings available, you can create your own `typings.d.ts` file a
 
 ### [Recommended Editor](https://xkcd.com/378/)
 
-<center><img style="width: 100%; max-width: 740px" src="assets/real_programmers.png"></center>
+<center><img style="width: 100%; max-width: 740px" src="/img/real_programmers.png"></center>
 
 At Infinum we recommended using [VSCode](https://code.visualstudio.com/) for Angular development as it has great integration with TypeScript and has some handy Angular plugins:
 
@@ -841,7 +841,7 @@ If you checked out the docs and the article, you probably noticed that implement
 
 We recommend implementing two-way binding for components which hold some internal state and you want to be able to pass values down and you also want to update outer component value if something changes internally. Good example would be some kind of counter component.
 
-Another type of component for which you might consider implementing two-way binding are components which are used in a similar manner as inputs, checkboxes and similar elements used within forms. For such cases it is usually better to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead.
+Another type of component for which you might consider implementing two-way binding are components which are used in a similar manner as inputs, checkboxes and similar elements used within forms. For such cases it is usually better to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead. More on that in section about working with forms.
 
 ## Routing and Lazy Loading
 
@@ -857,7 +857,35 @@ TODO
 
 ## Working with Forms
 
-TODO
+As you might already know, there are two approaches when working with forms in Angular - template-driven and reactive forms. There is a lot of great documentation for both:
+- [Reactive Forms](https://angular.io/guide/reactive-forms)
+- [Template-driven Forms](https://angular.io/guide/forms)
+
+The real question is which approach should you use? General reasoning is that if form is simple enough, template-driver forms should suffice. If form is complex and has a lot of validations, reactive approach is easier to manage.
+
+Going by that general reasoning you might end up having a mix of reactive and template-driven forms in your application. For that reason here at Infinum we usually lean towards reactive forms. While they do have some initial overhead, forms often get more complex over time and if you start off with using reactive forms there is no need to switch from template-driven forms at the point where they get hard to manage.
+
+### Our own library for working with forms!
+
+Since we mostly use reactive forms, we created a library which make things a bit easier. The library in question is [ngx-form-object](https://github.com/infinum/ngx-form-object). Check out the project's readme on GitHub to see how to use it.
+
+Some of the benefits of using it are:
+- Definition of form attributes on model-level using decorators
+- Support for single-values and relationships (Attribute, BelongsTo, HasMany)
+- Introduces `FormObject` and `FormStore` for decoupling of data and validation
+- Form generation based on model definition
+
+We definitely recommend trying out `ngx-form-object` (*shameful self-promotion*). If you decide to use reactive forms. We used it on many complex projects with huge forms and it helped us a lot!
+
+### Making your components work with forms transparently
+
+Another topic which should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but hopefully there are some great articles which we recommend reading:
+- [Angular Custom Form Controls Made Easy](https://netbasal.com/angular-custom-form-controls-made-easy-4f963341c8e2)
+  - quick introduction
+- [Never again be confused when implementing ControlValueAccessor in Angular forms](https://blog.angularindepth.com/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms-93b9eee9ee83)
+  - more in-depth, great article, recommend reading; but uses jQuery in example - so démodé
+
+You can implement both two-way binding and `ControlValueAccessor` if you want your component to be usable both inside a form and standalone outside the form, but usually you will not use the same component both inside and outside a form, so implementing just `ControlValueAccessor` is usually enough.
 
 ## Testing
 
