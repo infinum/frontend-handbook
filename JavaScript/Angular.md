@@ -405,7 +405,7 @@ Make sure to update `angular.json` if you add/remove environment files.
 
 After all is defined, run/build the app for different environments by specifying the environment in `ng` command: `ng build --env=prod` for production build; `ng build --env=staging` for staging build; `ng build` will use default `dev` environment.
 
-## Formatting and Naming
+## Formatting, Naming and Best Practices
 
 ### In Templates
 
@@ -723,6 +723,8 @@ class UserService implements IUserService { }
 class UserServiceStub implements IUserService { }
 ```
 
+----
+
 #### Prefer interface over type
 
 When defining data structures, prefer using interfaces instead of types. Use types only for things for which interfaces can not be used - unions of different types.
@@ -782,6 +784,8 @@ export class AuthorModel extends User {
 
 **TL;DR:** Prefer interfaces and abstractions over types. Use types only when you need union types.
 
+----
+
 #### Renaming rxjs imports
 
 Some rxjs imports have very generic names so you might want to rename them during import:
@@ -792,6 +796,122 @@ import {
   EMPTY as emptyObservable
 } from 'rxjs';
 ```
+
+----
+
+#### Subscribe late and pipe
+
+If you are new to RxJS you will probably be overwhelmed by the amount of operators and the "Rx-way" of doing things. To do things in "Rx-way" you will have to embrace usage of operators and think carefully when and how you subscribe.
+
+Rule of thumb is to subscribe as little and as late as possible, and do minimal amount of work in subscription callbacks.
+
+We will demonstrate this on an example. Imagine you have a stream of data to which you would like to subscribe and transform the data in some way.
+
+```ts
+interface IUser {
+  id: number;
+  user_name: string;
+  name: string;
+  surname: string;
+}
+```
+
+```
+/account/me returns JSON:
+{
+  "id": 42,
+  "user_name": "TheDude",
+  "name": "Jeff",
+  "surname": "Lebowski"
+}
+```
+
+```ts
+// bad
+const user$: Observable<IUser> = http.get('/account/me');
+
+user$.subscribe((response: IUser) => {
+  console.log(response.user_name); // TheDude
+});
+```
+
+```ts
+// good
+const userName$: Observable<string> = http.get('/account/me').pipe(
+  map((response: IUser) => response.user_name)
+);
+
+userName$.subscribe(console.log); // TheDude
+```
+
+The reason why is because there might be multiple subscribers who want the same thing and they would all have to do the same transformation in their respective success callbacks.
+
+It is of course possible that subscribers want different things, and for those cases you might want to expose some observable which has less piped operations.
+
+The point here is that as soon as you notice that you are repeating yourself in subscription callbacks, you should move that repeated logic into some operator that is piped to the source observable.
+
+----
+
+#### No subscriptions in guards
+
+Asynchronous guards are common, but they should not subscribe to anything, they should return an observable.
+
+To demonstrate this on an example, consider we have `AuthService` and method `getUserData` which returns an observable. The observable will return `User` model if user is authenticated or emit an error if not.
+
+We would like to implement a guard which allows only authenticated users to navigate to the route.
+
+```ts
+// bad
+class UserAuthorizedGuard implements CanActivate {
+  constructor(private authService: AuthService) {}
+
+  canActivate(): Observable<boolean> {
+    const authStatus$ = new Subject();
+
+    this.authService.getUserData().subscribe((user: User) => {
+      authStatus$.next(true);
+      authStatus$.complete();
+    }, (error) => {
+      console.error('User not authorized!', error);
+
+      authStatus$.next(false);
+      authStatus$.complete();
+    })
+
+    return authStatus$;
+  }
+}
+
+// good
+class UserAuthorizedGuard implements CanActivate {
+  constructor(private authService: AuthService) {}
+
+  canActivate(): Observable<boolean> {
+    return this.authService.getUserData().pipe(
+      catchError((error) => {
+        console.error('User not authorized!', error);
+
+        return observableOf(false);
+      }),
+      map(Boolean), // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
+    )
+  }
+}
+```
+
+----
+
+#### Use resolve guards to pass data to routes
+
+It is recommended to use a [Resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) to pre-fetch data necessary for route component rendering. This way you avoid:
+- Having to initiate data fetching on component initialization
+  - data is fetched during routing event
+- Implementing logic for not showing the component until the data is fetched
+  - when component starts rendering, you know you will have the data
+- Implementing loader in templates of all components which can be navigated to
+  - if data is loaded via Resolve guard for all routes, you can have a global loader logic which hooks into router events, thus implementing loaded showing/hiding logic only once
+
+----
 
 #### Ordering class members (including getters and life-cycle hooks)
 
