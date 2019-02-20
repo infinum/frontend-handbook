@@ -2,11 +2,11 @@
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
-## Core Libraries and Tools
+## Core Libraries, Configuration and Tools
 
 ### [Angular CLI](https://github.com/angular/angular-cli)
 
-If you are starting a new project, the best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a webpack config exposed for editing), it does some optimizations when compiling your code and it offers some handy scaffolding tools.
+The best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a webpack config exposed for editing), it does some optimizations when compiling your code and it offers some handy scaffolding tools.
 
 Install Angular CLI globally with `npm install -g @angular/cli` and check out what you can do with `ng help`.
 
@@ -18,23 +18,23 @@ Use Angular CLI for initial project setup:
 ng new my-app
 ```
 
-As of version 7 there will be a quick wizard-like setup prompting you about routing and styling. Choose with routing and SCSS styling.
+As of version 7 there will be a quick wizard-like setup prompting you about routing and styling. Choose depending on your needs. All our Angular projects here at Infinum use routing and SCSS styling.
 
 #### Scaffolding
 
 You can use Angular CLI for generating new modules, components, services, directives, etc.
 
-Command is `ng generate [schematic-name]`, for example: `ng generate component`. There is also a shorthand for many generation commands, for example: `ng g c` === `ng generate component`
+Command is `ng generate [schematic-name]`, for example: `ng generate component`. There is also a shorthand for many generation commands, for example: `ng g c` === `ng generate component`. Run `ng generate --help` to see a list of all available options and schematics.
 
 ##### Creating new modules
 
-To create a new module, use `ng g m MyModule`. If module will have routes, you can generate module with routing skeleton with `ng g m MyModule --routing`.
+To create a new module, use `ng g m MyModule`. If the module should have routes, you can generate module with routing skeleton with `ng g m MyModule --routing`.
 
 ##### Creating new components
 
-Create component with `ng g c MyComponent` or `ng g c my-component`. In both cases resulting component class name will be `MyComponent` and dir name will be `my-component`.
+Create components with `ng g c MyComponent` or `ng g c my-component`. In both cases the resulting component class name will be `MyComponent` and dir name will be `my-component`.
 
-Usually when creating components you want to create component module as well. This makes the component more modular and ensures that everything that the component needs is provided by the component module. Component module should declare and export the component - think of it as a public API. Component module could also declare some other "internal" components, but it does not have to necessarily export those internal components.
+Usually when creating components you want to create component module as well. This makes the component more modular and ensures that everything that the component needs is provided by the component module. Component module should declare and export the component - you can think of it as a public API. Component module could also declare some other "internal" components, but it does not have to necessarily export those internal components. It is our recommendation that component modules export only one declared component.
 
 Also remember that component can be declared only once (in one module), so it makes sense for reusable components to have their own module.
 
@@ -48,6 +48,8 @@ ng g m Calendar
 ng g c Calendar
 
 # make sure to export CalendarComponent in CalendarModule
+
+cd calendar
 
 # add some "internal" components which are not exported
 ng g c WeekView
@@ -76,11 +78,17 @@ export class CalendarModule { }
 
 ##### Creating new services
 
-Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future).
+Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). We recommend that you first create a dir for your service and then generate new service inside that dir.
 
 #### Ejecting
 
-Do not do it, but if you **ABSOLUTELY HAVE TO** edit the webpack config manually, you can eject the application with `ng eject`. Unfortunately there is no way to extend webpack config.
+Do not do it, but if you _absolutely have to_ edit the webpack config manually, you can eject the CLI's webpack config with `ng eject`.
+
+#### Extending Angular CLI's webpack config
+
+Since Angular CLI version 6 there is a way to extend the internal webpack config which is used by the CLI by using custom builders. To check out the details on how to do this, please see [@angular-builders/custom-webpack](https://github.com/meltedspark/angular-builders/tree/master/packages/custom-webpack). This should be enough for most cases, so most probably you will never have to eject the internal webpack config.
+
+One good example of extending CLI's webpack config can be seen in [Guess.js's Angular implementation](https://guess-js.github.io/docs/angular) for predictive prefetching of lazy-loaded modules.
 
 #### Devserver proxy
 
@@ -88,9 +96,9 @@ If you have issues with CORS, for development purpuses it is OK to temporarily u
 
 #### Other commands
 
-This handbook will not cover all `ng` commands, please check out the [wiki](https://github.com/angular/angular-cli/wiki).
+This handbook will not cover all `ng` commands, please check out the [Angular CLI Wiki](https://github.com/angular/angular-cli/wiki) for more info.
 
-### Typings
+### [Typings](https://angular.io/guide/typescript-configuration)
 
 If you are using some JS library which is not written in TypeScript, you can usually install typings separately. Install typings as dev-dependency, for example:
 
@@ -99,11 +107,32 @@ npm install --save d3
 npm install --save-dev @types/d3
 ```
 
+If there are no typings available, you can create your own `typings.d.ts` file and write some custom typings for your needs - they do not even have to be 100% complete, they can cover only the functionality which you use.
+
+### [Recommended Editor](https://xkcd.com/378/)
+
+At Infinum we recommended [VSCode](https://code.visualstudio.com/) for Angular development as it has great integration with TypeScript and has some handy Angular plugins:
+
+- [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) - Intellisense in templates
+- [Angular 7 Snippets](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
+- [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
+- [stylelint](https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint)
+- [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+- [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+
 ### [RxJS](https://github.com/ReactiveX/rxjs)
 
-Angular depends heavily on RxJS so getting to know RxJS is pretty important. It is used for all event handling and can even be used for application state management of some description.
+Angular depends heavily on RxJS so getting to know RxJS is pretty important. It is used for all event handling and can even be used for state management.
 
-Please check out some RxJS tutorials if you are not familiar with Rx.
+RxJS is implementation of [Reactive Extensions Library](http://reactivex.io/) for JavaScript. Angular isn't the only place where you can come across RxJS, it can also be used with vanilla JS or some other framework. Even some Android and iOS developers use Rx for their respective platforms. While the implementations can differ a bit, learning just one of the implementations (for example RxJS) will introduce you to a lot of concepts which are common for all Rx implementations - and then you can get into heated mergeMap vs switchMap discussions with Android and/or iOS developers, isn't that magnificent?
+
+Please check out some RxJS tutorials if you are not familiar with Rx. Please note that there were some breaking changes in RxJS version 6 - some of the APIs changed (mostly the way we use operators) and many tutorials which were created at an earlier time are using older versions of RxJS. That being said, conceptually not much has changed, just the way you write some RxJS functionality changed.
+
+Here are some good introduction tutorials to get you started:
+- Academind - [Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) playlist
+- Interactive diagrams - [RxJS Marbles](https://rxmarbles.com/)
+  - this will help you a lot when trying to understand what specific operators do
+- Angular documentation - [The RxJS Library](https://angular.io/guide/rx-library)
 
 #### Observers and Subscribers
 
@@ -151,68 +180,71 @@ Some common operators are:
 - `catchError` (replaces `.catch`)
 - `switchMap`
 
-Avoid doing a lot of logic in `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching and side-effects via operators.
+Avoid doing a lot of logic in `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching, side-effects and transformations via operators.
 
-You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
+You can also write your own operators. If you do so, it is strongly recommended writing them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
 
 #### async/await
 
 You can use async/await to await completion of observables. Keep in mind that this will not work if the observable emits more than one value. For example, it is ok for things like HTTP requests.
 
-To convert an observable to a promise, just call `obs$.toPromise()`.
+To convert an observable to a promise, just call `obs$.toPromise()` and then you can await it.
 
-### Recommended Editor
+One important thing to note is that you are awaiting for **completion** and not for **emission** of values. Knowing that, what do you expect the result to be in the following example?
 
-Recommended editor for Angular development is [VSCode](https://code.visualstudio.com/) as it has great integration with TypeScript and has some handy Angular plugins:
+```ts
+const source$: Subject<string> = new Subject();
+const sourcePromise: Promise<string> = source$.toPromise();
 
-- [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) - Intellisense in templates
-- [Angular 7 Snippets](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
-- [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
-- [stylelint](https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint)
-- [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
-- [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+source$.next('foo');
+source$.next('bar');
+source$.complete();
+
+const result = await sourcePromise;
+```
+
+Spoiler alert, the result will be `bar`, and if we do not complete the source observable, awaiting will hang indefinitely.
 
 ## File/Module Organization and Naming
 
-If you created the app using Angular CLI, there is already some clear structure in place. Building on that structure, you will probably want to add some more dirs to help you organize your code.
+If you created the app using Angular CLI, there is already some clear structure in place. Building on that structure, you will probably want to add some more dirs to help you organize your code. Here are some guidelines:
 
-Try to split up your application into components which you can reuse. If, for example, you have to handle lazy loading of all images in the app, create a `Image` module and component in `app/components` and use it in other components whenever you have to show an image. Export the declared component and import/provide dependencies which your component has.
+- Try to split up your application into modules which you can reuse. If, for example, you have to handle lazy loading of all images in the app, create a `Image` module and component in `app/components` and use it in other modules/components whenever you have to show an image. Export the declared component and import/provide dependencies which your component uses.
 
-Container components which are loaded directly via routing (by either `component` or `loadChildren`) should be placed in `app/pages` dir. If a component is loaded because you have used it in a template, that component should be in `app/components`
+- Container components which are loaded directly via routing (by either `component` or `loadChildren`) should be placed in `app/pages` dir. If a component is loaded because you have used it in a template, that component should be in `app/components`.
+  - One little exception here: if there is some very specific component tied to some routing submodule which is used only in that submodule, it is OK to leave it in that submodule (but as soon as it is used in another routing submodule, move it to `app/components`).
 
-One little exception here: if there is some very specific component tied to some routing submodule which is used only in that submodule, it is OK to leave it in that submodule (but as soon as it is used in another routing submodule, move it to `app/components`.
+- Store all your animations in `app/animations/` and import them for usage in component decorators. If you want to have some animation properties like duration configurable, you can export "animation factory" function which returns the actual `AnimationTriggerMetadata`.
 
-Store all your animations in `app/animations/` and import them for usage in component decorators.
+- Classes which might be used throughout the application (e.g. generic `Dictionary` class) should be in `app/classes`.
 
-Classes which might be used throughout the application (e.g. generic `Dictionary` class) should be in `app/classes`.
+- Entity models (`User`, `Post`, etc.) should be in `app/models`.
 
-Entity models (`User`, `Post`, etc.) should be in `app/models`.
+- If you are using some JS libs which do not have typings, add your own custom typing in `app/custom-typings`.
 
-If you are using some JS libs which do not have typings, add your own custom typing in `app/custom-typings`.
+- Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. Good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`
 
-Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. Good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translation: 'Success' } }`
+- If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s and validators in `app/forms`. If you have form components which are reused throughout the app, put them in `app/components/forms`.
 
-If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s and validators in `app/forms`. If you have form components which are reused throughout the app, put them in `app/components/forms`.
+- Put all route guards in `app/guards`.
 
-Put all route guards in `app/guards`.
+- If you need some helper functions (like a rounding function which actually rounds correctly *cough* Math.round *cough* floating point *cough*), put the helper in `app/helpers` in its own dir and make sure to write tests for it and simply export it in `app/helpers/index.ts`.
 
-If you need some helper functions (like a rounding function which actually rounds correctly *cough* Math.round *cough* floating point *cough*), put the helper in `app/helpers` in its own dir, make sure to write tests for it and simply export it in `app/helpers/helpers.ts`.
+- Save all your common interface files to `app/interfaces`.
 
-Save all your interface files to `app/interfaces`.
+- If you have some custom pipes for use in templates, create their own dirs in `app/pipes`, similar to helpers. Declare, export and provide the pipes in `app/pipes/pipes.module.ts`.
 
-If you have some custom pipes for use in templates, create their own dirs in `app/pipes`, similar to helpers. Declare, export and provide the pipes in `app/pipes/pipes.module.ts`.
+- Services should be placed in `app/services`, each service in its own dir.
 
-Services should be placed in `app/services`, each service in its own dir.
+- If you have any `NgModule`s which are not components (e.g. a module which imports all specific material modules that you need), put them in `app/shared-modules`.
 
-If you have any `NgModule`s which are not components (e.g. a module which imports all specific material modules that you need), put them in `app/shared-modules`.
+- TypeScript `type` declarations should be placed in `app/types`.
 
-TypeScript `type` declarations should be placed in `app/types`.
+- As defined in angular-cli, assets placed in `assets` will be served statically.
 
-As defined in angular-cli, assets placed in `assets` will be served statically.
+- Global styles should be placed in `src/app/styles` dir. Styles dir has very similar structure as that described in [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
-Global styles should be placed in `src/app/styles` dir. Styles dir has very similar structure as that described in SASS Styleguide, so please check it out.
-
-All environment files are placed in `environments`.
+- All environment files are placed in `environments`.
 
 When it all comes together, your src folder might look something like this:
 *(please note the postfixes in filenames like .guard, .interface, .model, etc.)*
@@ -249,7 +281,7 @@ When it all comes together, your src folder might look something like this:
     - round/
       - round.helper.ts
       - round.helper.spec.ts
-    - helpers.ts
+    - index.ts
   - interfaces/
     - user-data.interface.ts
   - models/
@@ -276,7 +308,7 @@ When it all comes together, your src folder might look something like this:
     - components/
       - _title.scss
     - overrides/
-      - _buttons.scss
+      - _button.scss
       - _card.scss
       - _media-blender.scss
     - themes/
@@ -304,7 +336,7 @@ When it all comes together, your src folder might look something like this:
   - environment.staging.ts
   - environment.ts
 
-## Presentational and Container Components
+## Presentational and Smart/Container Components
 
 Design your components to be as small as possible and reuse them as much as possible. Philosophically, components can be split up into two types:
 
@@ -323,11 +355,11 @@ Design your components to be as small as possible and reuse them as much as poss
     - can be loaded directly or lazy loaded when routing
     - use `changeDetection: ChangeDetectionStrategy.OnPush` and pass data down using `async` pipe
 
-More on this philosophy can be found in various online articles. Some articles have framework-specific information, but the core concepts apply no matter which framework you are using.
+More on this philosophy can be found in various online articles. Some articles have framework-specific information, but the core concepts apply no matter which framework you are using. A good article from Angular University on this topic: [Angular Architecture - Smart Components vs Presentational Components](https://blog.angular-university.io/angular-2-smart-components-vs-presentation-components-whats-the-difference-when-to-use-each-and-why/).
 
 ## Environments
 
-Environment files should be used for some global configuration changes which can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and can not be changed after the build. This can be an issue if application is deployed using Docker - in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files.
+Environment files should be used for some global configuration changes which can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and can not be changed after the build (at least not in a nice way). This can be an issue if application is deployed using Docker - in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files (more on this in SSR section).
 
 Define interface for the environment: `/src/app/interfaces/environment.interface`:
 ```typescript
@@ -373,7 +405,7 @@ After all is defined, run/build the app for different environments by specifying
 
 ### In Templates
 
-For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like so: `"prefix": "my-app",`.
+For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like so: `"prefix": "my-app"` (needless to say, pick a better prefix than `my-app`).
 
 ----
 
@@ -394,7 +426,7 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
   <div>Transcluded Content</div>
 </my-app-component>
 
-<!-- maybe could be good? -->
+<!-- bad -->
 <my-app-component
   *ngFor="let item of items"
   class="foo"
@@ -419,6 +451,8 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 #### Closing elements and angle brackets placement:
 
+Case with no content:
+
 ```html
 <!-- bad -->
 <my-component
@@ -434,7 +468,10 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
   [someInput]="someValue"
   (click)="onSomeClick()"
 ></my-component>
+```
 
+Case with content:
+```html
 <!-- bad -->
 <my-component
   class="foo"
@@ -499,14 +536,14 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 <!-- bad -->
 <button (click)="onClick()">Log in</button>
 
-<!-- good -->
-<button (click)="onLogInClick()">Log in</button>
+<!-- bad - use infinitive instead of past form -->
+<button (click)="onLogInClicked()">Log in</button>
 
 <!-- bad - too much -->
 <button (click)="onLogInButtonClick()">Log in</button>
 
-<!-- bad - use infinitive instead of past form -->
-<button (click)="onLogInClicked()">Log in</button>
+<!-- good -->
+<button (click)="onLogInClick()">Log in</button>
 ```
 
 ----
@@ -566,8 +603,9 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 #### Subscribe to observables with `async` pipe if possible:
 
+Component:
+
 ```typescript
-// component
 @Component(...)
 export class ArticlesList {
   public articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
@@ -575,30 +613,39 @@ export class ArticlesList {
   ...
 }
 ```
-```html
-// template
-<my-app-menu *ngIf="menu$ | async as articlesMenu" [menu]="articlesMenu">
-</my-app-menu>
 
-<my-app-article-details *ngFor="let article of articles$ | async" [article]="article">
-</my-app-article-details>
+Template:
+
+```html
+<my-app-menu
+  *ngIf="menu$ | async as articlesMenu"
+  [menu]="articlesMenu"
+></my-app-menu>
+
+<my-app-article-details
+  *ngFor="let article of articles$ | async"
+  [article]="article"
+></my-app-article-details>
 ```
 
-`async` pipe is especially useful if `changeDetection` is `OnPush` since it subscribes, calls change detection manually on changes and unsubscribes when component is destroyed.
+`async` pipe is especially useful if `changeDetection` is `OnPush` since it subscribes, calls change detection on changes and unsubscribes when component is destroyed.
 
 ----
 
 #### Use attributes for transclusion selectors:
 
+`my-app-wrapper` component template:
+
 ```html
-// Wrapper component
 <div class="wrapper">
   <p>Wrapper content:</p>
   <ng-content select="[some-stuff]"></ng-content>
 </div>
 ```
+
+Some other component's template:
+
 ```html
-// Some other component
 <my-app-wrapper>
   <div class="some-item" some-stuff>Some stuff</div>
 </my-app-wrapper>
@@ -748,9 +795,9 @@ TODO
 
 ## Dependency Injection
 
-In Angular, DI is utilized heavily, primarily for providing instances of either primitive values or class instances.
+DI is utilized heavily in Angular, primarily for providing instances of either primitive values or class instances.
 
-Make sure to check out the [official DI guide](https://angular.io/guide/dependency-injection) and you can also have a look at [this repo](https://github.com/fvoska/angular-di-demo) for some examples.
+DI is a very complex topic and warrants a separate discussion which would be out of scope for this Handbook. Make sure to check out the [official DI guide](https://angular.io/guide/dependency-injection) which explains many details. You can also have a look at [this repo](https://github.com/fvoska/angular-di-demo) for some examples.
 
 As of Angular 6, make sure to use `{ providedIn: 'root' }` [for singletons](https://angular.io/guide/singleton-services#providing-a-singleton-service) whenever possible.
 
@@ -758,9 +805,42 @@ DI is very useful for testing purposes, as shown in next chapter.
 
 ## Testing
 
-When unit testing, if the unit which you are testing is injectable, use `TestBed` for easier instance creation and easy providing of stub units. 'unit' in this context can be a component, service, pipe, etc - anything injectable.
+When unit testing, if the unit which you are testing is injectable, use `TestBed` for easier instance creation and easy providing of stub units. "unit" in this context can be a component, service, pipe, etc - anything injectable.
 
 ### Testing a service example
+
+We will test `SomeService` which injects `UserService`:
+
+```ts
+@Injectable({ providedIn: 'root' })
+export class SomeService {
+  constructor(private userService: UserService) { }
+
+  // ...rest of functionality
+}
+```
+
+To make this test a "unit" test, we will mock all `SomeService`'s dependencies:
+
+```ts
+let service: SomeService;
+
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    providers: [
+      { provide: UserService, useClass: UserTestingService }, // Provide mock dependency
+    ],
+  });
+
+  service = TestBed.get(SomeService);
+});
+
+it('should create a service instance', () => {
+  expect(service).toBeTruthy();
+});
+```
+
+Mock service for UserService might look something like this:
 
 ```ts
 // service/user/user.service.interface.ts
@@ -782,34 +862,11 @@ export class UserTestingService implements IUserService {
 }
 ```
 
-```ts
-@Injectable({ providedIn: 'root' })
-export class SomeService {
-  constructor(private userService: UserService)
-}
-```
-
-```ts
-let service: SomeService;
-
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: [
-      { provide: UserService, useClass: UserTestingService },
-    ],
-  });
-
-  service = TestBed.get(SomeService);
-});
-
-it('should create a service instance', () => {
-  expect(service).toBeTruthy();
-});
-```
-
 ### Testing a component example
 
 When testing complex components which use multiple services and render other components, make sure to provide them with stub services and components.
+
+In this example we will test `ComponentToBeTested` component which renders `SomeOtherComponent` and depends on `UserService`:
 
 ```ts
 @Component({
@@ -851,7 +908,7 @@ SomeOtherComponent folder structure should look like this:
 
       > should declare and export `SomeOtherTestingComponent`
 
-Make sure to exclude `*.testing.*` files from code coverage reports.
+Make sure to exclude `*.testing.*` files from code coverage reports in Jasmine (`angular.json` `codeCoverageExclude`) and any other reporting tools you might be using (like SonarQube, for example).
 
 Test should look like this:
 
@@ -1066,9 +1123,5 @@ TODO
 TODO
 
 ## Two-way binding
-
-TODO
-
-## Inner Workings and Common Pitfalls
 
 TODO
