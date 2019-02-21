@@ -915,7 +915,40 @@ It is recommended to use a [Resolve guard](https://angular.io/guide/router#resol
 
 #### Ordering class members (including getters and life-cycle hooks)
 
-TODO
+When ordering class members, follow this guideline:
+1. `@Input`s
+2. `@Output`s
+3. public, protected and private properties
+4. constructor
+5. lifecycle hooks
+6. public, protected and private getters and setters
+7. public, protected and private methods
+
+Example:
+```ts
+class MyComponent implements OnInit, OnChanges {
+  @Input() public i1: string;
+  @Input() public i2: string;
+  @Output() public o2: EventEmitter<string> = new EventEmitter();
+  public attr1: number;
+  protected attr2: string;
+  private attr3: Date;
+
+  constructor(...) { ... }
+
+  public ngOnInit(): void { ... }
+
+  public ngOnChanges(): void { ... }
+
+  public get computedProp(): string { ... }
+
+  private get secretComputedProp(): number { ... }
+
+  public onSomeButtonClick(event: MouseEvent): void { ... }
+
+  private someInternalAction(): void { ... }
+}
+```
 
 ## Dependency Injection
 
@@ -962,18 +995,6 @@ If you checked out the docs and the article, you probably noticed that implement
 We recommend implementing two-way binding for components which hold some internal state and you want to be able to pass values down and you also want to update outer component value if something changes internally. Good example would be some kind of counter component.
 
 Another type of component for which you might consider implementing two-way binding are components which are used in a similar manner as inputs, checkboxes and similar elements used within forms. For such cases it is usually better to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead. More on that in section about working with forms.
-
-## Routing and Lazy Loading
-
-TODO
-
-## Working with Angular Material
-
-TODO
-
-## Working with JSON API
-
-TODO
 
 ## Working with Forms
 
