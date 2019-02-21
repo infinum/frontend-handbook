@@ -45,7 +45,8 @@ When the source code in `develop` branch reaches a stable point and is ready to 
 Next to the main `master` and `develop` branches the Flow model uses a variety of supporting branches to aid parallel development between team members, ease tracking of features, prepare for production releases, and to assist in quickly fixing live production problems.
 Unlike the two main branches, these branches have a limited lifetime.
 
-Feature branches may branch of from `develop` and must be merged back into `develop`. Feature branch naming convention is as follows: `feature/*`, for example `feature/login-page`
+Feature branches may branch of from `develop` and must be merged back into `develop`. Feature branch naming convention is as follows: `feature/*`, for example `feature/login-page`.
+It is advisable to put a unique task identificator into the branch name. Usually that would be a task ID or some other unique task property, for example `feature/8712-login-page`
 
 Feature branches are used to develop new features for the upcoming or a distant future release. These branches exist as long as the feature is in development. Eventually, they are merged back into `develop` or are discarded.
 
