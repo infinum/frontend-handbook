@@ -71,7 +71,7 @@ Writing good commit messages is important. A clear commit log will be easier to 
 
 ## Pull requests
 
-Avoid creating pull requests that contain a lot of changes. If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which results in multiple pull requests.
+Avoid creating pull requests that contain [a lot of changes](https://www.urbandictionary.com/define.php?term=KPR). If you are implementing a feature that requires a lot of file changes, try breaking it up into multiple smaller features which results in multiple pull requests.
 
 Smaller pull requests are easier to review and will therefore be merged sooner.
 
