@@ -1335,6 +1335,90 @@ beforeEach(async(() => {
 }));
 ```
 
+### Testing component with content projection
+
+Components which use content projection can not be tested in the same way as components which use only inputs for passing the data to the component. The problem is that during TestBed configuration you can only configure the testing module; you can not define the template which would describe how the component is used inside another component's template.
+
+One of the easiest ways to test content projection is to simply create a wrapper component just for testing purposes.
+
+`TranscluderComponent`:
+
+```ts
+@Component({
+  selector: 'app-transcluder',
+  template: `
+  <h1>
+    <ng-content select="[title]"></ng-content>
+  </h1>
+
+  <div class="content">
+    <ng-content select="[content]"></ng-content>
+  </div>
+  `
+})
+export class TranscluderComponent { }
+```
+
+`TranscluderModule`:
+
+```ts
+@NgModule({
+  declarations: [TranscluderComponent],
+  imports: [CommonModule],
+  exports: [TranscluderComponent],
+})
+export class TranscluderModule { }
+```
+
+`TranscluderComponent` tests:
+
+```ts
+@Component({
+  selector: 'app-transcluder-testing-wrapper',
+  template: `
+  <app-transcluder>
+    <span title>{{ title }}</span>
+
+    <a href="google.com" content>{{ linkText }}</a>
+  </app-transcluder>
+  `
+})
+class TranscluderTestingWrapperComponent {
+  @ViewChild(TranscluderComponent) public trancluderComponent: TranscluderComponent;
+  public title = 'Go to Google';
+  public linkText = 'Link';
+}
+
+describe('TranscluderComponent', () => {
+  let component: TranscluderTestingWrapperComponent;
+  let fixture: ComponentFixture<TranscluderTestingWrapperComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [TranscluderModule],
+      declarations: [TranscluderTestingWrapperComponent]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TranscluderTestingWrapperComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should display passed title', () => {
+    const title: HTMLHeadingElement = fixture.debugElement.query(By.css('h1')).nativeElement;
+    expect(title.textContent).toBe(component.title);
+  });
+
+  it('should display passed content', () => {
+    const title: HTMLHeadingElement = fixture.debugElement.query(By.css('.content')).nativeElement;
+    expect(title.textContent).toBe(component.linkText);
+  });
+});
+```
+
 ### Trigger events from DOM instead of calling handlers directly
 
 If you have some buttons with click handlers, you should test them by clicking on the elements instead of calling the handler directly.
