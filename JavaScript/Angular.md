@@ -901,15 +901,31 @@ class UserAuthorizedGuard implements CanActivate {
 
 ----
 
-#### Use resolve guards to pass data to routes
+#### Be mindful of how and when data is fetched
 
-It is recommended to use a [Resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) to pre-fetch data necessary for route component rendering. This way you avoid:
-- Having to initiate data fetching on component initialization
-  - data is fetched during routing event
-- Implementing logic for not showing the component until the data is fetched
+There are two basic approaches to data loading:
+1. Via route resolve guards
+2. Via container components
+
+**Resolve guards**
+
+[Resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) can be used to pre-fetch data necessary for component rendering. Advantages of using resolve guards are:
+- No need for data fetching on component initialization
+  - data is fetched during routing event and ready when component is initialized
+- No need to implementing logic for not showing the component until the data is fetched
   - when component starts rendering, you know you will have the data
-- Implementing loader in templates of all components which can be navigated to
+- Loader showing/hiding logic can be implemented in once place instead of in each component that loads data
   - if data is loaded via Resolve guard for all routes, you can have a global loader logic which hooks into router events, thus implementing loaded showing/hiding logic only once
+
+**Container components**
+
+Even though guards are really easy to use and have some advantages, there might be situations where data has to be loaded through multiple requests or loading might be slow. In those cases it might be worth considering using a container component for data loading instead of guards. Container component would of course use some service for making the requests and then show the data once the requests complete. This way it is possible to show partial data as it comes in and implement empty state design for each chunk of data which is shown.
+
+A good example where partial data loading via container component can be preferable over all-at-once loading via guards is a dashboard-like page with multiple graphs where each graph shows data from one request. In such cases it is probably better to let the container component handle data loading and presentational components (graphs) should implement empty state with some nice loaders.
+
+Bottom line:
+- Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once
+- Use container components if data is loaded in chunks and results should be shown as they come in
 
 ----
 
