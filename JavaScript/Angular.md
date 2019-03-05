@@ -1030,11 +1030,9 @@ You can implement both two-way binding and `ControlValueAccessor` if you want yo
 
 ## Testing
 
-Depending on project and client's requirements, you might not have to do any testing at all or you might have to target >90% coverage. Usefulness of this section will depend on your need and desire for testing.
+Writing good quality tests for critical functionalities is an important step in quality assurance. We do not recommend not writing writing any tests nor do we recommend mindlessly trying to achieve 100% coverage. Applications with 100% coverage can still have bugs either because the test are not good enough or if edge cases were not covered by the implementation in the first place.
 
-We do not recommend not wiring any tests and neither do we recommend mindlessly trying to achieve 100% coverage. What we do recommend is to consider writing good quality tests for critical functionalities. Applications with 100% coverage can still have bugs either because the test are not good enough or if edge cases were not covered by the implementation in the first place.
-
-If you do decide to tests your Angular applications, there are many tips and tricks which we will cover in this section.
+There are many tips and tricks that go into testing Angular applications, and this section will cover some of them.
 
 ### Unit vs. Integration vs. End-to-End Testing
 
@@ -1042,9 +1040,9 @@ Tests can usually be placed in one of three categories: unit, integration or end
 
 #### Unit testing
 
-Unit tests test, as the name suggests, units. A unit is some individual piece of software which can also have some external dependencies (it can also be dependency-free). In context of Angular, units are components, services, guards, pipes, helper functions, interceptors, models and other custom classes, etc.
+Unit tests, as the name suggests, test units. A unit is some individual piece of software which can also have some external dependencies. In context of Angular, units are components, services, guards, pipes, helper functions, interceptors, models and other custom classes, etc.
 
-Unit testing in Angular comes out-of-the-box with Jasmine as both the testing framework and assertion library. We can even generate nice coverage reports as HTML files which can be presented to management or some other interested parties.
+Unit testing in Angular comes out-of-the-box with Jasmine as both the testing framework and assertion library. It is also possible to generate nice coverage reports as HTML files which can be presented to management or some other interested parties.
 
 #### Integration testing
 
