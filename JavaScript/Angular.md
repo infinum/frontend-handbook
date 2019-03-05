@@ -80,7 +80,7 @@ export class CalendarModule { }
 
 ##### Creating new services
 
-Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). We recommend that you first create a dir for your service and then generate new service inside that dir.
+Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). Solution is to simply prefix the directory name and the command will generate the directory as well as the service: `ng g s my-service/my-service`.
 
 #### Ejecting
 
@@ -88,7 +88,7 @@ Do not do it, but if you *absolutely have to* edit the webpack config manually, 
 
 #### Extending Angular CLI's webpack config
 
-Since Angular CLI version 6 there is a way to extend the internal webpack config which is used by the CLI by using custom builders. To check out the details on how to do this, please see [@angular-builders/custom-webpack](https://github.com/meltedspark/angular-builders/tree/master/packages/custom-webpack). This should be enough for most cases, so most probably you will never have to eject the internal webpack config.
+Since Angular CLI version 6 there is a way to extend the internal webpack config which is used by the CLI by using custom builders. To check out the details on how to do this, please see [@angular-builders/custom-webpack](https://github.com/meltedspark/angular-builders/tree/master/packages/custom-webpack). This should be enough for most cases, so you will most likely never have to eject the internal webpack config.
 
 One good example of extending CLI's webpack config can be seen in [Guess.js's Angular implementation](https://guess-js.github.io/docs/angular) for predictive prefetching of lazy-loaded modules.
 
@@ -98,7 +98,7 @@ If you have issues with CORS, for development purpuses it is OK to temporarily u
 
 #### Other commands
 
-This handbook will not cover all `ng` commands, please check out the [Angular CLI Wiki](https://github.com/angular/angular-cli/wiki) for more info.
+This handbook will not cover all `ng` commands; please check the [Angular CLI Wiki](https://github.com/angular/angular-cli/wiki) for more info.
 
 ### [Typings](https://angular.io/guide/typescript-configuration)
 
@@ -213,7 +213,7 @@ Spoiler alert, the result will be `bar`, and if we do not complete the source ob
 
 If you created the app using Angular CLI, there is already some clear structure in place. Building on that structure, you will probably want to add some more dirs to help you organize your code. Here are some guidelines:
 
-- Try to split up your application into modules which you can reuse. If, for example, you have to handle lazy loading of all images in the app, create a `Image` module and component in `app/components` and use it in other modules/components whenever you have to show an image. Export the declared component and import/provide dependencies which your component uses.
+- Try to split up your application into modules which you can reuse. If, for example, you have to handle lazy loading of all images in the app, create an `Image` module and component in `app/components` and use it in other modules/components whenever you have to show an image. Export the declared component and import/provide dependencies which your component uses.
 
 - Container components which are loaded directly via routing (by either `component` or `loadChildren`) should be placed in `app/pages` dir. If a component is loaded because you have used it in a template, that component should be in `app/components`.
   - One little exception here: if there is some very specific component tied to some routing submodule which is used only in that submodule, it is OK to leave it in that submodule (but as soon as it is used in another routing submodule, move it to `app/components`).
@@ -226,7 +226,7 @@ If you created the app using Angular CLI, there is already some clear structure 
 
 - If you are using some JS libs which do not have typings, add your own custom typing in `app/custom-typings`.
 
-- Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. Good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`
+- Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. Good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`. If enum data is a bit more complex, it can be useful to define an interface for it.
 
 - If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s and validators in `app/forms`. If you have form components which are reused throughout the app, put them in `app/components/forms`.
 
@@ -586,7 +586,7 @@ Case with content:
 <ng-container *ngIf="something"></ng-container>
 
 <!-- good -->
-<div class="i-need-this-class" *ngIf="something"></div>
+<div *ngIf="something" class="i-need-this-class"></div>
 ```
 
 ----
@@ -1039,7 +1039,7 @@ We definitely recommend trying out `ngx-form-object` (*shameful self-promotion*)
 
 ### Making your components work with forms transparently
 
-Another topic which should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but hopefully there are some great articles which we recommend reading:
+Another topic which should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but thankfully there are some great articles which we recommend reading:
 - [Angular Custom Form Controls Made Easy](https://netbasal.com/angular-custom-form-controls-made-easy-4f963341c8e2)
   - quick introduction
 - [Never again be confused when implementing ControlValueAccessor in Angular forms](https://blog.angularindepth.com/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms-93b9eee9ee83)
@@ -1087,9 +1087,10 @@ Covering E2E testing into detail is out of scope for this Handbook, please check
 - You can set up some pre-conditions using `onPrepare` hook in `protractor.conf.js`
 - If you are using async/await in your e2e tests, make sure to [check this out](https://github.com/angular/protractor/blob/master/docs/async-await.md)
 
-One last thing we would like to mention is that Protractor isn't the only solution for e2e testing, but it does come out-of-the box with Angular CLI generated projects. Honestly, writing Protractor tests was often a painful process (especially if you are writing tests using [Cucumber](https://cucumber.io/)). There are some newer e2e testing frameworks which might be worth checking out:
+It is good to mention that Protractor isn't the only solution for e2e testing, but it does come out-of-the box with Angular CLI generated projects. Honestly, writing Protractor tests was often a painful process (especially if you are writing tests using [Cucumber](https://cucumber.io/)). There are some newer e2e testing frameworks which might be worth checking out:
 - [Cypress.io](https://www.cypress.io/)
-- [Puppeteer](https://developers.google.com/web/tools/puppeteer/)
+- [WebdriverIO](https://webdriver.io/)
+- [Puppeteer](https://developers.google.com/web/tools/puppeteer/), although e2e testing is not its primary or only intended use
 
 ### Utilizing TestBed
 
