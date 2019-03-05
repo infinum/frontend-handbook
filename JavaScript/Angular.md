@@ -246,7 +246,7 @@ If you created the app using Angular CLI, there is already some clear structure 
 
 - As defined in angular-cli, assets placed in `assets` will be served statically.
 
-- Global styles should be placed in `src/app/styles` dir. Styles dir has very similar structure as that described in [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+- Global styles should be placed in `app/styles` dir. Styles dir has very similar structure as that described in [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
 - All environment files are placed in `environments`.
 
@@ -365,14 +365,14 @@ More on this philosophy can be found in various online articles. Some articles h
 
 Environment files should be used for some global configuration changes which can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and can not be changed after the build (at least not in a nice way). This can be an issue if application is deployed using Docker - in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files (more on this in SSR section).
 
-Define interface for the environment: `/src/app/interfaces/environment.interface`:
+Define interface for the environment: `app/interfaces/environment.interface`:
 ```typescript
 export interface IEnvironment {
   production: boolean;
 }
 ```
 
-Set base values `/src/environments/environment.base.ts`:
+Set base values `environments/environment.base.ts`:
 ```typescript
 import { IEnvironment } from 'app/interfaces/environment.interface';
 
@@ -381,7 +381,7 @@ export const baseEnvironment: IEnvironment = {
 }
 ```
 
-This is the default `dev` environment: `/src/environments/environment.ts`:
+This is the default `dev` environment: `environments/environment.ts`:
 ```typescript
 import { baseEnvironment } from './environment.base';
 
@@ -391,7 +391,7 @@ export const environment: IEnvironment = {
 };
 ```
 
-This is the production environment: `/src/environments/environment.prod.ts`:
+This is the production environment: `environments/environment.prod.ts`:
 ```typescript
 import { baseEnvironment } from './environment.base';
 
