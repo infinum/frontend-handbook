@@ -660,12 +660,13 @@ Some other component's template:
 #### Order attributes and bindings:
 
 1. Structural directives (`*ngFor`, `*ngIf`, etc.)
-2. Element reference (`#myComponent`)
-3. Ordinary attributes (`class`, etc.)
-4. Non-interpolated string inputs (`foo="bar"`)
-5. Interpolated inputs (`[foo]="theBar"`)
-6. Two-way bindings (`[(ngModel)]="email"`)
-7. Outputs (`(click)="onClick()"`)
+2. Animation triggers (`@fade`, `[@fade]`)
+3. Element reference (`#myComponent`)
+4. Ordinary attributes (`class`, etc.)
+5. Non-interpolated string inputs (`foo="bar"`)
+6. Interpolated inputs (`[foo]="theBar"`)
+7. Two-way bindings (`[(ngModel)]="email"`)
+8. Outputs (`(click)="onClick()"`)
 
 ```html
 <!-- bad -->
@@ -675,6 +676,7 @@ Some other component's template:
   class="foo"
   #myComponent
   [foo]="theBar"
+  @fade
   foo="bar"
   *ngIf="shouldShow"
   (someEvent)="onSomeEvent($event)"
@@ -683,6 +685,7 @@ Some other component's template:
 <!-- good -->
 <my-app-component
   *ngIf="shouldShow"
+  @fade
   #myComponent
   class="foo"
   foo="bar"
