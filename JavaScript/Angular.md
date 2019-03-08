@@ -917,7 +917,7 @@ There are two basic approaches to data loading:
   - data is fetched during routing event and ready when component is initialized
 - No need to implementing logic for not showing the component until the data is fetched
   - when component starts rendering, you know you will have the data
-- Loader showing/hiding logic can be implemented in once place instead of in each component that loads data
+- Loader showing/hiding logic can be implemented in one place instead of in each component that loads data
   - if data is loaded via Resolve guard for all routes, you can have a global loader logic which hooks into router events, thus implementing loaded showing/hiding logic only once
 
 **Container components**
