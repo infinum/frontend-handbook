@@ -28,11 +28,11 @@ You can use Angular CLI for generating new modules, components, services, direct
 
 Command is `ng generate [schematic-name]`, for example: `ng generate component`. There is also a shorthand for many generation commands, for example: `ng g c` === `ng generate component`. Run `ng generate --help` to see a list of all available options and schematics.
 
-##### Creating new modules
+**Creating new modules**
 
 To create a new module, use `ng g m MyModule`. If the module should have routes, you can generate module with routing skeleton with `ng g m MyModule --routing`.
 
-##### Creating new components
+**Creating new components**
 
 Create components with `ng g c MyComponent` or `ng g c my-component`. In both cases the resulting component class name will be `MyComponent` and dir name will be `my-component`.
 
@@ -78,7 +78,7 @@ ng g c DayView
 export class CalendarModule { }
 ```
 
-##### Creating new services
+**Creating new services**
 
 Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). Solution is to simply prefix the directory name and the command will generate the directory as well as the service: `ng g s my-service/my-service`.
 
