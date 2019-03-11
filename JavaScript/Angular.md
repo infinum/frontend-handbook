@@ -255,90 +255,90 @@ When it all comes together, your src folder might look something like this:
 
 - app/
   - animations/
-    - fade.animations.ts
+      - fade.animations.ts
   - classes/
-    - dictionary.ts
+      - dictionary.ts
   - components/
-    - header/
-      - header.component.html
-      - header.component.scss
-      - header.component.spec.ts
-      - header.component.ts
-      - header.module.ts
-    - modals/
-    - forms/
+      - header/
+          - header.component.html
+          - header.component.scss
+          - header.component.spec.ts
+          - header.component.ts
+          - header.module.ts
+      - modals/
+      - forms/
   - custom-typings/
-    - some-js-lib.d.ts
+      - some-js-lib.d.ts
   - enums/
-    - http-response-code.enum.ts
-    - http-response-code-data.enum.ts
-    - user-status.enum.ts
+      - http-response-code.enum.ts
+      - http-response-code-data.enum.ts
+      - user-status.enum.ts
   - forms/
-    - user/
-      - user.form-object.ts
-      - user.form-store.ts
+      - user/
+          - user.form-object.ts
+          - user.form-store.ts
   - guards/
-    - authentication/
-      - authentication.guard.ts
-      - authentication.guard.spec.ts
+      - authentication/
+          - authentication.guard.ts
+          - authentication.guard.spec.ts
   - helpers/
-    - round/
-      - round.helper.ts
-      - round.helper.spec.ts
-    - index.ts
+      - round/
+          - round.helper.ts
+          - round.helper.spec.ts
+      - index.ts
   - interfaces/
-    - user-data.interface.ts
+      - user-data.interface.ts
   - models/
-    - user.model.ts
+      - user.model.ts
   - pages/
-    - home-container/
-    - login-container/
-    - users-container/
+      - home-container/
+      - login-container/
+      - users-container/
   - pipes/
-    - order-by/
-      - order-by.pipe.ts
-      - order-by.pipe.spec.ts
-    - pipes.module.ts
+      - order-by/
+          - order-by.pipe.ts
+          - order-by.pipe.spec.ts
+      - pipes.module.ts
   - services/
-    - user/
-      - user.service.ts
-      - user.service.spec.ts
+      - user/
+          - user.service.ts
+          - user.service.spec.ts
   - shared-modules/
-    - material/
-      - material.module.ts
+      - material/
+          - material.module.ts
   - types/
-    - sorting-function.type.ts
+      - sorting-function.type.ts
   - styles/
-    - components/
-      - _title.scss
-    - overrides/
-      - _button.scss
-      - _card.scss
-      - _media-blender.scss
-    - themes/
-      - _main-theme.scss
-    - utils/
-      - _colors.scss
-      - _fonts.scss
-      - _mixins.scss
-      - _shared-variables.scss
-      - _z-indices.scss
-    - _core.scss
-    - main.scss
+      - components/
+          - _title.scss
+      - overrides/
+          - _button.scss
+          - _card.scss
+          - _media-blender.scss
+      - themes/
+          - _main-theme.scss
+      - utils/
+          - _colors.scss
+          - _fonts.scss
+          - _mixins.scss
+          - _shared-variables.scss
+          - _z-indices.scss
+      - _core.scss
+      - main.scss
 - assets/
-  - fonts/
-    - CustomFont.eot
-    - CustomFont.ttf
-    - CustomFont.woff
-    - CustomFont.woff2
-  - images/
-    - icons/
-      - app-icon.svg
+    - fonts/
+        - CustomFont.eot
+        - CustomFont.ttf
+        - CustomFont.woff
+        - CustomFont.woff2
+    - images/
+        - icons/
+            - app-icon.svg
 - environments/
-  - environment.base.ts
-  - environment.prod.ts
-  - environment.staging.ts
-  - environment.ts
+    - environment.base.ts
+    - environment.prod.ts
+    - environment.staging.ts
+    - environment.ts
 
 ## Presentational and Smart/Container Components
 
