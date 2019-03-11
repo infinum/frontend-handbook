@@ -1239,22 +1239,23 @@ export class ComponentToBeTested {
 
 SomeOtherComponent folder structure should look like this:
 
-- components/some-other/
-  - some-other.module.ts
-    - `export class SomeOtherModule`
-    - should declare and export `SomeOtherComponent`
-  - some-other.component.ts
-    - `export class SomeOtherComponent implements ISomeOtherComponent`
-  - some-other.component.spec.ts
-  - some-other.component.interface.ts
-    - `export interface ISomeOtherComponent`
-    - interface should include all `@Input()`s and `@Output()`s
-  - some-other.testing.component.ts
-    - `export class SomeOtherTestingComponent implements ISomeOtherComponent`
-    - **important** - should have the same selector as `SomeOtherComponent`
-  - some-other.testing.module.ts
-    - `export class SomeOtherTestingModule`
-    - should declare and export `SomeOtherTestingComponent`
+- components/
+  - some-other/
+      - some-other.module.ts
+        - `export class SomeOtherModule`
+        - should declare and export `SomeOtherComponent`
+      - some-other.component.ts
+        - `export class SomeOtherComponent implements ISomeOtherComponent`
+      - some-other.component.spec.ts
+      - some-other.component.interface.ts
+        - `export interface ISomeOtherComponent`
+        - interface should include all `@Input()`s and `@Output()`s
+      - some-other.testing.component.ts
+        - `export class SomeOtherTestingComponent implements ISomeOtherComponent`
+        - **important** - should have the same selector as `SomeOtherComponent`
+      - some-other.testing.module.ts
+        - `export class SomeOtherTestingModule`
+        - should declare and export `SomeOtherTestingComponent`
 
 Make sure to exclude `*.testing.*` files from code coverage reports in Jasmine (`angular.json` `codeCoverageExclude`) and any other reporting tools you might be using (like SonarQube, for example).
 
