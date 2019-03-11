@@ -1,9 +1,9 @@
-# React Guidelines and Best Practices
+# React guidelines and best practices
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
-### File Organization and Naming
-As it is a good practice to divide React components as container and presentational components, you should place them in separate folders (this example uses **containers** and **components** for folder naming, but there are other naming conventions, depending on the use case and preference of developers).
+### File organization and naming
+As it is good practice to divide React components into container and presentational components, you should place them in separate folders (this example uses **containers** and **components** for folder naming, but there are other naming conventions, depending on the use case and preference of developers).
 
 ```
 ...
@@ -12,7 +12,7 @@ As it is a good practice to divide React components as container and presentatio
 ...
 ```
 
-Use **camelCase** for general folder naming and **PascalCase** for React components, their stylesheet files and their containing folders.
+Use **camelCase** for general folder naming, and **PascalCase** for React components, their style sheet files, and their containing folders.
 
 ```
 ...
@@ -30,10 +30,10 @@ Use **camelCase** for general folder naming and **PascalCase** for React compone
 ...
 ```
 
-### File importing
+### Importing files
 
 JS Imports should be grouped in three categories:
-1. 3rd party dependencies
+1. 3rd-party dependencies
 2. Project modules
 3. Assets
 
@@ -48,11 +48,11 @@ import { User } from '../state/models/User';
 import logo from '../assets/logo.svg';
 ```
 
-### Component Declaration
+### Component declaration
 
 For declaring class components:
 - use ES2015 **class syntax**
-- if you **need** `React.createClass` use [`create-react-class`](https://www.npmjs.com/package/create-react-class) (`createClass` was removed in React 16)
+- if you **need** `React.createClass`, use [`create-react-class`](https://www.npmjs.com/package/create-react-class) (`createClass` was removed in React 16)
 
 ``` jsx
 // bad
@@ -76,7 +76,7 @@ export class FunctionalComponent extends React.PureComponent {
 
 ### Formatting
 
-Use self-closing tags, separated with an empty space, for elements that don't have children.
+Use self-closing tags separated with an empty space for elements that don't have children.
 
 ``` jsx
 // bad
@@ -86,7 +86,7 @@ Use self-closing tags, separated with an empty space, for elements that don't ha
 <ChildComponent onClick={this.onClickHandler} />
 ```
 
-If there is more than one prop, separate them with line breaks and also, put opening and closing tags in separate lines.
+If there is more than one prop, separate them with line breaks. Also, put opening and closing tags in separate lines.
 
 ``` jsx
 // bad
@@ -112,7 +112,7 @@ If there is more than one prop, separate them with line breaks and also, put ope
 </OuterChildComponent>
 ```
 
-- always wrap *render* method's return statement in parentheses (it's optional if it's returning a single line of JSX)
+- always wrap the *render* method's return statement in parentheses (it's optional if it's returning a single line of JSX)
 
 ``` jsx
 // bad 
@@ -157,8 +157,8 @@ render() {
 }
 ```
 
-### Passing Props
-Use camelCase for prop names and double quotes for JSX attribute values if you are passing them as a *string*.
+### Passing props
+Use camelCase for prop names, and double quotes for JSX attribute values if you are passing them as a *string*.
 
 ``` jsx
 export class ComponentName extends React.Component {
@@ -174,7 +174,7 @@ export class ComponentName extends React.Component {
 }
 ```
 
-Omit values for boolean props if default value is **true**.
+Omit values for boolean props if the default value is **true**.
 
 ``` jsx
 // bad
@@ -190,7 +190,7 @@ Omit values for boolean props if default value is **true**.
 />
 ```
 
-Declare functions before passing them as props instead of passing inline anonymous (arrow) functions. They will be needlessy instanced each time, thus effecting performance.
+Declare functions before passing them as props instead of passing inline anonymous (arrow) functions. They will be needlessly instanced every time, thus affecting performance.
 
 ``` jsx
 // bad
@@ -210,7 +210,7 @@ class ComponentName extends React.Component {
 }
 ```
 
-Avoid writing any logic inline. Extract it to the outside of the JSX block.
+Avoid writing any logic in line. Extract it to the outside of the JSX block.
 
 ``` jsx
 export class ComponentName extends React.Component {
@@ -226,16 +226,16 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Receiving Props
-*Checkout [`Typechecking With PropTypes`](https://reactjs.org/docs/typechecking-with-proptypes.html) in React's official documentation for general info.*
+### Receiving props
+*Check out [`Typechecking With PropTypes`](https://reactjs.org/docs/typechecking-with-proptypes.html) in React's official documentation for general info.*
 
-*Note: when using TypeScript with React, use TypeScript's built in types for type checking. For more info, checkout the [`JSX Handbook`](https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking) in TypeScript's official documentation.*
+*Note: when using TypeScript with React, use TypeScript's built-in types for type checking. For more info, check out the [`JSX Handbook`](https://www.typescriptlang.org/docs/handbook/jsx.html#type-checking) in TypeScript's official documentation.*
 
 In class components:
 - always use prop validation
-- use **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after class declaration and then export the class; See: ["Exporting Components" section](#exporting-components))
+- use a **static member** for declaring prop types and default props (if your transpiler doesn't support static members, set them after the class declaration and then export the class; see: ["Exporting Components" section](#exporting-components))
 - use *defaultProps* if you need to set default values
-- prop types shoud be as detailed as possible 
+- prop types should be as detailed as possible 
 
 ``` jsx
 export default class ComponentName extends React.Component {
@@ -269,7 +269,7 @@ export default class ComponentName extends React.Component {
 
 ### Using props
 
-If you are using more than one property in a method, preffer accessing them with **object destructuring**.
+If you are using more than one property in a method, you should access them with **object destructuring**.
 
 ``` jsx
 export class ComponentName extends React.Component {
@@ -290,7 +290,7 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Exporting Components
+### Exporting components
 - each React component file should have a single exported component
 - don't use default exports, always use named exports instead
  
@@ -308,12 +308,12 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Rendering Arrays of Data
+### Rendering arrays of data
 
 For iterating arrays:
-- use **map** method to render items
+- use the **map** method to render items
 - you should have a unique key for each element
-- **don't use array's index as a key**, unless you have no choice (no unique property in each element of the array) then make sure that you do not modify the order of that array
+- **don't use an array index as a key**, unless you have no choice (no unique property in each element of the array); in that case, make sure that you do not modify the order of that array
 
 ``` jsx
 render() {
@@ -332,9 +332,9 @@ render() {
 }
 ```
 
-### Conditional Rendering
+### Conditional rendering
 When you want to render either something or nothing, you can use the && operator.
-Make sure condition is boolean, if not cast it to boolean.
+Make sure the condition is boolean. If it is not, cast it to boolean.
 
 ```javascript
 // bad
@@ -355,8 +355,8 @@ Make sure condition is boolean, if not cast it to boolean.
 ```
 
 ### Binding
-- don't bind functions inline or in a class constructor if you have decorators
-- use [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
+- don't bind functions in line or in a class constructor if you have decorators
+- use the [`developit/decko`](https://github.com/developit/decko) lib's *@bind* decorator for binding
 - don't use arrow functions as class properties
 
 ``` jsx
@@ -412,8 +412,8 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### CSS Modules and Components
-Each component should have it's own stylesheet if CSS is needed for it.
+### CSS modules and components
+Each component should have its own style sheet if CSS is necessary for it.
 
 ```
 ...
@@ -461,16 +461,16 @@ export class ComponentName extends React.Component {
 ```
 
 ## Maximum file line number
-Make sure that your components stay readable and extract complex parts into separate and smaller components. This way you'll avoid huge files. A good rule of thumb for *presentional* components is around 150 lines, and for *containers* and *pages* around 300 loc.
+Make sure that your components stay readable and extract complex parts into separate and smaller components. In this way, you'll avoid huge files. A good rule of thumb for *presentational* components is around 150 lines, and around 300 loc for *containers* and *pages*.
 
 ## React + MobX
-*For general information about MobX, checkout the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
+*For general information about MobX, check out the official documentation:* [`mobx.js.org`](https://mobx.js.org/).
 
 ### Decorators
-Use decorators wherever you can if your transpiler supports it, because it makes code more readable and declarative.
+Use decorators wherever you can if your transpiler supports it because it makes code more readable and declarative.
 
-### Component Declaration
-Wrap components that handle app's state with *observer* from the `mobx-react` library.
+### Component declaration
+Wrap components that handle the app's state with an *observer* from the `mobx-react` library.
 
 ``` jsx
 import { observer } from 'mobx-react';
@@ -481,10 +481,10 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Local Component State
+### Local component state
 If MobX is used for state management:
-- prefer using MobX *observable* instead of *this.state* for component's local state; don't use both
-- wrap local state in a single observable object named **componentState**
+- prefer using a MobX *observable* instead of *this.state* for a component's local state; don't use both
+- wrap the local state in a single observable object named **componentState**
 
 ``` jsx
 import { observable } from 'mobx';
@@ -509,7 +509,7 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Computed Values
+### Computed values
 If you need values derived from observable data, use *@computed*.
 
 ``` jsx
@@ -538,7 +538,7 @@ export class ComponentName extends React.Component {
 ```
 
 ### Actions
-Wrap methods and functions that modify state with *@action*. For binding action methods, use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) library.
+Wrap methods and functions that modify state with *@action*. Use the aforementioned *@bind* decorator from the [`developit/decko`](https://github.com/developit/decko) library for binding action methods.
 
 ``` jsx
   import { action, observable } from 'mobx';
@@ -576,7 +576,7 @@ export class ComponentName extends React.Component {
 }
 ```
 
-### Async Await
+### Async await
 In actions implemented as *async* functions, after each *await*, any code that modifies the state should be wrapped in a *runInAction* utility.
 
 ``` jsx
@@ -601,4 +601,4 @@ export class ComponentName extends React.Component {
 ```
 
 ### Fragments
-When using React fragments, always use the explicit syntax with either `<Fragment></Fragment>` or `<React.Fragment></React.Fragment>`.
+When using React fragments, always use explicit syntax with either `<Fragment></Fragment>` or `<React.Fragment></React.Fragment>`.
