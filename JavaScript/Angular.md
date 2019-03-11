@@ -12,7 +12,7 @@ The best way to create a new project is by using Angular CLI. It will hide a lot
 
 Install Angular CLI globally with `npm install -g @angular/cli` and check out what you can do with `ng help`.
 
-#### Creating a new project
+**Creating a new project**
 
 Use Angular CLI for initial project setup:
 
@@ -22,7 +22,7 @@ ng new my-app
 
 As of version 7 there will be a quick wizard-like setup prompting you about routing and styling. Choose depending on your needs. All our Angular projects here at Infinum use routing and SCSS styling.
 
-#### Scaffolding
+**Scaffolding**
 
 You can use Angular CLI for generating new modules, components, services, directives, etc.
 
@@ -60,7 +60,7 @@ ng g c DayView
 # WeekView and DayView do not have to be exported, as they are used only internally
 ```
 
-```ts
+``` typescript
 @NgModule({
   imports: [
     FormsModule,
@@ -82,21 +82,21 @@ export class CalendarModule { }
 
 Use `ng g s MyService` to generate new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). Solution is to simply prefix the directory name and the command will generate the directory as well as the service: `ng g s my-service/my-service`.
 
-#### Ejecting
+**Ejecting**
 
 Do not do it, but if you *absolutely have to* edit the webpack config manually, you can eject the CLI's webpack config with `ng eject`.
 
-#### Extending Angular CLI's webpack config
+**Extending Angular CLI's webpack config**
 
 Since Angular CLI version 6 there is a way to extend the internal webpack config which is used by the CLI by using custom builders. To check out the details on how to do this, please see [@angular-builders/custom-webpack](https://github.com/meltedspark/angular-builders/tree/master/packages/custom-webpack). This should be enough for most cases, so you will most likely never have to eject the internal webpack config.
 
 One good example of extending CLI's webpack config can be seen in [Guess.js's Angular implementation](https://guess-js.github.io/docs/angular) for predictive prefetching of lazy-loaded modules.
 
-#### Devserver proxy
+**Devserver proxy**
 
 If you have issues with CORS, for development purpuses it is OK to temporarily use Webpack Devserver proxy. You can do this without ejecting the webpack config, [as per instructions](https://angular.io/guide/build#proxying-to-a-backend-server).
 
-#### Other commands
+**Other commands**
 
 This handbook will not cover all `ng` commands; please check the [Angular CLI Wiki](https://github.com/angular/angular-cli/wiki) for more info.
 
@@ -138,7 +138,7 @@ Here are some good introduction tutorials to get you started:
   - this will help you a lot when trying to understand what specific operators do
 - Angular documentation - [The RxJS Library](https://angular.io/guide/rx-library)
 
-#### Observers and Subscribers
+**Observers and Subscribers**
 
 When you want to observe a value, use some of the classes derived from `Observable`. Most use cases are covered with one of these:
 
@@ -150,7 +150,7 @@ All classed derived from `Observable` can be subscribed to in order to receive v
 
 There is a naming convention for `Observable` variables - postfixing with a dollar sign:
 
-```typescript
+``` typescript
 // bad
 const observable: Observable;
 
@@ -161,11 +161,11 @@ const observable$: Observable;
 const mySubject$: Subject;
 ```
 
-#### Operators usage and creation
+**Operators usage and creation**
 
 If you are using RxJS 5.5 or newer, make sure to use *[pipeable operators](https://github.com/ReactiveX/rxjs/blob/master/doc/pipeable-operators.md)* instead of *patch* operators.
 
-```typescript
+``` typescript
 // bad
 subject.do(() => { ... });
 
@@ -188,7 +188,7 @@ Avoid doing a lot of logic in `subscribe` callback. Subscribe as late as possibl
 
 You can also write your own operators. If you do so, it is strongly recommended writing them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
 
-#### async/await
+**async/await**
 
 You can use async/await to await completion of observables. Keep in mind that this will not work if the observable emits more than one value. For example, it is ok for things like HTTP requests.
 
@@ -196,7 +196,7 @@ To convert an observable to a promise, just call `obs$.toPromise()` and then you
 
 One important thing to note is that you are awaiting for **completion** and not for **emission** of values. Knowing that, what do you expect the result to be in the following example?
 
-```ts
+``` typescript
 const source$: Subject<string> = new Subject();
 const sourcePromise: Promise<string> = source$.toPromise();
 
@@ -344,20 +344,20 @@ When it all comes together, your src folder might look something like this:
 
 Design your components to be as small as possible and reuse them as much as possible. Philosophically, components can be split up into two types:
 
-1. Presentational (dumb)
-    - in charge of displaying the data which is passed down to them
-    - should not make use of services
-    - pass events up instead of doing complex things with them
-    - use `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` declaration
+- Presentational (dumb)
+  - in charge of displaying the data which is passed down to them
+  - should not make use of services
+  - pass events up instead of doing complex things with them
+  - use `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` declaration
 
-2. Container (smart)
-    - use multiple (if necessary) other components
-    - serve data to presentational components
-    - handle events from child components
-    - control UX flow
-    - work with services to make things happen (fetch, store, change state)
-    - can be loaded directly or lazy loaded when routing
-    - use `changeDetection: ChangeDetectionStrategy.OnPush` and pass data down using `async` pipe
+- Container (smart)
+  - use multiple (if necessary) other components
+  - serve data to presentational components
+  - handle events from child components
+  - control UX flow
+  - work with services to make things happen (fetch, store, change state)
+  - can be loaded directly or lazy loaded when routing
+  - use `changeDetection: ChangeDetectionStrategy.OnPush` and pass data down using `async` pipe
 
 More on this philosophy can be found in various online articles. Some articles have framework-specific information, but the core concepts apply no matter which framework you are using. A good article from Angular University on this topic: [Angular Architecture - Smart Components vs Presentational Components](https://blog.angular-university.io/angular-2-smart-components-vs-presentation-components-whats-the-difference-when-to-use-each-and-why/).
 
@@ -366,14 +366,16 @@ More on this philosophy can be found in various online articles. Some articles h
 Environment files should be used for some global configuration changes which can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and can not be changed after the build (at least not in a nice way). This can be an issue if application is deployed using Docker - in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files (more on this in SSR section).
 
 Define interface for the environment: `app/interfaces/environment.interface`:
-```typescript
+
+``` typescript
 export interface IEnvironment {
   production: boolean;
 }
 ```
 
 Set base values `environments/environment.base.ts`:
-```typescript
+
+``` typescript
 import { IEnvironment } from 'app/interfaces/environment.interface';
 
 export const baseEnvironment: IEnvironment = {
@@ -382,7 +384,8 @@ export const baseEnvironment: IEnvironment = {
 ```
 
 This is the default `dev` environment: `environments/environment.ts`:
-```typescript
+
+``` typescript
 import { baseEnvironment } from './environment.base';
 
 export const environment: IEnvironment = {
@@ -392,7 +395,8 @@ export const environment: IEnvironment = {
 ```
 
 This is the production environment: `environments/environment.prod.ts`:
-```typescript
+
+``` typescript
 import { baseEnvironment } from './environment.base';
 
 export const environment: IEnvironment = {
@@ -413,9 +417,9 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 ----
 
-#### Try to fit all inputs, outputs and regular HTML attributes in one line. If there is simply too many of them, break it up like so:
+**Try to fit all inputs, outputs and regular HTML attributes in one line. If there is simply too many of them, break **it up like so:
 
-```html
+``` html
 <!-- bad -->
 <my-app-component *ngFor="let item of items" class="foo" [bar]="something ? 'foo' : 'oof'" (click)="onClick($event)">
   <div>Transcluded Content</div>
@@ -453,11 +457,11 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 ----
 
-#### Closing elements and angle brackets placement:
+**Closing elements and angle brackets placement:**
 
 Case with no content:
 
-```html
+``` html
 <!-- bad -->
 <my-component
   class="foo"
@@ -475,7 +479,8 @@ Case with no content:
 ```
 
 Case with content:
-```html
+
+``` html
 <!-- bad -->
 <my-component
   class="foo"
@@ -504,9 +509,9 @@ Case with content:
 
 ----
 
-#### If you are passing data to a component, use property binding only if necessary:
+**If you are passing data to a component, use property binding only if necessary:**
 
-```html
+``` html
 <!-- bad -->
 <my-app-component [name]="'Steve'"></my-app-component>
 
@@ -516,9 +521,9 @@ Case with content:
 
 ----
 
-#### Prefix output handlers with `on`:
+**Prefix output handlers with `on`:**
 
-```html
+``` html
 <!-- bad -->
 <my-app-component (somethingHappened)="somethingHappened($event)">
 
@@ -534,9 +539,9 @@ Case with content:
 
 ----
 
-#### Name click handlers in a descriptive manner:
+**Name click handlers in a descriptive manner:**
 
-```html
+``` html
 <!-- bad -->
 <button (click)="onClick()">Log in</button>
 
@@ -552,9 +557,9 @@ Case with content:
 
 ----
 
-#### Use safe navigation operator:
+**Use safe navigation operator:**
 
-```html
+``` html
 <!-- bad -->
 <div *ngIf="user && user.loggedIn"></div>
 
@@ -564,9 +569,9 @@ Case with content:
 
 ----
 
-#### Add space around interpolation curly brackets:
+**Add space around interpolation curly brackets:**
 
-```html
+``` html
 <!-- bad -->
 <div>{{userName}}</div>
 
@@ -576,9 +581,9 @@ Case with content:
 
 ----
 
-#### Use `ng-container` when possible to reduce the amount of generated DOM elements:
+**Use `ng-container` when possible to reduce the amount of generated DOM elements:**
 
-```html
+``` html
 <!-- bad -->
 <div *ngIf="something"></div>
 
@@ -591,9 +596,9 @@ Case with content:
 
 ----
 
-#### Use `*ngIf; else`:
+**Use `*ngIf; else`:**
 
-```html
+``` html
 <!-- bad -->
 <ng-container *ngIf="something"></ng-container>
 <ng-container *ngIf="!something"></ng-container>
@@ -605,11 +610,11 @@ Case with content:
 
 ----
 
-#### Subscribe to observables with `async` pipe if possible:
+**Subscribe to observables with `async` pipe if possible:**
 
 Component:
 
-```typescript
+``` typescript
 @Component(...)
 export class ArticlesList {
   public articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
@@ -620,7 +625,7 @@ export class ArticlesList {
 
 Template:
 
-```html
+``` html
 <my-app-menu
   *ngIf="menu$ | async as articlesMenu"
   [menu]="articlesMenu"
@@ -636,11 +641,11 @@ Template:
 
 ----
 
-#### Use attributes for transclusion selectors:
+**Use attributes for transclusion selectors:**
 
 `my-app-wrapper` component template:
 
-```html
+``` html
 <div class="wrapper">
   <p>Wrapper content:</p>
   <ng-content select="[some-stuff]"></ng-content>
@@ -649,7 +654,7 @@ Template:
 
 Some other component's template:
 
-```html
+``` html
 <my-app-wrapper>
   <div class="some-item" some-stuff>Some stuff</div>
 </my-app-wrapper>
@@ -657,7 +662,7 @@ Some other component's template:
 
 ----
 
-#### Order attributes and bindings:
+**Order attributes and bindings:**
 
 1. Structural directives (`*ngFor`, `*ngIf`, etc.)
 2. Animation triggers (`@fade`, `[@fade]`)
@@ -668,7 +673,7 @@ Some other component's template:
 7. Two-way bindings (`[(ngModel)]="email"`)
 8. Outputs (`(click)="onClick()"`)
 
-```html
+``` html
 <!-- bad -->
 <my-app-component
   (click)="onClick($event)"
@@ -698,9 +703,9 @@ Some other component's template:
 
 ----
 
-#### Prefer `[class]` over `[ngClass]` syntax:
+**Prefer `[class]` over `[ngClass]` syntax:**
 
-```html
+``` html
 <!-- bad -->
 <div [ngClass]="{ 'active': isActive }"></div>
 
@@ -710,11 +715,11 @@ Some other component's template:
 
 ### In Code
 
-#### Prefix interfaces
+**Prefix interfaces**
 
 Interfaces should be prefixed with `I`. This might be a polarizing decision, but the reason why is because you might have cases where some class implements an interface and you also have a stub class which implements the same interface.
 
-```ts
+``` typescript
 // bad
 interface UserService { }
 
@@ -728,11 +733,11 @@ class UserServiceStub implements IUserService { }
 
 ----
 
-#### Prefer interface over type
+**Prefer interface over type**
 
 When defining data structures, prefer using interfaces instead of types. Use types only for things for which interfaces can not be used - unions of different types.
 
-```ts
+``` typescript
 // bad
 export type User = {
   name: string;
@@ -749,7 +754,7 @@ export type CSSPropertyValue = number | string;
 
 You might be tempted to use type for union of models. For example, in some CMS solution you might have `AdminModel` and `AuthorModel`. User can log in using either admin or author credentials.
 
-```ts
+``` typescript
 export class AdminModel {
   public id: string;
   public permissions: Array<Permission>;
@@ -771,7 +776,7 @@ User id: {{ user.id }}
 
 This might seem fine at first, but it is actually an anti-pattern. What you should really do in cases like this is create an abstraction above `AdminModel` and `AuthorModel`:
 
-```ts
+``` typescript
 export abstract class User {
   public id: string;
 }
@@ -789,11 +794,11 @@ export class AuthorModel extends User {
 
 ----
 
-#### Renaming rxjs imports
+**Renaming rxjs imports**
 
 Some rxjs imports have very generic names so you might want to rename them during import:
 
-```ts
+``` typescript
 import {
   of as observableOf
   EMPTY as emptyObservable
@@ -802,7 +807,7 @@ import {
 
 ----
 
-#### Subscribe late and pipe
+**Subscribe late and pipe**
 
 If you are new to RxJS you will probably be overwhelmed by the amount of operators and the "Rx-way" of doing things. To do things in "Rx-way" you will have to embrace usage of operators and think carefully when and how you subscribe.
 
@@ -810,7 +815,7 @@ Rule of thumb is to subscribe as little and as late as possible, and do minimal 
 
 We will demonstrate this on an example. Imagine you have a stream of data to which you would like to subscribe and transform the data in some way.
 
-```ts
+``` typescript
 interface IUser {
   id: number;
   user_name: string;
@@ -829,7 +834,7 @@ interface IUser {
 }
 ```
 
-```ts
+``` typescript
 // bad
 const user$: Observable<IUser> = http.get('/account/me');
 
@@ -838,7 +843,7 @@ user$.subscribe((response: IUser) => {
 });
 ```
 
-```ts
+``` typescript
 // good
 const userName$: Observable<string> = http.get('/account/me').pipe(
   map((response: IUser) => response.user_name)
@@ -855,7 +860,7 @@ The point here is that as soon as you notice that you are repeating yourself in 
 
 ----
 
-#### No subscriptions in guards
+**No subscriptions in guards**
 
 Asynchronous guards are common, but they should not subscribe to anything, they should return an observable.
 
@@ -863,7 +868,7 @@ To demonstrate this on an example, consider we have `AuthService` and method `ge
 
 We would like to implement a guard which allows only authenticated users to navigate to the route.
 
-```ts
+``` typescript
 // bad
 class UserAuthorizedGuard implements CanActivate {
   constructor(private authService: AuthService) {}
@@ -904,7 +909,7 @@ class UserAuthorizedGuard implements CanActivate {
 
 ----
 
-#### Be mindful of how and when data is fetched
+**Be mindful of how and when data is fetched**
 
 There are two basic approaches to data loading:
 1. Via route resolve guards
@@ -932,7 +937,7 @@ Bottom line:
 
 ----
 
-#### Ordering class members (including getters and life-cycle hooks)
+**Ordering class members (including getters and life-cycle hooks)**
 
 When ordering class members, follow this guideline:
 1. `@Input`s
@@ -944,7 +949,8 @@ When ordering class members, follow this guideline:
 7. public, protected and private methods
 
 Example:
-```ts
+
+``` typescript
 class MyComponent implements OnInit, OnChanges {
   @Input() public i1: string;
   @Input() public i2: string;
@@ -1000,7 +1006,7 @@ This Handbook will not cover how to implement custom two-way binding for your co
 
 One key takeaway which we will repeat in this Handbook is how two-way binding is de-sugared.
 
-```html
+``` html
 <my-counter [(value)]="counterValue"></my-counter>
 <my-counter [value]="counterValue" (valueChange)="counterValue=$event"></my-counter>
 ```
@@ -1057,13 +1063,13 @@ There are many tips and tricks that go into testing Angular applications, and th
 
 Tests can usually be placed in one of three categories: unit, integration or end-to-end tests.
 
-#### Unit testing
+**Unit testing**
 
 Unit tests, as the name suggests, test units. A unit is some individual piece of software which can also have some external dependencies. In context of Angular, units are components, services, guards, pipes, helper functions, interceptors, models and other custom classes, etc.
 
 Unit testing in Angular comes out-of-the-box with Jasmine as both the testing framework and assertion library. It is also possible to generate nice coverage reports as HTML files which can be presented to management or some other interested parties.
 
-#### Integration testing
+**Integration testing**
 
 Integration testing includes multiple units which are tested together to check how they interact. In Angular, there is no special way of doing integration testing. There is a thin line between unit an integration tests, and that line is more conceptual than technical. For integration testing you still use Jasmine which comes with every project generated by Angular CLI.
 
@@ -1075,7 +1081,7 @@ So it is really up to you to decide whether you want to test some component with
 
 What you call those Jasmine tests - unit or integration - doesn't really matter, ♪ *anyone can see* ♪.
 
-#### E2E testing
+**E2E testing**
 
 End-to-end testing is quite a bit different when compared to unit/integration testing with Jasmine. Angular CLI projects come with a separate E2E testing project which uses Protractor. [Protractor](https://www.protractortest.org/) is basically a wrapper around [Selenium](https://www.seleniumhq.org/) which allows us to write tests in JavaScript and it also has some Angular-specific helper functions.
 
@@ -1098,12 +1104,13 @@ Dependency Injection is very powerful during testing, as it allows you to provid
 
 Consider this example with header component and user service which is used for logging in:
 
-```html
+``` html
 ...
 <button (click)="onLogInClick">Log in</button>
 ...
 ```
-```ts
+
+``` typescript
 @Component({ ... })
 export class HeaderComponent {
   constructor(private userService: UserService)
@@ -1120,7 +1127,7 @@ You can use `TestBed.get` to get an instance of a dependency which the component
 
 Here is an example of how we could test our header component:
 
-```ts
+``` typescript
 let component: HeaderComponent;
 let fixture: ComponentFixture<HeaderComponent>;
 let userService: UserTestingService;
@@ -1157,7 +1164,7 @@ it('should log the user in when Log in button is clicked', () => {
 
 We will test `SomeService` which injects `UserService`:
 
-```ts
+``` typescript
 @Injectable({ providedIn: 'root' })
 export class SomeService {
   constructor(private userService: UserService) { }
@@ -1168,7 +1175,7 @@ export class SomeService {
 
 To make this test a "unit" test, we will mock all `SomeService`'s dependencies:
 
-```ts
+``` typescript
 let service: SomeService;
 
 beforeEach(() => {
@@ -1188,7 +1195,7 @@ it('should create a service instance', () => {
 
 Mock service for UserService might look something like this:
 
-```ts
+``` typescript
 // service/user/user.service.interface.ts
 export interface IUserService {
   user$: Observable<UserModel>;
@@ -1214,7 +1221,7 @@ When testing complex components which use multiple services and render other com
 
 In this example we will test `ComponentToBeTested` component which renders `SomeOtherComponent` and depends on `UserService`:
 
-```ts
+``` typescript
 @Component({
   selector: 'my-app-component-to-be-tested',
   template: `
@@ -1258,7 +1265,7 @@ Make sure to exclude `*.testing.*` files from code coverage reports in Jasmine (
 
 Test should look like this:
 
-```ts
+``` typescript
 let component: ComponentToBeTested;
 let fixture: ComponentFixture<ComponentToBeTested>;
 
@@ -1290,21 +1297,21 @@ If you want to test a component under different conditions, you will probably ha
 
 To change components input, you can simply:
 
-```ts
+``` typescript
 @Component(...)
 class SomeComponent {
   @Input() someInput: string;
 }
 ```
 
-```ts
+``` typescript
 component.someInput = 'foo';
 fixture.detectChanges(); // To update the view
 ```
 
 If you are doing stuff in `ngOnChanges`, you will have to call it manually since in tests `ngOnChanges` is not called automatically during programmatic input changes.
 
-```ts
+``` typescript
 component.someInput = 'foo';
 component.ngOnChanges({ someInput: { currentValue: 'foo' } } as any);
 fixture.detectChanges();
@@ -1314,7 +1321,7 @@ fixture.detectChanges();
 
 To test component outputs, simply spy on output emit function:
 
-```ts
+``` typescript
 @Component(
   template: `<button (click)="onButtonClicked()">`
 )
@@ -1327,7 +1334,7 @@ export class ComponentWithOutput {
 }
 ```
 
-```ts
+``` typescript
 spyOn(component.buttonClicked, 'emit');
 
 expect(component.buttonClicked.emit).not.toHaveBeenCalled();
@@ -1341,7 +1348,7 @@ expect(component.buttonClicked.emit).toHaveBeenCalled();
 
 If the component you are testing is using `OnPush` change detection, `fixture.detectChanges()` will not work. To fix this, you can override the CD just during testing:
 
-```ts
+``` typescript
 beforeEach(async(() => {
   TestBed.configureTestingModule({
     declarations: [ComponentWithInputComponent]
@@ -1361,7 +1368,7 @@ One of the easiest ways to test content projection is to simply create a wrapper
 
 `TranscluderComponent`:
 
-```ts
+``` typescript
 @Component({
   selector: 'app-transcluder',
   template: `
@@ -1379,7 +1386,7 @@ export class TranscluderComponent { }
 
 `TranscluderModule`:
 
-```ts
+``` typescript
 @NgModule({
   declarations: [TranscluderComponent],
   imports: [CommonModule],
@@ -1390,7 +1397,7 @@ export class TranscluderModule { }
 
 `TranscluderComponent` tests:
 
-```ts
+``` typescript
 @Component({
   selector: 'app-transcluder-testing-wrapper',
   template: `
@@ -1443,13 +1450,13 @@ If you have some buttons with click handlers, you should test them by clicking o
 
 Example:
 
-```html
+``` html
 <button class="login-button" (click)="onLogInClicked()">Log in</button>
 ```
 
 Note: for simplicity, we will assume that login action is synchronous.
 
-```ts
+``` typescript
 // bad
 it('should log the user in when Log in button is clicked', () => {
   expect(component.loggedIn).toBeFalsy();
@@ -1478,13 +1485,13 @@ Most likely your application will be making requests left and right so it is imp
 
 We will go through the whole process from service creation to testing success/failure states.
 
-#### Service setup
+**Service setup**
 
 We will create a simple `DadJokeService` which will be used for fetching jokes from `https://icanhazdadjoke.com`.
 
 The service looks like this:
 
-```ts
+``` typescript
 @Injectable({
   providedIn: 'root'
 })
@@ -1519,7 +1526,7 @@ You notice that our service depends on `HttpClient` which it injects using DI. I
 
 We also have an interface which defines how the response JSON is structured:
 
-```ts
+``` typescript
 export interface IJoke {
   id: string;
   joke: string;
@@ -1527,13 +1534,13 @@ export interface IJoke {
 }
 ```
 
-#### Tests setup
+**Tests setup**
 
 Let's start by creating a most basic test, which just ensures that our `DadJokeService` instantiates correctly.
 
 If you generated your service using Angular CLI, the `spec` file will probably look something like this:
 
-```ts
+``` typescript
 describe('DadJokeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
@@ -1548,7 +1555,7 @@ Scaffolding tends to change from version to version and this particular example 
 
 We will modify this default `spec` file a bit, by moving DadJokeService instance fetching from `it` block into a `beforeEach` hook, right after configuring the `TestBed`:
 
-```ts
+``` typescript
 describe('DadJokeService', () => {
   let service: DadJokeService;
 
@@ -1568,7 +1575,7 @@ This transformation of default `spec` file is something that we usually do for a
 
 If you run the tests now, they will fail because our service injects `HttpClient` and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule` which you can import from `@angular/common/http/testing` which provides a complete mocking backend for `HttpClient` service. We just have to import it in our `TestBed` module:
 
-```ts
+``` typescript
 TestBed.configureTestingModule({
   imports: [
     HttpClientTestingModule,
@@ -1578,13 +1585,13 @@ TestBed.configureTestingModule({
 
 Our basic test now passes.
 
-#### Mocking HTTP requests in tests
+**Mocking HTTP requests in tests**
 
 This is where the fun part comes in - we would like to test how our service behaves if request succeeds or fails.
 
 We wil start by testing a successful request:
 
-```ts
+``` typescript
 describe('DadJokeService', () => {
   let service: DadJokeService;
   let httpMock: HttpTestingController;
@@ -1630,7 +1637,7 @@ Since all this is executed synchronously, after we flush the response, success c
 
 Error catching can be tested in a similar manner:
 
-```ts
+``` typescript
 it('should return a default joke if request fails', () => {
   service.getJoke().subscribe((joke) => {
     expect(joke).toBe(DadJokeService.DEFAULT_JOKE);
@@ -1643,7 +1650,8 @@ it('should return a default joke if request fails', () => {
 ```
 
 In our specific example it was not important which particular error happened because our error catching implementation in `catchError` operator has no logic which would determine different behaviour depending on error code. For example, if we wanted to test how our error handling handles 500 server errors, we could do something like this:
-```ts
+
+``` typescript
 mockRequest.error(new ErrorEvent('server_down'), { status: 500 });
 ```
 This allows us to test more complex error handling which usually includes some logic for displaying different error messages depending on error code and, as shown, that is completely doable using the `error` method of `TestRequest` object.
