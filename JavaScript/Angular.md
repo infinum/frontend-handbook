@@ -854,7 +854,7 @@ userName$.subscribe(console.log); // TheDude
 
 The reason why is because there might be multiple subscribers who want the same thing, and they would all have to do the same transformation in their respective success callbacks.
 
-It is, of course, possible that the subscribers want different things, and for those cases you might want to expose some observable whose operations are less piped.
+It is, of course, possible that the subscribers want different things, and for those cases you might want to expose some observable with fewer piped operations.
 
 The point here is that, as soon as you notice that you are repeating yourself in subscription callbacks, you should move that repeated logic into some operator that is piped to the source observable.
 
@@ -983,7 +983,7 @@ DI is a very complex topic and requires a separate discussion which would be out
 
 As of Angular 6, make sure to use `{ providedIn: 'root' }` [for singletons](https://angular.io/guide/singleton-services#providing-a-singleton-service) whenever possible.
 
-DI is very useful for testing purposes, as shown in the next chapter.
+DI is very useful for testing purposes, as shown in a later chapter.
 
 ## Angular Universal (server-side rendering)
 
