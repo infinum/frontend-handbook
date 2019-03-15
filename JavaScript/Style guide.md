@@ -1,10 +1,10 @@
-Based on [Airbnb JavaScript style guide](https://github.com/airbnb/javascript).
+Based on the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 
-This styleguide contains only changes since ES5. For other rules, check out [ES5 styleguide](JS%20Styleguide).
+This style guide contains only changes since ES5. For other rules, check out the [ES5 styleguide](JS%20Styleguide).
 
 ## [References](#references)
 
-Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases use ``let``.
+Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases, use ``let``.
 
 Note that both `let` and `const` are block-scoped.
 
@@ -102,7 +102,7 @@ const obj = {
 };
 ```
 
-Only quote properties that are invalid identifiers.
+Quote only properties that are invalid identifiers.
 
 ## [Arrays](#arrays)
 Use array spreads `...` to copy arrays.
@@ -266,7 +266,7 @@ function handleThings(name, opts = {}) {
 }
 ```
 
-## [Arrow Functions](#arrow-functions)
+## [Arrow functions](#arrow-functions)
 
 When you must use function expressions (as when passing an anonymous function), use arrow function notation.
 
@@ -450,7 +450,7 @@ function example() {
 
 ## [Commas](#commas)
 
-Use additional trailing comma. This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code which means you don't have to worry about the trailing comma problem in legacy browsers.
+Use an additional trailing comma. This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code, which means you don't have to worry about the trailing comma problem in legacy browsers.
 
 ```js
 // bad - git diff without trailing comma
