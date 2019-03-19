@@ -133,6 +133,7 @@ RxJS is the implementation of the [Reactive Extensions Library](http://reactivex
 Please check out some RxJS tutorials if you are not familiar with Rx. Please note that there have been some breaking changes in RxJS version 6—some of the APIs have changed (mostly the way we use operators), and many tutorials that were created earlier are now using older versions of RxJS. That being said, not much has changed conceptually, just the way you write some RxJS functionalities.
 
 Here are some good introductory tutorials to get you started:
+
 - Academind—[Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) playlist
 - Interactive diagrams—[RxJS Marbles](https://rxmarbles.com/)
   - this will help you a lot when trying to understand what specific operators do
@@ -912,6 +913,7 @@ class UserAuthorizedGuard implements CanActivate {
 **Be mindful of how and when data is fetched**
 
 There are two basic approaches to data loading:
+
 1. Via route resolve guards
 2. Via container components
 
@@ -933,6 +935,7 @@ Even though guards are really easy to use and have some advantages, there might 
 A good example where partial data loading via a container component can be preferred over all-at-once loading via guards is a dashboard-like page with multiple graphs where each graph shows data from one request. In such cases, it is probably better to let the container component handle data loading, and presentational components (graphs) should implement an empty state with some nice loaders.
 
 Bottom line:
+
 - Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once
 - Use container components if data is loaded in chunks and results should be shown as they come in
 
@@ -1027,6 +1030,7 @@ Another type of component for which you might consider implementing two-way bind
 ## Working with forms
 
 As you might already know, there are two approaches when working with forms in Angular—template-driven and reactive forms. There is a lot of great documentation on both:
+
 - [Reactive Forms](https://angular.io/guide/reactive-forms)
 - [Template-driven Forms](https://angular.io/guide/forms)
 
