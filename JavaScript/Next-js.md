@@ -55,6 +55,7 @@ We used this requirement since many of our projects use modals, and it proved to
 `compose` is just a helper function which enables function composition.
 
 ```jsx
+// /components/layouts/privatePage.tsx
 import React, { Fragment } from 'react';
 import Head from 'next/head';
 import compose from 'ramda/src/compose';
@@ -92,13 +93,13 @@ const PrivatePage = (props) => {
     </Fragment>
   );
 };
-
 export default privatePage(PrivatePage);
 ```
 
 Here is an example of how we can use `privatePage` layout:
 
 ```jsx
+// /pages/index.tsx
 import * as React from 'react';
 // ...
 import PrivatePage from '../components/layouts/privatePage';
@@ -107,7 +108,6 @@ const Index = () => {
   // ...
   return <PrivatePage>Home Page content</PrivatePage>;
 };
-
 export default Index;
 ```
 
@@ -120,6 +120,7 @@ From react docs HOC-s are **functions which take components and returns a new co
 `withAuth` is simple HOC which checks the user is authenticated. If not user is redirected to the login page.
 
 ```jsx
+// /components/higherOrderComponents/withAuth.tsx
 import * as React from 'react';
 import { useEffectOnce } from 'react-use';
 import { useRouter } from 'next/router';
@@ -145,6 +146,7 @@ export default withAuth;
 For this POC much more interesting component is `withModal` HOC, which enables pages to show any of supported modals. In this example, we have just the newsletter modal.
 
 ```jsx
+// /components/higherOrderComponents/withModal.tsx
 import React from 'react';
 import Router, { useRouter } from 'next/router';
 
@@ -190,6 +192,7 @@ export default withModal;
 Here we are returning component, along with modal if query parameter is present and if it matches one of our modals (in this case the newsletter modal). HOC is dynamically rendering modal and `/components/modal/index.tsx` is responsible for it.
 
 ```jsx
+// /components/modals/index.tsx
 import dynamic from 'next/dynamic';
 
 const NewsletterModal = dynamic(() => import('./newsletter'), {
@@ -213,9 +216,8 @@ This way we can dynamically load modal, which means that modal will be loaded as
 
 Example of how can we use modal on a page:
 
-`/pages/withHocModal.tsx`
-
 ```jsx
+// /pages/withHocModal.tsx
 import React, { useState } from 'react';
 import Link from 'next/link';
 
@@ -239,7 +241,6 @@ export const ShowModal = () => {
     </PrivatePage>
   );
 };
-
 export default ShowModal;
 ```
 
