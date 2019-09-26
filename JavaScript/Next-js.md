@@ -1,25 +1,26 @@
 ## Introduction
 
-Next.js supports some very cool features which can be used on diffrent kind of projects. For example some projects with public pages couldn't use create-react-app beacause it doesn't support server side rendering which makes SEO much easier.
-So in projects that requres SSR, different stack must be used that would probably include something like express on top of node, and custom webpack and babel configuration.
-Also any customization of webpack or babel inside CRA requires ejecting which is one way operation and from that point you are responsible for maintaining cofiguration files.
-Soon every project would probably introduce something new and we would end up with many different projects very hard to maintain.
+Next.js supports some very cool features which can be used on different kind of projects. For example, some projects with public pages couldn't use create-react-app because it doesn't support server-side rendering, which makes SEO much harder. So in projects that require SSR, the different stack must be used that would probably include something like express on top of node, and custom webpack and babel configuration.
 
-Next.js solves above stated problems, and allowes us to use single stack for many different projects. Plus next.js introduces some very usefool features, which comes out of the box:
+Also, any customization of webpack or babel inside CRA requires ejecting, which is the one-way operation, and from that point, you are responsible for maintaining configuration files.
 
-- Code sppliting
+Soon every project would probably introduce something new so we would end up with many different projects very hard to maintain.
+Next.js solves above-stated problems and allows us to use a single stack for many different projects. Plus next.js introduces some handy features, which comes out of the box:
+
+- Code splitting
 - SSR
 - Page prefetching
 - Dynamic import of modules
 - Built-in Zero-Config TypeScript Support
-- Integrated client side routing
+- Integrated client-side routing
 - Custom server with custom express routes
 - static HTML export
 
 ## POC
 
-We made POC which used some of above features. We wanted to build an app which could be exported to static html files (wouldn't need any server processing) and would contain modals which we could be accessed via link.
-We used this requirement since many our projects use modals, and it proved to be very usefull to access them directly by adding query params to url.
+We made POC which used some of the above features. We wanted to build an app which could be exported to static Html files (wouldn't need any server processing) and would contain modals which we could access via link.
+
+We used this requirement since many of our projects use modals, and it proved to be very useful to access them directly by adding query params to url.
 
 ### App structure
 
@@ -45,11 +46,12 @@ We used this requirement since many our projects use modals, and it proved to be
 ...
 ```
 
-`login.tsx` and `register.tsx` are public pages whose functionality is self explanatory. Once login is successful user is redirected to index page which acts as home page.
+`login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful user is redirected to the index page which acts as the home page.
 
 ### Layouts
 
-`privatePage.tsx` is a example of layout page for all private pages. Here is example how we can extend `Head` section for adding global fonts, but more importantly we use layout page with two HOC-s composed with ramda.
+`privatePage.tsx` is an example of a layout page for all private pages. Here is an example of how we can extend `Head` section for adding global fonts, but more importantly, we use layout page with two HOC-s composed with ramda.
+
 `compose` is just a helper function which enables function composition.
 
 ```jsx
@@ -94,7 +96,7 @@ const PrivatePage = (props) => {
 export default privatePage(PrivatePage);
 ```
 
-Here is example how we can use `privatePage` layout:
+Here is an example of how we can use `privatePage` layout:
 
 ```jsx
 import * as React from 'react';
@@ -111,11 +113,11 @@ export default Index;
 
 ### Higher order components
 
-From react docs HOC-s are _function who takes components and returns a new component_. They are used when we need to re use some component logic.
+From react docs HOC-s are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
 
 ### withAuth
 
-Simple HOC which checks if user is authenticated. If not user is redirected to login
+`withAuth` is simple HOC which checks the user is authenticated. If not user is redirected to the login page.
 
 ```jsx
 import * as React from 'react';
@@ -140,7 +142,7 @@ export default withAuth;
 
 ### withModal
 
-For this POC much more interesting component is `withModal` HOC, which enables pages to show any of supported modals. In this example we have just newsletter modal.
+For this POC much more interesting component is `withModal` HOC, which enables pages to show any of supported modals. In this example, we have just the newsletter modal.
 
 ```jsx
 import React from 'react';
@@ -185,7 +187,7 @@ const withModal = (Component) => (props) => {
 export default withModal;
 ```
 
-Here we are returning component, along with modal if query parametar is present and if it matches one of our modals (in this case newsletter modal). HOC is dynamically rendering modal and `/components/modal/index.tsx` is responsible for it.
+Here we are returning component, along with modal if query parameter is present and if it matches one of our modals (in this case the newsletter modal). HOC is dynamically rendering modal and `/components/modal/index.tsx` is responsible for it.
 
 ```jsx
 import dynamic from 'next/dynamic';
@@ -205,11 +207,11 @@ export default {
 };
 ```
 
-This way we can simply dynamically load modal, which means that modal will be loaded asynchronously if on private pages query param containes matching modal name.
+This way we can dynamically load modal, which means that modal will be loaded asynchronously if private pages query param contains a matching modal name.
 
 ### Page with Modal
 
-Example how can we use modal in a page:
+Example of how can we use modal on a page:
 
 `/pages/withHocModal.tsx`
 
@@ -241,5 +243,5 @@ export const ShowModal = () => {
 export default ShowModal;
 ```
 
-In a local state we are storing `Date.now()` value and it's easy to show that the state is preserved between toggling modal.
-To `PrivatePage` layout we are passing pageUrlSlug so `withModal` HOC would know where to route after closing modal. In other words we are showing the same page without query params.
+We are storing `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling modal.
+To `PrivatePage` layout we are passing pageUrlSlug so `withModal` HOC would know where to route after closing modal. In other words, we want to show the same page without query params.
