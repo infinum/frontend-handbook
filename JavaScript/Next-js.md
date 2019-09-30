@@ -28,19 +28,19 @@ We used this requirement since many of our projects use modals, and it proved to
 ...
 ├─ components
 ⎮   ├─ higherOrderComponents
-⎮   ⎮   └─ withAuth.tsx
-⎮   ⎮   └─ withModal.tsx
+⎮   ⎮   └─ WithAuth.tsx
+⎮   ⎮   └─ WithModal.tsx
 ⎮   ├─ layouts
-⎮   ⎮   └─ privatePage.tsx
+⎮   ⎮   └─ Layout.tsx
 ⎮   ├─ modals
 |   |   └─ index.tsx
-|   |   └─ newsletter.tsx
-|   └─ loginRegisterForm.tsx
+|   |   └─ Newsletter.tsx
+|   └─ LoginRegisterForm.tsx
 ├─ pages
 |   ├─ index.tsx
 ⎮   ├─ login.tsx
 ⎮   ├─ register.tsx
-|   └─ withHocModal.tsx
+|   └─ with-hoc-modal.tsx
 ├─ services
 |   └─ auth.ts
 ...
@@ -50,25 +50,16 @@ We used this requirement since many of our projects use modals, and it proved to
 
 ### Layouts
 
-`privatePage.tsx` is an example of a layout page for all private pages. Here is an example of how we can extend `Head` section for adding global fonts, but more importantly, we use layout page with two HOC-s composed with ramda.
-
-`compose` is just a helper function which enables function composition.
+`Layout.tsx` is an example of a layout page for all private pages. Here is an example of how we can extend `Head` section for adding global fonts, but more importantly, we use layout page with higher order component `WithAuth` which is responsible for authentification.
 
 ```jsx
-// /components/layouts/privatePage.tsx
+// /components/layouts/layout.tsx
 import React, { Fragment } from 'react';
 import Head from 'next/head';
-import compose from 'ramda/src/compose';
 
 import withAuth from '../higherOrderComponents/withAuth';
-import withModal from '../higherOrderComponents/withModal';
 
-const privatePage = compose(
-  withModal,
-  withAuth,
-);
-
-const PrivatePage = (props) => {
+const Layout = (props) => {
   return (
     <Fragment>
       <Head>
@@ -93,20 +84,21 @@ const PrivatePage = (props) => {
     </Fragment>
   );
 };
-export default privatePage(PrivatePage);
+
+export default withAuth(Layout);
 ```
 
-Here is an example of how we can use `privatePage` layout:
+Here is an example of how we can use `Layout`:
 
 ```jsx
 // /pages/index.tsx
-import * as React from 'react';
+import React from 'react';
 // ...
-import PrivatePage from '../components/layouts/privatePage';
+import Layout from '../components/layouts/Layout';
 
 const Index = () => {
   // ...
-  return <PrivatePage>Home Page content</PrivatePage>;
+  return <Layout>Home Page content</Layout>;
 };
 export default Index;
 ```
@@ -115,9 +107,9 @@ export default Index;
 
 From react docs HOC-s are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
 
-### withAuth
+### WithAuth
 
-`withAuth` is simple HOC which checks the user is authenticated. If not user is redirected to the login page.
+`withAuth` is simple HOC which checks if the user is authenticated, if not user is redirected to the login page.
 
 ```jsx
 // /components/higherOrderComponents/withAuth.tsx
@@ -141,108 +133,89 @@ const withAuth = (Component) => (props) => {
 export default withAuth;
 ```
 
-### withModal
+### WithModal
 
-For this POC much more interesting component is `withModal` HOC, which enables pages to show any of supported modals. In this example, we have just the newsletter modal.
+Another HOC is `WithModal`, which pushes modalName inside props that can be used inside components.
 
 ```jsx
 // /components/higherOrderComponents/withModal.tsx
 import React from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
-import useModalName from '../../utils/useModalName';
-import Modals from '../modals';
-import { ModalNames } from '../../utils/types';
+import useModalName from '../../customEffects/useModalName';
 
 const withModal = (Component) => (props) => {
-  const router = useRouter();
   const modalName = useModalName();
 
-  const email = (router.query.email as string) || '';
-
-  const onModalSubmit = (email: string) => {
-    console.log(email);
-  };
-
-  const onModalClose = () => {
-    Router.push(`/${props.pageUrlSlug}`);
-  };
-
-  const renderModal = () => {
-    switch (modalName) {
-      case ModalNames.newsletter:
-        return Modals.newsletter({
-          email,
-          onSubmit: onModalSubmit,
-          onClose: onModalClose,
-        });
-    }
-  };
-
-  return (
-    <React.Fragment>
-      {modalName && renderModal()}
-      <Component {...props} />
-    </React.Fragment>
-  );
+  return <Component modalName={modalName} {...props} />;
 };
 export default withModal;
 ```
-
-Here we are returning component, along with modal if query parameter is present and if it matches one of our modals (in this case the newsletter modal). HOC is dynamically rendering modal and `/components/modal/index.tsx` is responsible for it.
-
-```jsx
-// /components/modals/index.tsx
-import dynamic from 'next/dynamic';
-
-const NewsletterModal = dynamic(() => import('./newsletter'), {
-  ssr: false,
-  loading: () => <p>Loading</p>,
-});
-
-export default {
-  newsletter: (props: {
-    email?: string,
-    isModalVisible?: boolean,
-    onSubmit?: (email: string) => void,
-    onClose?: () => void,
-  }) => <NewsletterModal email={props.email} onSubmit={props.onSubmit} onClose={props.onClose} />,
-};
-```
-
-This way we can dynamically load modal, which means that modal will be loaded asynchronously if private pages query param contains a matching modal name.
 
 ### Page with Modal
 
 Example of how can we use modal on a page:
 
 ```jsx
-// /pages/withHocModal.tsx
+// /pages/with-hoc-modal.tsx
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
+import modals from '../components/modals';
 
-import PrivatePage from '../components/layouts/privatePage';
+import WithModal from '../components/higherOrderComponents/WithModal';
+import Layout from '../components/layouts/Layout';
 
-const pageUrlSlug = 'withHocModal';
+const pageUrlSlug = 'with-hoc-modal';
 
-export const ShowModal = () => {
+export const withHocModalPage = (props: {
+  modalName: string,
+  onModalSubmit: (email: string) => void,
+  onModalClose: () => void,
+}) => {
   const [name, setName] = useState(0);
   React.useEffect(() => {
     setName(name || Date.now());
   }, []);
 
+  const onModalClose = () => {
+    Router.push(`/${pageUrlSlug}`);
+  };
+
+  const Modal = modals[props.modalName];
+
   return (
-    <PrivatePage pageUrlSlug={pageUrlSlug}>
+    <Layout>
       <h1>Page with hoc modal</h1>
       {name}
       <Link href={`/${pageUrlSlug}?email=testtt&modal=newsletter`} shallow>
         <a>here</a>
       </Link>
-    </PrivatePage>
+      {Modal && <Modal onClose={onModalClose} />}
+    </Layout>
   );
 };
-export default ShowModal;
+
+export default WithModal(withHocModalPage);
 ```
 
 We are storing `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling modal.
-To `PrivatePage` layout we are passing pageUrlSlug so `withModal` HOC would know where to route after closing modal. In other words, we want to show the same page without query params.
+To `Layout` we are passing `onClose` callback, so we would know where to route after closing modal. In other words, we want to show the same page without query params.
+
+### Dynamic Modal rendering
+
+The only thing that is left to do is to show how are we rendering modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until url params contain the modal name.
+
+```jsx
+// /components/modals/index.tsx
+import dynamic from 'next/dynamic';
+
+const NewsletterModal = dynamic(() => import('./Newsletter'), {
+  ssr: false,
+  loading: () => <p>Loading</p>,
+});
+
+export default {
+  newsletter: NewsletterModal,
+};
+```
