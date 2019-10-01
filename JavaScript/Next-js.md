@@ -175,11 +175,7 @@ import withAuth from '../components/hoc/withAuth';
 
 const pageUrlSlug = 'with-hoc-modal';
 
-export const withHocModalPage = (props: {
-  modalName: string,
-  onModalSubmit: (email: string) => void,
-  onModalClose: () => void,
-}) => {
+export const withHocModalPage = (props: { modalName: string, onModalClose: () => void }) => {
   const [name, setName] = useState(0);
   React.useEffect(() => {
     setName(name || Date.now());
