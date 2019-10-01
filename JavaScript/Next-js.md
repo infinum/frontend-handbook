@@ -27,9 +27,9 @@ We used this requirement since many of our projects use modals, and it proved to
 ```
 ...
 ├─ components
-⎮   ├─ higherOrderComponents
-⎮   ⎮   └─ WithAuth.tsx
-⎮   ⎮   └─ WithModal.tsx
+⎮   ├─ hoc
+⎮   ⎮   └─ withAuth.tsx
+⎮   ⎮   └─ withModal.tsx
 ⎮   ├─ layouts
 ⎮   ⎮   └─ Layout.tsx
 ⎮   ├─ modals
@@ -50,14 +50,14 @@ We used this requirement since many of our projects use modals, and it proved to
 
 ### Layouts
 
-`Layout.tsx` is an example of a layout page for all private pages. Here is an example of how we can extend `Head` section for adding global fonts, but more importantly, we use layout page with higher order component `WithAuth` which is responsible for authentification.
+`Layout.tsx` is an example of a layout page for all pages. Here is an example of how we can extend `Head` section for adding global fonts.
 
 ```jsx
 // /components/layouts/layout.tsx
 import React, { Fragment } from 'react';
 import Head from 'next/head';
 
-import withAuth from '../higherOrderComponents/withAuth';
+import withAuth from '../hoc/withAuth';
 
 const Layout = (props) => {
   return (
@@ -69,8 +69,6 @@ const Layout = (props) => {
           key="google-font-cabin"
         />
       </Head>
-
-      <div id="portal"></div>
 
       <main>
         <div className="container">{props.children}</div>
@@ -85,7 +83,7 @@ const Layout = (props) => {
   );
 };
 
-export default withAuth(Layout);
+export default Layout;
 ```
 
 Here is an example of how we can use `Layout`:
@@ -95,13 +93,16 @@ Here is an example of how we can use `Layout`:
 import React from 'react';
 // ...
 import Layout from '../components/layouts/Layout';
+import withAuth from '../components/hoc/withAuth';
 
 const Index = () => {
   // ...
   return <Layout>Home Page content</Layout>;
 };
-export default Index;
+export default withAuth(Index);
 ```
+
+Index page in this example is used as a private page, so we are using withAuth hoc.
 
 ### Higher order components
 
@@ -117,7 +118,12 @@ import * as React from 'react';
 import { useEffectOnce } from 'react-use';
 import { useRouter } from 'next/router';
 
-import { isLoggedIn } from '../../services/auth';
+function isLoggedIn() {
+  const user = localStorage.getItem('user');
+  const userObject = JSON.parse(user);
+
+  return userObject ? !!userObject.token : false;
+}
 
 const withAuth = (Component) => (props) => {
   const router = useRouter();
@@ -163,8 +169,9 @@ import Link from 'next/link';
 import Router from 'next/router';
 import modals from '../components/modals';
 
-import WithModal from '../components/higherOrderComponents/WithModal';
+import WithModal from '../components/hoc/withModal';
 import Layout from '../components/layouts/Layout';
+import withAuth from '../components/hoc/withAuth';
 
 const pageUrlSlug = 'with-hoc-modal';
 
@@ -196,11 +203,18 @@ export const withHocModalPage = (props: {
   );
 };
 
-export default WithModal(withHocModalPage);
+export default withAuth(WithModal(withHocModalPage));
 ```
 
 We are storing `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling modal.
-To `Layout` we are passing `onClose` callback, so we would know where to route after closing modal. In other words, we want to show the same page without query params.
+To `Layout` we are passing `onClose` callback, so we would know where to route after closing modal. In other words, we want to show the same page without query params. If there are some params we need to preserve we would use something like the following:
+
+```jsx
+Router.push({
+  pathname: `/${pageUrlSlug}`,
+  query: { name: 'some name' },
+});
+```
 
 ### Dynamic Modal rendering
 
