@@ -9,4 +9,4 @@ A block is a piece of content that is encapsulated, meaning it doesn't rely on a
 An element is a part of a block. An element is meaningless on its own and should always be below a block in the HTML tree. An element describes a part of a block, and a block is defined by combining multiple elements.
 
 ##Modifier
-A modifier (or modificator) can be put on both the block and element, and is used to change the visual properties of a block or element.  It is used so that a block/element can be flexibly reused on other parts of a page, where a small modification is required.
+A modifier (or modificator) can be put on both the block and element, and is used to change the visual properties of a block or element. It is used so that a block/element can be flexibly reused on other parts of a page, where a small modification is required.
