@@ -1,7 +1,5 @@
 Based on the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 
-This style guide contains only changes since ES5. For other rules, check out the [ES5 styleguide](JS%20Styleguide).
-
 ## [References](#references)
 
 Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases, use ``let``.
