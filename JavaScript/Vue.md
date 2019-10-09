@@ -1,4 +1,4 @@
-The official Vue guide, cookbook and style guide already includes best practices, common and interesting use cases explained in detail.
+The official Vue guide, cookbook and style guide already include best practices, common and interesting use cases explained in detail.
 Refer to the links below.
 
 * [Official guide](https://vuejs.org/v2/guide/)
