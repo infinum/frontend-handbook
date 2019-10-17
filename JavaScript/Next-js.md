@@ -2,7 +2,7 @@
 
 Next.js supports some very cool features which can be used in different kinds of projects. For example, some projects with public pages can't be built with create-react-app (CRA) because it doesn't support server-side rendering, which makes SEO much harder. So, in projects that require SSR, a different stack must be used that would probably include something like Express on top of node, and custom Webpack and Babel configurations.
 
-Also, any customization of webpack or babel inside CRA requires ejecting, which is the one-way operation, and from that point, you are responsible for maintaining configuration files.
+Also, any customization of Webpack or Babel inside CRA requires ejecting, which is a one-way operation. From that point onward, you are responsible for maintaining configuration files.
 
 Soon every project would probably introduce something new so we would end up with many different projects very hard to maintain.
 Next.js solves above-stated problems and allows us to use a single stack for many different projects. Plus next.js introduces some handy features, which comes out of the box:
