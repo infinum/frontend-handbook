@@ -110,7 +110,7 @@ From the React documentation, Higher-Order Components (HOC) are **functions whic
 
 ### WithAuth
 
-`withAuth` is simple HOC which checks if the user is authenticated, if not user is redirected to the login page.
+`withAuth` is simple HOC which checks if the user is authenticated, and if not, the user is redirected to the login page.
 
 ```jsx
 // /components/higherOrderComponents/withAuth.tsx
