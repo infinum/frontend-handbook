@@ -4,7 +4,7 @@ Next.js supports some very cool features which can be used in different kinds of
 
 Also, any customization of Webpack or Babel inside CRA requires ejecting, which is a one-way operation. From that point onward, you are responsible for maintaining configuration files.
 
-Soon every project would probably introduce something new so we would end up with many different projects very hard to maintain.
+Multiple custom configuration files is something that we want to avoid.
 Next.js solves above-stated problems and allows us to use a single stack for many different projects. Plus next.js introduces some handy features, which comes out of the box:
 
 - Code splitting
