@@ -202,7 +202,7 @@ export const withHocModalPage = (props: { modalName: string, onModalClose: () =>
 export default withAuth(WithModal(withHocModalPage));
 ```
 
-We are storing `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling modal.
+We are storing the `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling the modal.
 To `Layout` we are passing `onClose` callback, so we would know where to route after closing modal. In other words, we want to show the same page without query params. If there are some params we need to preserve we would use something like the following:
 
 ```jsx
