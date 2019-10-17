@@ -214,7 +214,7 @@ Router.push({
 
 ### Dynamic Modal rendering
 
-The only thing that is left to do is to show how are we rendering modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until url params contain the modal name.
+The only thing that is left to do is to show how we are rendering the modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until URL params contain the modal name.
 
 ```jsx
 // /components/modals/index.tsx
