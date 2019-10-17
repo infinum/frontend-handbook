@@ -106,7 +106,7 @@ Index page in this example is used as a private page, so we are using withAuth h
 
 ### Higher order components
 
-From react docs HOC-s are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
+From the React documentation, Higher-Order Components (HOC) are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
 
 ### WithAuth
 
