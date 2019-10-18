@@ -20,7 +20,7 @@ Next.js solves above-stated problems and allows us to use a single stack for man
 
 We made POC which uses some of the above features. We build an app which can be exported to static HTML files (wouldn't need any server processing) and that contains modals which we can access with a link.
 
-We used this requirement since many of our projects use modals, and it proved to be very useful to access them directly by adding query params to url.
+Since many of our projects use modals, it proved to be very useful to be able to access them directly by adding query parameters to the URL.
 
 ### App structure
 
