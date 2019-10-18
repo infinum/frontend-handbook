@@ -46,7 +46,7 @@ Since many of our projects use modals, it proved to be very useful to be able to
 ...
 ```
 
-`login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful user is redirected to the index page which acts as the home page.
+`login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful, the user is redirected to the index page which acts as the home page.
 
 ### Layouts
 
