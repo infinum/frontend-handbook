@@ -128,7 +128,7 @@ When you're working on a project with `_shame.scss` always check the file when y
 The colors file should only contain color variables of the base and global kind.
 All colors for blocks or elements should go into their local file on the top.
 
-Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors. 
+Base colors are actual color values used on the site, they will be used by both global colors and block-elements colors.
 
 When naming color variables avoid using names that correspond to the actual colors, better use some thing like `rouge`, `wood`, `mercury`, etc...
 
@@ -363,4 +363,4 @@ For a reference of sass functionality refer to this page: [SASS reference](http:
 
 *This should cover almost every case when writing sass, including file structures, imports, code organization and logic*
 
-We use scss-lint and csscomb as our linter, and codestyle checker. Dotfiles for these can be found on the [Useful links guide](/books/frontend/Useful-links)
+We use scss-lint and csscomb as our linter, and codestyle checker. Dotfiles for these can be found on the [Useful links guide](/books/frontend/useful-links)
