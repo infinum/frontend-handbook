@@ -230,6 +230,30 @@ export default {
 };
 ```
 
+## Testing
+
+For testing we used jest (Javascript testing framework) and [Testing library](https://testing-library.com/) for easier querying and interacting with DOM nodes.
+Setup is simple, we need few npm packages `jest`, `@testing-library/jest-dom`, `@testing-library/react`. and we need to add `jest.config.js` file with few options set.
+
+```js
+// /jest.config.js
+module.exports = {
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+};
+```
+
+To run tests we just need to add script to package.json
+
+```js
+  ...
+  "scripts": {
+    "test": "jest"
+    ...
+  }
+  ...
+```
+
 ## Next.js starter
 
 We published to npm our [**Infinum Next.js starter**](https://www.npmjs.com/package/@infinumjs/js-next-starter).
@@ -238,3 +262,5 @@ Generated project features previously explained modals example, along with styli
 
 The project contains a store that uses [datx](https://www.npmjs.com/package/datx). Also, the store example shows how to add a model to store and how to use model data inside react render function.
 The store is initialized and later on, injected using [Dependable react](https://www.npmjs.com/package/dependable-react)
+
+The testing environment is also set, and two example tests are added. `/src/components/modals` folder contains a testing file with an example of snapshot testing and testing modal component UI. We can do that using DOM querying (getByTestId) and firing events (fireEvent), which are few of the many features provided by `testing-library`.
