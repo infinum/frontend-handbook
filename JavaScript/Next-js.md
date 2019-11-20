@@ -1,11 +1,11 @@
 ## Introduction
 
-Next.js supports some very cool features which can be used on different kind of projects. For example, some projects with public pages couldn't use create-react-app because it doesn't support server-side rendering, which makes SEO much harder. So in projects that require SSR, the different stack must be used that would probably include something like express on top of node, and custom webpack and babel configuration.
+Next.js supports some very cool features which can be used in different kinds of projects. For example, some projects with public pages can't be built with create-react-app (CRA) because it doesn't support server-side rendering, which makes SEO much harder. So, in projects that require SSR, a different stack must be used that would probably include something like Express on top of node, and custom Webpack and Babel configurations.
 
-Also, any customization of webpack or babel inside CRA requires ejecting, which is the one-way operation, and from that point, you are responsible for maintaining configuration files.
+Also, any customization of Webpack or Babel inside CRA requires ejecting, which is a one-way operation. From that point onward, you are responsible for maintaining configuration files.
 
-Soon every project would probably introduce something new so we would end up with many different projects very hard to maintain.
-Next.js solves above-stated problems and allows us to use a single stack for many different projects. Plus next.js introduces some handy features, which comes out of the box:
+Multiple custom configuration files is something that we want to avoid.
+Next.js solves above-stated problems and allows us to use a single stack for many different projects. Plus Next.js introduces some handy features, which come built-in:
 
 - Code splitting
 - SSR
@@ -18,9 +18,9 @@ Next.js solves above-stated problems and allows us to use a single stack for man
 
 ## POC
 
-We made POC which used some of the above features. We wanted to build an app which could be exported to static Html files (wouldn't need any server processing) and would contain modals which we could access via link.
+We made POC which uses some of the above features. We build an app which can be exported to static HTML files (wouldn't need any server processing) and that contains modals which we can access with a link.
 
-We used this requirement since many of our projects use modals, and it proved to be very useful to access them directly by adding query params to url.
+Since many of our projects use modals, it proved to be very useful to be able to access them directly by adding query parameters to the URL.
 
 ### App structure
 
@@ -46,7 +46,7 @@ We used this requirement since many of our projects use modals, and it proved to
 ...
 ```
 
-`login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful user is redirected to the index page which acts as the home page.
+`login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful, the user is redirected to the index page which acts as the home page.
 
 ### Layouts
 
@@ -106,11 +106,11 @@ Index page in this example is used as a private page, so we are using withAuth h
 
 ### Higher order components
 
-From react docs HOC-s are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
+From the React documentation, Higher-Order Components (HOC) are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
 
 ### WithAuth
 
-`withAuth` is simple HOC which checks if the user is authenticated, if not user is redirected to the login page.
+`withAuth` is simple HOC which checks if the user is authenticated, and if not, the user is redirected to the login page.
 
 ```jsx
 // /components/higherOrderComponents/withAuth.tsx
@@ -202,8 +202,8 @@ export const withHocModalPage = (props: { modalName: string, onModalClose: () =>
 export default withAuth(WithModal(withHocModalPage));
 ```
 
-We are storing `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling modal.
-To `Layout` we are passing `onClose` callback, so we would know where to route after closing modal. In other words, we want to show the same page without query params. If there are some params we need to preserve we would use something like the following:
+We are storing the `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling the modal.
+To `Layout` we are passing the `onClose` callback, so we would know where to route after closing the modal. In other words, we want to show the same page without query params. If there were some params we needed to preserve, we would use something like the following:
 
 ```jsx
 Router.push({
@@ -214,7 +214,7 @@ Router.push({
 
 ### Dynamic Modal rendering
 
-The only thing that is left to do is to show how are we rendering modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until url params contain the modal name.
+The only thing that is left to do is to show how we are rendering the modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until URL params contain the modal name.
 
 ```jsx
 // /components/modals/index.tsx
