@@ -229,3 +229,12 @@ export default {
   newsletter: NewsletterModal,
 };
 ```
+
+## Next.js starter
+
+We published to npm our [**Infinum Next.js starter**](https://www.npmjs.com/package/@infinumjs/js-next-starter).
+
+Generated project features previously explained modals example, along with a styling and a theming example using[emotion](https://www.npmjs.com/package/emotion) for CSS in JS and [emotion theming](https://www.npmjs.com/package/emotion-theming).
+
+Inside the project is an example of a store which uses [datx](https://www.npmjs.com/package/datx). Also store example shows how to add model to store and how to use model data inside react render function.
+Store is initialized and later on injected using [Dependable react](https://www.npmjs.com/package/dependable-react)
