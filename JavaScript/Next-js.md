@@ -233,7 +233,7 @@ export default {
 ## Testing
 
 For testing we used [Jest](https://jestjs.io/) (Javascript testing framework) and [Testing library](https://testing-library.com/) for easier querying and interacting with DOM nodes.
-Setup is simple, we need few npm packages `jest`, `@testing-library/jest-dom`, `@testing-library/react`. and we need to add `jest.config.js` file with few options set.
+Setup is simple, we need few npm packages `jest`, `@testing-library/jest-dom`, `@testing-library/react`, and we need to add `jest.config.js` file with few options set.
 
 ```js
 // /jest.config.js
