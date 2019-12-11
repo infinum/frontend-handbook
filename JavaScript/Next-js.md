@@ -256,7 +256,7 @@ To run tests we just need to add script to package.json
 
 ## Next.js starter
 
-We published to npm our [**Infinum Next.js starter**](https://www.npmjs.com/package/@infinumjs/js-next-starter).
+We published the [**Infinum Next.js starter**](https://www.npmjs.com/package/@infinumjs/js-next-starter) to npm.
 
 Generated project features previously explained modals example, along with styling and a theming using [emotion](https://www.npmjs.com/package/emotion) for CSS in JS and [emotion theming](https://www.npmjs.com/package/emotion-theming).
 
