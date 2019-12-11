@@ -258,7 +258,7 @@ To run tests we just need to add script to package.json
 
 We published the [**Infinum Next.js starter**](https://www.npmjs.com/package/@infinumjs/js-next-starter) to npm.
 
-Generated project features previously explained modals example, along with styling and a theming using [emotion](https://www.npmjs.com/package/emotion) for CSS in JS and [emotion theming](https://www.npmjs.com/package/emotion-theming).
+Generated project features previously explained modals example, along with styling and a theming using [Emotion](https://www.npmjs.com/package/emotion) for CSS in JS and [Emotion Theming](https://www.npmjs.com/package/emotion-theming).
 
 The project contains a store that uses [datx](https://www.npmjs.com/package/datx). Also, the store example shows how to add a model to store and how to use model data inside react render function.
 The store is initialized and later on, injected using [Dependable react](https://www.npmjs.com/package/dependable-react)
