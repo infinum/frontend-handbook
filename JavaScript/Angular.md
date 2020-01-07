@@ -8,19 +8,19 @@
 
 ### [Angular CLI](https://github.com/angular/angular-cli)
 
-The best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a webpack config exposed for editing), it does some optimizations when compiling your code, and it offers some handy scaffolding tools.
+The best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a webpack config exposed for editing), do some optimizations when compiling your code, and offer some handy scaffolding tools.
 
 Install Angular CLI globally with `npm install -g @angular/cli` and check out what you can do with `ng help`.
 
 **Creating a new project**
 
-Use Angular CLI for initial project setup:
+Use Angular CLI for the initial project setup:
 
 ```bash
 ng new my-app
 ```
 
-As of version 7, there will be a quick wizard-like setup advising you about routing and styling. Choose depending on your needs. All our Angular projects here at Infinum use routing and SCSS styling.
+As of version 7, there will be a quick wizard-like setup advising you about routing and styling. Choose depending on your needs. All of our Angular projects here at Infinum use routing and SCSS styling.
 
 **Scaffolding**
 
@@ -36,7 +36,7 @@ Use `ng g m MyModule` to create a new module. If the module should have routes, 
 
 Create components with `ng g c MyComponent` or `ng g c my-component`. In both cases, the resulting component class name will be `MyComponent`, and dir name will be `my-component`.
 
-Usually, you want to create a component module as well when creating components. This makes the component more modular and ensures that everything that the component needs is provided by the component module. The component module should declare and export the component—you can think of it as a public API. The component module could also declare some other "internal" components, but it does not have to necessarily export those internal components. It is our recommendation that component modules export only one declared component.
+Usually, you want to create a component module when creating components. This makes the component more modular and ensures that everything that the component needs is provided by the component module. The component module should declare and export the component—you can think of it as a public API. The component module could also declare some other "internal" components, but it does not have to necessarily export those internal components. It is our recommendation that component modules export only one declared component.
 
 Also remember that a component can be declared only once (in one module), so it makes sense for reusable components to have their own module.
 
@@ -80,7 +80,7 @@ export class CalendarModule { }
 
 **Creating new services**
 
-Use `ng g s MyService` to generate a new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). The solution is to simply prefix the directory name, and the command will generate the directory as well as the service: `ng g s my-service/my-service`.
+Use `ng g s MyService` to generate a new service. NOTE: unlike during component generation, service generation will not create a new dir for the service (although that might change in the future). The solution is to simply prefix the directory name, and the command will generate the directory and the service: `ng g s my-service/my-service`.
 
 **Ejecting**
 
@@ -109,13 +109,13 @@ npm install --save d3
 npm install --save-dev @types/d3
 ```
 
-If there are no typings available, you can create your own `typings.d.ts` file and write some custom typings for your needs—they do not even have to be 100% complete, they can cover only the functionality which you use.
+If there are no typings available, you can create your own `typings.d.ts` file and write some custom typings for your needs. They do not even have to be 100% complete; they can cover only the functionality which you use.
 
 ### [Recommended Editor](https://xkcd.com/378/)
 
 <center><img style="width: 100%; max-width: 740px" src="/img/real_programmers.png"></center>
 
-At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angular development, as it has great integration with TypeScript and has some handy Angular plugins:
+At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angular development, as it has a great integration with TypeScript and has some handy Angular plugins:
 
 - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)—IntelliSense in templates
 - [Angular 7 Snippets](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
@@ -128,9 +128,9 @@ At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angu
 
 Angular depends heavily on RxJS, so getting familiar with RxJS is pretty important. It is used for all event handling and can even be used for state management.
 
-RxJS is the implementation of the [Reactive Extensions Library](http://reactivex.io/) for JavaScript. Angular isn't the only place where you can come across RxJS—it can also be used with Vanilla JS or some other framework. Even some Android and iOS developers use Rx for their respective platforms. While the implementations can differ a bit, learning just one of the implementations (for example RxJS) will introduce you to a lot of concepts which are common for all Rx implementations—and then you can get into a heated mergeMap vs switchMap discussions with Android and/or iOS developers. Isn't that magnificent?
+RxJS is the implementation of the [Reactive Extensions Library](http://reactivex.io/) for JavaScript. Angular isn't the only place where you can come across RxJS—it can also be used with Vanilla JS or some other framework. Even some Android and iOS developers use Rx for their respective platforms. While the implementations can differ a bit, learning just one of the implementations (for example RxJS) will introduce you to a lot of concepts which are common for all Rx implementations. You can then get into a heated mergeMap vs switchMap discussion with Android and/or iOS developers. Isn't that magnificent?
 
-Please check out some RxJS tutorials if you are not familiar with Rx. Please note that there have been some breaking changes in RxJS version 6—some of the APIs have changed (mostly the way we use operators), and many tutorials that were created earlier are now using older versions of RxJS. That being said, not much has changed conceptually, just the way you write some RxJS functionalities.
+Please check out some RxJS tutorials if you are not familiar with Rx. Please note that there have been some breaking changes in RxJS version 6. Some of the APIs have changed (mostly the way we use operators), and many tutorials that were created earlier are now using older versions of RxJS. That being said, not much has changed conceptually, just the way you write some RxJS functionalities.
 
 Here are some good introductory tutorials to get you started:
 
@@ -195,7 +195,7 @@ You can use async/await to await the completion of observables. Keep in mind tha
 
 To convert an observable to a promise, just call `obs$.toPromise()` and then you can await it.
 
-One important thing to note is that you are waiting for the **completion** and not for **emission** of values. Knowing that, what do you expect the result to be in the following example?
+One important thing to note is that you are waiting for the **completion**, not **emission** of values. Knowing that, what do you expect the result to be in the following example?
 
 ``` typescript
 const source$: Subject<string> = new Subject();
@@ -227,7 +227,7 @@ If you have created the app using Angular CLI, there is already some clear struc
 
 - If you are using some JS libs which do not have typings, add your own custom typing in `app/custom-typings`.
 
-- Whenever you have some attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. A good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`. If enum data is a bit more complex, defining an interface for it can be useful.
+- Whenever you have an attribute whose value can be some value from a set of values, make an enum and store that enum in `app/enums`. A good example is an enum for HTTP status codes. If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`. If the enum data is a bit more complex, defining an interface for it can be useful.
 
 - If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s, and validators in `app/forms`. If you have form components that are reused throughout the app, put them in `app/components/forms`.
 
@@ -247,7 +247,7 @@ If you have created the app using Angular CLI, there is already some clear struc
 
 - As defined in angular-cli, assets placed in `assets` will be served statically.
 
-- Global styles should be placed in the `app/styles` dir. The styles dir has very similar structure as that described in the [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+- Global styles should be placed in the `app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
 - All environment files are placed in `environments`.
 
@@ -364,7 +364,7 @@ More on this philosophy can be found in various online articles. Some articles h
 
 ## Environments
 
-Environment files should be used for some global configuration changes that can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and cannot be changed after the build (at least not in an acceptable way). This can be an issue if the application is deployed using Docker—in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files (more on this in the SSR section).
+Environment files should be used for some global configuration changes that can differ between development and production builds. Keep in mind that these values are bundled in build at build-time and cannot be changed after the build (at least not in an acceptable way). This can be an issue if the application is deployed using Docker, in which case you should use some SSR solution or script injection instead of defining variables via Angular's environment files (more on this in the SSR section).
 
 Define the interface for the environment: `app/interfaces/environment.interface`:
 
@@ -736,7 +736,7 @@ class UserServiceStub implements IUserService { }
 
 **Prefer interface over type**
 
-When defining data structures, prefer using interfaces instead of types. Use types only for things for which interfaces cannot be used—unions of different types.
+When defining data structures, prefer using interfaces over types. Use types only for those things for which interfaces cannot be used—unions of different types.
 
 ``` typescript
 // bad
@@ -753,7 +753,7 @@ export interface IUser {
 export type CSSPropertyValue = number | string;
 ```
 
-You might be tempted to use a type for a union of models. For example, in some CMS solutions you might have `AdminModel` and `AuthorModel`. The user can log in using either the admin or author credentials.
+You might be tempted to use a type for a union of models. For example, in some CMS solutions you might have `AdminModel` and `AuthorModel`. The user can log in using either admin or author credentials.
 
 ``` typescript
 export class AdminModel {
@@ -814,7 +814,7 @@ If you are new to RxJS, you will probably be overwhelmed by the amount of operat
 
 A rule of thumb is to subscribe as little and as late as possible, and do minimal amount of work in subscription callbacks.
 
-We will demonstrate this on an example. Imagine you have a stream of data to which you would like to subscribe and transform the data in some way.
+We will demonstrate this with an example. Imagine you have a stream of data to which you would like to subscribe and transform the data in some way.
 
 ``` typescript
 interface IUser {
@@ -863,7 +863,7 @@ The point here is that, as soon as you notice that you are repeating yourself in
 
 **No subscriptions in guards**
 
-Asynchronous guards are common, but they should not subscribe to anything, they should return an observable.
+Asynchronous guards are common, but they should not subscribe to anything; they should return an observable.
 
 To demonstrate this on an example, imagine we have `AuthService` and the `getUserData` method which returns an observable. The observable will return the `User` model if the user is authenticated or emit an error if not.
 
@@ -919,25 +919,25 @@ There are two basic approaches to data loading:
 
 **Resolve guards**
 
-A [resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) can be used to pre-fetch data necessary for component rendering. The advantages of using resolve guards are:
+A [resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) can be used to pre-fetch the data necessary for component rendering. The advantages of using resolve guards are:
 
 - No need to fetch data on component initialization
-  - data is fetched during the routing event and ready when the component is initialized
+  - Data is fetched during the routing event and ready when the component is initialized
 - No need to implement logic for not showing the component until the data is fetched
-  - when the component starts rendering, you know you will have the data
+  - When the component starts rendering, you know you will have the data
 - A loader showing/hiding logic can be implemented in one place instead of in each component that loads data
-  - if data is loaded via a resolve guard for all routes, you can have a global loader logic which hooks into router events, thus implementing the loaded showing/hiding logic only once
+  - If data is loaded via a resolve guard for all routes, you can have a global loader logic which hooks into router events, thus implementing the loaded showing/hiding logic only once
 
 **Container components**
 
-Even though guards are really easy to use and have some advantages, there might be situations where the data has to be loaded through multiple requests or loading might be slow. In those cases, it might be worth to consider using a container component for data loading instead of guards. The container component would, of course, use some service to make the requests and then show the data once the requests have been completed. In this way, it is possible to show partial data as it comes in, and implement empty state design for each chunk of data that is shown.
+Even though guards are really easy to use and have some advantages, there might be situations where the data has to be loaded through multiple requests or the loading might be slow. In those cases, it might be worth to consider using a container component for data loading instead of guards. The container component would, of course, use some service to make the requests and then show the data once the requests have been completed. In this way, it is possible to show partial data as it comes in, and implement empty state design for each chunk of data that is shown.
 
 A good example where partial data loading via a container component can be preferred over all-at-once loading via guards is a dashboard-like page with multiple graphs where each graph shows data from one request. In such cases, it is probably better to let the container component handle data loading, and presentational components (graphs) should implement an empty state with some nice loaders.
 
 Bottom line:
 
-- Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once
-- Use container components if data is loaded in chunks and results should be shown as they come in
+- Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once.
+- Use container components if data is loaded in chunks and results should be shown as they come in.
 
 ----
 
@@ -994,7 +994,7 @@ DI is very useful for testing purposes, as shown in a later chapter.
 
 When setting up server-side rendering, follow the [official guide](https://angular.io/guide/universal).
 
-There are many tricks with SSR even after you finish the setup. You can check out [this repo](https://github.com/fvoska/angular-universal-demo) to find out how to solve many issues. This includes reading environment variables at runtime, so it is worth checking out.
+There are many tricks with SSR, even after you finish the setup. You can check out [this repo](https://github.com/fvoska/angular-universal-demo) to find out how to solve many issues. This includes reading environment variables at runtime, so it is worth checking out.
 
 ## Two-way binding
 
@@ -1006,9 +1006,9 @@ Angular's [binding syntax](https://angular.io/guide/template-syntax#binding-synt
 - One-way from view target to data source (`(someEvent)="onSomeEvent()"`)
 - Two-way (`[(ngModel)]="value"`)
 
-If you have worked with template-driven forms, you've probably come across `ngModel` and used two-way data binding. Just like you can use two-way binding with `ngModel`, you can also use two-way binding of any input of your custom component.
+If you have worked with template-driven forms, you've probably come across `ngModel` and used two-way data binding. Just like you can use two-way binding with `ngModel`, you can also use the two-way binding of any input of your custom component.
 
-This handbook will not cover how to implement custom two-way binding for your components. We suggest checking out this article: [Two-way data binding in Angular](https://blog.thoughtram.io/angular/2016/10/13/two-way-data-binding-in-angular-2.html), which explains how two-way binding works, and how you can implement your own.
+This handbook will not cover how to implement a custom two-way binding for your components. We suggest checking out this article: [Two-way Data Binding in Angular](https://blog.thoughtram.io/angular/2016/10/13/two-way-data-binding-in-angular-2.html), which explains how two-way binding works, and how you can implement your own.
 
 One key takeaway which we will repeat in this handbook is how two-way binding is de-sugared.
 
@@ -1017,15 +1017,15 @@ One key takeaway which we will repeat in this handbook is how two-way binding is
 <my-counter [value]="counterValue" (valueChange)="counterValue=$event"></my-counter>
 ```
 
-These two lines do exactly the same thing—that might give you an idea how to go about implementing custom two-way binding for your components :) For more details, we suggest reading the official docs and articles that we mentioned a bit earlier.
+These two lines do exactly the same thing—that might give you an idea how to go about implementing custom two-way binding for your components. :) For more details, we suggest reading the official docs and articles that we mentioned a bit earlier.
 
 ### Should you use two-way binding?
 
-If you've checked out the docs and the article, you've probably noticed that implementing two-way binding for your components isn't rocket science. You might be thinking "OH MY GOD I WILL ENABLE TWO-WAY BINDING FOR ALL MY COMPONENTS". Hold on, you might not actually need it.
+If you've checked out the docs and the article, you've probably noticed that implementing two-way binding for your components isn't rocket science. You might be thinking "OH MY GOD, I WILL ENABLE TWO-WAY BINDING FOR ALL MY COMPONENTS". Hold on, you might not actually need it.
 
 We recommend implementing two-way binding for components which hold some internal state, and you want to be able to pass values down and also update outer component value if something changes internally. A good example would be some kind of a counter component.
 
-Another type of component for which you might consider implementing two-way binding are components which are used in a similar manner as inputs, checkboxes, and similar elements that are used within forms. For such cases, it is usually better to implement a [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead. More on that in the section about working with forms.
+Another type of component for which you might consider implementing two-way binding are the components used in a similar manner as inputs, checkboxes, and similar elements that are used within forms. For such cases, it is usually better to implement a [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) instead. More on that in the section about working with forms.
 
 ## Working with forms
 
@@ -1034,9 +1034,9 @@ As you might already know, there are two approaches when working with forms in A
 - [Reactive Forms](https://angular.io/guide/reactive-forms)
 - [Template-driven Forms](https://angular.io/guide/forms)
 
-The real question is which approach should you use? General reasoning is that if the form is simple enough, template-driven forms should suffice. If the form is complex and has a lot of validations, the reactive approach is easier to manage.
+The real question is which approach should you use? General reasoning is that template-driven forms should suffice if the form is simple enough. If the form is complex and has a lot of validations, the reactive approach is easier to manage.
 
-Going by that general reasoning, you might end up having a mix of reactive and template-driven forms in your application. For that reason, here at Infinum, we usually lean towards reactive forms. While they do have some initial overhead, forms often get more complex over time, and if you start off with using reactive forms, there is no need to switch from template-driven forms when they get hard to manage.
+Going by that general reasoning, you might end up having a mix of reactive and template-driven forms in your application. For that reason, here at Infinum, we usually lean towards reactive forms. While they do have some initial overhead, forms often get more complex over time. If you start off with using reactive forms, there is no need to switch from template-driven forms when they get harder to manage.
 
 ### Our own library for working with forms!
 
@@ -1055,20 +1055,18 @@ We definitely recommend trying out `ngx-form-object` (*shameful self-promotion*)
 
 Another topic that should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use the `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but luckily, there are some great articles which we recommend reading:
 
-- [Angular Custom Form Controls Made Easy](https://netbasal.com/angular-custom-form-controls-made-easy-4f963341c8e2)
-  - quick introduction
-- [Never again be confused when implementing ControlValueAccessor in Angular forms](https://blog.angularindepth.com/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms-93b9eee9ee83)
-  - more in-depth, great article, recommend reading; but uses jQuery in the example—so démodé
+- [Angular Custom Form Controls Made Easy](https://netbasal.com/angular-custom-form-controls-made-easy-4f963341c8e2)—quick introduction
+- [Never Again be Confused when Implementing ControlValueAccessor in Angular Forms](https://blog.angularindepth.com/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms-93b9eee9ee83)—more in-depth, great article, recommend reading; but uses jQuery in the example—so démodé
 
 You can implement both two-way binding and `ControlValueAccessor` if you want your component to be usable both inside a form and outside the form, as a stand-alone. However, you will usually not use the same component both inside and outside a form, so implementing just `ControlValueAccessor` should be enough.
 
 ## Testing
 
-Writing good quality tests for critical functionalities is an important step in quality assurance. We do not recommend not writing any tests, nor do we recommend mindlessly trying to achieve 100% coverage. Applications with 100% coverage can still have bugs either because the tests are not good enough, or if edge cases were not covered by the implementation in the first place.
+Writing good quality tests for critical functionalities is an important step in quality assurance. We do not recommend not writing any tests, nor do we recommend mindlessly trying to achieve 100% coverage. Applications with 100% coverage can still have bugs either because the tests are not good enough, or if the edge cases were not covered by the implementation in the first place.
 
 There are many tips and tricks that go into testing Angular applications. This section will cover some of them.
 
-### Unit vs integration vs end-to-end testing
+### Unit vs. integration vs. end-to-end testing
 
 Tests can usually be placed into one of the three categories: unit, integration, or end-to-end tests.
 
@@ -1082,10 +1080,10 @@ Unit testing in Angular comes out-of-the-box with Jasmine, as both the testing f
 
 Integration testing includes multiple units which are tested together to check how they interact. In Angular, there is no special way of doing integration testing. There is a thin line between unit and integration tests, and that line is more conceptual than technical. For integration testing, you still use Jasmine, which comes with every project generated by Angular CLI.
 
-What makes a test an integration test instead of unit test? Well, it depends on how much you mock during testing. If component A which you are testing renders components B, C, and D, and depends on services S1 and S2, you have a choice:
+What makes a test an integration test instead of a unit test? Well, it depends on how much you mock during testing. If component A which you are testing renders components B, C, and D, and depends on services S1 and S2, you have a choice:
 
 1. You can test component A using mocks for components B, C, and D, and mocks for services S1 and S2. We could call that a unit test of component A since it is testing only component A's functionality, and it assumes that other components and services work as expected.
-2. You can test component A using real components B, C, and D and real services S1 and S2. This will make the `TestBed` module configuration a bit heavier, and tests might run a bit slower. However, we could call this an integration test of the interaction between components A, B, C, and D and service S1 and S2.
+2. You can test component A using real components B, C, and D and real services S1 and S2. This will make the `TestBed` module configuration a bit heavier, and tests might run a bit slower. However, we could call this an integration test of the interaction between components A, B, C, and D and services S1 and S2.
 
 So, it is really up to you to decide whether you want to test some component with all its dependencies mocked, or if you want to test interaction with other real components as well.
 
@@ -1095,13 +1093,13 @@ What you call those Jasmine tests—unit or integration—doesn't really matter,
 
 End-to-end testing is quite different when compared to unit/integration testing with Jasmine. Angular CLI projects come with a separate E2E testing project which uses Protractor. [Protractor](https://www.protractortest.org/) is basically a wrapper around [Selenium](https://www.seleniumhq.org/), which allows us to write tests in JavaScript, and it also has some Angular-specific helper functions.
 
-When you start E2E tests, your application will be built, and a programmatically controlled instance of a web browser will be opened. The tests will then click on various elements of the webpage without any human input (via [WebDriver](https://www.seleniumhq.org/projects/webdriver/)). This allows us to create a quick smoke-testing type of tests which go through the main flows of our application in an automated way.
+When you start E2E tests, your application will be built, and a programmatically controlled instance of a web browser will be opened. The tests will then click on various elements of the webpage without any human input (via [WebDriver](https://www.seleniumhq.org/projects/webdriver/)). This allows us to create a quick smoke-testing type of tests which goes through the main flows of our application in an automated way.
 
 Covering E2E testing in detail is out of the scope of this handbook. Please check out the [official documentation](https://angular.io/cli/e2e) if you would like to know more. However, we do have some quick tips and tricks:
 
-- the `ng e2e` command builds your app and starts a local DevServer just like `ng serve`, and then it runs Protractor on that local instance of your app. If you want to run e2e tests on some specific environment instead of a local environment, you can run Protractor directly instead of via Angular CLI, simply by executing `protractor` (make sure to install it globally, or use binary from node_modules, or create a script in package.json). In `protractor.conf.js`, you can configure `baseUrl` to point to the URL of your app on the desired environment
-- You can use environment variables in Protractor tests. For example, if you have a login functionality test, you can do something like this: `$('input[data-e2e-test="login-email"]').sendKeys(process.env.E2E_LOGIN_EMAIL);`
-- You can set up some pre-conditions using the `onPrepare` hook in `protractor.conf.js`
+- the `ng e2e` command builds your app and starts a local DevServer just like `ng serve`, and then it runs Protractor on that local instance of your app. If you want to run e2e tests on some specific environment instead of a local environment, you can run Protractor directly instead of via Angular CLI, simply by executing `protractor` (make sure to install it globally, use binary from node_modules, or create a script in package.json). In `protractor.conf.js`, you can configure `baseUrl` to point to the URL of your app on the desired environment.
+- You can use environment variables in Protractor tests. For example, if you have a login functionality test, you can do something like this: `$('input[data-e2e-test="login-email"]').sendKeys(process.env.E2E_LOGIN_EMAIL);`.
+- You can set up some pre-conditions using the `onPrepare` hook in `protractor.conf.js`.
 - If you are using async/await in your e2e tests, make sure to [check this out](https://github.com/angular/protractor/blob/master/docs/async-await.md)
 
 We should mention that Protractor isn't the only solution for e2e testing, but it does come out-of-the box with Angular CLI generated projects. Honestly, writing Protractor tests is often a painful process (especially if you are writing tests using [Cucumber](https://cucumber.io/)). There are some newer e2e testing frameworks which might be worth checking out:
@@ -1112,7 +1110,7 @@ We should mention that Protractor isn't the only solution for e2e testing, but i
 
 ### Utilizing TestBed
 
-Dependency injection is very powerful during testing, as it allows you to provide mock services for testing purposes. You will sometimes want to spy on some private service's methods. This might tempt you to make the service public or do bypass TS by doing something like `component['myService']`. To avoid these *dirty* solutions, you can utilize `TestBed`.
+Dependency injection is very powerful during testing, as it allows you to provide mock services for testing purposes. You will sometimes want to spy on some private service's methods. This might tempt you to make the service public or to bypass TS by doing something like `component['myService']`. To avoid these *dirty* solutions, you can utilize `TestBed`.
 
 Consider this example with a header component and user service which is used for logging in:
 
@@ -1133,9 +1131,9 @@ export class HeaderComponent {
 }
 ```
 
-In our test, we will use TestBed to configure a testing module with all the necessary dependencies. It is usually a good idea to provide mock dependencies instead of real dependencies—this makes it easier to set up different conditions for testing, and it makes tests actual unit tests and not integration tests.
+In our test, we will use TestBed to configure a testing module with all the necessary dependencies. It is usually a good idea to provide mock dependencies instead of real dependencies. This makes it easier to set up different conditions for testing, and it makes actual unit tests and not integration tests.
 
-You can use `TestBed.get` to get an instance of a dependency which the component that is being tested injects. In the following example, we will get an instance of `UserTestingService`, using the `UserService` class as a token—this has to match the token with which the instance is injected in the header component constructor.
+You can use `TestBed.get` to get an instance of a dependency which the component that is being tested injects. In the following example, we will get an instance of `UserTestingService`, using the `UserService` class as a token. This has to match the token with which the instance is injected in the header component constructor.
 
 Here is an example of how we could test our header component:
 
@@ -1370,9 +1368,9 @@ beforeEach(async(() => {
 
 ### Testing components with content projection
 
-Components that use content projection cannot be tested in the same way as components that use only inputs for passing the data to the component. The problem is that, during TestBed configuration, you can only configure the testing module—you cannot define the template which would describe how the component is used inside another component's template.
+Components that use content projection cannot be tested in the same way as components that use only inputs for passing the data to the component. The problem is that, during TestBed configuration, you can only configure the testing module. You cannot define the template which would describe how the component is used inside another component's template.
 
-One of the easiest ways to test content projection is to simply create a wrapper component only for testing purposes.
+One of the easiest ways to test content projection is to simply create a wrapper component for testing purposes only.
 
 `TranscluderComponent`:
 
@@ -1544,7 +1542,7 @@ export interface IJoke {
 
 **Test setup**
 
-Let's start by creating the most basic test, which ensures only that our `DadJokeService` instantiates correctly.
+Let's start by creating the most basic test which ensures only that our `DadJokeService` instantiates correctly.
 
 If you've generated your service using Angular CLI, the `spec` file will probably look something like this:
 
@@ -1579,9 +1577,9 @@ describe('DadJokeService', () => {
 });
 ```
 
-This transformation of the default `spec` file is something that we usually do for all services that we test.
+This transformation of the default `spec` file is something that we usually do for all services we test.
 
-If you run the tests now, they will fail because our service injects `HttpClient`, and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule`, which you can import from `@angular/common/http/testing`, that provides a complete mocking backend for the `HttpClient` service. We just have to import it in our `TestBed` module:
+If you run the tests now, they will fail because our service injects `HttpClient`, and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule`, which you can import from `@angular/common/http/testing`. It provides a complete mocking back end for the `HttpClient` service. We just have to import it in our `TestBed` module:
 
 ``` typescript
 TestBed.configureTestingModule({
@@ -1633,7 +1631,7 @@ describe('DadJokeService', () => {
 });
 ```
 
-We added a `httpMock` variable to our `describe` block and we assign it to an instance of `HttpTestingController`, which is provided by `HttpClientTestingModule`.
+We added a `httpMock` variable to our `describe` block. We assign it to an instance of `HttpTestingController`, which is provided by `HttpClientTestingModule`.
 
 We also defined a `jokeResponse` variable which is formatted in the same way as a real response JSON would be.
 
@@ -1657,14 +1655,14 @@ it('should return a default joke if request fails', () => {
 });
 ```
 
-In our specific example, it was not important which particular error happened because our error catching implementation in `catchError` operator has no logic which would determine different behavior depending on error code. For example, if we wanted to test how our error handling handles 500 server errors, we could do something like this:
+In our specific example, it was not important which particular error happened because our error catching implementation in the `catchError` operator has no logic which would determine different behavior depending on error code. For example, if we wanted to test how our error handling handles 500 server errors, we could do something like this:
 
 ``` typescript
 mockRequest.error(new ErrorEvent('server_down'), { status: 500 });
 ```
 
-This allows us to test more complex error handling, which usually includes some logic for displaying different error messages depending on error code. As shown, that is completely doable using the `error` method of the `TestRequest` object.
+This allows us to test a more complex error handling, which usually includes some logic for displaying different error messages depending on error code. As shown, that is completely doable using the `error` method of the `TestRequest` object.
 
 ### Testing helpers
 
-If you have helper functions, testing them is basically the same as in any other application in any other framework (or even Vanilla JS). You do not need TestBed, you just need good old Jasmine, and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.
+If you have helper functions, testing them is basically the same as in any other application in any framework (even Vanilla JS). You do not need TestBed. You just need good old Jasmine, and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.

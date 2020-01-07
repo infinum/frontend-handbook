@@ -1,5 +1,4 @@
-**Don't ever use tag selectors if they can be avoided**. They are usually much slower than any class selector, and almost always have to be
-overridden.
+**Don't ever use tag selectors if they can be avoided**. They are usually much slower than any class selector, and almost always have to be overridden.
 
 It is strongly recommended to use scss-lint to force nesting, specificity, rule order, and other rules in the following chapter.
 
@@ -38,10 +37,10 @@ The usual example of three-level nesting is found in a simple block element with
 ```
 
 <a name="specificity"></a>
+
 ### Specificity
 
-Specificity is a bit more complex than nesting. With specificity, you have to take into account the generated CSS output. Each level of nesting
-adds a level of specificity to a selector. Adding multiple selectors on a single line also adds to specificity, for example:
+Specificity is a bit more complex than nesting. With specificity, you have to take into account the generated CSS output. Each level of nesting adds a level of specificity to a selector. Adding multiple selectors on a single line also adds to specificity. For example:
 
 ```scss
   //level 1 specificity

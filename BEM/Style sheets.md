@@ -19,7 +19,7 @@ A simple form block using BEM can look like this:
 </form>
 ```
 
-Where the `login-form` class is the block name, the `login-form__row`, `login-form__label`, and `login-form__input` classes are elements, and the `login-form__input--username` and `login-form__input--password` classes are modifiers.
+...where the `login-form` class is the block name, the `login-form__row`, `login-form__label`, and `login-form__input` classes are elements, and the `login-form__input--username` and `login-form__input--password` classes are modifiers.
 
 ## Blocks
 
@@ -87,7 +87,7 @@ A block modifier is a class that is used to modify the appearance of a block in 
 
 ### Using blocks
 
-Not everything is a block. This is not Minecraft. Just because an HTML element has children, that doesn't necessarily mean it is, or should be, a block. If an HTML element and its styling make no sense in the layout anywhere outside its position, it is not a block. If an HTML element cannot be reused, it is probably not a block. If an HTML element has no children, it is probably not a block. There are cases where this is not true, as each case is unique.
+Not everything is a block. This is not Minecraft. Just because an HTML element has children, that doesn't necessarily mean it is, or should be, a block. If an HTML element and its styling make no sense in the layout anywhere outside its position, it is not a block. If an HTML element cannot be reused, it is probably not a block. If an HTML element has no children, it is probably not a block. There are cases where this is not true as each case is unique.
 
 *A bad block example*
 
@@ -175,9 +175,9 @@ Syntax: `<block-name>__<element-name>`
 
 ### Element naming
 
-An element name is a list of words separated with a dash describing the element and its use and purpose under its block. It is prefixed with the block name and two underscores, or just two underscores as a shorthand. Using a full name is recommended, as overriding behavior might occur otherwise.
+An element name is a list of words separated with a dash describing the element and its use and purpose under its block. It is prefixed with the block name and two underscores or just two underscores as a shorthand. Using a full name is recommended. Otherwise, an overriding behavior might occur.
 
-Unlike blocks, naming elements can be abstract and vague, as they are meaningful only under their parent block. Still, you should take care not to have names that describe the element's use in a block. There is no point in using the block name in the element name, as that would only result in redundancy.
+Unlike blocks, naming elements can be abstract and vague, as they are meaningful only under their parent block. Still, you should take care not to have names that describe the element's use in a block. There is no point in using the block name in the element name as that would only result in redundancy.
 The parent & symbol from Sass proves very useful when writing elements. A block with an element can be written in Sass as:
 
 ```scss
@@ -203,7 +203,7 @@ Resulting in a CSS:
 }
 ```
 
-If you need it to nest inside of the block class, in Sass, you would have to use the & symbol before the element, or use string interpolation.
+If you need it to nest inside of the block class, in Sass, you would have to use the & symbol before the element or string interpolation.
 
 Example:
 
@@ -233,7 +233,7 @@ Results in:
   }
 ```
 
-Where the `&` character will interpolate into the block name. Use it.
+...where the `&` character will interpolate into the block name. Use it.
 
 Examples:
 
@@ -360,9 +360,9 @@ Elements make sense only inside a block. Never should an element be without its 
 }
 ```
 
-The `highlighted` block is not really a block, it is an element, as it can only live inside of the statistic block. Also, the `highlighted__text` element it houses also makes sense only inside the statistic, so it is an element of the statistic, and not highlighted.
+The `highlighted` block is not really a block. It is an element because it can live inside of the statistic block only. Also, the `highlighted__text` element it houses also makes sense only inside the statistic, so it is an element of the statistic, not highlighted.
 
-The `statistics-list__statistic--no-first` modifier doesn't make sense, as the modifier should be applied to the statistic block. The `statistics-list__statistic` element shouldn't worry about its content implementation, it should have styles that are based only on its position and appearance inside the "statistics-list" block.
+The `statistics-list__statistic--no-first` modifier doesn't make sense because the modifier should be applied to the statistic block. The `statistics-list__statistic` element shouldn't worry about its content implementation; it should have styles that are based only on its position and appearance inside the "statistics-list" block.
 
 *Fixed example*
 

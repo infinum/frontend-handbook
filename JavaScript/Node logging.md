@@ -48,7 +48,7 @@ if (isServer) {
   });
 } else {
   log = require('loglevel');
-  
+
   // Set level to debug for development or to silent for production
   log.setLevel(process.env.NODE_ENV === 'development' ? 1 : 5);
 }

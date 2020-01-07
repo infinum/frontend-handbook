@@ -17,6 +17,6 @@
   * Roboto is a Rails Engine that gives you the ability to specify environment specific robots in your application.
   * More info with code examples is available [here.](https://github.com/LaunchAcademy/roboto)
 * **Metatags**
-  * SEO plugin for Ruby on Rails applications, configurable plugin that follows best practices for meta tags.
+  * SEO plugin for Ruby on Rails applications; a configurable plugin that follows the best practices for meta tags.
   * More info with code examples is available [here.](https://github.com/kpumuk/meta-tags)
   * Tutorial available [here.](http://cookieshq.co.uk/posts/easy-seo-metatags-with-rails-4/)
