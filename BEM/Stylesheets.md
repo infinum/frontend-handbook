@@ -178,7 +178,7 @@ Syntax: `<block-name>__<element-name>`
 An element name is a list of words separated with a dash describing the element and its use and purpose under its block. It is prefixed with the block name and two underscores or just two underscores as a shorthand. Using a full name is recommended. Otherwise, an overriding behavior might occur.
 
 Unlike blocks, naming elements can be abstract and vague, as they are meaningful only under their parent block. Still, you should take care not to have names that describe the element's use in a block. There is no point in using the block name in the element name as that would only result in redundancy.
-The parent & symbol from Sass proves very useful when writing elements. A block with an element can be written in Sass as:
+The parent & symbol from sass proves very useful when writing elements. A block with an element can be written in sass as:
 
 ```scss
 .my-block {
@@ -203,7 +203,7 @@ Resulting in a CSS:
 }
 ```
 
-If you need it to nest inside of the block class, in Sass, you would have to use the & symbol before the element or string interpolation.
+If you need it to nest inside of the block class, in sass, you would have to use the & symbol before the element or string interpolation.
 
 Example:
 
@@ -308,7 +308,7 @@ An element modifier is a class that is used to modify the appearance of an eleme
 
 ### Using elements
 
-Elements make sense only inside a block. Never should an element be without its block, either in HTML or Sass. When reusing the block, its elements don't necessarily have to be used in the same order, nor do they have to be used at all.
+Elements make sense only inside a block. Never should an element be without its block, either in HTML or sass. When reusing the block, its elements don't necessarily have to be used in the same order, nor do they have to be used at all.
 
 *Bad elements example*
 

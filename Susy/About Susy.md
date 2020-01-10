@@ -2,11 +2,11 @@
 
 **Important:** this guide is made for Susy 2. For information about Susy 3, check out [Susy 3 Docs](http://oddbird.net/susy/docs/).
 
-Susy is a Sass library that handles grid layouting and the math behind it, and contains some utilities. It has no inherent styling choices, as it is meant to be used only for the grid. Understanding the use of Susy mostly revolves about knowing its utilities and its configuration, so the guide will first focus on that.
+Susy is a sass library that handles grid layouting and the math behind it, and contains some utilities. It has no inherent styling choices, as it is meant to be used only for the grid. Understanding the use of Susy mostly revolves about knowing its utilities and its configuration, so the guide will first focus on that.
 
 ## Warning
 
-Before going through this guide, some knowledge of Sass is needed. For that, check the [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
+Before going through this guide, some knowledge of sass is needed. For that, check the [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
 
 The guide is effectively split into two parts: Susy configuration and the actual guide. A more in-depth configuration explanation can be found in the documentation. If you are familiar with Susy, skip to the guide section.
 

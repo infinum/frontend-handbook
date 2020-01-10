@@ -23,7 +23,7 @@ Use border-box sizing. This can easily be set up using a Susy mixin:
 This will go into the `_core.scss` file.
 
 ### Basic configuration
-To set Susy configuration, you have to put the configuration object into the `$susy` Sass variable.
+To set Susy configuration, you have to put the configuration object into the `$susy` sass variable.
 
 For example:
 
@@ -42,7 +42,7 @@ $layout-no-gutter: (
 $susy: $layout-default;
 ```
 
-Use the `$layout` prefix for any Sass variable that holds a Susy configuration. The Susy configuration can be overridden on the fly when writing Sass, using the with-layout mixin - this is where the `$layout-no-gutter` variable could be used.
+Use the `$layout` prefix for any sass variable that holds a Susy configuration. The Susy configuration can be overridden on the fly when writing sass, using the with-layout mixin - this is where the `$layout-no-gutter` variable could be used.
 
 This goes into the `_config.scss` file.
 
@@ -122,7 +122,7 @@ In most cases, you want to use the gutter-position `before` or `after` - `after`
 ### With layout
 `with-layout` is a very useful mixin for generating specific context in which to use Susy mixins.
 
-In the basic configuration section, there was an example layout configuration set in the `$layout-no-gutter` Sass variable.
+In the basic configuration section, there was an example layout configuration set in the `$layout-no-gutter` sass variable.
 
 ```scss
 $layout-no-gutter: (
@@ -177,7 +177,7 @@ You can see how this makes Susy very flexible, without the need for custom overr
 ### Break
 To be able to create rows, the mixin `break` is used. Break will force a clear on the columns appearing above, making it possible to create a row.
 
-In the case of the following Sass and HTML:
+In the case of the following sass and HTML:
 
 ```scss
 .section {

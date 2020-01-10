@@ -1,13 +1,13 @@
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
-In all web projects, we usually have some kind of a css/Sass folder, naming of which can sometimes be chosen. The usual names would be:
+In all web projects, we usually have some kind of a css/sass folder, naming of which can sometimes be chosen. The usual names would be:
 
 * Stylesheets
 * Styles
 * CSS
 * SASS
 
-If needed, brush up on Sass partials and imports, as those are important to understand the file structure.
+If needed, brush up on sass partials and imports, as those are important to understand the file structure.
 If the app is a Rails app, sprockets can be used instead of imports. The differences will be noted when necessary.
 
 Because of the BEM philosophy, files will usually follow the strucutre of components (that being blocks). An example of a structure would be:
@@ -44,7 +44,7 @@ Because of the BEM philosophy, files will usually follow the strucutre of compon
 * \_shame.scss
 * application.scss
 
-Only the main file (application.scss in the example above) should be a normal Sass file. Everything else should be a partial. This way, only one CSS file is generated, and when a file is not imported, it will not be unnecessarily compiled.
+Only the main file (application.scss in the example above) should be a normal sass file. Everything else should be a partial. This way, only one CSS file is generated, and when a file is not imported, it will not be unnecessarily compiled.
 
 The application.scss file should only hold imports, no actual rules, styling, variables, mixins etc. can go in it. Usually, it would look something like:
 
@@ -215,7 +215,7 @@ $breakpoint-tablet: '(max-width: 991px)';
 
 ### Placeholders
 
-The placeholders file should contain globally shared pseudoclasses (or placeholders). Pseudoclasses in Sass are classes beginning with %, which generate no CSS output, but can be extended using the Sass directive @extend.
+The placeholders file should contain globally shared pseudoclasses (or placeholders). Pseudoclasses in sass are classes beginning with %, which generate no CSS output, but can be extended using the sass directive @extend.
 Example usage of a global placeholder.
 
 * [SASS reference on pseudoclasses](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#placeholder_selectors_)
@@ -258,7 +258,7 @@ Example usage of a global placeholder.
 
 ### Mixins
 
-The mixins file should contain any global mixin that can help organize Sass better. If your project contains a lot of mixins, it is recommended that you put them in separate files and group them according to their purpose. Then, put all of those files inside a new folder called **mixins**.
+The mixins file should contain any global mixin that can help organize sass better. If your project contains a lot of mixins, it is recommended that you put them in separate files and group them according to their purpose. Then, put all of those files inside a new folder called **mixins**.
 For instance, adding clearfix:
 
 ```scss
@@ -358,8 +358,8 @@ Animations should be prefixed with the keyframe prefix, while the mixins using i
 
 ### SASS style guide
 
-For a reference of Sass functionality, refer to this page: [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
+For a reference of sass functionality, refer to this page: [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 
-*This should cover almost every case when writing Sass, including file structures, imports, code organization and logic.*
+*This should cover almost every case when writing sass, including file structures, imports, code organization and logic.*
 
 We use scss-lint and csscomb as our linter, and codestyle checker. Dotfiles for these can be found on the [Useful links guide](/books/frontend/useful-links).
