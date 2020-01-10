@@ -56,13 +56,13 @@ Use semantic elements as much as possible. Even in the worst case scenario, it's
 
 Consensual cookies are good. Non-consensual cookies are illegal (well, at least in some countries). If you are using cookies, be sure to keep the user informed about their use and to obtain the user's consent.
 
-Luckily enough, we have developed and are currently maintaining a gem for that. Add the [cookies_eu](https://github.com/infinum/cookies_eu) gem to your Gemfile and set it up. If you need help, consult the back end team.
+Luckily enough, we have developed and are currently maintaining a gem for that. Add the [cookies_eu](https://github.com/infinum/cookies_eu) gem to your Gemfile and set it up. If you need help, consult the backend team.
 
 ## Environment-specific robots.txt
 
 Letting crawlers crawl over your staging page is ill-advised, as it's bad for SEO. If the project you are working on has its staging environment, prevent crawlers from gathering data that hasn't been approved yet by creating environment-specific robots.txt files.
 
-Similar to the former case, add the [roboto](https://github.com/LaunchAcademy/roboto) gem to your Gemfile and set it up. Feel free to check if a better-developed or better-maintained technology has become available in the meantime. You can always consult the back end team if you need assistance.
+Similar to the former case, add the [roboto](https://github.com/LaunchAcademy/roboto) gem to your Gemfile and set it up. Feel free to check if a better-developed or better-maintained technology has become available in the meantime. You can always consult the backend team if you need assistance.
 
 ## Testing and optimising
 

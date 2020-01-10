@@ -1579,7 +1579,7 @@ describe('DadJokeService', () => {
 
 This transformation of the default `spec` file is something that we usually do for all services we test.
 
-If you run the tests now, they will fail because our service injects `HttpClient`, and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule`, which you can import from `@angular/common/http/testing`. It provides a complete mocking back end for the `HttpClient` service. We just have to import it in our `TestBed` module:
+If you run the tests now, they will fail because our service injects `HttpClient`, and we have not provided it in our tests. Luckily, there is a module called `HttpClientTestingModule`, which you can import from `@angular/common/http/testing`. It provides a complete mocking backend for the `HttpClient` service. We just have to import it in our `TestBed` module:
 
 ``` typescript
 TestBed.configureTestingModule({
