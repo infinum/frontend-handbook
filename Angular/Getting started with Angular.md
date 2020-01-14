@@ -67,7 +67,7 @@ The Handbook covers some of the best practices and formatting preferences to whi
 - Working with forms
 - Testing
 
-One of the topics which is usually not covered into detail in most online tutorials is testing. A large portion of the Handbook is about [testing](https://handbook.infinum.co/books/frontend/javascript/angular#testing) and this should come in very handy once you start working on an actual project where it might be required to write tests.
+One of the topics which is usually not covered in detail in most online tutorials is testing. A large portion of the Handbook is about [testing](https://handbook.infinum.co/books/frontend/javascript/angular#testing) and this should come in very handy once you start working on an actual project where it will be required to write tests.
 
 ## 3. Get to know RxJS
 
