@@ -73,7 +73,7 @@ One of the topics which is usually not covered in detail in most online tutorial
 
 There are many concepts which Angular shares with React, Vue and other component-based JavaScript libraries/frameworks. However, when it comes to Angular, there is one big player in the game who is usually not present when using other frameworks, and that is RxJS.
 
-Writing good quality Angular applications both in terms of performance and code readability and reusability often required having a good grasp of how RxJS works and how it can be utilized to create reactive data streams.
+Writing good quality Angular applications both in terms of performance and code readability and reusability often requires having a good grasp of how RxJS works and how it can be utilized to create reactive data streams.
 
 Luckily there are some good and free online tutorials available. We recommend watching Acedemind's [Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) YouTube playlist. There is also a cool website called [RxJS Marbles](https://rxmarbles.com/) where you can explore many different RxJS operators and see what they do in a visual way.
 
