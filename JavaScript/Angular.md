@@ -1097,9 +1097,7 @@ Taking learnings from all previous examples and the fact that we can use service
   ...
 })
 class MyComponent {
-  public user: UserModel = this.route.params.pipe(switchMap((params: Params) => {
-    return this.usersService.fetchById(params.userId);
-  }));
+  public user: UserModel;
   private userSubscription: Subscription;
 
   constructor(
