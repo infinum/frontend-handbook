@@ -795,6 +795,382 @@ export class AuthorModel extends User {
 
 ----
 
+**Always safe-guard `ngOnChanges`**
+
+```ts
+// bad
+@Component(...)
+class MyComponent {
+  @Input() public input1: string;
+  @Input() public input2: string;
+  private upperCaseInput1: string;
+
+  public ngOnChanges() {
+    this.upperCaseInput1 = this.input1.toUpperCase();
+  }
+}
+```
+
+The problem with not checking which specific change was triggered is that whatever computation is done might be done unnecessarily. You should add checks so that the action is executed only when the related inputs change and ignore changes of other inputs. In above example `upperCaseInput1`'s value depends only on `input1`'s value, but the assignment will be executed even if only `input2` changes, which is unnecessary.
+
+```ts
+// good
+@Component(...)
+class MyComponent {
+  @Input() public input1: string;
+  @Input() public input2: string;
+  private upperCaseInput1: string;
+
+  public ngOnChanges(changes) {
+    if (changes.input1) {
+      this.upperCaseInput1 = this.input1.toUpperCase()
+    }
+  }
+}
+```
+
+----
+
+**Extract ngOnChanges logic into methods**
+
+If `ngOnChanges` contains some logic, it is often a good idea to separate that logic into private methods to increase readability of `ngOnChanges` method.
+
+```ts
+// bad
+@Component(...)
+class MyComponent {
+  @Input() public user: UserModel;
+  public userForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {}
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.user) {
+      this.userForm = this.fb.group({
+        name: this.user.name,
+        ...
+      });
+    }
+  }
+}
+```
+
+```ts
+// good
+@Component(...)
+class MyComponent {
+  @Input() public user: UserModel;
+  public userForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {}
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.user) {
+      this.updateUserForm();
+    }
+  }
+
+  private updateUserForm(): void {
+    this.userForm = this.fb.group({
+      name: this.user.name,
+      ...
+    });
+  }
+}
+```
+
+We can even go one step further and make things "pure":
+
+```ts
+// even better
+@Component(...)
+class MyComponent {
+  @Input() public user: UserModel;
+  public userForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {}
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.user) {
+      this.userForm = this.buildUserForm(changes.user.currentValue);
+      //   or
+      // this.userForm = this.buildUserForm(this.user);
+      //   it doesn't really matter much which one you choose since
+      //   changes.user.currentValue === this.user
+    }
+  }
+
+  private updateUserForm(user: UserModel): FormGroup {
+    return this.fb.group({
+      name: user.name,
+      ...
+    });
+  }
+}
+```
+
+----
+
+**Remember that `ngOnChange` is called on first change as well as all subsequent changes**
+
+In this example we want to react on input changes and call some action.
+
+```ts
+//bad
+@Component(...)
+class MyComponent {
+  @Input() public label: string;
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.label) {
+      this.someActions()
+    }
+  }
+
+  public ngOnInit() {
+    this.someActions()
+  }
+
+  private someActions() { ... }
+}
+```
+
+Problem with the above example is that someActions will be called twice, first in `ngOnChanges` and then in `ngOnInit`. Yes, this order seems a bit strange - `ngOnInit` is called **after** the first `ngOnChanges` call; but this is just how it is.
+
+```ts
+//good
+@Component(...)
+class MyComponent {
+  @Input() public label: string;
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.label) {
+      this.someActions()
+    }
+  }
+
+  private someActions() { ... }
+}
+```
+
+Look at your use cases and check if you can remove `ngOnInit`. You almost never need `ngOnInit`. If there are some default input values which should be set, you can do it alongside input declaration (`@Input() label: string = 'default label'`). Any other reactions to input changes should be done in `ngOnChanges`.
+
+----
+
+**Consider different initial assignment options**
+
+There is often a need to assign some properties during component initialization. This can be done in multiple ways:
+
+1. In component's constructor
+2. During property declaration
+3. In lifecycle hooks
+4. Subscribing at initialization
+
+When learning Angular, you hear a lot about different lifecycle hooks. Even when creating new components using the Angular CLI, you get a component with empty `constructor` and empty `ngOnInit` method. Because of this, it seems natural to use one of these for initialization.
+
+_Example #1_ - how a constructor might be used for initial value assignment:
+
+```ts
+@Component(...)
+class MyComponent {
+  private foo: string;
+
+  constructor() {
+    this.foo = 'bar';
+  }
+}
+```
+
+This works and there is nothing wrong with this, but it can be written shorter like so:
+
+_Example #2_ - initial assignment alongside property declaration
+
+```ts
+@Component(...)
+class MyComponent {
+  private foo: string = 'bar';
+}
+```
+
+We did pretty much the same thing, but a bit shorter.
+
+_Example #3_ - order during initial assignment alongside property declaration
+```ts
+@Component(...)
+class MyComponent {
+  private foo: string = 'bar';
+
+  constructor() {
+    this.foo = 'foo';
+  }
+}
+```
+
+Property assignments will be executed immediately after constructor execution has finished, so in this example the final value of `foo` will be `bar`.
+
+We recommend setting initial values alongside property declaration since it is the shortest option.
+
+However, there are some cases where you will have to use `ngOnInit` or `ngOnChanges`.
+
+_Example #4_ - when are `ngOnInit` and `ngOnChanges` necessary?
+
+```ts
+// bad
+@Component(...)
+class PersonDetailsComponent {
+  @Input() public birthDate: Date;
+  public isLegalAge: boolean;
+
+  constructor() {
+    this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
+    // This check is not 100% correct, we are keeping it simple.
+  }
+}
+```
+
+If you try this, you will get an exception because `birthDate` will be undefined at component construction time. Input binding values are available only after `ngOnInit` and `ngOnChanges` are called. To make this work, you can use `ngOnInit`:
+
+```ts
+// bad
+@Component(...)
+class PersonDetailsComponent implements OnInit {
+  @Input() public birthDate: Date;
+  public isLegalAge: boolean;
+
+  ngOnInit() {
+    this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
+  }
+}
+```
+
+Using `ngOnInit` works and we get no exception (with the assumption that a valid `Date` object is passed down to our component via `birthDate` input).
+
+We still have one problem with this solution. If input binding changes, `isLegalAge` will not be re-assigned. To solve this we simply switch to using `ngOnChanges`:
+
+```ts
+// good
+@Component(...)
+class PersonDetailsComponent implements OnInit {
+  @Input() public birthDate: Date;
+  public isLegalAge: boolean;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.birthDate) {
+      this.isLegalAge = this.checkIfLegalAge(changes.birthDate.currentValue);
+    }
+  }
+
+  private checkIfLegalAge(birthDate): boolean {
+    return new Date().getYear() - birthDate.getYear() > 18;
+  }
+}
+```
+
+Since this check is simple and returns a primitive value, using a getter here is also a valid option and it allows us to remove ngOnChanges completely and reduce the amount of code.
+
+```ts
+// even better
+@Component(...)
+class PersonDetailsComponent implements OnInit {
+  @Input() public birthDate: Date;
+
+  public get isLegalAge(): boolean {
+    return new Date().getYear() - this.birthDate.getYear() > 18;
+  }
+}
+```
+
+But be careful when using getters for values which are used in templates because they will be called very often. This is OK only if there is not too much heavy lifting inside getters and if the getter does not return a newly initialized object every time it is called.
+
+_Example #5_ - avoid unnecessary creation of multiple observables and avoid subscriptions
+
+Taking learnings from all previous examples and the fact that we can use services during initial assignment, we can greatly simplify initialization of observables and their usage in templates.
+
+```ts
+// bad
+@Component({
+  template: `
+  <ng-container *ngIf="user">
+    {{ user.name }}
+  </ng-container>
+  `,
+  ...
+})
+class MyComponent {
+  public user: UserModel;
+  private userSubscription: Subscription;
+
+  constructor(
+    private route: ActivatedRoute,
+    private usersService: UsersService,
+  ) {
+    this.userSubscription = this.route.params.pipe(switchMap((params: Params) => {
+      return this.usersService.fetchById(params.userId);
+    })).subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
+  }
+}
+```
+
+This is bad because it will not work correctly with OnPush change detection and we have to take care of subscriptions manually - it is easy to forget to unsubscribe and we have to introduce `ngOnDestroy`.
+
+```ts
+// still bad
+@Component({
+  template: `
+  <ng-container *ngIf="user$ | async as user">
+    {{ user.name }}
+  </ng-container>
+  `,
+  ...
+})
+class MyComponent {
+  constructor(
+    private route: ActivatedRoute,
+    private usersService: UsersService,
+  ) {}
+
+  public get user$(): Observable<UserModel> {
+    return this.route.params.pipe(switchMap((params: Params) => {
+      return this.usersService.fetchById(params.userId);
+    }));
+  }
+}
+```
+
+This is a bit better since we no longer have to take care of unsubscribing, but the issue now is that during each template check, `user$` getter will be called. In _Example #4_ we had a case where using a getter was fine, but in this case it is not. Each time it is called it creates a new observable, template will subscribe to this new observable during each change detection, meaning that a new subscription will trigger another API call every CD cycle - which is unnecessary.
+
+```ts
+// good
+@Component({
+  template: `
+  <ng-container *ngIf="user$ | async as user">
+    {{ user.name }}
+  </ng-container>
+  `,
+  ...
+})
+class MyComponent {
+  public user$: Observable<UserModel> = this.route.params.pipe(switchMap((params: Params) => {
+    return this.usersService.fetchById(params.userId);
+  }));
+
+  constructor(
+    private route: ActivatedRoute,
+    private usersService: UsersService,
+  ) {}
+}
+```
+
+Finally the correct solution simply assigns user$ to an observable which is created only once. The template will have only one subscription and we will just react to updates in the data stream which happen when params change.
+
+----
+
 **Renaming RxJS imports**
 
 Some RxJS imports have very generic names, so you might want to rename them during import:
