@@ -65,13 +65,24 @@ The Handbook covers some of the best practices and formatting preferences to whi
 
 One of the topics which is usually not covered in detail in most online tutorials is testing. A large portion of the Handbook is about [testing](https://handbook.infinum.co/books/frontend/javascript/angular#testing) and this should come in very handy once you start working on an actual project where it will be required to write tests.
 
-## 3. Get to know RxJS
+## 3. Various online resources
+
+Completing Tour of Heroes and reading some of the guides from the official documentation should teach you enough to start working on a real project. To advance your knowledge from this point forward, there are many great websites, YouTube channels and blogs you can follow. As you bump into parts of the framework where it is not clear to you what is going on, there is a good change that a quick web search will lead you to one of these sources:
+
+- [Angular University](https://angular-university.io/) has tons of PDFs and video content
+- Angular In Depth [[Web](https://indepth.dev/angular/), [Medium](https://medium.com/angular-in-depth)] usually covers more advanced topics, so it is probably not a great first resource for beginners, but it will definitely be of great value when you have some very specific questions
+- Subscription-based learning portals like [egghead.io](https://egghead.io/) have courses covering a wide range of topics
+- [Academind](https://www.academind.com/) covers Angular, TypeScript, NodeJS, vanilla JS, RxJS, React, Vue and various other topics. Some content is available on [YouTube](https://www.youtube.com/channel/UCSJbGtTlrDami-tDGPUV9-w/featured), and some on [Udemy](https://www.udemy.com/courses/search/?src=ukw&q=academind%20angular)
+
+Feel free to start a course or simply start following some blogs to keep on top of things.
+
+## 4. Get to know RxJS
 
 There are many concepts which Angular shares with React, Vue and other component-based JavaScript libraries/frameworks. However, when it comes to Angular, there is one big player in the game who is usually not present when using other frameworks, and that is RxJS.
 
 Writing good quality Angular applications both in terms of performance and code readability and reusability often requires having a good grasp of how RxJS works and how it can be utilized to create reactive data streams.
 
-Luckily there are some good and free online tutorials available. We recommend watching Acedemind's [Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) YouTube playlist. There is also a cool website called [RxJS Marbles](https://rxmarbles.com/) where you can explore many different RxJS operators and see what they do in a visual way.
+Luckily there are some good and free online tutorials available. We recommend watching Acedemind's [Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) YouTube playlist. There is also a cool website called [RxJS Marbles](https://rxmarbles.com/) where you can explore many different RxJS operators and see what they do in a visual way. [Egghead.io](https://egghead.io/) has some great courses as well, for example [RxJS Beyond the Basics: Operators in Depth](https://egghead.io/courses/rxjs-beyond-the-basics-operators-in-depth) and [Build an Angular Instant Search Component](https://egghead.io/courses/build-an-angular-instant-search-component).
 
 We also recommend reading the official documentation pages related to Observables and RxJS:
 - [Observables](https://angular.io/guide/observables)
