@@ -1045,7 +1045,7 @@ class PersonDetailsComponent implements OnInit {
 
 Using `ngOnInit` works and we get no exception (with the assumption that a valid `Date` object is passed down to our component via `birthDate` input).
 
-We still have one problem with this solution. If input binding changes, `isLegalAge` will not be re-assigned. To solve this we simply switch to useing `ngOnChanges`:
+We still have one problem with this solution. If input binding changes, `isLegalAge` will not be re-assigned. To solve this we simply switch to using `ngOnChanges`:
 
 ```ts
 // good
