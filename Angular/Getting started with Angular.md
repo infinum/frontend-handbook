@@ -41,7 +41,7 @@ Here are some of the most important guides:
 - [Observables](https://angular.io/guide/observables)
 - [The RxJS library](https://angular.io/guide/rx-library)
 
-Most of these are quite large documents. Nobody expects you to read through all the contents of all these documents. But you should know they are there so you can come back to them when you are unsure of how some things work. Even the most experienced developers use the documentation pages on a regular basis to remind themselves of some parts of the framework which they might not have used as extensively in a while so they need a refreshed.
+Most of these are quite large documents. Nobody expects you to read through all of the content of all of these documents. But you should know they are there, so you can come back to them when you are unsure of how some things work. Even the most experienced developers use the documentation pages on a regular basis to remind themselves of some parts of the framework which they might not have used as extensively in a while so they need a refreshed.
 
 ### 1.3. Reference pages
 
