@@ -1028,7 +1028,7 @@ class PersonDetailsComponent {
 }
 ```
 
-If you try this, you will get an exception because `birthDate` will be undefined at component construction time. Input bindings values are available only after `ngOnInit` and `ngOnChanges` are called. To make this work, you can use `ngOnInit`:
+If you try this, you will get an exception because `birthDate` will be undefined at component construction time. Input binding values are available only after `ngOnInit` and `ngOnChanges` are called. To make this work, you can use `ngOnInit`:
 
 ```ts
 // bad
