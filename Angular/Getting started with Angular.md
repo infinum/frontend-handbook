@@ -43,10 +43,6 @@ Here are some of the most important guides:
 
 Most of these are quite large documents. Nobody expects you to read through all of the content of all of these documents. But you should know they are there, so you can come back to them when you are unsure of how some things work. Even the most experienced developers use the documentation pages on a regular basis to remind themselves of some parts of the framework which they might not have used as extensively in a while so they need a refreshed.
 
-### 1.3. Reference pages
-
-If you have some specific questions
-
 ## 2. Infinum [Angular guidelines and best practices](https://handbook.infinum.co/books/frontend/javascript/angular) Handbook
 
 The official docs are a great source of reference information, guides and tutorials. After you finish all the official tutorials, taking a look at our very own [Angular Handbook](https://handbook.infinum.co/books/frontend/javascript/angular). At first we recommend you skim-read it on a high-level, just to get to know which topics are covered. Of course feel free to read it completely if you have the time.
