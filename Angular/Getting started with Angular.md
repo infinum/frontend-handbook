@@ -20,7 +20,7 @@ There are two tutorial-style sections in the official docs.
 
 This section covers all the steps you need to complete before you can start making your first app. It also covers the very basics of Angular's core features, including template syntax, component design, routing, dependency injection, working with forms and a simple deployment process.
 
-This is a great resource for your first introduction to Angular and we recommend following all the steps from this section. The tutorial provides a [starting point on StackBlitz](https://angular.io/generated/live-examples/getting-started-v0/stackblitz.html), an online integrated development environment. It is very important that you actually write code—do not just read or copy/paste the code, write it.
+This is a great resource for your first introduction to Angular and we recommend following all of the steps from this section. The tutorial provides a [starting point on StackBlitz](https://angular.io/generated/live-examples/getting-started-v0/stackblitz.html), an online integrated development environment. It is very important that you actually write code—do not just read or copy/paste it, write it.
 
 #### 1.1.2. [Tour of Heroes App and Tutorial](https://angular.io/tutorial)
 
