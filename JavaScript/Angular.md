@@ -1006,7 +1006,7 @@ class MyComponent {
 }
 ```
 
-Property assignments will be executed immediately after constructor execution has finished, so in this example the final value oif `foo` will be `bar`.
+Property assignments will be executed immediately after constructor execution has finished, so in this example the final value of `foo` will be `bar`.
 
 We recommend setting initial values alongside property declaration since it is the shortest option.
 
