@@ -811,7 +811,7 @@ class MyComponent {
 }
 ```
 
-Problem with not checking which specific change was triggered is that whatever computation is done might be done unnecessarily. You should add checks so that the action is executed only when the related inputs change and ignore changes of other inputs. In above example `upperCaseInput1`'s value depends only on `input1`'s value, but the assignment will be executed even if only `input2` changes, which is unnecessary.
+The problem with not checking which specific change was triggered is that whatever computation is done might be done unnecessarily. You should add checks so that the action is executed only when the related inputs change and ignore changes of other inputs. In above example `upperCaseInput1`'s value depends only on `input1`'s value, but the assignment will be executed even if only `input2` changes, which is unnecessary.
 
 ```ts
 // good
