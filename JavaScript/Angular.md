@@ -1023,7 +1023,7 @@ class PersonDetailsComponent {
 
   constructor() {
     this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
-    // I know this check is not 100% correct, just keeping it simple.
+    // This check is not 100% correct, we are keeping it simple.
   }
 }
 ```
