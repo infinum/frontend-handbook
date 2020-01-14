@@ -6,7 +6,7 @@ Angular is a big framework and there is a lot to cover when getting started. We 
 
 Please read through this short getting started guide in its whole and then start opening the links on your journey to learn Angular 💪.
 
-If you have a mentor guiding you through your learning process, you are encouraged to also discuss any topic with him or her.
+If you have a mentor guiding you through your learning process, you are encouraged to also discuss any topic with them.
 
 ## 1. Official documentation
 
