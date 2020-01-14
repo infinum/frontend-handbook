@@ -1,5 +1,3 @@
-# Angular guidelines and best practices
-
 <center><img style="width: 100%; max-width: 1000px" src="/img/angular.svg"></center>
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
