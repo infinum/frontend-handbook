@@ -1169,7 +1169,7 @@ class MyComponent {
 }
 ```
 
-Finally the correct solution simply assigns user$ to be an observable which is created only once, template will have only one subscription and we will just react to updates in the data stream which happen on params change.
+Finally the correct solution simply assigns user$ to an observable which is created only once. The template will have only one subscription and we will just react to updates in the data stream which happen when params change.
 
 ----
 
