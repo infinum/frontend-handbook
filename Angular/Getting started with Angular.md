@@ -41,9 +41,9 @@ Here are some of the most important guides:
 
 Most of these are quite large documents. Nobody expects you to read through all of the content of all of these documents. But you should know they are there, so you can come back to them when you are unsure of how some things work. Even the most experienced developers use the documentation pages on a regular basis to remind themselves of some parts of the framework which they might not have used as extensively in a while so they need a refreshed.
 
-## 2. Infinum [Angular guidelines and best practices](https://handbook.infinum.co/books/frontend/javascript/angular) Handbook
+## 2. Infinum [Angular guidelines and best practices](https://handbook.infinum.co/books/frontend/angular/angular-guidelines-and-best-practices) Handbook
 
-The official docs are a great source of reference information, guides and tutorials. After you finish all the official tutorials, taking a look at our very own [Angular Handbook](https://handbook.infinum.co/books/frontend/javascript/angular). At first we recommend you skim-read it on a high-level, just to get to know which topics are covered. Of course feel free to read it completely if you have the time.
+The official docs are a great source of reference information, guides and tutorials. After you finish all the official tutorials, taking a look at our very own [Angular Handbook](https://handbook.infinum.co/books/frontend/angular/angular-guidelines-and-best-practices). At first we recommend you skim-read it on a high-level, just to get to know which topics are covered. Of course feel free to read it completely if you have the time.
 
 The Handbook covers some of the best practices and formatting preferences to which we try and adhere when possible. This includes:
 
@@ -61,7 +61,7 @@ The Handbook covers some of the best practices and formatting preferences to whi
 - Working with forms
 - Testing
 
-One of the topics which is usually not covered in detail in most online tutorials is testing. A large portion of the Handbook is about [testing](https://handbook.infinum.co/books/frontend/javascript/angular#testing) and this should come in very handy once you start working on an actual project where it will be required to write tests.
+One of the topics which is usually not covered in detail in most online tutorials is testing. A large portion of the Handbook is about [testing](https://handbook.infinum.co/books/frontend/angular/angular-guidelines-and-best-practices#testing) and this should come in very handy once you start working on an actual project where it will be required to write tests.
 
 ## 3. Various online resources
 
