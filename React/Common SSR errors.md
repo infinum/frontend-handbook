@@ -29,7 +29,7 @@ export default () => (
 );
 ```
 
-This is the DOM structure generated on the server side:
+This is the DOM structure generated on the server-side:
 ```html
 <div>
   <style data-emotion-css="1fyxi0m">
