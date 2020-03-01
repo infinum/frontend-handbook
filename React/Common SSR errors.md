@@ -54,7 +54,7 @@ This is the DOM structure generated on the server side:
   <p class="css-1fyxi0m">Subtitle</p>
 </div>
 ```
-As the first child is `<style>` instead of `<p>` tag, `:first-child` selector won't work.
+Since the first child is a `<style>` instead of a `<p>` element, the `:first-child` selector won't work.
 
 ### Solution
 Use `:first-of-type`, `:last-of-type` or `:nth-of-type` selectors.
