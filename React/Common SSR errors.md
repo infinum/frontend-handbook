@@ -23,7 +23,7 @@ const Text = styled.p`
 
 export default () => (
   <div>
-    <Text>Tilte</Text>
+    <Text>Title</Text>
     <Text>Subtitle</Text>
   </div>
 );
