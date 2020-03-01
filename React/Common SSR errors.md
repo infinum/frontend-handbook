@@ -2,7 +2,7 @@
 
 ## Avoid usage of `:first-child` CSS selector with Emotion 10
 
-If `:first-child` CSS selector is used in SSR application React will show this warning in the console:
+If `:first-child` CSS selector is used in server-side rendered applications, React will show this warning in the console:
 ```
 The pseudo class ":first-child" is potentially unsafe when doing server-side rendering. Try changing it to ":first-of-type"
 ```
