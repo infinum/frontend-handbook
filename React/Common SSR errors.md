@@ -10,7 +10,7 @@ The pseudo class ":first-child" is potentially unsafe when doing server-side ren
 Default server-side rendering in Emotion 10 renders the `<style>` tag inline with the component, instead of extracting everything inside `<head>`, similarly to "shadow CSS" in Web Components.
 This approach enables streaming and requires no additional configuration, but does not work with nth child or similar selectors.
 
-Here is the example of `:first-child` selector:
+Here is an example of the `:first-child` selector:
 ```jsx
 import styled from "@emotion/styled";
 
