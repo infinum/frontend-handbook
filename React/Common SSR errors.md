@@ -59,4 +59,4 @@ Since the first child is a `<style>` instead of a `<p>` element, the `:first-chi
 ### Solution
 Use `:first-of-type`, `:last-of-type` or `:nth-of-type` selectors.
 
-> Read more about alternative SSR setup in the official documentation https://emotion.sh/docs/ssr
+> Read more about an alternative SSR setup in the [official documentation](https://emotion.sh/docs/ssr).
