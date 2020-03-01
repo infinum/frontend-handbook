@@ -41,7 +41,7 @@ This is the DOM structure generated on the server side:
         color: black;
     }
   </style>
-  <p class="css-1fyxi0m">Tilte</p>
+  <p class="css-1fyxi0m">Title</p>
   <style data-emotion-css="1fyxi0m">
     .css-1fyxi0m {
         color: gray;
