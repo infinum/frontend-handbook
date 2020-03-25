@@ -993,6 +993,7 @@ class MyComponent {
 We did pretty much the same thing, but a bit shorter.
 
 _Example #3_ - order during initial assignment alongside property declaration
+
 ```ts
 @Component(...)
 class MyComponent {
