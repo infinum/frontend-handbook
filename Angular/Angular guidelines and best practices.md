@@ -1,4 +1,4 @@
-<center><img style="width: 100%; max-width: 1000px" src="/img/angular.svg"></center>
+![Angular](/img/angular.svg)
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
@@ -111,7 +111,7 @@ If there are no typings available, you can create your own `typings.d.ts` file a
 
 ### [Recommended Editor](https://xkcd.com/378/)
 
-<center><img style="width: 100%; max-width: 740px" src="/img/real_programmers.png"></center>
+![XKCD real programmers](/img/real_programmers.png)
 
 At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angular development, as it has a great integration with TypeScript and has some handy Angular plugins:
 
