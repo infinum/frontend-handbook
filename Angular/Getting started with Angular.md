@@ -1,4 +1,4 @@
-<center><img style="width: 100%; max-width: 1000px" src="/img/angular.svg"></center>
+![Angular](/img/angular.svg)
 
 Angular is a big framework and there is a lot to cover when getting started. We have put together a short guide with links to resources which should help you.
 
