@@ -1,72 +1,33 @@
-# TypeScript + React
+# Getting started with React
 
-*For general info on using JSX with TypeScript, check out the guidelines in TypeScript's official documentation [JSX · TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)*.
+### React
 
-### Component declaration
+- intro
 
-When declaring a React class component in TypeScript, set two generic types that describe props and state.
+### Next.js Framework
 
-``` typescript
-export class ComponentName extends React.Component<{/*prop types*/}, {/*state types*/}> {
-  // ...
-}
-```
+- what is it
+- learn next https://nextjs.org/learn/basics/create-nextjs-app
 
-### Props
+### Typescript
 
-For validating props in TypeScript classes:
-- use TypeScript's built-in types instead of `prop-types`
-- if no local component state is set, skip it (when MobX is used for state management, this is usually always the case)
+- how to set it up with next.js
 
-``` typescript
-export class ComponentName extends React.Component<{
-  className?: string;
-  isConditionMet: boolean;
-  onClick?(event: any): void;
-}> {
-  // ...
-}
-```
+### Prettier
 
-Use interfaces when you have a set of common props used in more than a few components (in which case the interfaces should be imported from a separate file).
+- infinum prettier settings
+- maybe add note for optional format on save settings in VSCode
 
-``` typescript
-interface CommonProps {
-  // prop types
-}
-```
+### Eslint
 
-``` typescript
-import { CommonProps } from 'interfaces/CommonProps';
+- infinum eslint
 
-export class ComponentName extends React.Component<CommonProps & { active?: boolean }> {
-  // ...
-}
-```
+### Testing
 
-### Class members and methods
+- jest
+- react testing library
 
-React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
+### Internationalization
 
-``` typescript
-export class ComponentName extends React.Component {
-  constructor(args) {
-    super(args);
-    // ...
-  }
-
-  public componentDidMount() {
-    // ...
-  }
-
-  private handleLocalData() {
-    // ...
-  }
-
-  public render() {
-    return {
-      // ...
-    };
-  }
-}
-```
+- polyglot
+- react-i18Next
