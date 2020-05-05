@@ -45,6 +45,8 @@ For testing React applications we use these libraries:
 - [jest](https://jestjs.io/)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 - [React Hooks Testing Library](https://github.com/testing-library/react-hooks-testing-library)
+- [React Testing Library - User Event](https://github.com/testing-library/user-event)
+- [Simulate react-select events for react-testing-library](https://github.com/romgain/react-select-event)
 
 ### Internationalization
 
