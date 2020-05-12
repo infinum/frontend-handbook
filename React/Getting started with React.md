@@ -72,5 +72,6 @@ For testing React applications we use these libraries:
 
 ### Internationalization
 
-- polyglot
-- react-i18Next
+We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react.i18next](https://react.i18next.com/) for implementing internationalization in React applications.
+
+- [Internationalization setup](/)
