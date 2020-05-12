@@ -28,8 +28,30 @@ Next.js uses `'@babel/preset-typescript'` instead of `tsc` so some features are 
 
 ### Prettier
 
-- infinum prettier settings
-- maybe add note for optional format on save settings in VSCode
+Prettier is an opinionated code formatter that supports many languages
+and integrates with most editors. By using Prettier we can achieve consistent code across all the project without spending too many time and energy on PR reviews.
+We are obligated to use it on every project.
+
+You can start using it by adding this VSCode plugin https://github.com/prettier/prettier-vscode and creating `.prettierrc` in the root of your project.
+
+Here is an example of `.prettierrc`:
+```json
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "printWidth": 120,
+  "bracketSpacing": true
+}
+```
+##### OPTIONAL:
+You can enable `formatOnSave` in VSCode by creating `.vscode/settings.json` and adding these settings:
+```
+{
+  "editor.formatOnSave": true,
+}
+```
+This will format your code every time save file.
 
 ### Eslint
 
