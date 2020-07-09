@@ -13,6 +13,8 @@ In the next sections we will cover some topics related to React ecosystem used i
 
 - [Official documentation](https://nextjs.org/docs/getting-started)
 - [Learn next](https://nextjs.org/learn/basics/create-nextjs-app)
+- [Examples](https://github.com/vercel/next.js/tree/canary/examples)
+- [Handbook Introduction](/handbook/books/frontend/react/nextjs/introduction)
 
 ### Typescript
 
@@ -24,7 +26,7 @@ If you are unfamiliar with Typescript you can go through [documentation](https:/
 
 Next.js uses `'@babel/preset-typescript'` instead of `tsc` so some features are not supported
 
-> Does not support namespaces or const enums because those require type information to transpile. Also does not support export = and import =, because those cannot be transpiled to ES.next.
+> Does not support `namespaces` or `const enums` because those require type information to transpile. Also does not support `export =` and `import =`, because those cannot be transpiled to ES.next.
 
 ### Prettier
 
