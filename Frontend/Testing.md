@@ -135,6 +135,27 @@ company or team.
 For example, Quality Assurance team might do one set of tests instead of you.
 Or maybe you will do all by yourself.
 
+### How to literally write tests?
+
+This depends on your development stack.
+
+React developers will use different tools than e.g. Angular or Vue developers.
+Wordpress developers also have their arsenal of testing tools.
+
+What is common for them is, as we said already, that they are writing code for tests.
+And that code might look like
+
+```Javascript
+// isOddNumber is your function
+
+test('isOddNumber returns true for value 35', () => {
+  expect(isOddNumber(35))
+    .toEqual(true);
+});
+```
+
+How to use tools in each stack is something each stack should cover.
+
 ### TDD
 
 We need to note that we will simplify TDD concept since it cannot be explained in single page.
