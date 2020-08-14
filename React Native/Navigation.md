@@ -118,7 +118,7 @@ const DrawerNavigator: React.FC<IDrawerNavigatorProps> = (props) => {
 
 #### 1.4 Parameters (Typescript)
 To fully use the power of Typescript, `navigation/params` folder should contain types and interfaces for all stacks used inside the application. Since React Navigation handles `Tab` and `Drawer` navigations in the background, there is no need for any type definitions.
-Each stack should have its parameters defined in separate file. Parameters file consists of 3 main parts:
+Each stack should have its parameters defined in a separate file. The parameters file consists of 3 main parts:
 
  1. List of screens used inside of stack with related `route` params defined as `type`.
  2. Screen `route` parameters defined as `interface`
