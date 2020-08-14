@@ -1,4 +1,4 @@
-Routing in mobile applications presents more then mere navigation between routes (screens). It consists of functionalities and styles which are divided across platforms. Generally, routing systems inside native applications has its own look and feel aswell as well defined UX which differs from android and iOS platforms.
+Routing in mobile applications presents more then mere navigation between routes (screens). It consists of functionalities and styles which are divided across platforms. Generally, routing systems inside native applications has its own look and feel as well as well defined UX which differs from android and iOS platforms.
 
 In order to achieve this “native feel”, RN community implemented a [React Navigation](https://reactnavigation.org/) library. It’s main focus presents “native-look-and-feel” while keeping the performance and extensibility.
 
@@ -21,7 +21,7 @@ In order to keep your navigation maintanable and easy to upgrade  here are some 
  `Navigator.tsx` is a React functional component which defines navigation entry point. It should contain navigation structure wrapped inside `NavigationContainer`:
 
 
-```javascript
+```typescript
 const  Navigator:  React.FC<INavigatorProps>  =  (props)  =>  {
 	return  (
 		<NavigationContainer>
@@ -36,7 +36,7 @@ All navigation stacks should be wrapped as functional components inside `navigat
 For example, most common application structure consits of authentication (*login*, *register*) and main (*home*, etc..) workflow.
 In React Navigation terms this means that you should split your navigation stacks between those 2 flows: `AuthenticationStack` and `HomeStack`. Even though, we could use only one stack with all screens, this is a bad practise in mobile development and makes the app harder to maintain as your application grows.
 
-```javascript
+```typescript
 
 // AuthenticationStack.tsx
 
@@ -69,7 +69,7 @@ const HomeStack: React.FC<IHomeStackProps> = (props) => {
 **IMPORTANT**: `NavigationContainer` component accepts single child component. This is not an issue if your application uses `Tab` or `Drawer` navigation. If you use only `Stacks` you need to create `RootStack` component which will then target all other `Stacks` inside separate `Stack.Screen` components.
 Using example above this `Navigator.tsx` would look like:
 
- ```javascript
+ ```typescript
  const RootStack = createStackNavigator();
 
 const Navigator: React.FC<INavigatorProps> = (props) => {
@@ -87,7 +87,7 @@ const Navigator: React.FC<INavigatorProps> = (props) => {
 #### 1.3 TABS
 Usually, applications have one navigation tab which should be in `navigation/tabs`. When using tab navigation, each `Tab.Screen` component should target a stack with related screens.
 
- ```javascript
+ ```typescript
  const Tab = createTabNavigator();
 
 const TabNavigator: React.FC<ITabNavigatorProps> = (props) => {
@@ -103,7 +103,7 @@ const TabNavigator: React.FC<ITabNavigatorProps> = (props) => {
 #### 1.4 Drawer
 Usually, applications have one navigation tab which should be in `navigation/drawer`. When using tab navigation, each `Tab.Screen` component should target a stack with related screens.
 
- ```javascript
+ ```typescript
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC<IDrawerNavigatorProps> = (props) => {
@@ -127,14 +127,14 @@ Each stack should have its parameters defined in separate file. Parameters file 
 Example:
  1.
 
- ```javascript
+ ```typescript
 export type HomeStackParamList = {
 	Home: IHomeRouteProps;
 	// ... other HomeStack screens
 };
 ```
 2.
- ```javascript
+ ```typescript
 export interface IHomeRouteProps {
 	propName: propValue;
 	...
@@ -153,20 +153,20 @@ Each screen inside the application inherits `navigation` and `route` props from 
 Correct use:
 
 1. Create stack with related types:
- ```javascript
+ ```typescript
 const HomeStack = createStackNavigator<HomeStackParamsList>();
 ```
 
 2.  Add screen types to each screen components props:
 
- ```javascript
+ ```typescript
 const Home: React.FC<HomeStackScreenProps<'Home'>> = ({ navigation, route}) => (...);
 ```
 
 **IMPORTANT**:
 Above route types (2) won't work for nested stacks.
 Correct route types:
- ```javascript
+ ```typescript
 type NestedRouteParams<T> = {
 [K in keyof T]: undefined extends T[K] ? { screen: K; params?: T[K] } : { screen: K; params: T[K] };
 }[keyof T];
@@ -175,7 +175,7 @@ type NestedRouteParams<T> = {
 Example:
 `HomeStack` contains `Home` screen and `UserStack`, which then contains `Profile` screen. In that case our params list type looks like:
 
- ```javascript
+ ```typescript
 export type HomeStackParamList = {
 	Home: IHomeRouteProps;
 	ProfileStack: NestedRouteParams<ProfileStackParamList>;
@@ -184,7 +184,7 @@ export type HomeStackParamList = {
 
 This way we can easily navigate to each screen inside `ProfileStack` from anywhere inside `HomeStack`:
 
- ```javascript
+ ```typescript
 navigation.navigate('ProfileStack', {
 	screen: 'Profile',
 	params: { /* params */ } // route params
@@ -200,4 +200,4 @@ Library implements `useSafeAreaInsets` hook which returns `inset` object contain
 
 `const { top, bottom } = useSafeAreInsets()`
 
-Since newer android devices started to add notch aswell, you should always define your `Header` height using `height + topInset` value.
+Since newer android devices started to add notch as well, you should always define your `Header` height using `height + topInset` value.
