@@ -148,7 +148,7 @@ export type HomeStackScreenProps<T extends keyof HomeStackParamList = {
 };
 ```
 
-Each screen inside application inherits `navigation` and `route` props from React Navigation. Type (3) should be used as typing for screen props which basicly gives code complete for all navigation and routing parameters inside screen.
+Each screen inside the application inherits `navigation` and `route` props from React Navigation. Type (3) should be used as a typing for screen props which basically gives code completion for all navigation and routing parameters inside of the screen.
 
 Correct use:
 
