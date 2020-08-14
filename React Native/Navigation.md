@@ -34,7 +34,7 @@ const  Navigator:  React.FC<INavigatorProps>  =  (props)  =>  {
 #### 1.2 STACKS
 All navigation stacks should be wrapped as functional components inside `navigation/stacks`.
 For example, most common application structure consits of authentication (*login*, *register*) and main (*home*, etc..) workflow.
-In React Navigation terms this means that you should split your navigation stacks between those 2 flows: `AuthenticationStack` and `HomeStack`. Even though, we could use only one stack with all screens, this is a bad practise in mobile development and makes app harder to maintain as your application grows.
+In React Navigation terms this means that you should split your navigation stacks between those 2 flows: `AuthenticationStack` and `HomeStack`. Even though, we could use only one stack with all screens, this is a bad practise in mobile development and makes the app harder to maintain as your application grows.
 
 ```javascript
 
