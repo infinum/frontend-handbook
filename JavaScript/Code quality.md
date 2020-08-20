@@ -2,6 +2,8 @@
 
 There are many tools for ensuring a constant level of code quality is maintained on a project. Different tools do different things in different ways. This handbook covers some of those tools.
 
+If you have already read this section of the Handbook and are here just for the config files, [jump ahead](#putting-it-all-together) (+ [editor files](#editor-files)).
+
 ### Git hooks
 
 Git hooks allow us to run scripts during various `git` commands. This verification step can be used to run various tools which ensure that the code satisfies some conditions before it is added to the repository. If the verification fails, the git command will abort.
@@ -120,6 +122,7 @@ Developers should set up their code editors to run Prettier whenever they save a
 }
 ```
 
+<a id="editor-files"></a>
 To ensure editor settings are in-line with prettier settings, create a workspace `.vscode` settings and `.editorconfig` files:
 
 ```js
@@ -127,7 +130,10 @@ To ensure editor settings are in-line with prettier settings, create a workspace
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.insertSpaces": false
+  "editor.insertSpaces": false,
+  "[scss]": {
+    "editor.formatOnSave": false
+  }
 }
 ```
 
@@ -158,7 +164,7 @@ Just like with ESLint and TSLint, Infinum provides ruleset for Stylelint as well
 
 ### Putting it all together
 
-Here is a complete example which runs TypeScript compilation check on all files, prettier and tslint on an Angular (v10) project:
+Here is a complete example which runs TypeScript compilation check on all files, prettier, tslint and stylelint on an Angular (v10) project:
 
 ```js
 // package.json
@@ -194,18 +200,25 @@ Here is a complete example which runs TypeScript compilation check on all files,
 {
   "extends": ["@infinumjs/tslint-config-angular", "tslint-config-prettier"],
   "rules": {
+    // remember to replace `app` with your selector
     "directive-selector": [true, "attribute", "app", "camelCase"],
     "component-selector": [true, "element", "app", "kebab-case"]
   }
 }
-
 ```
 
+```js
+// stylelint.config.js
+module.exports = {
+  "extends": "@infinumjs/stylelint-config"
+}
+
+```
 
 For this example, you will have to install the following `devDependencies`:
 
 ```bash
-npm install -D concurrently husky lint-staged ng-lint-staged stylelint prettier @infinumjs/tslint-config-angular tslint-config-prettier
+npm i -D concurrently husky lint-staged ng-lint-staged stylelint prettier tslint-config-prettier @infinumjs/tslint-config-angular @infinumjs/stylelint-config
 ```
 
 Some notes:
@@ -213,3 +226,4 @@ Some notes:
   - `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
     - `concurrently` speeds up things by running these two `tsc` checks in parallel
   - `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
+  - `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
