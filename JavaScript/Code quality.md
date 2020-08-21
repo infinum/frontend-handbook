@@ -60,7 +60,7 @@ Check the following chapters for specifics about Prettier, ESLint and Stylelint.
 
 ### Automatic code formatting with Prettier and IDE settings
 
-![Bikeshedding](../img/work.png)
+![Bikeshedding](/img/work.png)
 
 _Source: [XKCD](https://xkcd.com/1741/)_
 
