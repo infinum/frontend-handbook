@@ -222,6 +222,7 @@ npm i -D concurrently husky lint-staged ng-lint-staged stylelint prettier tslint
 ```
 
 Some notes:
+
   - it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
   - `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
     - `concurrently` speeds up things by running these two `tsc` checks in parallel
