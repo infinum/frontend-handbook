@@ -227,6 +227,6 @@ Some notes:
 
   - it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
   - `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
-      - `concurrently` speeds up things by running these two `tsc` checks in parallel
+  - `concurrently` speeds up things by running `tsc` checks in parallel
   - `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
   - `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
