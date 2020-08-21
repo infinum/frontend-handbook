@@ -32,6 +32,7 @@ Most of our code quality tools are run on either `pre-commit` or `pre-push` hook
 Similarly to `husky`, `lint-staged` is also configured in `package.json`. It uses `glob` patterns which allow you to run different scripts on different file types/patterns.
 
 Here is an example which runs `eslint` and `prettier` on all staged `.js` and `.ts` files, and `stylelint` on all staged `.scss` files via a pre-commit hook:
+
 ```js
 // package.json
 {
@@ -69,6 +70,7 @@ Many people are very passionate about the way they format their code. While we a
 [Prettier](https://prettier.io/) is one of the most popular tools for this job. It is very opinionated and not very configurable. It might not be perfect, but it is a good way to ensure consistency when it comes to formatting and it format multiple different file types.
 
 Here is our recommended Prettier configuration:
+
 ```js
 // .prettierrc.json
 {
