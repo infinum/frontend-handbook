@@ -8,7 +8,7 @@ If you have already read this section of the Handbook and are here just for the 
 
 Git hooks allow us to run scripts during various `git` commands. This verification step can be used to run various tools which ensure that the code satisfies some conditions before it is added to the repository. If the verification fails, the git command will abort.
 
-No matter which code quality tools we use, git hooks are a great way to run those tools. There are multiple ways to add git hooks. For JavaScript projects, we recommend using [husky](https://github.com/typicode/husky). Husky script are configured in `package.json`. Here is a most basic example which runs test before any code is pushed to the repository:
+No matter which code quality tools we use, git hooks are a great way to run those tools. There are multiple ways to add git hooks. For JavaScript projects, we recommend using [husky](https://github.com/typicode/husky). Husky scripts are configured in `package.json`. Here is a basic example which runs `test` before any code is pushed to the repository:
 
 ```js
 // package.json
@@ -23,7 +23,7 @@ No matter which code quality tools we use, git hooks are a great way to run thos
 
 In this example, if you try pushing and the tests fail, code will not get pushed to the remote. We do not necessarily recommend running tests on push, it is just an example (there are better ways to run automated tests using a proper CI/CD set-up).
 
-Most of our code quality tools are run on either `pre-commit` or `pre-push` hooks, so using git hooks is kind of a pre-requisite for the rest of the Code quality handbook section.
+Most of our code quality tools are run on either `pre-commit` or `pre-push` hooks, so using git hooks is kind of a prerequisite for the rest of the Code quality handbook section.
 
 ### Lint-staged
 
@@ -31,7 +31,7 @@ Most of our code quality tools are run on either `pre-commit` or `pre-push` hook
 
 Similarly to `husky`, `lint-staged` is also configured in `package.json`. It uses `glob` patterns which allow you to run different scripts on different file types/patterns.
 
-Here is an example which runs `eslint` and `prettier` on all staged `.js` and `.ts` files and `stylelint` on all staged `.scss` files via a pre-commit hook:
+Here is an example which runs `eslint` and `prettier` on all staged `.js` and `.ts` files, and `stylelint` on all staged `.scss` files via a pre-commit hook:
 ```js
 // package.json
 {
@@ -64,7 +64,7 @@ Check the following chapters for specifics about Prettier, ESLint and Stylelint.
 
 _Source: [XKCD](https://xkcd.com/1741/)_
 
-Many people are very passionate about the way they format their code. While we appreciate everyone's opinion, we believe it is best to leave this bikeshedding to automated tooling. It might not format the code in a way that is satisfying to everyone but it will be consistent across projects and, more importantly, it will format the code written by different people in the same way. This also saves some time wasted on discussion about formatting.
+Many people are very passionate about the way they format their code. While we appreciate everyone's opinion, we believe it is best to leave this bikeshedding to automated tooling. It might not format the code in a way that is satisfying to everyone, but it will be consistent across projects and, more importantly, it will format the code written by different people in the same way. This also eliminates discussions around formatting.
 
 [Prettier](https://prettier.io/) is one of the most popular tools for this job. It is very opinionated and not very configurable. It might not be perfect, but it is a good way to ensure consistency when it comes to formatting and it format multiple different file types.
 
@@ -109,7 +109,7 @@ If you just added Prettier to an existing codebase, you should probably run it o
 *.scss
 ```
 
-Developers should set up their code editors to run Prettier whenever they save a file. This is not a bullet-proof solution because some editors might not have support for this (either natively or via plug-ins). Going one step further, we recommend running Prettier via pre-commit hook. This ensures that the committed code is formatted even if the developer who wrote it did not have his editor set-up to format on file save.
+Developers should set up their code editors to run Prettier whenever they save a file. This is not a bullet-proof solution because some editors might not have support for this (either natively or via plug-ins). Going one step further, we recommend running Prettier via the pre-commit hook. This ensures that the committed code is formatted even if the developer who wrote it did not have his editor set up to format on file save.
 
 ```js
 // package.json
@@ -160,11 +160,11 @@ Infinum created various rulesets for ESLint and TSLint which you can check out [
 
 ### Stylelint
 
-Just like with ESLint and TSLint, Infinum provides ruleset for Stylelint as well. You can find it [here](https://github.com/infinum/stylelint-config).
+Just like with ESLint and TSLint, Infinum provides a ruleset for Stylelint as well. You can find it [here](https://github.com/infinum/stylelint-config).
 
 ### Putting it all together
 
-Here is a complete example which runs TypeScript compilation check on all files, prettier, tslint and stylelint on an Angular (v10) project:
+Here is the complete example which runs TypeScript compilation check on all files, prettier, tslint and stylelint on an Angular (v10) project:
 
 ```js
 // package.json
