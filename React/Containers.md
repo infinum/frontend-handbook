@@ -11,24 +11,20 @@ import LoginForm from 'components/ui/LoginForm';
 import appData from 'collections/app-data';
 
 const LoginContainer = () => {
-	const [apiErrors, setApiErrors] = React.useState({});
+  const [apiErrors, setApiErrors] = React.useState({});
 
-	const onSubmit = ({ username, password }) => {
-		appData
-			.login(username, password)
-			.then(() => {})
-			.catch((e) => {});
-	};
+  const onSubmit = ({ username, password }) => {
+    appData
+      .login(username, password)
+      .then(() => {})
+      .catch((e) => {});
+  };
 
-	return (
-		<>
-			<LoginForm
-				margin={30}
-				onSubmit={onSubmit}
-				apiErrors={apiErrors}
-			/>
-		</>
-	);
+  return (
+    <>
+      <LoginForm margin={30} onSubmit={onSubmit} apiErrors={apiErrors} />
+    </>
+  );
 };
 
 export default LoginContainer;

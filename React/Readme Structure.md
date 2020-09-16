@@ -19,13 +19,13 @@ to new developers joining the project.
 ## Deployment
 
 Detailed documentation on where the project runs and how it's deployed. Can be
-esp. usefull if you use Docker or Passenger to host this site because this could
+esp. useful if you use Docker or Passenger to host this site because this could
 require you to have some special files/scripts in the project.
 
 ## Git workflow
 
 Explain in detail how you work, what branches do you use, who is allowed to push
-to what and when. Explain how PRs should be strucutred, how do you tie them to
+to what and when. Explain how PRs should be structured, how do you tie them to
 work tickets in Productive/Jira.
 
 ## Styleguide
