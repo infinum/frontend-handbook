@@ -3,7 +3,7 @@ React Native implements `Stylesheet API` which uses javascript to create styles.
 Applying styles in RN is done through `styles` prop. All core components in RN implement `styles` prop which accepts styles as javascript objects or array of objects with style parameters written in `camelCase` format.
 
 ```javascript
-<View  style={{ flex: 1, backgroundColor: '0fd0fd', borderRadius:  4 }} />
+<View  style={{ flex: 1, backgroundColor: '#0fd0fd', borderRadius:  4 }} />
 ```
 
 ## StyleSheet API
