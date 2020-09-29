@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 </View>
 ```
 
-**Note:** styles should always be defined outside of `render` function.
+**Note:** Styles should always be defined outside of the `render` function.
 
 ```javascript
 import React from 'react';
