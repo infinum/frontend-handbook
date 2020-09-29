@@ -9,7 +9,7 @@ Applying styles in RN is done through `styles` prop. All core components in RN i
 ## StyleSheet API
 Using `Stylesheet API` for creating styles is highly recommended since it consists of several optimisations. Each style object created with the API is registered with unique ID. This way styles can be reused by referring to their ID. Also, this allows javascript to send a single style configuration over bridge only once and then be reused on native side, instead of sending multiple configurations for same styles. In the end this allows styles to be more efficient, performant and apps / components more scalable and easier to maintain.
 
-To create styles API implements **`create`** method.
+To create styles, the API implements a **`create`** method.
 
 ```javascript
 const styles = StyleSheet.create({
