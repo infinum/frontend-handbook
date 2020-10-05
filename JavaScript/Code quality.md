@@ -220,10 +220,10 @@ Here is the complete example which runs TypeScript compilation check on all file
 ```js
 // .stylelintrc.json
 {
-	"plugins": ["stylelint-prettier"],
-	"rules": {
-		"prettier/prettier": true
-	}
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": true
+  }
 }
 
 ```
