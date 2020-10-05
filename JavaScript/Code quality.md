@@ -225,7 +225,6 @@ Here is the complete example which runs TypeScript compilation check on all file
     "prettier/prettier": true
   }
 }
-
 ```
 
 For this example, you will have to install the following `devDependencies`:
