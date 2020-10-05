@@ -269,7 +269,7 @@ To add localisation support (`i18n`) do the following:
     ```
 1. In `_app.tsx` add following import
     ```bash
-    import 'localisation/Localisation';
+    import 'localisation/localisation';
     ```
 
 Check if integration is correct by adding translated text in the UI.
@@ -517,7 +517,7 @@ To add test support do the following:
     import userEvent from '@testing-library/user-event';
     import { ThemeProvider } from 'emotion-theming';
 
-    import localisation from 'localisation/Localisation';
+    import localisation from 'localisation/localisation';
     import { theme } from 'theming/Theme';
 
     /*
