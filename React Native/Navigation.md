@@ -3,7 +3,7 @@ Routing in mobile applications presents more then mere navigation between routes
 In order to achieve this “native feel”, RN community implemented a [React Navigation](https://reactnavigation.org/) library. It’s main focus presents “native-look-and-feel” while keeping the performance and extensibility.
 
 ### Official documentation
-[Official documentation](https://reactnavigation.org/docs/getting-started) has a lot of informations and contains more then few code examples of all important parts.
+[Official documentation](https://reactnavigation.org/docs/getting-started) has a lot of information and contains more than a few code examples of all important parts.
 Make sure to get familiar with it before continuing to read further.
 
 ### 1. Navigation file structure
