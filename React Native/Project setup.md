@@ -18,7 +18,7 @@ Generally, most of our projects use `typescript` and `npm` as package manager. T
 npx react-native init AwesomeProjectName --template react-native-template-typescript --npm
 ````
 
-***Note:*** If previous command fails, it's possible that `eact-native-template-typescript` is deprecated or there are some major changes to CLI. In that case, please contact someone from Javascript team to update the chapter.
+***Note:*** If previous command fails, it's possible that `react-native-template-typescript` is deprecated or there are some major changes to CLI. In that case, please contact someone from Javascript team to update the chapter.
 
 ### Github repository
 Since the creation of github repositories is limited to admins only, contact one of the Javascript team leads to create a repository for you.
@@ -38,7 +38,7 @@ Don't forget to add `README.md` which should consist of:
 To get started with project structure please check our official [React handbook](https://infinum.com/handbook/books/frontend/javascript/react).
 Since there are some semantic differences and domain specifics between React and React Native application some of the naming is different.
 For example, in RN we don't have concept of pages. RN uses screens as it's top level views (building elements), therefore we will have `screens` directory instead of `pages`.
-Also, navigation in RN represents more than a meere routing system. It makes the applications base and holds informations on the structure and it's configuration. Therefore, we use define `navigation` directory inside project root. Check [navigation chapter](todo) for detailed informations on this.
+Also, navigation in RN represents more than a mere routing system. It makes the applications base and holds informations on the structure and it's configuration. Therefore, we use define `navigation` directory inside project root. Check [navigation chapter](todo) for detailed informations on this.
 
 ### Dependencies
 
@@ -48,7 +48,7 @@ Since RN uses the React ecosystem, we can reuse most of it's development depende
 ## Platform specifics
 
 ### Android
-Android uses Gradle as a build and dependency managment system. For that reason all android specifics configurations, like application version, minimal supported SDK, flavors etc. are configured inside application gradle file.
+Android uses Gradle as a build and dependency management system. For that reason all android specifics configurations, like application version, minimal supported SDK, flavors etc. are configured inside application gradle file.
 To get familiar with android (gradle) configuration please check our official [android handbook chapter](https://infinum.com/handbook/books/android/project-structure/gradle-build-system).
 
 ### iOS
