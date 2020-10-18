@@ -159,6 +159,7 @@ const App: React.FunctionComponent = () => {
     )
   }
 }
+
 ```
 This means that when you're defining your styles inside `AppCircle`,  you're actually creating a normal `Circle` component, that has your styles attached to it. Important thing to mention here is that `AppCircle` inherits all the props from `Circle` component.
 
@@ -181,6 +182,9 @@ export const Circle: React.FunctionComponent = () => {
   }
 }
 ```
+
+This kind of styling should be applied only in case you have some dynamic styles which is calculated during the application pre or post layouting phase. There is no sense in creating an empty styled component and applying the styled properties directly. Also, be aware that each styled component can accept any kind of prop (like a regular React component), after which you can extract the prop and use it, inside the component style declaration. This leads to a question, should you define your own style prop or use this feature. Well, this depends on a case and scenario but you should stick to one of those and try not to mix them, since it may hurt readability of the code and will eventually lead to overcomplicated style definitions.
+
 **Note:** *style properties need to follow camelCase naming rule and have **number** or **percentage** value.* Using These value types are specific rule to `styled-components` library. If you are using `emotion` you can defined values in `px` aswell (have in mind that `px` values will cause error in `styled-components`):
 
 **Note:** *flex property works like CSS shorthand, and not the legacy flex property in React Native. Setting flex: 1 sets flexShrink to 1 in addition to setting flexGrow to 1 and flexBasis to 0.*
