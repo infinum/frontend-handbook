@@ -10,7 +10,7 @@ Make sure to get familiar with it before continuing to read further.
 In order to keep your navigation maintainable and easy to upgrade, here are some guidelines which rely on library main concepts: ***Stack***, ***Tab***, ***Drawer*** and ***Parameters***.
 
  - navigation/
-	  -- stacks/
+	 - stacks/
 	  -- tabs/
 	  -- drawer/
 	  -- params/
