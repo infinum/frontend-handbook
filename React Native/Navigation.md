@@ -13,7 +13,7 @@ In order to keep your navigation maintainable and easy to upgrade, here are some
 	 - stacks/
 	 - tabs/
 	  -- drawer/
-	  -- params/
+	 - params/
 	  -- Navigator.tsx
 
 
