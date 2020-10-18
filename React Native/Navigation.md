@@ -4,7 +4,7 @@ In order to achieve this “native feel”, RN community implemented a [React Na
 
 ### Official documentation
 [Official documentation](https://reactnavigation.org/docs/getting-started) has a lot of informations and contains more then few code examples of all important parts.
-Make sure to get faimiliar with it before continue to read further.
+Make sure to get familiar with it before continuing to read further.
 
 ### 1. Navigation file structure
 In order to keep your navigation maintanable and easy to upgrade  here are some guidelines which rely on library main concepts: ***Stack***, ***Tab***, ***Drawer*** and ***Parameters***.
