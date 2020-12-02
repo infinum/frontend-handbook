@@ -15,6 +15,7 @@ npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
 For Chakra UI to work correctly, you need to setup the `ChakraProvider` at the root of your application.
 
 Example:
+
 ```jsx
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -35,6 +36,7 @@ Note:
 - For Create React App, you need to set this up in `index.tsx`
 
 ### Style props
+
 Style props are a way to alter the style of a component by simply passing props to it. It helps to save time by providing helpful shorthand ways to style components.
 
 Alternative to that is using sx prop that takes an object with style rules.
@@ -50,6 +52,7 @@ Alternative to that is using sx prop that takes an object with style rules.
 For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
 
 #### The `as` prop
+
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
 
 For example, say you are using a Button component, and you need to make it a link instead. You can compose a and Button like this:
@@ -59,14 +62,15 @@ For example, say you are using a Button component, and you need to make it a lin
   Lorem Ipsum
 </Button>
 ```
-This allows you to use all of the Button props and all of the a props without having to wrap the Button in an a component.
 
+This allows you to use all of the Button props and all of the a props without having to wrap the Button in an a component.
 
 ### Setup custom theme
 
 If you need to customize the default theme to match your design requirements, you can use `extendTheme` from `@chakra-ui/react`.
 
 Example:
+
 ```jsx
 import { extendTheme } from "@chakra-ui/react";
 
@@ -91,6 +95,7 @@ For more info about setup read [docs](https://chakra-ui.com/docs/getting-started
 The theme object is where you define your application's color palette, type scale, font stacks, breakpoints, border radius values, and more. Theme overrides are placed in `src/styles/themes` folder.
 
 Example:
+
 ```ts
 const overrides = {
   colors: {
@@ -103,6 +108,7 @@ const overrides = {
 ```
 
 Except objects, theme override can take a function:
+
 ```ts
 const overrides = {
   colors: (props) => {
@@ -112,18 +118,21 @@ const overrides = {
       primary: {
         100: colorMode === "dark" ? "#ff0000" : "#ffffff",
         80: "#ff1a1a",
-      }
-    }
-  }
-}
+      },
+    };
+  },
+};
 ```
+
 Then in `props` we have access button props, `theme` object and `colorMode`.
 
-Note: 
+Note:
+
 - `mode(lightMode, darkMode)(props)` function is the same as `colorMode === "dark" ? darkMode : lightMode`.
 - `mode` function is part of `chakra-ui/theme-tools` package.
 
 Theme folder structure:
+
 ```bash
 src
 ├── styles
@@ -144,6 +153,7 @@ src
 Color naming should a single value or an object with keys in range from 50 to 900.
 
 Example:
+
 ```ts
 export const colors = {
   white: "#ffffff",
@@ -171,6 +181,7 @@ They are defined in `src/styles/theme/styles.ts` file.
 <!-- TODO maybe what should be defined in global -->
 
 Example:
+
 ```ts
 const overrides = {
   styles: {
@@ -183,9 +194,9 @@ const overrides = {
       "*": {
         boxSizing: "border-box",
       },
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ### Responsive
@@ -195,6 +206,7 @@ Chakra UI supports responsive styles out of the box. Instead of manually adding 
 > Under the hood `@media(min-width)` media query is used to ensure mobile-first
 
 Chakra UI default breakpoints:
+
 ```ts
 export const breakpoints = {
   sm: "30em",
@@ -205,6 +217,7 @@ export const breakpoints = {
 ```
 
 Here's how to interpret this syntax:
+
 - `base`: From `0em` upwards
 - `md`: From `48em` upwards
 - `lg`: From `62em` upwards
@@ -229,16 +242,14 @@ For responsive styles, array or object syntax can be used.
 In case we need to skip cretan breakpoint, `null` is passed at that position in the array to avoid generating unnecessary CSS.
 
 Example:
+
 ```jsx
-<Text fontSize={["24px", null, "56px"]}>
-  Lorem Ipsum is simply dummy text
-</Text>
+<Text fontSize={["24px", null, "56px"]}>Lorem Ipsum is simply dummy text</Text>
 ```
 
 Array and Object syntax work for every style prop in the them specification, which means you can change most properties at a given breakpoint.
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
-
 
 ### Custom components style
 
@@ -246,32 +257,36 @@ Chakra UI has a specific API for styling components. Most components have defaul
 
 Components styles are defined in `theme/components/<component-name>.ts`
 Each component style will export these objects:
+
 - `baseStyles`
 - `sizes`
 - `variants`
 - `defaultProps`
 
 Base style are styles that all button types share.
+
 ```tsx
 const baseStyle = {
-	lineHeight: '1.2',
-	borderRadius: 'md',
-	_focus: {
-		boxShadow: 'outline',
-	},
-	_disabled: {
-		opacity: 0.4,
-		cursor: 'not-allowed',
-		boxShadow: 'none',
+  lineHeight: "1.2",
+  borderRadius: "md",
+  _focus: {
+    boxShadow: "outline",
+  },
+  _disabled: {
+    opacity: 0.4,
+    cursor: "not-allowed",
+    boxShadow: "none",
   },
   _hover: {
-    cursor: 'pointer',
-  }
+    cursor: "pointer",
+  },
 };
 ```
 
 <!-- TODO change this example to use color schema -->
+
 Variant represents visual style.
+
 ```tsx
 const variants = {
   solid: {
@@ -290,40 +305,43 @@ const variants = {
     borderColor: 'primary.100',
     _hover: {
       bg: 'primary.100',
-    } 
+    }
   },
 };
 ```
 
 Sizes determent all the component sizes like `width`, `height`, `font-size` etc
+
 ```tsx
 const sizes = {
-	sm: {
-		h: 8,
-		minW: 8,
-		fontSize: 'sm',
-		px: 3,
-	},
-	xs: {
-		h: 6,
-		minW: 6,
-		fontSize: 'xs',
-		px: 2,
-	},
+  sm: {
+    h: 8,
+    minW: 8,
+    fontSize: "sm",
+    px: 3,
+  },
+  xs: {
+    h: 6,
+    minW: 6,
+    fontSize: "xs",
+    px: 2,
+  },
 };
 ```
 
 Naming used for sizes:
+
 - `lg`
 - `md`
 - `sm`
 - `xs`
 
 Default values are default values for `size` and `variant`
+
 ```tsx
 const defaultProps = {
-	variant: 'solid',
-	size: 'md',
+  variant: "solid",
+  size: "md",
 };
 ```
 
@@ -336,50 +354,55 @@ When you use the ChakraProvider at the root of your app, you can automatically u
 > Tip: Chakra stores the color mode in localStorage and uses CSS variables to ensure the color mode is persistent.
 
 #### useColorMode
+
 `useColorMode` is a React hook that gives you access to the current color mode, and a function to toggle the color mode.
 
 ```tsx
 function Example() {
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <header>
       <Button onClick={toggleColorMode}>
         Toggle {colorMode === "light" ? "Dark" : "Light"}
       </Button>
     </header>
-  )
+  );
 }
 ```
 
 #### useColorModeValue
+
 `useColorModeValue` is React hook that takes 2 arguments, first is value for light mode and second is value for dark mode, and returnees the the value based on the active color mode
 
 ```tsx
-const value = useColorModeValue(lightModeValue, darkModeValue)
+const value = useColorModeValue(lightModeValue, darkModeValue);
 ```
 
 ### Style 3rd party components
+
 In this example we will style [react-select](https://react-select.com) with Chakra UI
 
 First we need to create custom style object in theme
+
 ```tsx
 // style/theme/components/reactSelect.ts
 const ReactSelect = {
-	baseStyle: () => ({
-		container: {
-			bg: 'black',
-			p: 8,
-		},
-		menu: {
-			color: 'blue.100',
-			bg: 'blue.500',
-			padding: 8,
-		},
-	}),
+  baseStyle: () => ({
+    container: {
+      bg: "black",
+      p: 8,
+    },
+    menu: {
+      color: "blue.100",
+      bg: "blue.500",
+      padding: 8,
+    },
+  }),
 };
 ```
 
 Keys in `baseStyle` can be one of:
+
 - clearIndicator
 - container
 - control
@@ -410,41 +433,42 @@ After we have `ReactSelect` theme object, we need to add that to `theme.componen
 ```tsx
 // style/theme/index.ts
 const overrides = {
-	colors,
+  colors,
+  // ...
+  components: {
+    Button,
+    ReactSelect,
     // ...
-	components: {
-		Button,
-		ReactSelect,
-        // ...
   },
 };
 ```
 
 Now we can create Select component in components folder:
+
 ```tsx
 const selectStyle = {
-	container: (base, { theme }) => {
-		return {
-			...base,
-			...theme.container,
-		};
-	},
-	menu: (base, { theme }) => ({
-		...base,
-		...theme.menu,
-	}),
+  container: (base, { theme }) => {
+    return {
+      ...base,
+      ...theme.container,
+    };
+  },
+  menu: (base, { theme }) => ({
+    ...base,
+    ...theme.menu,
+  }),
 };
 
 const Select = (props) => {
-	const styles = useStyleConfig('ReactSelect', props);
+  const styles = useStyleConfig("ReactSelect", props);
 
-	return (
-		<ReactSelect
-			theme={css(styles)(useTheme())}
-			styles={selectStyle}
-			{...props}
-		/>
-	);
+  return (
+    <ReactSelect
+      theme={css(styles)(useTheme())}
+      styles={selectStyle}
+      {...props}
+    />
+  );
 };
 ```
 
@@ -453,20 +477,22 @@ Each key added to the theme needs to be added to `selectStyle`.
 Additionally custom components can be added to react-select like `SelectContainer`
 
 Example:
+
 ```tsx
-const SelectContainer: FC<ContainerProps<BoxProps>> = ({ children, ...rest }) => {
-	return (
-		<components.SelectContainer {...rest}>
-			<chakra.div sx={rest.selectProps.sx}>{children}</chakra.div>
-		</components.SelectContainer>
-	);
+const SelectContainer: FC<ContainerProps<BoxProps>> = ({
+  children,
+  ...rest
+}) => {
+  return (
+    <components.SelectContainer {...rest}>
+      <chakra.div sx={rest.selectProps.sx}>{children}</chakra.div>
+    </components.SelectContainer>
+  );
 };
 ```
 
 This will allow us to use `sx` prop on select component.
+
 ```tsx
-<Select
-  sx={{ mt: 12 }}
-  options={[]}
-/>
+<Select sx={{ mt: 12 }} options={[]} />
 ```
