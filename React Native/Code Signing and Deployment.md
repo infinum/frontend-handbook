@@ -8,12 +8,6 @@ This chapter will assume opting in to Play App Signing.
 ## Generating an upload key
 To create your *upload key*, you can run this command in the terminal. *(do it in* `android/app`*)*  
   
-On Windows:
-```bash
-keytool -genkeypair -v -keystore release.keystore -alias my-key-alias -storetype PKCS12 -keyalg RSA -keysize 2048 -validity 10000
-```
-  
-On Mac:
 ```bash
 keytool -genkey -v -keystore release.keystore -alias my-key-alias -storetype PKCS12 -keyalg RSA -keysize 2048 -validity 10000
 ```
@@ -75,13 +69,46 @@ you would use `assembleStagingRelease` or `assembleProductionRelease` commands.
 
 ### Generating the bundle
 
-If you want to upload the app to Google Play, you'll have to generate an AAB file.  
+If you want to upload the app to Google Play, it's recommended you generate an AAB file.  
 Like with generating the APK, you use the same command but replace `assemble` with `bundle`, like this:  
 ```bash
 ./gradlew bundleRelease
 ```
 The AAB will be located in `android/app/build/outputs/bundle/release/app-release.aab` and you can upload it to Google Play.  
+  
+If your project for some reason requires uploading the APK file to Google Play, you can upload the one signed with the *upload key* but you lose the benefits of app spliting. Read more about this [here](https://developer.android.com/guide/app-bundle).
 
 ## Releasing
 
-You can follow the steps for releasing the app [here](https://infinum.com/handbook/books/android/deployment/release-practices).
+You can follow the steps for releasing the app [here](https://infinum.com/handbook/books/android/deployment/release-practices).  
+  
+  
+
+# iOS
+
+## Signing
+To distribute your app on the App Store, a few steps are required. You will need Xcode and an Apple developer account.  
+Before you start, make sure to read [this chapter](https://infinum.com/handbook/books/ios/project-flow/certificates-provisioning-profiles-and-apns) about certificates and provisioning profiles.  
+After you get your certificate and profile, you're set. App signing is done automatically.  
+
+## Building
+
+To build the app, in Xcode first go to Product > Scheme > Edit scheme, and change Build configuration to Release. Now you can build and run the app without Metro server.  
+
+## Releasing
+
+### Archive
+
+To release the app, you first need to create an archive. You do that in Xcode by going to Product > Archive. After the archive builds successfully, a new window will be opened with a list of all archives. The top one will be selected and it's the one you've just built.  
+
+### Distribution
+
+With the archive selected, click on the Distribute App button on the right, and after verifying the info that appears, click the Upload button. This will launch a wizard for exporting the app. The default settings should be fine for React Native apps.
+
+### Distribution methods
+
+In the wizard for exporting the app, there is one screen where you can choose the distribution method. There are 2 methods that you're going to use the most.  
+The first one is App Store which will export the app to App Store Connect where you can deploy it on TestFlight or App Store.  
+The second one is Enterprise which will export the app to IPA file which you can then upload to labs.  
+  
+For more info about app distribution, you can look [here](https://help.apple.com/xcode/mac/current/#/devac02c5ab8).
