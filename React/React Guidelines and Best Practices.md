@@ -38,7 +38,8 @@ JS Imports should be grouped into three categories:
 3. Assets
 
 Example:
-```javascript
+
+```js
 import { css } from 'emotion';
 import React from 'react';
 
