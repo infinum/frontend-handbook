@@ -12,7 +12,7 @@ npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
 
 ### Setup provider:
 
-For Chakra UI to work correctly, you need to setup the `ChakraProvider` at the root of your application.
+For Chakra UI to work correctly, you need to set up the `ChakraProvider` at the root of your application.
 
 Example:
 
@@ -55,7 +55,7 @@ For more about style props read [docs](https://chakra-ui.com/docs/features/style
 
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
 
-For example, say you are using a Button component, and you need to make it a link instead. You can compose a and Button like this:
+For example, say you are using a `Button` component, and you need to make it a link instead. You can compose `a` and `Button` like this:
 
 ```tsx
 <Button as="a" variant="outline" href="https://chakra-ui.com">
@@ -63,7 +63,7 @@ For example, say you are using a Button component, and you need to make it a lin
 </Button>
 ```
 
-This allows you to use all of the Button props and all of the a props without having to wrap the Button in an a component.
+This allows you to use all of the `Button` props and all of the `a` props without having to wrap the `Button` in an `a` component.
 
 ### Setup custom theme
 
@@ -247,7 +247,7 @@ Example:
 <Text fontSize={["24px", null, "56px"]}>Lorem Ipsum is simply dummy text</Text>
 ```
 
-Array and Object syntax work for every style prop in the them specification, which means you can change most properties at a given breakpoint.
+Array and Object syntax work for every style prop in the theme specification, which means you can change most properties at a given breakpoint.
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
 
@@ -263,10 +263,10 @@ Each component style will export these objects:
 - `variants`
 - `defaultProps`
 
-Base style are styles that all button types share.
+`baseStyle` are styles that all button types share.
 
 ```tsx
-const baseStyle = {
+const baseStyle: StyleObjectOrFn = {
   lineHeight: "1.2",
   borderRadius: "md",
   _focus: {
@@ -285,10 +285,10 @@ const baseStyle = {
 
 <!-- TODO change this example to use color schema -->
 
-Variant represents visual style.
+`variants` represents visual style.
 
 ```tsx
-const variants = {
+const variants: { [variant: string]: StyleObjectOrFn } = {
   solid: {
     bg: 'primary.100',,
     color: 'white',
@@ -299,33 +299,33 @@ const variants = {
       bg: 'neutral.200',
     }
   },
-	outline: {
+	outline: (props: Dict): SystemStyleObject => ({
     bg: 'transparent',,
     border: '1px solid',
     borderColor: 'primary.100',
     _hover: {
       bg: 'primary.100',
     }
-  },
+  }),
 };
 ```
 
-Sizes determent all the component sizes like `width`, `height`, `font-size` etc
+`sizes` determine all the component sizes like `width`, `height`, `font-size` etc
 
 ```tsx
-const sizes = {
+const sizes: { [size: string]: StyleObjectOrFn } = {
   sm: {
     h: 8,
     minW: 8,
     fontSize: "sm",
     px: 3,
   },
-  xs: {
+  xs: (props: Dict): SystemStyleObject => ({
     h: 6,
     minW: 6,
     fontSize: "xs",
     px: 2,
-  },
+  }),
 };
 ```
 
@@ -336,7 +336,7 @@ Naming used for sizes:
 - `sm`
 - `xs`
 
-Default values are default values for `size` and `variant`
+`defaultProps` are default values for `size` and `variant`
 
 ```tsx
 const defaultProps = {
@@ -474,7 +474,7 @@ const Select = (props) => {
 
 Each key added to the theme needs to be added to `selectStyle`.
 
-Additionally custom components can be added to react-select like `SelectContainer`
+Additionally, custom components can be added to react-select like `SelectContainer`
 
 Example:
 
