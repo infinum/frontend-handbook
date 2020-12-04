@@ -8,8 +8,10 @@
 - [next.js](https://github.com/vercel/next.js) - The React Framework
 
 ##### React Routing
-- [next-connect](https://github.com/hoangvvo/next-connect) - Minimal router and middleware layer for Next.js
 - [react-router](https://github.com/ReactTraining/react-router) - Declarative routing for React
+
+#### Next.js Routing
+- [next-connect](https://github.com/hoangvvo/next-connect) - Minimal router and middleware layer for Next.js
 
 ##### React Styling and Component Libraries
 - [styled-components](https://github.com/styled-components/styled-components) - Visual primitives for the component age
@@ -38,8 +40,13 @@
 - [react-testing-library](https://github.com/testing-library/react-testing-library) - Simple and complete React DOM testing utilities that encourage good testing practices
 - [react-hooks-testing-library](https://github.com/testing-library/react-hooks-testing-library) - Simple and complete React hooks testing utilities that encourage good testing practices
 - [@testing-library/user-event](https://github.com/testing-library/user-event) - Simulate user events for react-testing-library
+- [jest-dom](https://github.com/testing-library/jest-dom) - Custom jest matchers to test the state of the DOM
+- [identity-obj-proxy](https://github.com/keyz/identity-obj-proxy) - Useful for mocking webpack imports
+- [ts-jest](https://github.com/kulshekhar/ts-jest) - TypeScript preprocessor with sourcemap support for Jest
+- [jest-svg-transformer](https://www.npmjs.com/package/jest-svg-transformer) - Transform svgs for for jest+react to declutter snapshots
+- [@emotion/jest](https://github.com/emotion-js/emotion/tree/master/packages/jest) - Jest testing utilities for emotion
 
-##### React Libraries
+##### Other Libraries
 - [react-transition-group](https://github.com/reactjs/react-transition-group) - An easy way to perform animations when a React component enters or leaves the DOM
 - [react-focus-lock](https://github.com/theKashey/react-focus-lock) - Focus locking
 - [react-portal-universal](https://github.com/jesstelford/react-portal-universal) - Generic wrapper for React's createPortal allowing for rendering portals on the server
@@ -51,3 +58,8 @@
 ##### Forms
 - [react-hook-form](https://github.com/react-hook-form/react-hook-form) - React Hooks for forms validation (Web + React Native)
 - [formik](https://github.com/formium/formik) - Build forms in React, without the tears
+
+##### Next.js plugins
+- [next-compose-plugins](https://github.com/cyrilwanner/next-compose-plugins) - Cleaner API for enabling and configuring plugins for Next.js
+- [next-react-svg](https://github.com/jeremybarbet/next-react-svg) - Transform your svg image to a React component
+- [next-seo](https://github.com/garmeeh/next-seo) - Managing your SEO easier in Next.js
