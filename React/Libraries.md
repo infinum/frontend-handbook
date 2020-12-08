@@ -36,7 +36,7 @@
 - [react-rating](https://github.com/dreyescat/react-rating) - A rating react component with custom symbols
 - [react-compound-slider](https://github.com/sghall/react-compound-slider) - A small React slider with no opinion on markup or styles
 - [react-slick](https://github.com/akiran/react-slick) - React carousel component
-- [react-datepicker](https://github.com/tresko/react-datepicker) - An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with styled-components
+- [@datepicker-react/hooks](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) - An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with styled-components
 
 ##### React Testing
 - [jest](https://github.com/facebook/jest) - Delightful JavaScript Testing
