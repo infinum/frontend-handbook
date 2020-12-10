@@ -359,8 +359,6 @@ chakra("button", {
 
 This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
 
-Chakra factory function can also that convert jsx element to chakra-enabled components so you can pass style props to them.
-
 For example `react-datepicker` can be wrapped in chakra factory function to be possible to pass style props to `<DatePicker />`
 
 Example:
