@@ -10,9 +10,12 @@ Chakra UI is a simple, modular and accessible component library that gives you t
 npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
 
+For more about setup read [docs](https://chakra-ui.com/docs/getting-started)
+
 ### Setup provider:
 
 For Chakra UI to work correctly, you need to set up the `ChakraProvider` at the root of your application.
+Under the hood Chakra UI is using [emotion ThemeProvider](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/providers.tsx)
 
 Example:
 
@@ -55,15 +58,35 @@ For more about style props read [docs](https://chakra-ui.com/docs/features/style
 
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
 
-For example, say you are using a `Button` component, and you need to make it a link instead. You can compose `a` and `Button` like this:
+`as` prop (`polymorphic prop`) is feature from emotion borrowed from styled-components
+
+- [emotion as prop](https://emotion.sh/docs/styled#as-prop)
+- [styled-components polymorphic prop](https://styled-components.com/docs/api#as-polymorphic-prop)
+
+It allows us to use all of the `Button` props and all of the `a` props without having to wrap the `Button` in an `a` component.
+
+Example:
 
 ```tsx
-<Button as="a" variant="outline" href="https://chakra-ui.com">
-  Lorem Ipsum
+<Button as="a" href="https://chakra-ui.com/docs/getting-started">
+  Chakra UI docs
 </Button>
 ```
 
-This allows you to use all of the `Button` props and all of the `a` props without having to wrap the `Button` in an `a` component.
+In example above `a` element will be rendered with styled of `Button` component.
+Except HTML elements `as` prop can be another React component:
+
+```tsx
+<Button as={Link} someLinkProp={value}>
+  Chakra UI docs
+</Button>
+```
+
+- `Button` will be rendered as `Link` component
+- `Link` props will become available on `Button`
+- `Link` and `Button` styles will be combined
+
+For more info about `as` prop read [docs](https://chakra-ui.com/docs/features/style-props#the-as-prop)
 
 ### Setup custom theme
 
@@ -93,6 +116,8 @@ For more info about setup read [docs](https://chakra-ui.com/docs/getting-started
 ## Theming rules
 
 The theme object is where you define your application's color palette, type scale, font stacks, breakpoints, border radius values, and more. Theme overrides are placed in `src/styles/themes` folder.
+
+Theming with Chakra UI is based on the [Styled System Theme Specification](https://system-ui.com/theme/)
 
 Example:
 
@@ -126,10 +151,16 @@ const overrides = {
 
 Then in `props` we have access button props, `theme` object and `colorMode`.
 
-Note:
+#### `chakra-ui/theme-tools`
+
+Chakra has a whole pallet of useful helpers:
 
 - `mode(lightMode, darkMode)(props)` function is the same as `colorMode === "dark" ? darkMode : lightMode`.
-- `mode` function is part of `chakra-ui/theme-tools` package.
+- `orient` define `vertical` and `horizontal` style for component: `<Divider orientation="horizontal | vertical" />`
+- `transparentize` helper to make a color transparent `transparentize('blue.100', 0.3)`
+- `darken` darken a specified color `darken('blue.100', 0.5)` (there is also `lighten`, `blacken`, `whiten`)
+
+For more about `theme-tools` check out [github](https://github.com/chakra-ui/chakra-ui/tree/develop/packages/theme-tools/src)
 
 Theme folder structure:
 
@@ -170,6 +201,51 @@ export const colors = {
     900: "#0055b9",
   },
 };
+```
+
+### Pseudo props
+
+Pseudo props in ChakraUI can be passed as props to component. Full list of props can be found in [docs](https://chakra-ui.com/docs/features/style-props#pseudo)
+
+Example:
+
+```tsx
+<Button
+  bg="blue.100"
+  _hover={{
+    background: "white",
+  }}
+>
+  Submit
+</Button>
+```
+
+Also pseudo elements can be used in theme or in `sx` prop
+
+```tsx
+<Button
+  sx={{
+    bg: 'blue.100',
+    _hover: {
+      bg: 'white
+    }
+  }}
+>
+  Submit
+</Button>
+
+// or
+
+<Button
+  sx={{
+    bg: 'blue.100',
+    ':hover': {
+      bg: 'white
+    }
+  }}
+>
+  Submit
+</Button>
 ```
 
 ### Global styles
@@ -250,6 +326,59 @@ Example:
 Array and Object syntax work for every style prop in the theme specification, which means you can change most properties at a given breakpoint.
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
+
+For more about responsive styles read [styled-system responsive styles docs](https://styled-system.com/responsive-styles/)
+
+### Chakra Factory
+
+Chakra factory serves as an object of chakra JSX elements, and also a function that can be used to enable custom component receive chakra's style props.
+
+```tsx
+import { chakra } from "@chakra-ui/react";
+
+// object
+<chakra.button
+  sx={{
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  }}
+>
+  Click me
+</chakra.button>;
+
+// function
+chakra("button", {
+  baseStyle: {
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  },
+});
+```
+
+This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
+
+Chakra factory function can also that convert jsx element to chakra-enabled components so you can pass style props to them.
+
+For example `react-datepicker` can be wrapped in chakra factory function to be possible to pass style props to `<DatePicker />`
+
+Example:
+
+```tsx
+import DatePicker from "react-datepicker";
+import { chakra } from "@chakra-ui/react";
+
+export const Datepicker = () => {
+  const ChakraDatepicker = chakra(DatePicker);
+
+  return <ChakraDatepicker sx={{ width: "100%", bg: "blue.100" }} />;
+};
+```
+
+Chakra factory function will pass `class` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
+
+For more about chakra factory read [docs](https://chakra-ui.com/docs/features/chakra-factory)
 
 ### Custom components style
 
@@ -496,3 +625,7 @@ This will allow us to use `sx` prop on select component.
 ```tsx
 <Select sx={{ mt: 12 }} options={[]} />
 ```
+
+### React hook form example
+
+This [example](https://chakra-ui.com/guides/integrations/with-hook-form) shows how to build a simple form with Chakra UI form components and the React Hook Form form library.
