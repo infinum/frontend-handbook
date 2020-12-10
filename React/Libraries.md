@@ -15,9 +15,9 @@
 
 ##### React Styling and Component Libraries
 - [styled-components](https://github.com/styled-components/styled-components) - Visual primitives for the component age
-- [emotion](https://github.com/emotion-js/emotion) - CSS-in-JS library designed for high performance style composition
 - [chakra-ui](https://github.com/chakra-ui/chakra-ui/) - Simple, Modular & Accessible UI Components for your React Applications
-- [styled-system](https://github.com/styled-system/styled-system) - Style props for rapid UI development
+  - [emotion](https://github.com/emotion-js/emotion) (Used by ChakraUI) - CSS-in-JS library designed for high performance style composition
+  - [styled-system](https://github.com/styled-system/styled-system) (Used by ChakraUI) - Style props for rapid UI development
 
 ##### React Components
 - [react-select](https://github.com/JedWatson/react-select) - The Select Component for React.js
@@ -37,6 +37,7 @@
 - [react-compound-slider](https://github.com/sghall/react-compound-slider) - A small React slider with no opinion on markup or styles
 - [react-slick](https://github.com/akiran/react-slick) - React carousel component
 - [@datepicker-react/hooks](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) - An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with styled-components
+- [react-headroom](https://github.com/KyleAMathews/react-headroom) - Hide your header until you need it
 
 ##### React Testing
 - [jest](https://github.com/facebook/jest) - Delightful JavaScript Testing
