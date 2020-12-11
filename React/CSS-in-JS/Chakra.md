@@ -359,7 +359,7 @@ chakra("button", {
 
 This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
 
-For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` style props to `<DatePicker />`
+For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` or style props to `<DatePicker />`
 
 Example:
 
