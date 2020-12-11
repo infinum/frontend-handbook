@@ -54,7 +54,7 @@ Alternative to that is using sx prop that takes an object with style rules.
 
 For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
 
-#### The `as` prop
+#### The `as` polymorphic prop
 
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
 
@@ -359,7 +359,7 @@ chakra("button", {
 
 This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
 
-For example `react-datepicker` can be wrapped in chakra factory function to be possible to pass style props to `<DatePicker />`
+For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` style props to `<DatePicker />`
 
 Example:
 
@@ -367,14 +367,14 @@ Example:
 import DatePicker from "react-datepicker";
 import { chakra } from "@chakra-ui/react";
 
-export const Datepicker = () => {
-  const ChakraDatepicker = chakra(DatePicker);
+const ChakraDatepicker = chakra(DatePicker);
 
-  return <ChakraDatepicker sx={{ width: "100%", bg: "blue.100" }} />;
-};
+export const Datepicker = () => (
+  <ChakraDatepicker sx={{ width: "100%", bg: "blue.100" }} />
+);
 ```
 
-Chakra factory function will pass `class` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
+Chakra factory function will pass `className` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
 
 For more about chakra factory read [docs](https://chakra-ui.com/docs/features/chakra-factory)
 
