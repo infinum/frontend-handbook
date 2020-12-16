@@ -38,6 +38,10 @@ Note:
 - For Next.js, you need to set this up in `pages/_app.tsx`
 - For Create React App, you need to set this up in `index.tsx`
 
+For including `<CSSReset />` just add `resetCSS` prop to `<ChakraProvider>`
+
+[All provider props](https://chakra-ui.com/docs/getting-started#chakraprovider-props)
+
 ### Style props
 
 Style props are a way to alter the style of a component by simply passing props to it. It helps to save time by providing helpful shorthand ways to style components.
