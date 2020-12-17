@@ -1,5 +1,3 @@
-## Working with forms
-
 As you might already know, there are two approaches when working with forms in Angular—template-driven and reactive forms. There is a lot of great documentation on both:
 
 - [Reactive Forms](https://angular.io/guide/reactive-forms)

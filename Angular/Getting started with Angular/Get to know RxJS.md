@@ -1,5 +1,3 @@
-## 4. Get to know RxJS
-
 There are many concepts which Angular shares with React, Vue and other component-based JavaScript libraries/frameworks. However, when it comes to Angular, there is one big player in the game who is usually not present when using other frameworks, and that is RxJS.
 
 Writing good quality Angular applications both in terms of performance and code readability and reusability often requires having a good grasp of how RxJS works and how it can be utilized to create reactive data streams.

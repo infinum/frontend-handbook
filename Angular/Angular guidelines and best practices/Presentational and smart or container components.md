@@ -1,5 +1,3 @@
-## Presentational and smart/container components
-
 Design your components to be as small as possible and reuse them as much as possible. Philosophically, components can be divided into two types:
 
 - Presentational (dumb)

@@ -1,5 +1,3 @@
-## 3. Various online resources
-
 Completing Tour of Heroes and reading some of the guides from the official documentation should teach you enough to start working on a real project. To advance your knowledge from this point forward, there are many great websites, YouTube channels and blogs you can follow. As you bump into parts of the framework where it is not clear to you what is going on, there is a good chance that a quick web search will lead you to one of these sources:
 
 - [Angular University](https://angular-university.io/) has tons of PDFs and video content

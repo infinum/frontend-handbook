@@ -1,5 +1,3 @@
-## Formatting, naming and best practices
-
 ### In templates
 
 For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like this: `"prefix": "my-app"` (needless to say, pick a better prefix than `my-app`).

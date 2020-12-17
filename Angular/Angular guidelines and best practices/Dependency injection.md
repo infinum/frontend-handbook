@@ -1,5 +1,3 @@
-## Dependency injection
-
 DI is utilized heavily in Angular, primarily for providing instances of either primitive values or class instances.
 
 DI is a very complex topic and requires a separate discussion which would be out of the scope of this handbook, but make sure you check out the following resources:

@@ -1,5 +1,3 @@
-## Testing
-
 Writing good quality tests for critical functionalities is an important step in quality assurance. We do not recommend not writing any tests, nor do we recommend mindlessly trying to achieve 100% coverage. Applications with 100% coverage can still have bugs either because the tests are not good enough, or if the edge cases were not covered by the implementation in the first place.
 
 There are many tips and tricks that go into testing Angular applications. This section will cover some of them.

@@ -1,5 +1,3 @@
-## Two-way binding
-
 Just like AngularJS, Angular has support for two-way binding, even though it works quite differently and is a lot less magical than in AngularJS.
 
 Angular's [binding syntax](https://angular.io/guide/template-syntax#binding-syntax-an-overview) offers three directions:

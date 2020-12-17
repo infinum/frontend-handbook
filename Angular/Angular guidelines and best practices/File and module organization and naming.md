@@ -1,5 +1,3 @@
-## File/module organization and naming
-
 If you have created the app using Angular CLI, there is already some clear structure in place. Building on that structure, you will probably want to add some more dirs to help you organize your code. Here are some guidelines:
 
 - Try to split up your application into modules which you can reuse. If, for example, you have to handle lazy loading of all images in the app, create an `Image` module and component in `app/components` and use it in other modules/components whenever you have to show an image. Export the declared component and import/provide dependencies which your component uses.

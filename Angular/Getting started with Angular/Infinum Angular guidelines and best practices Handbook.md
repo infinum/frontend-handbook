@@ -1,5 +1,3 @@
-## 2. Infinum [Angular guidelines and best practices](https://handbook.infinum.co/books/frontend/angular/angular-guidelines-and-best-practices) Handbook
-
 The official docs are a great source of reference information, guides and tutorials. After you finish all the official tutorials, taking a look at our very own [Angular Handbook](https://handbook.infinum.co/books/frontend/angular/angular-guidelines-and-best-practices). At first we recommend you skim-read it on a high-level, just to get to know which topics are covered. Of course feel free to read it completely if you have the time.
 
 The Handbook covers some of the best practices and formatting preferences to which we try and adhere when possible. This includes:

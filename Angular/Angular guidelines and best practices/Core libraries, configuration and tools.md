@@ -1,5 +1,3 @@
-## Core libraries, configuration and tools
-
 ### [Angular CLI](https://github.com/angular/angular-cli)
 
 The best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a webpack config exposed for editing), do some optimizations when compiling your code, and offer some handy scaffolding tools.
