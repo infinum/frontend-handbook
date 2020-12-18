@@ -1,23 +1,23 @@
-#### React Libraries
-
-##### React Development Tools
- - [create-react-app](https://github.com/facebook/create-react-app) - Project setup by running one command
- - [storybook](https://github.com/storybookjs/storybook) - Development environment for UI components
+#### React Libraries to use
 
 ##### React Frameworks
 - [next.js](https://github.com/vercel/next.js) - The React Framework
-
-##### React Routing
-- [react-router](https://github.com/ReactTraining/react-router) - Declarative routing for React
 
 ##### Next.js Routing
 - [next-connect](https://github.com/hoangvvo/next-connect) - Minimal router and middleware layer for Next.js
 
 ##### React Styling and Component Libraries
-- [styled-components](https://github.com/styled-components/styled-components) - Visual primitives for the component age
 - [chakra-ui](https://github.com/chakra-ui/chakra-ui/) - Simple, Modular & Accessible UI Components for your React Applications
   - [emotion](https://github.com/emotion-js/emotion) (Used by ChakraUI) - CSS-in-JS library designed for high performance style composition
   - [styled-system](https://github.com/styled-system/styled-system) (Used by ChakraUI) - Style props for rapid UI development
+
+##### React State Management
+- [mobx](https://github.com/mobxjs/mobx) - Simple, scalable state management
+- [datx](https://github.com/infinum/datx) - A MobX data store
+- [swr](https://github.com/vercel/swr) - React Hooks library for remote data fetching
+
+##### Forms
+- [react-hook-form](https://github.com/react-hook-form/react-hook-form) - React Hooks for forms validation (Web + React Native)
 
 ##### React Components
 - [react-select](https://github.com/JedWatson/react-select) - The Select Component for React.js
@@ -38,6 +38,9 @@
 - [react-slick](https://github.com/akiran/react-slick) - React carousel component
 - [@datepicker-react/hooks](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) - An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with styled-components
 - [react-headroom](https://github.com/KyleAMathews/react-headroom) - Hide your header until you need it
+
+##### React Development Tools
+ - [storybook](https://github.com/storybookjs/storybook) - Development environment for UI components
 
 ##### React Testing
 - [jest](https://github.com/facebook/jest) - Delightful JavaScript Testing
@@ -67,18 +70,11 @@
 - [react-use-measure](https://github.com/pmndrs/react-use-measure) - Utility to measure view bounds
 - [googlemap-react](https://github.com/googlemap-react/googlemap-react) - Easier Google Map Integration for React projects
 - [react-merge-refs](https://github.com/gregberge/react-merge-refs) - React utility to merge refs
+- [@artsy/fresnel](https://github.com/artsy/fresnel) - An SSR compatible approach to CSS media query based responsive layouts for React
 
 ##### Localization
 - [i18next](https://github.com/i18next/i18next) - i18next: learn once - translate everywhere
 - [react-i18next](https://github.com/i18next/react-i18next) - Internationalization for react done right. Using the i18next i18n ecosystem.
-
-##### React State Management
-- [mobx](https://github.com/mobxjs/mobx) - Simple, scalable state management
-- [datx](https://github.com/infinum/datx) - A MobX data store
-- [swr](https://github.com/vercel/swr) - React Hooks library for remote data fetching
-
-##### Forms
-- [react-hook-form](https://github.com/react-hook-form/react-hook-form) - React Hooks for forms validation (Web + React Native)
 
 ##### Next.js plugins
 - [next-compose-plugins](https://github.com/cyrilwanner/next-compose-plugins) - Cleaner API for enabling and configuring plugins for Next.js
@@ -86,3 +82,14 @@
 - [next-seo](https://github.com/garmeeh/next-seo) - Managing your SEO easier in Next.js
 - [@next/bundle-analyzer](https://github.com/vercel/next.js/tree/canary/packages/next-bundle-analyzer) - Use webpack-bundle-analyzer in your Next.js project
 - [next-transpile-modules](https://github.com/martpie/next-transpile-modules#readme) - Next.js plugin to transpile code from node_modules
+
+#### Other good React Libraries (consult with TL or LE before using them)
+
+##### React Development Tools
+ - [create-react-app](https://github.com/facebook/create-react-app) - Project setup by running one command
+
+##### React Routing
+- [react-router](https://github.com/ReactTraining/react-router) - Declarative routing for React
+
+##### React Styling
+- [styled-components](https://github.com/styled-components/styled-components) - Visual primitives for the component age
