@@ -39,6 +39,20 @@
 - [@datepicker-react/hooks](https://github.com/tresko/react-datepicker/tree/master/packages/hooks) - An easily internationalizable, accessible, mobile-friendly datepicker library for the web, build with styled-components
 - [react-headroom](https://github.com/KyleAMathews/react-headroom) - Hide your header until you need it
 
+##### React Animation Libraries
+- [react-transition-group](https://github.com/reactjs/react-transition-group) - An easy way to perform animations when a React component enters or leaves the DOM
+- [react-spring](https://github.com/pmndrs/react-spring) - A spring physics based React animation library
+- [framer-motion](https://github.com/framer/motion) - Open source, production-ready animation and gesture library for React
+
+##### React Chart Libraries
+- [recharts](https://github.com/recharts/recharts) - Redefined chart library built with React and D3
+- [nivo](https://github.com/plouc/nivo) - nivo provides a rich set of dataviz components, built on top of the awesome d3 and Reactjs libraries
+
+##### React Code Style
+- [eslint](https://github.com/eslint/eslint) - Find and fix problems in your JavaScript code
+- [eslint-config-react-ts](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts) - Infinum's ESLint React TypeScript shareable config
+- [prettier](https://github.com/prettier/prettier) - Prettier is an opinionated code formatter
+
 ##### React Development Tools
  - [storybook](https://github.com/storybookjs/storybook) - Development environment for UI components
 
@@ -54,7 +68,6 @@
 - [@emotion/jest](https://github.com/emotion-js/emotion/tree/master/packages/jest) - Jest testing utilities for emotion
 
 ##### Other Libraries
-- [react-transition-group](https://github.com/reactjs/react-transition-group) - An easy way to perform animations when a React component enters or leaves the DOM
 - [react-focus-lock](https://github.com/theKashey/react-focus-lock) - Focus locking
 - [@jesstelford/react-portal-universal](https://github.com/jesstelford/react-portal-universal) - Generic wrapper for React's createPortal allowing for rendering portals on the server
 - [date-fns](https://github.com/date-fns/date-fns) - Modern JavaScript date utility library
@@ -65,12 +78,12 @@
 - [@bugsnag/js](https://github.com/bugsnag/bugsnag-js) - Javascript error handling tool for Bugsnag. Monitor and report JavaScript bugs & errors.
 - [@bugsnag/plugin-react](https://github.com/bugsnag/bugsnag-js/tree/master/packages/plugin-react) - A @bugsnag/js plugin for React
 - [focus-visible](https://github.com/WICG/focus-visible) - Polyfill for `:focus-visible`
-- [react-spring](https://github.com/pmndrs/react-spring) - A spring physics based React animation library
 - [react-use-gesture](https://github.com/pmndrs/react-use-gesture) - Bread n butter utility for component-tied mouse/touch gestures in React
 - [react-use-measure](https://github.com/pmndrs/react-use-measure) - Utility to measure view bounds
 - [googlemap-react](https://github.com/googlemap-react/googlemap-react) - Easier Google Map Integration for React projects
 - [react-merge-refs](https://github.com/gregberge/react-merge-refs) - React utility to merge refs
 - [@artsy/fresnel](https://github.com/artsy/fresnel) - An SSR compatible approach to CSS media query based responsive layouts for React
+- [slate](https://github.com/ianstormtaylor/slate) - A completely customizable framework for building rich text editors. (Currently in beta.)
 
 ##### Localization
 - [i18next](https://github.com/i18next/i18next) - i18next: learn once - translate everywhere
