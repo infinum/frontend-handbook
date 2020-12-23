@@ -1,12 +1,16 @@
-### In templates
+A lot of bike-shedding can be avoided by using a tool that enforces the formatting rules. Luckily, such a tool exists and it is called `prettier`. We have detailed how to use `prettier` alongside some other tools as well—you can check it out [here](/handbook/books/frontend/javascript/code-quality)!
+
+Even when using `prettier`, there can still be some areas in which `prettier` is unopinionated and it is up to us to decide what is the best way to name and format things. That is exactly what this chapter covers.
+
+## In templates
 
 For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like this: `"prefix": "my-app"` (needless to say, pick a better prefix than `my-app`).
 
 ----
 
-**Try to fit all inputs, outputs, and regular HTML attributes in one line. If there is simply too many of them, break it up like this:**
+### Try to fit all inputs, outputs, and regular HTML attributes in one line. If there are simply too many of them, break them up
 
-``` html
+```html
 <!-- bad -->
 <my-app-component *ngFor="let item of items" class="foo" [bar]="something ? 'foo' : 'oof'" (click)="onClick($event)">
   <div>Transcluded Content</div>
@@ -44,11 +48,11 @@ For the purposes of future-proofing and avoiding conflicts with other libs, pref
 
 ----
 
-**Closing elements and angle brackets placement:**
+### Closing elements and angle brackets placement
 
 Case without content:
 
-``` html
+```html
 <!-- bad -->
 <my-component
   class="foo"
@@ -67,7 +71,7 @@ Case without content:
 
 Case with content:
 
-``` html
+```html
 <!-- bad -->
 <my-component
   class="foo"
@@ -96,9 +100,9 @@ Case with content:
 
 ----
 
-**If you are passing data to a component, use property binding only if necessary:**
+### If you are passing data to a component, use property binding only if necessary
 
-``` html
+```html
 <!-- bad -->
 <my-app-component [name]="'Steve'"></my-app-component>
 
@@ -108,9 +112,9 @@ Case with content:
 
 ----
 
-**Prefix output handlers with `on`:**
+### Prefix output handlers with `on`
 
-``` html
+```html
 <!-- bad -->
 <my-app-component (somethingHappened)="somethingHappened($event)">
 
@@ -126,9 +130,9 @@ Case with content:
 
 ----
 
-**Name click handlers in a descriptive manner:**
+### Name click handlers in a descriptive manner
 
-``` html
+```html
 <!-- bad -->
 <button (click)="onClick()">Log in</button>
 
@@ -144,9 +148,9 @@ Case with content:
 
 ----
 
-**Use a safe navigation operator:**
+### Use the optional chaining operator
 
-``` html
+```html
 <!-- bad -->
 <div *ngIf="user && user.loggedIn"></div>
 
@@ -156,9 +160,9 @@ Case with content:
 
 ----
 
-**Add space around curly brackets used for interpolation:**
+### Add space around curly brackets used for interpolation
 
-``` html
+```html
 <!-- bad -->
 <div>{{userName}}</div>
 
@@ -168,24 +172,24 @@ Case with content:
 
 ----
 
-**Use `ng-container` when possible to reduce the amount of generated DOM elements:**
+### Use `ng-container` when possible to reduce the amount of generated DOM elements
 
-``` html
+```html
 <!-- bad -->
-<div *ngIf="something"></div>
+<span *ngIf="something"></span>
 
 <!-- good -->
 <ng-container *ngIf="something"></ng-container>
 
 <!-- good -->
-<div *ngIf="something" class="i-need-this-class"></div>
+<span *ngIf="something" class="i-need-this-class"></span>
 ```
 
 ----
 
-**Use `*ngIf; else`:**
+### Use `*ngIf; else`
 
-``` html
+```html
 <!-- bad -->
 <ng-container *ngIf="something"></ng-container>
 <ng-container *ngIf="!something"></ng-container>
@@ -197,11 +201,30 @@ Case with content:
 
 ----
 
-**Subscribe to observables with the `async` pipe if possible:**
+### Subscribe to observables using the `async` pipe. Avoid manual subscriptions
 
 Component:
 
-``` typescript
+```typescript
+// bad
+@Component(...)
+export class ArticlesList {
+  public articles$ = new BehaviorSubject<Array<Article>>([]);
+  public menu$ = new BehaviorSubject<Menu>(undefined);
+
+  constructor(...) {
+    this.articleService.fetchArticles().subscribe((articles) => {
+      this.articles$.next(articles);
+    });
+
+    this.articleService.fetchMenu().subscribe((menu) => {
+      this.menu$.next(menu);
+    });
+  }
+  ...
+}
+
+// good
 @Component(...)
 export class ArticlesList {
   public articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
@@ -212,7 +235,7 @@ export class ArticlesList {
 
 Template:
 
-``` html
+```html
 <my-app-menu
   *ngIf="menu$ | async as articlesMenu"
   [menu]="articlesMenu"
@@ -228,11 +251,11 @@ The `async` pipe is especially useful if `changeDetection` is `OnPush` since it 
 
 ----
 
-**Use attributes for transclusion selectors:**
+### Use attributes for transclusion selectors
 
 The `my-app-wrapper` component template:
 
-``` html
+```html
 <div class="wrapper">
   <p>Wrapper content:</p>
   <ng-content select="[some-stuff]"></ng-content>
@@ -241,7 +264,7 @@ The `my-app-wrapper` component template:
 
 Some other component's template:
 
-``` html
+```html
 <my-app-wrapper>
   <div class="some-item" some-stuff>Some stuff</div>
 </my-app-wrapper>
@@ -249,7 +272,7 @@ Some other component's template:
 
 ----
 
-**Order attributes and bindings:**
+### Order attributes and bindings
 
 1. Structural directives (`*ngFor`, `*ngIf`, etc.)
 2. Animation triggers (`@fade`, `[@fade]`)
@@ -260,7 +283,7 @@ Some other component's template:
 7. Two-way bindings (`[(ngModel)]="email"`)
 8. Outputs (`(click)="onClick()"`)
 
-``` html
+```html
 <!-- bad -->
 <my-app-component
   (click)="onClick($event)"
@@ -290,9 +313,9 @@ Some other component's template:
 
 ----
 
-**Prefer the `[class]` over `[ngClass]` syntax:**
+### Prefer the `[class]` over `[ngClass]` syntax
 
-``` html
+```html
 <!-- bad -->
 <div [ngClass]="{ 'active': isActive }"></div>
 
@@ -300,13 +323,13 @@ Some other component's template:
 <div [class.active]="isActive"></div>
 ```
 
-### In code
+## In code
 
-**Prefix interfaces**
+### Prefix interfaces
 
 Interfaces should be prefixed with `I`. This might be a polarizing decision, but you should do it because you might have cases where some class implements an interface, and you also have a stub class which implements the same interface.
 
-``` typescript
+```typescript
 // bad
 interface UserService { }
 
@@ -320,11 +343,11 @@ class UserServiceStub implements IUserService { }
 
 ----
 
-**Prefer interface over type**
+### Prefer interface over type
 
 When defining data structures, prefer using interfaces over types. Use types only for those things for which interfaces cannot be used—unions of different types.
 
-``` typescript
+```typescript
 // bad
 export type User = {
   name: string;
@@ -341,7 +364,7 @@ export type CSSPropertyValue = number | string;
 
 You might be tempted to use a type for a union of models. For example, in some CMS solutions you might have `AdminModel` and `AuthorModel`. The user can log in using either admin or author credentials.
 
-``` typescript
+```typescript
 export class AdminModel {
   public id: string;
   public permissions: Array<Permission>;
@@ -363,7 +386,7 @@ User id: {{ user.id }}
 
 This might seem fine at first, but it is actually an anti-pattern. What you should actually do in a case like this is create an abstraction above `AdminModel` and `AuthorModel`:
 
-``` typescript
+```typescript
 export abstract class User {
   public id: string;
 }
@@ -381,9 +404,9 @@ export class AuthorModel extends User {
 
 ----
 
-**Always safe-guard `ngOnChanges`**
+### Always safe-guard `ngOnChanges`
 
-```ts
+```typescript
 // bad
 @Component(...)
 class MyComponent {
@@ -399,7 +422,7 @@ class MyComponent {
 
 The problem with not checking which specific change was triggered is that whatever computation is done might be done unnecessarily. You should add checks so that the action is executed only when the related inputs change and ignore changes of other inputs. In above example `upperCaseInput1`'s value depends only on `input1`'s value, but the assignment will be executed even if only `input2` changes, which is unnecessary.
 
-```ts
+```typescript
 // good
 @Component(...)
 class MyComponent {
@@ -417,11 +440,11 @@ class MyComponent {
 
 ----
 
-**Extract ngOnChanges logic into methods**
+### Extract ngOnChanges logic into methods
 
 If `ngOnChanges` contains some logic, it is often a good idea to separate that logic into private methods to increase readability of `ngOnChanges` method.
 
-```ts
+```typescript
 // bad
 @Component(...)
 class MyComponent {
@@ -441,7 +464,7 @@ class MyComponent {
 }
 ```
 
-```ts
+```typescript
 // good
 @Component(...)
 class MyComponent {
@@ -467,7 +490,7 @@ class MyComponent {
 
 We can even go one step further and make things "pure":
 
-```ts
+```typescript
 // even better
 @Component(...)
 class MyComponent {
@@ -497,11 +520,11 @@ class MyComponent {
 
 ----
 
-**Remember that `ngOnChange` is called on first change as well as all subsequent changes**
+### Remember that `ngOnChanges` is called on first change as well as all subsequent changes
 
 In this example we want to react on input changes and call some action.
 
-```ts
+```typescript
 //bad
 @Component(...)
 class MyComponent {
@@ -523,7 +546,7 @@ class MyComponent {
 
 Problem with the above example is that someActions will be called twice, first in `ngOnChanges` and then in `ngOnInit`. Yes, this order seems a bit strange - `ngOnInit` is called **after** the first `ngOnChanges` call; but this is just how it is.
 
-```ts
+```typescript
 //good
 @Component(...)
 class MyComponent {
@@ -543,7 +566,7 @@ Look at your use cases and check if you can remove `ngOnInit`. You almost never 
 
 ----
 
-**Consider different initial assignment options**
+### Consider different initial assignment options
 
 There is often a need to assign some properties during component initialization. This can be done in multiple ways:
 
@@ -554,9 +577,9 @@ There is often a need to assign some properties during component initialization.
 
 When learning Angular, you hear a lot about different lifecycle hooks. Even when creating new components using the Angular CLI, you get a component with empty `constructor` and empty `ngOnInit` method. Because of this, it seems natural to use one of these for initialization.
 
-_Example #1_ - how a constructor might be used for initial value assignment:
+**Example #1** - how a constructor might be used for initial value assignment:
 
-```ts
+```typescript
 @Component(...)
 class MyComponent {
   private foo: string;
@@ -569,9 +592,9 @@ class MyComponent {
 
 This works and there is nothing wrong with this, but it can be written shorter like so:
 
-_Example #2_ - initial assignment alongside property declaration
+**Example #2** - initial assignment alongside property declaration
 
-```ts
+```typescript
 @Component(...)
 class MyComponent {
   private foo: string = 'bar';
@@ -580,9 +603,9 @@ class MyComponent {
 
 We did pretty much the same thing, but a bit shorter.
 
-_Example #3_ - order during initial assignment alongside property declaration
+**Example #3** - order during initial assignment alongside property declaration
 
-```ts
+```typescript
 @Component(...)
 class MyComponent {
   private foo: string = 'bar';
@@ -599,9 +622,9 @@ We recommend setting initial values alongside property declaration since it is t
 
 However, there are some cases where you will have to use `ngOnInit` or `ngOnChanges`.
 
-_Example #4_ - when are `ngOnInit` and `ngOnChanges` necessary?
+**Example #4** - when are `ngOnInit` and `ngOnChanges` necessary?
 
-```ts
+```typescript
 // bad
 @Component(...)
 class PersonDetailsComponent {
@@ -617,7 +640,7 @@ class PersonDetailsComponent {
 
 If you try this, you will get an exception because `birthDate` will be undefined at component construction time. Input binding values are available only after `ngOnInit` and `ngOnChanges` are called. To make this work, you can use `ngOnInit`:
 
-```ts
+```typescript
 // bad
 @Component(...)
 class PersonDetailsComponent implements OnInit {
@@ -634,10 +657,10 @@ Using `ngOnInit` works and we get no exception (with the assumption that a valid
 
 We still have one problem with this solution. If input binding changes, `isLegalAge` will not be re-assigned. To solve this we simply switch to using `ngOnChanges`:
 
-```ts
+```typescript
 // good
 @Component(...)
-class PersonDetailsComponent implements OnInit {
+class PersonDetailsComponent implements OnChanges {
   @Input() public birthDate: Date;
   public isLegalAge: boolean;
 
@@ -655,10 +678,10 @@ class PersonDetailsComponent implements OnInit {
 
 Since this check is simple and returns a primitive value, using a getter here is also a valid option and it allows us to remove ngOnChanges completely and reduce the amount of code.
 
-```ts
+```typescript
 // even better
 @Component(...)
-class PersonDetailsComponent implements OnInit {
+class PersonDetailsComponent {
   @Input() public birthDate: Date;
 
   public get isLegalAge(): boolean {
@@ -669,11 +692,11 @@ class PersonDetailsComponent implements OnInit {
 
 But be careful when using getters for values which are used in templates because they will be called very often. This is OK only if there is not too much heavy lifting inside getters and if the getter does not return a newly initialized object every time it is called.
 
-_Example #5_ - avoid unnecessary creation of multiple observables and avoid subscriptions
+### Avoid unnecessary creation of multiple observables and avoid subscriptions
 
-Taking learnings from all previous examples and the fact that we can use services during initial assignment, we can greatly simplify initialization of observables and their usage in templates.
+Taking the learnings from all the previous examples and the fact that we can use services during initial assignment, we can greatly simplify initialization of observables and their usage in templates.
 
-```ts
+```typescript
 // bad
 @Component({
   template: `
@@ -706,7 +729,7 @@ class MyComponent {
 
 This is bad because it will not work correctly with OnPush change detection and we have to take care of subscriptions manually - it is easy to forget to unsubscribe and we have to introduce `ngOnDestroy`.
 
-```ts
+```typescript
 // still bad
 @Component({
   template: `
@@ -732,7 +755,7 @@ class MyComponent {
 
 This is a bit better since we no longer have to take care of unsubscribing, but the issue now is that during each template check, `user$` getter will be called. In _Example #4_ we had a case where using a getter was fine, but in this case it is not. Each time it is called it creates a new observable, template will subscribe to this new observable during each change detection, meaning that a new subscription will trigger another API call every CD cycle - which is unnecessary.
 
-```ts
+```typescript
 // good
 @Component({
   template: `
@@ -758,11 +781,11 @@ Finally the correct solution simply assigns user$ to an observable which is crea
 
 ----
 
-**Renaming RxJS imports**
+### Renaming RxJS imports
 
 Some RxJS imports have very generic names, so you might want to rename them during import:
 
-``` typescript
+```typescript
 import {
   of as observableOf
   EMPTY as emptyObservable
@@ -771,7 +794,7 @@ import {
 
 ----
 
-**Subscribe late and pipe**
+### Subscribe as late as possible and use the operators
 
 If you are new to RxJS, you will probably be overwhelmed by the amount of operators and the "Rx-way" of doing things. To do things in the "Rx-way", you will have to embrace the usage of operators and think carefully when and how you subscribe.
 
@@ -779,7 +802,7 @@ A rule of thumb is to subscribe as little and as late as possible, and do minima
 
 We will demonstrate this with an example. Imagine you have a stream of data to which you would like to subscribe and transform the data in some way.
 
-``` typescript
+```typescript
 interface IUser {
   id: number;
   user_name: string;
@@ -788,8 +811,8 @@ interface IUser {
 }
 ```
 
-```
-/account/me returns JSON:
+`/account/me` returns JSON:
+```json
 {
   "id": 42,
   "user_name": "TheDude",
@@ -798,7 +821,7 @@ interface IUser {
 }
 ```
 
-``` typescript
+```typescript
 // bad
 const user$: Observable<IUser> = http.get('/account/me');
 
@@ -807,7 +830,7 @@ user$.subscribe((response: IUser) => {
 });
 ```
 
-``` typescript
+```typescript
 // good
 const userName$: Observable<string> = http.get('/account/me').pipe(
   map((response: IUser) => response.user_name)
@@ -824,7 +847,7 @@ The point here is that, as soon as you notice that you are repeating yourself in
 
 ----
 
-**No subscriptions in guards**
+### No subscriptions in guards
 
 Asynchronous guards are common, but they should not subscribe to anything; they should return an observable.
 
@@ -832,7 +855,7 @@ To demonstrate this on an example, imagine we have `AuthService` and the `getUse
 
 We would like to implement a guard which allows only authenticated users to navigate to the route.
 
-``` typescript
+```typescript
 // bad
 class UserAuthorizedGuard implements CanActivate {
   constructor(private authService: AuthService) {}
@@ -873,7 +896,7 @@ class UserAuthorizedGuard implements CanActivate {
 
 ----
 
-**Be mindful of how and when data is fetched**
+### Be mindful of how and when data is fetched
 
 There are two basic approaches to data loading:
 
@@ -893,7 +916,7 @@ A [resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component
 
 **Container components**
 
-Even though guards are really easy to use and have some advantages, there might be situations where the data has to be loaded through multiple requests or the loading might be slow. In those cases, it might be worth to consider using a container component for data loading instead of guards. The container component would, of course, use some service to make the requests and then show the data once the requests have been completed. In this way, it is possible to show partial data as it comes in, and implement empty state design for each chunk of data that is shown.
+Even though guards are really easy to use and have some advantages, there might be situations where the data has to be loaded through multiple requests or the loading might be slow. In those cases, it might be worth to consider using a container component for data loading instead of guards. The container component would use some service to make the requests and then show the data once the requests have been completed. In this way, it is possible to show partial data as it comes in, and implement empty state design for each chunk of data that is shown.
 
 A good example where partial data loading via a container component can be preferred over all-at-once loading via guards is a dashboard-like page with multiple graphs where each graph shows data from one request. In such cases, it is probably better to let the container component handle data loading, and presentational components (graphs) should implement an empty state with some nice loaders.
 
@@ -904,7 +927,7 @@ Bottom line:
 
 ----
 
-**Ordering class members (including getters and lifecycle hooks)**
+### Ordering class members (including getters and lifecycle hooks)
 
 Follow this guideline when ordering class members:
 
@@ -918,7 +941,7 @@ Follow this guideline when ordering class members:
 
 Example:
 
-``` typescript
+```typescript
 class MyComponent implements OnInit, OnChanges {
   @Input() public i1: string;
   @Input() public i2: string;

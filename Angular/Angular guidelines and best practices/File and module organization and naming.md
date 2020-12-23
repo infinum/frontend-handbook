@@ -87,7 +87,7 @@ Generic TypeScript `type` declarations should be placed in `src/app/types`. If t
 
 As defined by `angular-cli`, assets placed in `src/assets` will be served statically.
 
-Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](/handbook/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
 ### NgxFormObject
 
