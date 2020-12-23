@@ -60,10 +60,6 @@ If an enum is used across multiple top-level modules, you can place the enum in 
 
 If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`. If the enum data is a bit more complex, defining an interface for it can be useful.
 
-### NgxFormObject
-
-If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s, and validators in `src/app/forms`. If you have form components that are reused throughout the app, put them in `src/app/components/forms`.
-
 ### Guards
 
 Put all generic route guards in `src/app/guards`.
@@ -75,7 +71,7 @@ If you need some generic helper functions (like a rounding function which actual
 
 ### Pipes
 
-If you have some custom generic pipes for use in templates, create their own dirs in `src/app/pipes`, similar to helpers. Declare, export, and provide the pipes in `src/app/pipes/pipes.module.ts`.
+If you have some custom generic pipes for use in templates, create their own dirs in `src/app/pipes`. Each pipe should have its own module that declares and exports the pipe.
 
 If a pipe is very specific and tied to a particular component, create it alongside that component instead of in the global pipes directory.
 
@@ -85,10 +81,14 @@ If you have any `NgModule`s which are not components (e.g., a module which impor
 
 ### Custom types
 
-TypeScript `type` declarations should be placed in `src/app/types`.
+Generic TypeScript `type` declarations should be placed in `src/app/types`. If the `type` is very specific and tied to a certain component/service/model, it is ok to place it alongside that component/service/model.
 
 ### Assets, global styles, and partials
 
 As defined by `angular-cli`, assets placed in `src/assets` will be served statically.
 
 Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](https://handbook.infinum.co/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+
+### NgxFormObject
+
+If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s, and validators in `src/app/forms`. If you have form components that are reused throughout the app, put them in `src/app/components/forms`.
