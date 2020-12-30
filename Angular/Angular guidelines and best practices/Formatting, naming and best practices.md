@@ -1,106 +1,24 @@
+This chapter covers various best practices when writing templates, business logic, components, services, etc. We also include some Angular-specific design patterns.
+
+## A quick note on formatting
+
 A lot of bike-shedding can be avoided by using a tool that enforces the formatting rules. Luckily, such a tool exists and it is called `prettier`. We have detailed how to use `prettier` alongside some other tools as well—you can check it out [here](/handbook/books/frontend/javascript/code-quality)!
 
-Even when using `prettier`, there can still be some areas in which `prettier` is unopinionated and it is up to us to decide what is the best way to name and format things. That is exactly what this chapter covers.
+Even when using `prettier`, there can still be some cases in which `prettier` is unopinionated and it is up to us to decide what is the best way to name and format things. Some such cases are covered by this chapter.
 
-## In templates
+# Best practices
 
-For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json` like this: `"prefix": "my-app"` (needless to say, pick a better prefix than `my-app`).
+## Use strict mode
 
-----
+We recommend enabling strict mode when creating a new application (or enable it for already existing applications). This enables some additional checks for TypeScript and Angular templates. You can read more about it [here](https://angular.io/guide/strict-mode).
 
-### Try to fit all inputs, outputs, and regular HTML attributes in one line. If there are simply too many of them, break them up
+## Use a meaningful component prefix
 
-```html
-<!-- bad -->
-<my-app-component *ngFor="let item of items" class="foo" [bar]="something ? 'foo' : 'oof'" (click)="onClick($event)">
-  <div>Transcluded Content</div>
-</my-app-component>
+The following examples in this chapter are using `my-app` component selector prefix. For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json`.
 
-<!-- bad -->
-<my-app-component
-  *ngFor="let item of items"
-  class="foo"
-  [bar]="something ? 'foo' : 'oof'"
-  (click)="onClick($event)">
-  <div>Transcluded Content</div>
-</my-app-component>
+## If you are passing data to a component, use property binding only if necessary
 
-<!-- bad -->
-<my-app-component
-  *ngFor="let item of items"
-  class="foo"
-  [bar]="something ? 'foo' : 'oof'"
-  (click)="onClick($event)">
-
-  <div>Transcluded Content</div>
-</my-app-component>
-
-<!-- good -->
-<my-app-component
-  *ngFor="let item of items"
-  class="foo"
-  [bar]="something ? 'foo' : 'oof'"
-  (click)="onClick($event)"
->
-  <div>Transcluded Content</div>
-</my-app-component>
-```
-
-----
-
-### Closing elements and angle brackets placement
-
-Case without content:
-
-```html
-<!-- bad -->
-<my-component
-  class="foo"
-  [someInput]="someValue"
-  (click)="onSomeClick()"
->
-</my-component>
-
-<!-- good -->
-<my-component
-  class="foo"
-  [someInput]="someValue"
-  (click)="onSomeClick()"
-></my-component>
-```
-
-Case with content:
-
-```html
-<!-- bad -->
-<my-component
-  class="foo"
-  [someInput]="someValue"
-  (click)="onSomeClick()"
->Some content</my-component>
-
-<!-- bad -->
-<my-component
-  class="foo"
-  [someInput]="someValue"
-  (click)="onSomeClick()">
-
-  Some content
-</my-component>
-
-<!-- good -->
-<my-component
-  class="foo"
-  [someInput]="someValue"
-  (click)="onSomeClick()"
->
-  Some content
-</my-component>
-```
-
-----
-
-### If you are passing data to a component, use property binding only if necessary
+In the following example, property binding is unnecessary because we are assigning a string value.
 
 ```html
 <!-- bad -->
@@ -110,9 +28,7 @@ Case with content:
 <my-app-component name="Steve"></my-app-component>
 ```
 
-----
-
-### Prefix output handlers with `on`
+## Prefix output handlers with `on`
 
 ```html
 <!-- bad -->
@@ -128,9 +44,7 @@ Case with content:
 <my-app-component (somethingHappened)="onSomethingHappened($event)">
 ```
 
-----
-
-### Name click handlers in a descriptive manner
+## Name click handlers in a short and descriptive manner
 
 ```html
 <!-- bad -->
@@ -139,16 +53,14 @@ Case with content:
 <!-- bad - use infinitive instead of past form -->
 <button (click)="onLogInClicked()">Log in</button>
 
-<!-- bad - too much -->
+<!-- bad - too many words -->
 <button (click)="onLogInButtonClick()">Log in</button>
 
 <!-- good -->
 <button (click)="onLogInClick()">Log in</button>
 ```
 
-----
-
-### Use the optional chaining operator
+## Use the optional chaining operator
 
 ```html
 <!-- bad -->
@@ -158,39 +70,23 @@ Case with content:
 <div *ngIf="user?.loggedIn"></div>
 ```
 
-----
-
-### Add space around curly brackets used for interpolation
+## Use `ng-container` when possible to reduce the amount of unnecessary DOM elements
 
 ```html
-<!-- bad -->
-<div>{{userName}}</div>
-
-<!-- good -->
-<div>{{ userName }}</div>
-```
-
-----
-
-### Use `ng-container` when possible to reduce the amount of generated DOM elements
-
-```html
-<!-- bad -->
+<!-- bad - span is unnecessary -->
 <span *ngIf="something"></span>
 
-<!-- good -->
+<!-- good - span was unnecessary -->
 <ng-container *ngIf="something"></ng-container>
 
-<!-- good -->
+<!-- good - span is necessary because of the class -->
 <span *ngIf="something" class="i-need-this-class"></span>
 ```
 
-----
-
-### Use `*ngIf; else`
+## Use `*ngIf; else`
 
 ```html
-<!-- bad -->
+<!-- bad - we have to type the same condition twice and check it twice -->
 <ng-container *ngIf="something"></ng-container>
 <ng-container *ngIf="!something"></ng-container>
 
@@ -199,59 +95,9 @@ Case with content:
 <ng-template #anotherThing></ng-template>
 ```
 
-----
+## Use attributes for transclusion selectors
 
-### Subscribe to observables using the `async` pipe. Avoid manual subscriptions
-
-Component:
-
-```typescript
-// bad
-@Component(...)
-export class ArticlesList {
-  public articles$ = new BehaviorSubject<Array<Article>>([]);
-  public menu$ = new BehaviorSubject<Menu>(undefined);
-
-  constructor(...) {
-    this.articleService.fetchArticles().subscribe((articles) => {
-      this.articles$.next(articles);
-    });
-
-    this.articleService.fetchMenu().subscribe((menu) => {
-      this.menu$.next(menu);
-    });
-  }
-  ...
-}
-
-// good
-@Component(...)
-export class ArticlesList {
-  public articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
-  public menu$: Observable<Menu> = this.articleService.fetchMenu();
-  ...
-}
-```
-
-Template:
-
-```html
-<my-app-menu
-  *ngIf="menu$ | async as articlesMenu"
-  [menu]="articlesMenu"
-></my-app-menu>
-
-<my-app-article-details
-  *ngFor="let article of articles$ | async"
-  [article]="article"
-></my-app-article-details>
-```
-
-The `async` pipe is especially useful if `changeDetection` is `OnPush` since it subscribes, calls change detection on changes, and unsubscribes when the component is destroyed.
-
-----
-
-### Use attributes for transclusion selectors
+When implementing transclusion with manual content selection via the `select` attribute of the `ng-content` element, we recommend using attribute selectors.
 
 The `my-app-wrapper` component template:
 
@@ -270,16 +116,14 @@ Some other component's template:
 </my-app-wrapper>
 ```
 
-----
-
-### Order attributes and bindings
+## Order/group attributes and bindings
 
 1. Structural directives (`*ngFor`, `*ngIf`, etc.)
 2. Animation triggers (`@fade`, `[@fade]`)
 3. Element reference (`#myComponent`)
-4. Ordinary attributes (`class`, etc.)
-5. Non-interpolated string inputs (`foo="bar"`)
-6. Interpolated inputs (`[foo]="theBar"`)
+4. HTML attributes (`class`, etc.)
+5. Non-interpolated string inputs and attributes (`foo="bar"`)
+6. Interpolated inputs (`[bar]="theBar"`)
 7. Two-way bindings (`[(ngModel)]="email"`)
 8. Outputs (`(click)="onClick()"`)
 
@@ -290,7 +134,7 @@ Some other component's template:
   [(ngModel)]="fooBar"
   class="foo"
   #myComponent
-  [foo]="theBar"
+  [bar]="theBar"
   @fade
   foo="bar"
   *ngIf="shouldShow"
@@ -304,16 +148,14 @@ Some other component's template:
   #myComponent
   class="foo"
   foo="bar"
-  [foo]="theBar"
+  [bar]="theBar"
   [(ngModel)]="fooBar"
   (click)="onClick($event)"
   (someEvent)="onSomeEvent($event)"
 ></my-app-component>
 ```
 
-----
-
-### Prefer the `[class]` over `[ngClass]` syntax
+## Prefer the `[class]` over `[ngClass]` syntax
 
 ```html
 <!-- bad -->
@@ -323,82 +165,7 @@ Some other component's template:
 <div [class.active]="isActive"></div>
 ```
 
-## In code
-
-### Postfix observables with `$`
-
-When you want to observe a value, use some of the classes derived from `Observable`. Most use cases are covered with one of these:
-
-- `Subject`
-- `BehaviorSubject`
-- `ReplaySubject`
-
-You can subscribe to all classes derived from `Observable` in order to receive value changes. You can also use `operators` to manipulate how and when the value changes are sent to the subscribers.
-
-There is a naming convention for `Observable` variables—postfixing with a dollar sign:
-
-``` typescript
-// bad
-const observable: Observable;
-
-// good
-const observable$: Observable;
-
-// good
-const mySubject$: Subject;
-```
-
-### Using and creating operators
-
-If you are using RxJS 5.5 or newer, make sure to use *[pipeable operators](https://github.com/ReactiveX/rxjs/blob/master/doc/pipeable-operators.md)* instead of *patch* operators.
-
-``` typescript
-// bad
-subject.do(() => { ... });
-
-// good
-subject.pipe(tap() => { ... });
-```
-
-Some common operators are:
-
-- `map`
-- `filter`
-- `tap` (replaces `.do`)
-- `delay`
-- `debounceTime`
-- `distinctUntilChanged`
-- `catchError` (replaces `.catch`)
-- `switchMap`
-
-Avoid doing a lot of logic in the `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching, side-effects, and transformations via operators.
-
-You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
-
-### Observables and async/await
-
-You can use async/await to await for the completion of observables. Keep in mind that this probably does not make too much sense for observables emits more than one value, but it might be OK for things like HTTP requests.
-
-To convert an observable to a promise, just call `obs$.toPromise()` and then you can await it.
-
-One important thing to note is that you are waiting for the **completion**, not **emission** of values. Knowing that, what do you expect the result to be in the following example?
-
-``` typescript
-const source$: Subject<string> = new Subject();
-const sourcePromise: Promise<string> = source$.toPromise();
-
-source$.next('foo');
-source$.next('bar');
-source$.complete();
-
-const result = await sourcePromise;
-```
-
-Spoiler alert! The result will be `bar`, and if we do not complete the source observable, awaiting will hang indefinitely.
-
-----
-
-### Prefix interfaces
+## Prefix interfaces
 
 Interfaces should be prefixed with `I`. This might be a polarizing decision, but you should do it because you might have cases where some class implements an interface, and you also have a stub class which implements the same interface.
 
@@ -414,9 +181,7 @@ class UserService implements IUserService { }
 class UserServiceStub implements IUserService { }
 ```
 
-----
-
-### Prefer interface over type
+## Prefer interface over type
 
 When defining data structures, prefer using interfaces over types. Use types only for those things for which interfaces cannot be used—unions of different types.
 
@@ -475,9 +240,46 @@ export class AuthorModel extends User {
 
 **TL;DR:** Prefer interfaces and abstractions over types. Use types only when you need union types.
 
-----
+## Ordering the class members (including getters and lifecycle hooks)
 
-### Always safe-guard `ngOnChanges`
+Follow this guideline when ordering class members:
+
+1. `@Input`s
+2. `@Output`s
+3. properties
+4. constructor
+5. getters and setters
+6. lifecycle hooks
+7. methods
+
+Example:
+
+```typescript
+class MyComponent implements OnInit, OnChanges {
+  @Input() public i1: string;
+  @Input() public i2: string;
+  @Output() public o2: EventEmitter<string> = new EventEmitter();
+  public attr1: number;
+  protected attr2: string;
+  private attr3: Date;
+
+  constructor(...) { ... }
+
+  public get computedProp(): string { ... }
+
+  private get secretComputedProp(): number { ... }
+
+  public ngOnInit(): void { ... }
+
+  public ngOnChanges(): void { ... }
+
+  public onSomeButtonClick(event: MouseEvent): void { ... }
+
+  private someInternalAction(): void { ... }
+}
+```
+
+## Always safe-guard `ngOnChanges`
 
 ```typescript
 // bad
@@ -511,9 +313,7 @@ class MyComponent {
 }
 ```
 
-----
-
-### Extract ngOnChanges logic into methods
+## Extract ngOnChanges logic into methods
 
 If `ngOnChanges` contains some logic, it is often a good idea to separate that logic into private methods to increase readability of `ngOnChanges` method.
 
@@ -548,11 +348,11 @@ class MyComponent {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
-      this.updateUserForm();
+      this.createUserForm();
     }
   }
 
-  private updateUserForm(): void {
+  private createUserForm(): void {
     this.userForm = this.fb.group({
       name: this.user.name,
       ...
@@ -561,7 +361,7 @@ class MyComponent {
 }
 ```
 
-We can even go one step further and make things "pure":
+We can even go one step further and make things _pure_:
 
 ```typescript
 // even better
@@ -574,15 +374,11 @@ class MyComponent {
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
-      this.userForm = this.buildUserForm(changes.user.currentValue);
-      //   or
-      // this.userForm = this.buildUserForm(this.user);
-      //   it doesn't really matter much which one you choose since
-      //   changes.user.currentValue === this.user
+      this.userForm = this.createUserForm(changes.user.currentValue);
     }
   }
 
-  private updateUserForm(user: UserModel): FormGroup {
+  private createUserForm(user: UserModel): FormGroup {
     return this.fb.group({
       name: user.name,
       ...
@@ -591,9 +387,7 @@ class MyComponent {
 }
 ```
 
-----
-
-### Remember that `ngOnChanges` is called on first change as well as all subsequent changes
+## Prefer using `ngOnChanges` over `ngOnInit`
 
 In this example we want to react on input changes and call some action.
 
@@ -635,11 +429,9 @@ class MyComponent {
 }
 ```
 
-Look at your use cases and check if you can remove `ngOnInit`. You almost never need `ngOnInit`. If there are some default input values which should be set, you can do it alongside input declaration (`@Input() label: string = 'default label'`). Any other reactions to input changes should be done in `ngOnChanges`.
+Look at your use cases and check if you can remove `ngOnInit`. You almost never need `ngOnInit` (more on this in the following sub-chapter). If there are some default input values which should be set, you can do it alongside input declaration (`@Input() label: string = 'default label'`). Any other reactions to input changes should be done in `ngOnChanges`.
 
-----
-
-### Consider different initial assignment options
+## Consider different initial assignment options
 
 There is often a need to assign some properties during component initialization. This can be done in multiple ways:
 
@@ -648,7 +440,7 @@ There is often a need to assign some properties during component initialization.
 3. In lifecycle hooks
 4. Subscribing at initialization
 
-When learning Angular, you hear a lot about different lifecycle hooks. Even when creating new components using the Angular CLI, you get a component with empty `constructor` and empty `ngOnInit` method. Because of this, it seems natural to use one of these for initialization.
+When learning Angular, you hear a lot about different lifecycle hooks. Even when creating new components using the Angular CLI, you get a component with empty `constructor` and empty `ngOnInit` method. Because of this, it seems natural to use one of these for initialization. We will explore what the options for assignment on initialization and what is the best way to do it.
 
 **Example #1** - how a constructor might be used for initial value assignment:
 
@@ -728,7 +520,7 @@ class PersonDetailsComponent implements OnInit {
 
 Using `ngOnInit` works and we get no exception (with the assumption that a valid `Date` object is passed down to our component via `birthDate` input).
 
-We still have one problem with this solution. If input binding changes, `isLegalAge` will not be re-assigned. To solve this we simply switch to using `ngOnChanges`:
+We still have one problem with this solution. If input binding changes again (after the initial change), `isLegalAge` will not be re-assigned. To solve this we simply switch to using `ngOnChanges`:
 
 ```typescript
 // good
@@ -765,9 +557,134 @@ class PersonDetailsComponent {
 
 But be careful when using getters for values which are used in templates because they will be called very often. This is OK only if there is not too much heavy lifting inside getters and if the getter does not return a newly initialized object every time it is called.
 
-### Avoid unnecessary creation of multiple observables and avoid subscriptions
+To sump up, we recommend using ngOnChanges for computing values based on input changes. You can also use getters if they return primitive values and if the computation is quick and simple.
+
+## Postfix observables with `$`
+
+When you want to observe a value, use some of the classes derived from `Observable`. Most use cases are covered with one of these:
+
+- `Subject`
+- `BehaviorSubject`
+- `ReplaySubject`
+
+You can subscribe to all classes derived from `Observable` in order to receive value changes. You can also use `operators` to manipulate how and when the value changes are sent to the subscribers.
+
+There is a naming convention for `Observable` variables—postfixing with a dollar sign:
+
+``` typescript
+// bad
+const observable: Observable;
+
+// good
+const observable$: Observable;
+
+// good
+const mySubject$: Subject;
+```
+
+## Using and creating operators
+
+If you are using RxJS 5.5 or newer, make sure to use *[pipeable operators](https://github.com/ReactiveX/rxjs/blob/master/doc/pipeable-operators.md)* instead of *patch* operators.
+
+``` typescript
+// bad
+subject.do(() => { ... });
+
+// good
+subject.pipe(tap() => { ... });
+```
+
+Some common operators are:
+
+- `map`
+- `filter`
+- `tap` (replaces `.do`)
+- `delay`
+- `debounceTime`
+- `distinctUntilChanged`
+- `catchError` (replaces `.catch`)
+- `switchMap`
+
+Avoid doing a lot of logic in the `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching, side-effects, and transformations via operators.
+
+You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
+
+## Observables and async/await
+
+You can use async/await to await for the completion of observables. Keep in mind that this probably does not make too much sense for observables emits more than one value, but it might be OK for things like HTTP requests.
+
+To convert an observable to a promise, just call `obs$.toPromise()` and then you can await it.
+
+One important thing to note is that you are waiting for the **completion**, not **emission** of values. Knowing that, what do you expect the result to be in the following example?
+
+``` typescript
+const source$: Subject<string> = new Subject();
+const sourcePromise: Promise<string> = source$.toPromise();
+
+source$.next('foo');
+source$.next('bar');
+source$.complete();
+
+const result = await sourcePromise;
+```
+
+Spoiler alert! The result will be `bar`, and if we do not complete the source observable, awaiting will hang indefinitely.
+
+## Avoid manual subscriptions and asynchronous property assignment
+
+We recommend avoiding making manual subscription calls and asynchronous property assignment. The code example below has some comments indicating what is meant by "manual subscription" and "asynchronous property assignment".
+
+It is best to leave subscription handling to the `async` pipe because it:
+  - encourages [reactive programming](https://medium.com/front-end-weekly/why-should-we-use-reactive-programming-in-angular-2e2913297054)
+  - handles unsubscribing automatically
+  - works well with `OnPush` change detection
+  - avoids the need to do asynchronous property assignment
+
+Component:
+
+```typescript
+// bad
+@Component(...)
+export class ArticlesList {
+  public articles: Array<Article>;
+
+  constructor(...) {
+    this.articleService.fetchArticles().subscribe((articles) => { // manual subscription
+      this.articles = articles; // asynchronous property assignment
+    });
+  }
+}
+
+// good
+@Component(...)
+export class ArticlesList {
+  public readonly articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
+
+  constructor(...) { }
+}
+```
+
+Template:
+
+```html
+<!-- bad -->
+<my-app-article-details
+  *ngFor="let article of articles"
+  [article]="article"
+></my-app-article-details>
+
+<!-- good -->
+<my-app-article-details
+  *ngFor="let article of articles$ | async"
+  [article]="article"
+></my-app-article-details>
+```
+
+## Avoid unnecessary creation of multiple observables and avoid subscriptions
 
 Taking the learnings from all the previous examples and the fact that we can use services during initial assignment, we can greatly simplify initialization of observables and their usage in templates.
+
+In this example, we have to fetch the user by ID. The ID is read from route parameters.
 
 ```typescript
 // bad
@@ -803,7 +720,7 @@ class MyComponent {
 This is bad because it will not work correctly with OnPush change detection and we have to take care of subscriptions manually - it is easy to forget to unsubscribe and we have to introduce `ngOnDestroy`.
 
 ```typescript
-// still bad
+// even worse
 @Component({
   template: `
   <ng-container *ngIf="user$ | async as user">
@@ -826,7 +743,7 @@ class MyComponent {
 }
 ```
 
-This is a bit better since we no longer have to take care of unsubscribing, but the issue now is that during each template check, `user$` getter will be called. In _Example #4_ we had a case where using a getter was fine, but in this case it is not. Each time it is called it creates a new observable, template will subscribe to this new observable during each change detection, meaning that a new subscription will trigger another API call every CD cycle - which is unnecessary.
+Here we no longer have to take care of unsubscribing, but the issue now is that during each template check, `user$` getter will be called. In _Example #4_ in one of the previous sub-chapters we had a case where using a getter was fine, but in this case it is not. Each time it is called it creates a new observable, template will subscribe to this new observable during each change detection, meaning that a new subscription will trigger another API call every CD cycle - which is unnecessary.
 
 ```typescript
 // good
@@ -852,22 +769,28 @@ class MyComponent {
 
 Finally the correct solution simply assigns user$ to an observable which is created only once. The template will have only one subscription and we will just react to updates in the data stream which happen when params change.
 
-----
-
-### Renaming RxJS imports
-
-Some RxJS imports have very generic names, so you might want to rename them during import:
+If the observable creation pipeline gets larger, you can move it to a private method like so:
 
 ```typescript
-import {
-  of as observableOf
-  EMPTY as emptyObservable
-} from 'rxjs';
+// good
+@Component(...)
+class MyComponent {
+  public user$: Observable<UserModel> = this.createUserObservable();
+
+  constructor(
+    private route: ActivatedRoute,
+    private usersService: UsersService,
+  ) {}
+
+  private createUserObservable(): Observable<UserModel> {
+    return this.route.params.pipe(switchMap((params: Params) => {
+      return this.usersService.fetchById(params.userId);
+    }));
+  }
+}
 ```
 
-----
-
-### Subscribe as late as possible and use the operators
+## Subscribe as late as possible and use the operators
 
 If you are new to RxJS, you will probably be overwhelmed by the amount of operators and the "Rx-way" of doing things. To do things in the "Rx-way", you will have to embrace the usage of operators and think carefully when and how you subscribe.
 
@@ -918,9 +841,7 @@ It is, of course, possible that the subscribers want different things, and for t
 
 The point here is that, as soon as you notice that you are repeating yourself in subscription callbacks, you should move that repeated logic into some operator that is piped to the source observable.
 
-----
-
-### No subscriptions in guards
+## No subscriptions in guards
 
 Asynchronous guards are common, but they should not subscribe to anything; they should return an observable.
 
@@ -967,9 +888,7 @@ class UserAuthorizedGuard implements CanActivate {
 }
 ```
 
-----
-
-### Be mindful of how and when data is fetched
+## Be mindful of how and when the data is fetched
 
 There are two basic approaches to data loading:
 
@@ -997,44 +916,3 @@ Bottom line:
 
 - Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once.
 - Use container components if data is loaded in chunks and results should be shown as they come in.
-
-----
-
-### Ordering class members (including getters and lifecycle hooks)
-
-Follow this guideline when ordering class members:
-
-1. `@Input`s
-2. `@Output`s
-3. public, protected, and private properties
-4. constructor
-5. lifecycle hooks
-6. public, protected, and private getters and setters
-7. public, protected, and private methods
-
-Example:
-
-```typescript
-class MyComponent implements OnInit, OnChanges {
-  @Input() public i1: string;
-  @Input() public i2: string;
-  @Output() public o2: EventEmitter<string> = new EventEmitter();
-  public attr1: number;
-  protected attr2: string;
-  private attr3: Date;
-
-  constructor(...) { ... }
-
-  public ngOnInit(): void { ... }
-
-  public ngOnChanges(): void { ... }
-
-  public get computedProp(): string { ... }
-
-  private get secretComputedProp(): number { ... }
-
-  public onSomeButtonClick(event: MouseEvent): void { ... }
-
-  private someInternalAction(): void { ... }
-}
-```
