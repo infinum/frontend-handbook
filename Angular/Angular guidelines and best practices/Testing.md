@@ -602,3 +602,11 @@ This allows us to test a more complex error handling, which usually includes som
 ## Testing helpers
 
 If you have helper functions, testing them is basically the same as in any other application in any framework (even Vanilla JS). You do not need TestBed. You just need good old Jasmine, and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.
+
+## Creating wrapper test components
+
+TODO
+
+## Typing mock services
+
+TODO: ExtractPublic<T>

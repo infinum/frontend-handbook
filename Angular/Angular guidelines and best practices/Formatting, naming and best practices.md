@@ -841,6 +841,10 @@ It is, of course, possible that the subscribers want different things, and for t
 
 The point here is that, as soon as you notice that you are repeating yourself in subscription callbacks, you should move that repeated logic into some operator that is piped to the source observable.
 
+## Do not use observables if unnecessary
+
+TODO: ngOnChanges BehaviorSubject .next example
+
 ## No subscriptions in guards
 
 Asynchronous guards are common, but they should not subscribe to anything; they should return an observable.
@@ -916,3 +920,11 @@ Bottom line:
 
 - Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once.
 - Use container components if data is loaded in chunks and results should be shown as they come in.
+
+## Avoid creating black-box components
+
+TODO: example with tabs
+
+## Consider using single observable pattern
+
+## Use pipes
