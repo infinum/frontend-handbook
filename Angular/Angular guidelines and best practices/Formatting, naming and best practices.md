@@ -843,7 +843,110 @@ The point here is that, as soon as you notice that you are repeating yourself in
 
 ## Do not use observables if unnecessary
 
-TODO: ngOnChanges BehaviorSubject .next example
+We recommend using `OnPush` change detection strategy. This means that some things that work with `Default` CD will no longer work when you start using `OnPush` CD. The best way to make things work again is to take a reactive approach when designing the component and utilize the Observables, operators and `async` pipe.
+
+However, there are cases when you do not need an Observable. Sometimes, direct values work just as fine. Do not implement an Observable if it is not needed, it will just add some unnecessary overhead.
+
+Here is an example where an observable is unnecessary:
+
+```html
+<!-- bad -->
+{{ someNumber }}! = {{ factorialOfTheNumber$ | async }}
+```
+
+```typescript
+// bad
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() public someNumber: number = 0;
+  public readonly factorialOfTheNumber$ = new BehaviorSubject<number>(1);
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.someNumber) {
+      this.factorialOfTheNumber$.next(calculateFactorial(changes.someNumber.currentValue));
+    }
+  }
+}
+```
+
+```html
+<!-- good -->
+{{ someNumber }}! = {{ factorialOfTheNumber }}
+```
+
+```typescript
+// good
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() public someNumber: number = 0;
+  public readonly factorialOfTheNumber = 1;
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.someNumber) {
+      this.factorialOfTheNumber = calculateFactorial(changes.someNumber.currentValue);
+    }
+  }
+}
+```
+
+This can be a result of confusion about how `OnPush` CD works. If `factorialOfTheNumber$` is not an observable and is a direct value, it might be unclear if the template will be re-rendered or not. The answer is - yes, the template will be re-rendered correctly. While it is true that direct property assignment with `OnPush` CD can sometimes result in template not being re-rendered, that usually happens only when assigning in an asynchronous piece of code. If the `calculateFactorial` calculation is synchronous (as it is in this example), then we can assign the value directly, without the need to wrap it in an Observable.
+
+Remember, any property assignments that are done synchronously in `ngOnChanges` will get rendered correctly. This is because CD is run synchronously after all the code in `ngOnChanges` is executed. This is true for both `OnPush` and `Default` CD.
+
+## Consider not using ngOnChanges and use pure pipes
+
+Building on the previous example with unnecessary Observables, we will go one step further and try to eliminate the `ngOnChanges` lifecycle hook altogether.
+
+To do this, we have to understand how pipes work. Pipes can have multiple input values and one output value. Input values are mapped to the output value in the transformation method. Impure pipes will execute the transformation method on each change detection cycle. This is probably not optimal nor the desired behaviour in most situations. On the other hand, pure pipes will execute the transformation method only if some of the input values change. All pipes are pure by default, and that is great! You can read more about pipes [here](https://angular.io/guide/pipes).
+
+We can not utilize the knowledge of pure pipes and update our component:
+
+```html
+{{ someNumber }}! = {{ someNumber | factorial }}
+```
+
+```typescript
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() public someNumber: number = 0;
+}
+```
+
+```typescript
+@Pipe({ name: 'factorial' })
+export class FactorialPipe implements PipeTransform {
+  public transform(value: number): number {
+    return calculateFactorial(value);
+  }
+}
+```
+
+We have greatly reduced the amount of code in our component and have created a reusable piece of code in the form of a pure pipe. This pipe can be reused in other places, but it is also ok if it is used in only this one component's template. If it is not reused in other places, it is ok to leave the pipe implementation file alongside the component module file and declare it in the component's module.
+
+You might ask a question "But what if I need to use the factorial value inside my component code?". The solution depends on how and when you need to use the value that is calculated by the pipe. If you need to access the value on some user interaction, you can pass the calculated value from the template to the action handler method. This is great because it keeps your methods pure.
+
+```html
+<ng-container *ngIf="someNumber | factorial as someNumberFactorial">
+  {{ someNumber }}! = {{ someNumberFactorial }}
+
+  <button (click)="saveFactorialValue(someNumberFactorial)">Save the factorial value</button>
+</ng-container>
+```
+
+```typescript
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() public someNumber: number = 0;
+
+  public saveFactorialValue(someNumberFactorial): void {
+    // do something with someNumberFactorial
+  }
+}
+```
+
+Some notes:
+  - we wrapped everything in one `ng-container` to avoid calling the pipe twice
+  - be careful in case that your pipe can return a valid falsy value, as in that case the `*ngIf` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
 
 ## No subscriptions in guards
 
@@ -1044,5 +1147,3 @@ We will not go into the details of this pattern in this handbook. To learn more 
   - [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
   - [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
   - [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)
-
-## Use pipes
