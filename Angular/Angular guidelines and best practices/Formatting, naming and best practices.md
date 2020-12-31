@@ -991,6 +991,58 @@ Please do not take this as us firing shots at Nebular. We still think that Nebul
 
 Long story short, we recommend taking the "glass box" approach as it allows for more flexibility.
 
-## Consider using single observable pattern
+## Consider using the single observable pattern
+
+Did you ever find yourself in the `ng-container` nesting hell? It might have looked something like this:
+
+```html
+<ng-container *ngIf="frameworkName1$ | async as frameworkName1">
+  <ng-container *ngIf="frameworkName2$ | async as frameworkName2">
+    <ng-container *ngIf="frameworkName3$ | async as frameworkName3">
+      {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not even talk about {{ frameworkName3 }}.
+    </ng-container>
+  </ng-container>
+</ng-container>
+```
+
+There is a simple solution to this problem, and it is called the single data observable pattern. In short, this pattern takes advantage of the reactive programming paradigm introduced with RxJS to combine multiple observable streams into one, allowing us to reduce the amount of nested subscriptions in the template. In its purest form, it allows us to have only one subscription in the template (one `async` pipe). You can also utilize this pattern to create multiple combined observables instead of having many more individual subscriptions.
+
+The example above could be refactored to use the single data observable pattern:
+
+```ts
+@Component(...)
+export class MyComponent {
+  private readonly frameworkName1$ = ...;
+  private readonly frameworkName2$ = ...;
+  private readonly frameworkName3$ = ...;
+
+  public readonly frameworkNames$ = combineLatest([
+    frameworkName1$,
+    frameworkName2$,
+    frameworkName3$,
+  ]).pipe(map(([
+    frameworkName1,
+    frameworkName2,
+    frameworkName3,
+  ]) => {
+    return {
+      frameworkName1,
+      frameworkName2,
+      frameworkName3,
+    }
+  }))
+}
+```
+
+```html
+<ng-container *ngIf="frameworkNames$ | async as frameworkNames">
+  {{ frameworkNames.frameworkName1 }} is way better than {{ frameworkNames.frameworkName2 }}. I will not even talk about {{ frameworkNames.frameworkName3 }}.
+</ng-container>
+```
+
+We will not go into the details of this pattern in this handbook. To learn more about this pattern, please check out these videos:
+  - [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
+  - [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
+  - [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)
 
 ## Use pipes
