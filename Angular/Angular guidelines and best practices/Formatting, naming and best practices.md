@@ -923,7 +923,73 @@ Bottom line:
 
 ## Avoid creating black-box components
 
-TODO: example with tabs
+The component's `Inputs` and `Outputs` are what we call the component's public API. There are many ways in which a component can be built and the definition of this public API for each specific component is completely up to the developer.
+
+One of the approaches is to define the component's public API as a black box. This means that most or all of the implementation details are hidden and the component's user has a clearly defined and usually strict way of sending the data and configuration objects to the component, as well as getting some events back from the component. Component usually does some complex operations based on the input data and configuration.
+
+One example of a black box component would be a tree component to which you pass the tree structure to the component as one root object that can have multiple levels of nested items. From the component's user's perspective, this seems like a nice and clear way of using a component, making this approach tantalizing.
+
+Example how such a component would be used:
+
+```html
+<my-app-tree-view [rootNode]="navigationRoot">
+</my-app-tree-view>
+```
+
+```typescript
+interface ITreeNode {
+  title: string;
+  link: string;
+  children?: Array<ITreeNode>;
+}
+
+@Component(...)
+export class ParentComponent {
+  public navigationRoot: ITreeNode = {
+    title: 'Homepage',
+    link: '/',
+    children: [...]
+  }
+}
+```
+
+However, the black box approach is not very flexible and you could soon find yourself adding various configuration options and optional properties in the data objects (`ITreeNode` in the above example) as the new edge cases arise. This ends up with a bunch of if statements or similar logic in the component, growing in complexity and decreasing readability of the component's source code.
+
+An alternative approach would be to decrease the amount of black-boxing and give the component's user a bit more choice in how the component is used. This can be achieved by good composition and content transclusion. The name for this alternative approach is glass box.
+
+In the tree component example, this would mean that instead of having one large data object with nested children objects, we would leave the composition of the tree elements to the user.
+
+Example of a glass box approach:
+
+```html
+<my-app-tree-node>
+  <a routerLink="/">Homepage</a>
+
+  <my-app-tree-node>
+    ... child 1 ...
+  </my-app-tree-node>
+
+  <my-app-tree-node>
+    ... child 2 ...
+  </my-app-tree-node>
+</my-app-tree-node>
+```
+
+This allows the parent component to add things like custom classes to the links or even make the links button instead of anchor elements. This makes for a more flexible component.
+
+Please check out some of these real-world examples of good implementations of glass box components:
+  - [CDK Tree](https://material.angular.io/cdk/tree/overview)
+  - [Material tabs](https://material.angular.io/components/tabs/overview)
+
+Here is also one interesting comparison between Material's and Nebular's implementation of a menu component:
+  - [Material menu](https://material.angular.io/components/menu/overview)
+  - [Nebular menu](https://akveo.github.io/nebular/docs/components/menu/overview#nbmenucomponent)
+
+Material implementation takes the glass box approach, while Nebular leans more towards black-boxing. We believe this makes the Material implementation more flexible. For example, the material implementation allows you to have buttons or anchor elements inside the menu and to have custom components like icons inside each menu item. This is also possible with Nebular, but support for that had to be added in the menu component itself, by adding additional properties inside the menu data objects. This bloats the `NbMenuItem` interface which now includes all the various edge cases like icons, path matching, query params, badges, etc. If you need something similar to a badge but use your own custom component instead of the Nebular's badge, it might be hard to do it with this black box approach that Nebular took.
+
+Please do not take this as us firing shots at Nebular. We still think that Nebular is a pretty good library, but there will always be some trade-offs when defining a component's public API. You could take 10 component libraries and none of them would have the best implementation of each and every component for each use-case of those components. Some will have some components implemented well for certain uses cases, while other component might not be as good.
+
+Long story short, we recommend taking the "glass box" approach as it allows for more flexibility.
 
 ## Consider using single observable pattern
 
