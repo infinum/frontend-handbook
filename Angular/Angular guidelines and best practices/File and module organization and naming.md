@@ -59,7 +59,13 @@ Similar as with services and models, you can place enums alongside other files t
 
 If an enum is used across multiple top-level modules, you can place the enum in `src/app/enums`. A good example is an enum for HTTP status codes.
 
-If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be: `export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }`. If the enum data is a bit more complex, defining an interface for it can be useful.
+If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be:
+
+```typescript
+export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }
+```
+
+If the enum data is a bit more complex, defining an interface for it can be useful.
 
 ## Guards
 
@@ -88,7 +94,7 @@ Generic TypeScript `type` declarations should be placed in `src/app/types`. If t
 
 As defined by `angular-cli`, assets placed in `src/assets` will be served statically.
 
-Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](/handbook/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
 ## NgxFormObject
 

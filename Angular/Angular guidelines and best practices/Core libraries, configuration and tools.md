@@ -59,6 +59,7 @@ ng g c DayView
 ```
 
 Complete `CalendarModule` example:
+
 ```typescript
 @NgModule({
   imports: [
@@ -138,4 +139,4 @@ Here are some good introductory tutorials to get you started:
 - Another tool to visualize the operators - [RxViz](https://rxviz.com/)
 - Angular documentation—[The RxJS Library](https://angular.io/guide/rx-library)
 
-We will discuss some RxJS-specific best practices in a [later chapter](/handbook/books/frontend/angular/angular-guidelines-and-best-practices/use-rxjs-wisely).
+We will discuss some RxJS-specific best practices in a [later chapter](/books/frontend/angular/angular-guidelines-and-best-practices/use-rxjs-wisely).

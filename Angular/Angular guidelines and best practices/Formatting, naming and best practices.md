@@ -2,7 +2,7 @@ This chapter covers various best practices when writing templates, business logi
 
 ## A quick note on formatting
 
-A lot of bike-shedding can be avoided by using a tool that enforces the formatting rules. Luckily, such a tool exists and it is called `prettier`. We have detailed how to use `prettier` alongside some other tools as well—you can check it out [here](/handbook/books/frontend/javascript/code-quality)!
+A lot of bike-shedding can be avoided by using a tool that enforces the formatting rules. Luckily, such a tool exists and it is called `prettier`. We have detailed how to use `prettier` alongside some other tools as well—you can check it out [here](/books/frontend/javascript/code-quality)!
 
 Even when using `prettier`, there can still be some cases in which `prettier` is unopinionated and it is up to us to decide what is the best way to name and format things. Some such cases are covered by this chapter.
 
@@ -597,7 +597,7 @@ To make good use of RxJS and develop the application in a reactive way, it is im
 
 You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
 
-Covering all the various operators is out of the scope of this handbook. Please refer to some of the learning resources mentioned earlier [[1](/handbook/books/frontend/angular/getting-started-with-angular/get-to-know-rxjs)] [[2](/handbook/books/frontend/angular/angular-guidelines-and-best-practices/core-libraries-configuration-and-tools#a-hrefhttpsgithubcomreactivexrxjs-target_blankrxjsa)].
+Covering all the various operators is out of the scope of this handbook. Please refer to some of the learning resources mentioned earlier [[1](/books/frontend/angular/getting-started-with-angular/get-to-know-rxjs)] [[2](/books/frontend/angular/angular-guidelines-and-best-practices/core-libraries-configuration-and-tools#a-hrefhttpsgithubcomreactivexrxjs-target_blankrxjsa)].
 
 ## Observables and async/await
 
@@ -799,6 +799,7 @@ interface IUser {
 ```
 
 `/account/me` returns JSON:
+
 ```json
 {
   "id": 42,
@@ -1016,6 +1017,61 @@ Bottom line:
 - Use resolve guards if route data can be loaded in one big chunk and is also shown all-at-once.
 - Use container components if data is loaded in chunks and results should be shown as they come in.
 
+## The single observable pattern
+
+Did you ever find yourself in the `ng-container` nesting hell? It might have looked something like this:
+
+```html
+<ng-container *ngIf="frameworkName1$ | async as frameworkName1">
+  <ng-container *ngIf="frameworkName2$ | async as frameworkName2">
+    <ng-container *ngIf="frameworkName3$ | async as frameworkName3">
+      {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not even talk about {{ frameworkName3 }}.
+    </ng-container>
+  </ng-container>
+</ng-container>
+```
+
+There is a simple solution to this problem, and it is called the single data observable pattern. In short, this pattern takes advantage of the reactive programming paradigm introduced with RxJS to combine multiple observable streams into one, allowing us to reduce the amount of nested subscriptions in the template. In its purest form, it allows us to have only one subscription in the template (one `async` pipe). You can also utilize this pattern to create multiple combined observables instead of having many more individual subscriptions.
+
+The example above could be refactored to use the single data observable pattern:
+
+```ts
+@Component(...)
+export class MyComponent {
+  private readonly frameworkName1$ = ...;
+  private readonly frameworkName2$ = ...;
+  private readonly frameworkName3$ = ...;
+
+  public readonly frameworkNames$ = combineLatest([
+    frameworkName1$,
+    frameworkName2$,
+    frameworkName3$,
+  ]).pipe(map(([
+    frameworkName1,
+    frameworkName2,
+    frameworkName3,
+  ]) => {
+    return {
+      frameworkName1,
+      frameworkName2,
+      frameworkName3,
+    }
+  }))
+}
+```
+
+```html
+<ng-container *ngIf="frameworkNames$ | async as frameworkNames">
+  {{ frameworkNames.frameworkName1 }} is way better than {{ frameworkNames.frameworkName2 }}. I will not even talk about {{ frameworkNames.frameworkName3 }}.
+</ng-container>
+```
+
+We will not go into the details of this pattern in this handbook. To learn more about this pattern, please check out these videos:
+
+- [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
+- [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
+- [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)
+
 ## Avoid creating black-box components
 
 The component's `Inputs` and `Outputs` are what we call the component's public API. There are many ways in which a component can be built and the definition of this public API for each specific component is completely up to the developer.
@@ -1086,59 +1142,4 @@ Material implementation takes the glass box approach, while Nebular leans more t
 
 Please do not take this as us firing shots at Nebular. We still think that Nebular is a pretty good library, but there will always be some trade-offs when defining a component's public API. You could take 10 component libraries and none of them would have the best implementation of each and every component for each use-case of those components. Some will have some components implemented well for certain uses cases, while other component might not be as good.
 
-Long story short, we recommend taking the "glass box" approach as it allows for more flexibility.
-
-## The single observable pattern
-
-Did you ever find yourself in the `ng-container` nesting hell? It might have looked something like this:
-
-```html
-<ng-container *ngIf="frameworkName1$ | async as frameworkName1">
-  <ng-container *ngIf="frameworkName2$ | async as frameworkName2">
-    <ng-container *ngIf="frameworkName3$ | async as frameworkName3">
-      {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not even talk about {{ frameworkName3 }}.
-    </ng-container>
-  </ng-container>
-</ng-container>
-```
-
-There is a simple solution to this problem, and it is called the single data observable pattern. In short, this pattern takes advantage of the reactive programming paradigm introduced with RxJS to combine multiple observable streams into one, allowing us to reduce the amount of nested subscriptions in the template. In its purest form, it allows us to have only one subscription in the template (one `async` pipe). You can also utilize this pattern to create multiple combined observables instead of having many more individual subscriptions.
-
-The example above could be refactored to use the single data observable pattern:
-
-```ts
-@Component(...)
-export class MyComponent {
-  private readonly frameworkName1$ = ...;
-  private readonly frameworkName2$ = ...;
-  private readonly frameworkName3$ = ...;
-
-  public readonly frameworkNames$ = combineLatest([
-    frameworkName1$,
-    frameworkName2$,
-    frameworkName3$,
-  ]).pipe(map(([
-    frameworkName1,
-    frameworkName2,
-    frameworkName3,
-  ]) => {
-    return {
-      frameworkName1,
-      frameworkName2,
-      frameworkName3,
-    }
-  }))
-}
-```
-
-```html
-<ng-container *ngIf="frameworkNames$ | async as frameworkNames">
-  {{ frameworkNames.frameworkName1 }} is way better than {{ frameworkNames.frameworkName2 }}. I will not even talk about {{ frameworkNames.frameworkName3 }}.
-</ng-container>
-```
-
-We will not go into the details of this pattern in this handbook. To learn more about this pattern, please check out these videos:
-
-- [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
-- [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
-- [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)
+Long story short, we recommend taking the glass box approach as it allows for more flexibility.
