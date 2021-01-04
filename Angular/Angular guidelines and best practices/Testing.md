@@ -209,6 +209,8 @@ export class DonutChartTestingComponent implements IDonutChartComponent {
   @Input() public sections: Array<IDonutSection> = [];
   @Input() public options: IDonutOptions = {};
   @Output() public sectionSelected = new EventEmitter<IDonutSection>();
+
+  // no implementation
 }
 
 // donut-chart.testing.module.ts
@@ -221,6 +223,8 @@ export class DonutChartTestingModule {}
 ```
 
 The `DonutChartComponent` should be covered extensively by unit tests. When testing some other component that depends on `DonutChartComponent`, you can assume that `DonutChartComponent` works correctly and you can simply import its testing module (`DonutChartTestingModule`).
+
+We highly recommend this pattern, it works great if you are doing a lot of unit testing (which you should be doing).
 
 ### What about component harnesses?
 
