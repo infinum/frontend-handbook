@@ -138,5 +138,3 @@ Here are some good introductory tutorials to get you started:
   - this will help you a lot when trying to understand what specific operators do
 - Another tool to visualize the operators - [RxViz](https://rxviz.com/)
 - Angular documentation—[The RxJS Library](https://angular.io/guide/rx-library)
-
-We will discuss some RxJS-specific best practices in a [later chapter](/books/frontend/angular/angular-guidelines-and-best-practices/use-rxjs-wisely).
