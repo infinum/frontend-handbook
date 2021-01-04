@@ -9,7 +9,7 @@ Going by that general reasoning, you might end up having a mix of reactive and t
 
 Reactive forms are also a bit easier to hook into RxJS pipelines.
 
-## Our own library for working with forms!
+# NgxFormObject - our own library for working with forms!
 
 Since we mostly use reactive forms, we've created a library, which makes things a bit easier. The library in question is [ngx-form-object](https://github.com/infinum/ngx-form-object). Check out the project's README on GitHub to find out how to use it.
 
@@ -22,7 +22,7 @@ Some of the benefits of using it:
 
 We definitely recommend trying out `ngx-form-object` (*shameful self-promotion*) if you decide to use reactive forms. We've used it on many complex projects with huge forms and it has helped us a lot!
 
-## Making your components work with forms transparently
+# Making your components work with forms transparently
 
 Another topic that should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use the `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but luckily, there are some great articles which we recommend reading:
 

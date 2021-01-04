@@ -19,7 +19,7 @@ One key takeaway that we will repeat in this handbook is how two-way binding is 
 
 These two lines do exactly the same thing—this might give you an idea about how to implement custom two-way binding for your component's inputs. For more details, we suggest reading the official docs and articles that we mentioned a bit earlier.
 
-### Should you use two-way binding?
+# Should you use two-way binding?
 
 If you've checked out the docs and the article, you've probably noticed that implementing two-way binding for your components isn't rocket science. You might be thinking "OH MY GOD, I WILL ENABLE TWO-WAY BINDING FOR ALL MY COMPONENTS". Hold on, you might not actually need it.
 
