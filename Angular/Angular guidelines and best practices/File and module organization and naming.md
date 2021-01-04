@@ -9,12 +9,13 @@ As the project grows in size, it gets harder and harder to maintain a good file 
 Services should be placed in `src/app/services`.
 
 Try to keep the code grouped by domain. For example, if you have a `Post` class, `IPost` interface, and a `PostService` used for managing the blog posts, you can have all these files inside one directory like so:
-  - `src/app/services/post/`
-    - `post.service.ts`
-    - `post.service.spec.ts`
-    - `post.interface.ts`
-    - `post.model.ts`
-    - `post.model.spec.ts`
+
+- `src/app/services/post/`
+  - `post.service.ts`
+  - `post.service.spec.ts`
+  - `post.interface.ts`
+  - `post.model.ts`
+  - `post.model.spec.ts`
 
 ### Pages
 

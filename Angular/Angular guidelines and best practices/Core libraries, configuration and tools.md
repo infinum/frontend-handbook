@@ -135,6 +135,7 @@ Here are some good introductory tutorials to get you started:
 - Academind—[Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) playlist
 - Interactive diagrams—[RxJS Marbles](https://rxmarbles.com/)
   - this will help you a lot when trying to understand what specific operators do
+- Another tool to visualize the operators - [RxViz](https://rxviz.com/)
 - Angular documentation—[The RxJS Library](https://angular.io/guide/rx-library)
 
 We will discuss some RxJS-specific best practices in a [later chapter](/handbook/books/frontend/angular/angular-guidelines-and-best-practices/use-rxjs-wisely).

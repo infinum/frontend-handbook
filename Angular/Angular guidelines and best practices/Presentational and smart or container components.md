@@ -5,7 +5,6 @@ Design your components to be as small as possible and reuse them as much as poss
   - should not make use of services
   - pass events up instead of doing complex things with them
   - use `changeDetection: ChangeDetectionStrategy.OnPush` in the `@Component` declaration
-
 - Container (smart)
   - use multiple (if necessary) other components
   - serve data to presentational components

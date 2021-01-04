@@ -582,19 +582,9 @@ const observable$: Observable;
 const mySubject$: Subject;
 ```
 
-## Using and creating operators
+## Get to know the RxJS operators
 
-If you are using RxJS 5.5 or newer, make sure to use *[pipeable operators](https://github.com/ReactiveX/rxjs/blob/master/doc/pipeable-operators.md)* instead of *patch* operators.
-
-``` typescript
-// bad
-subject.do(() => { ... });
-
-// good
-subject.pipe(tap() => { ... });
-```
-
-Some common operators are:
+To make good use of RxJS and develop the application in a reactive way, it is important to utilize the operators. RxJS operators allow you to modify the stream of data in multiple ways. Some common operators are:
 
 - `map`
 - `filter`
@@ -605,9 +595,9 @@ Some common operators are:
 - `catchError` (replaces `.catch`)
 - `switchMap`
 
-Avoid doing a lot of logic in the `subscribe` callback. Subscribe as late as possible, and do all the necessary error catching, side-effects, and transformations via operators.
-
 You can also write your own operators. If you do so, it is strongly recommended to write them as [pure pipeable operator functions](https://github.com/ReactiveX/rxjs/blob/master/doc/operator-creation.md#operator-as-a-pure-function).
+
+Covering all the various operators is out of the scope of this handbook. Please refer to some of the learning resources mentioned earlier [[1](/handbook/books/frontend/angular/getting-started-with-angular/get-to-know-rxjs)] [[2](/handbook/books/frontend/angular/angular-guidelines-and-best-practices/core-libraries-configuration-and-tools#a-hrefhttpsgithubcomreactivexrxjs-target_blankrxjsa)].
 
 ## Observables and async/await
 
@@ -635,10 +625,11 @@ Spoiler alert! The result will be `bar`, and if we do not complete the source ob
 We recommend avoiding making manual subscription calls and asynchronous property assignment. The code example below has some comments indicating what is meant by "manual subscription" and "asynchronous property assignment".
 
 It is best to leave subscription handling to the `async` pipe because it:
-  - encourages [reactive programming](https://medium.com/front-end-weekly/why-should-we-use-reactive-programming-in-angular-2e2913297054)
-  - handles unsubscribing automatically
-  - works well with `OnPush` change detection
-  - avoids the need to do asynchronous property assignment
+
+- Encourages [reactive programming](https://medium.com/front-end-weekly/why-should-we-use-reactive-programming-in-angular-2e2913297054)
+- Handles unsubscribing automatically
+- Works well with `OnPush` change detection
+- Avoids the need to do asynchronous property assignment
 
 Component:
 
@@ -945,8 +936,9 @@ export class MyComponent implements OnChanges {
 ```
 
 Some notes:
-  - we wrapped everything in one `ng-container` to avoid calling the pipe twice
-  - be careful in case that your pipe can return a valid falsy value, as in that case the `*ngIf` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
+
+- We wrapped everything in one `ng-container` to avoid calling the pipe twice
+- Be careful in case that your pipe can return a valid falsy value, as in that case the `*ngIf` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
 
 ## No subscriptions in guards
 
@@ -1081,12 +1073,14 @@ Example of a glass box approach:
 This allows the parent component to add things like custom classes to the links or even make the links button instead of anchor elements. This makes for a more flexible component.
 
 Please check out some of these real-world examples of good implementations of glass box components:
-  - [CDK Tree](https://material.angular.io/cdk/tree/overview)
-  - [Material tabs](https://material.angular.io/components/tabs/overview)
+
+- [CDK Tree](https://material.angular.io/cdk/tree/overview)
+- [Material tabs](https://material.angular.io/components/tabs/overview)
 
 Here is also one interesting comparison between Material's and Nebular's implementation of a menu component:
-  - [Material menu](https://material.angular.io/components/menu/overview)
-  - [Nebular menu](https://akveo.github.io/nebular/docs/components/menu/overview#nbmenucomponent)
+
+- [Material menu](https://material.angular.io/components/menu/overview)
+- [Nebular menu](https://akveo.github.io/nebular/docs/components/menu/overview#nbmenucomponent)
 
 Material implementation takes the glass box approach, while Nebular leans more towards black-boxing. We believe this makes the Material implementation more flexible. For example, the material implementation allows you to have buttons or anchor elements inside the menu and to have custom components like icons inside each menu item. This is also possible with Nebular, but support for that had to be added in the menu component itself, by adding additional properties inside the menu data objects. This bloats the `NbMenuItem` interface which now includes all the various edge cases like icons, path matching, query params, badges, etc. If you need something similar to a badge but use your own custom component instead of the Nebular's badge, it might be hard to do it with this black box approach that Nebular took.
 
@@ -1094,7 +1088,7 @@ Please do not take this as us firing shots at Nebular. We still think that Nebul
 
 Long story short, we recommend taking the "glass box" approach as it allows for more flexibility.
 
-## Consider using the single observable pattern
+## The single observable pattern
 
 Did you ever find yourself in the `ng-container` nesting hell? It might have looked something like this:
 
@@ -1144,6 +1138,7 @@ export class MyComponent {
 ```
 
 We will not go into the details of this pattern in this handbook. To learn more about this pattern, please check out these videos:
-  - [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
-  - [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
-  - [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)
+
+- [Course Component Finished - Introduction to the Single Data Observable Pattern](https://angular-university.io/lesson/reactive-course-component-finished)
+- [Reactive Angular - The Single Data Observable Pattern](https://angular-university.io/lesson/reactive-angular-the-single-data-observable-pattern)
+- [Single Data Observable Pattern - Default Data Values](https://angular-university.io/lesson/reactive-single-data-observable-pattern-default-data-values)

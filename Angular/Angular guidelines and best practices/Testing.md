@@ -51,9 +51,7 @@ Dependency injection is very powerful during testing, as it allows you to provid
 Consider this example with a header component and user service which is used for logging in:
 
 ``` html
-...
 <button (click)="onLogInClick">Log in</button>
-...
 ```
 
 ```typescript
@@ -603,9 +601,7 @@ This allows us to test a more complex error handling, which usually includes som
 
 If you have helper functions, testing them is basically the same as in any other application in any framework (even Vanilla JS). You do not need TestBed. You just need good old Jasmine, and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.
 
-## Creating wrapper test components
-
-TODO
+## The testing module pattern
 
 ## Typing mock services
 
