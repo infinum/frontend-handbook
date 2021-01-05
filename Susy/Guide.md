@@ -1,19 +1,21 @@
-**Important:** this guide is made for Susy 2. For information about Susy 3 checkout [Susy 3 Docs](http://oddbird.net/susy/docs/).
+**Important:** This guide is written for Susy 2. For information about Susy 3, check out [Susy 3 Docs](http://oddbird.net/susy/docs/).
 
 ## Setting up
 
 ### Importing
-After installing it in any way you need (gem, bower, npm), you need to import the main Susy file into your application.scss file.
+
+After installing it in any way you need (gem, Bower, npm), you need to import the main Susy file into your application.scss file.
 
 ```scss
 @import 'susy';
 ```
 
-The nice thing about Susy is that you can import it anywhere without fear of extra css, because the only thing Susy offers are mixins and functions which won't compile into the final css.
+The great thing about Susy is that you can import it anywhere without fear of extra CSS, because the only thing Susy offers are mixins and functions which won't compile into the final CSS.
 
 ### Box sizing
-Next thing is to make sure the box sizing is set globally.
-Use border-box sizing. This can easily be set up using a Susy mixin:
+
+The next thing is to make sure that box sizing is set globally.
+Use border-box sizing. This can be easily set up using a Susy mixin:
 
 ```scss
 @include global-box-sizing(border-box);
@@ -22,7 +24,8 @@ Use border-box sizing. This can easily be set up using a Susy mixin:
 This will go into the `_core.scss` file.
 
 ### Basic configuration
-To set susy configuration you have to put the configuration object into the `$susy` sass variable.
+
+To set up a Susy configuration, you have to put the configuration object into the `$susy` Sass variable.
 
 For example:
 
@@ -41,12 +44,13 @@ $layout-no-gutter: (
 $susy: $layout-default;
 ```
 
-Use the `$layout` prefix for any Sass variable that holds a Susy configuration. The Susy configuration can be overridden on the fly when writing Sass, using the with-layout mixin - this is where the `$layout-no-gutter` variable could be used.
+Use the `$layout` prefix for any Sass variable that holds a Susy configuration. The Susy configuration can be overridden on the fly when writing Sass, using the with-layout mixin—this is where the `$layout-no-gutter` variable can be used.
 
 This goes into the `_config.scss` file.
 
-## Using susy
-You will primarily use Susy through its mixins:
+## Using Susy
+
+You will use Susy primarily through its mixins:
 
  * container
  * span
@@ -54,10 +58,11 @@ You will primarily use Susy through its mixins:
  * break
  * gallery
 
-This guide will go in depth on using these correctly. There are also function variants of most of these, which will be covered briefly.
+This guide will go in-depth on using these correctly. There are also function variants of most of these, which will be covered briefly.
 
 ### Container
-Container is set on elements the children of which are columns (defined by the span mixin). This will set the clearfix on the container element, as well as define the width if the Susy is configured as static.
+
+A container is set on elements whose children are columns (defined by the span mixin). This will set the clearfix on the container element as well as define the width if Susy is configured as static.
 
 Usage:
 
@@ -68,9 +73,10 @@ Usage:
 ```
 
 ### Span
-The span mixin is used on elements that will behave as columns to the grid. A span element should always be underneath an element with container defined in it.
 
-Example usage:
+The span mixin is used on elements that will behave as columns to the grid. A span element should always be underneath an element with a container defined in it.
+
+Example of use:
 
 ```scss
 .section {
@@ -82,7 +88,7 @@ Example usage:
 }
 ```
 
-Span can take multiple parameters, the first one always being the number of column units the span takes. The maximum number of column units is defined in the columns configuration property. This can be overriden on a per-span basis by using the `of` syntax.
+A span can take multiple parameters, the first one always being the number of column units the span takes. The maximum number of column units is defined in the column configuration property. This can be overridden on a per-span basis by using the `of` syntax.
 
 Example:
 
@@ -98,7 +104,7 @@ Example:
 
 This would generate a column half the width of the container (minus the gutter).
 
-Lastly, regarding gutters: if using the gutter-position value `after` you would need to set the last column to be last in the span call. For instance:
+Finally, regarding gutters: if you're using the `after` gutter-position value, you have to set the last column to be the last in the span call. For instance:
 
 ```scss
 .section {
@@ -116,12 +122,13 @@ Lastly, regarding gutters: if using the gutter-position value `after` you would 
 }
 ```
 
-In most cases you want to use gutter-position `before` or `after` - `after` being preferred.
+In most cases, you want to use the `before` or `after` gutter-position, with `after` being preferred.
 
 ### With layout
+
 `with-layout` is a very useful mixin for generating specific context in which to use Susy mixins.
 
-In the basic configuration section, there was an example layout configuration set in the `$layout-no-gutter` Sass variable.
+In the Basic configuration section, there was an example layout configuration set in the `$layout-no-gutter` Sass variable.
 
 ```scss
 $layout-no-gutter: (
@@ -129,7 +136,7 @@ $layout-no-gutter: (
 );
 ```
 
-If for example you need to generate columns with no gutters, by using the with-layout mixin you can generate a nested context with the new configuration as such:
+If, for example, you need to generate columns with no gutters, you can generate a nested context with the new configuration by using the with-layout mixin:
 
 ```scss
 @include with-layout($layout-no-gutter) {
@@ -148,7 +155,7 @@ If for example you need to generate columns with no gutters, by using the with-l
 }
 ```
 
-In the previous example this could have also been used to set the number of columns. For instance:
+In the previous example, this could have been used to set the number of columns as well. For instance:
 
 ```scss
 $layout-for-section: (
@@ -174,9 +181,10 @@ $layout-for-section: (
 You can see how this makes Susy very flexible, without the need for custom overriding.
 
 ### Break
-To be able to create rows, the mixin `break` is used. Break will force a clear on the columns appearing above, making it possible to create a row.
 
-In the case of the following Sass and HTML:
+You use the `break` mixin to create rows. The break will force a clear on the columns appearing above, making it possible to create a row.
+
+In the case of the following sass and HTML:
 
 ```scss
 .section {
@@ -204,14 +212,15 @@ In the case of the following Sass and HTML:
 </div>
 ```
 
-This would allow the first column to be on the row on its own (and take half the container width) while the other two columns will go to the second row.
+This allows the first column to be on its own in the row (and take half the container width), while the other two columns go to the second row.
 
 ### Gallery
-The `gallery` mixin is used when you need a varying number of same-height columns. As the name suggest, it makes creating a gallery grid easy.
 
-The `gallery` mixin is very similiar to the span mixins, except there will be no need to define the first or last element. (It allows for a dynamic number of items as such)
+The `gallery` mixin is used when you need a varying number of same-height columns. As the name suggests, it makes creating a gallery grid easy.
 
-If items are not of the same height, a strange floating issue will occur - consider using break with span in that case.
+The `gallery` mixin is very similiar to the span mixin, except there is no need to define the first or last element. (It allows for a dynamic number of items as such).
+
+If the items are not of the same height, a strange floating issue will occur—consider using a break with span in that case.
 
 Usage:
 
@@ -226,12 +235,14 @@ Usage:
 ```
 
 ## Other functionality
-While those are the meat of the Susy toolkit, there are some other useful functionality it offers.
 
-### Push, Pull, Post
-* `push` will move the span by the indicated number of column units (margin-left)
-* `pull` will move a span backwards a number of column units. (negative margin-left)
-* `post` will move any span after this one a number of column units. (margin-right)
+While these are the flesh of the Susy toolkit, there is some other useful functionality it offers.
+
+### Push, pull, post
+
+* `push` will move the span the indicated number of column units (margin-left)
+* `pull` will move the span backwards a number of column units (negative margin-left)
+* `post` will move any span after the current one a number of column units (margin-right)
 
 Example:
 
@@ -265,7 +276,7 @@ Example:
 }
 ```
 
-With html
+With HTML
 
 ```html
 <div class="section">
@@ -287,7 +298,8 @@ Will result in:
 ```
 
 ### Functions
-If for some reason you want to manually set widths of spans or columns, or just need the calculated widths, you can use the functions of the same name as mixins to get it.
+
+If, for some reason, you want to manually set the width of spans or columns, or just need the calculated widths, you can use the functions of the same name as mixins.
 
 Examples:
 
@@ -302,5 +314,4 @@ Examples:
   margin-right: gutter(6 of 12);
 }
 ```
-
-For any other information read the documentation.
+Read the documentation if you need any other information.

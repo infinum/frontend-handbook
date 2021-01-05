@@ -1,8 +1,8 @@
 # TypeScript + React
 
-*For general info on using JSX with TypeScript checkout the guidelines in TypeScript's official documentation [JSX · TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)*.
+*For general info on using JSX with TypeScript, check out the guidelines in TypeScript's official documentation [JSX · TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)*.
 
-### Component Declaration
+### Component declaration
 
 When declaring a React class component in TypeScript, set two generic types that describe props and state.
 
@@ -15,8 +15,8 @@ export class ComponentName extends React.Component<{/*prop types*/}, {/*state ty
 ### Props
 
 For validating props in TypeScript classes:
-- use TypeScript's built in types instead of `prop-types`
-- if no local component state is set, skip it (when MobX is used for state management this is usually always the case)
+- use TypeScript's built-in types instead of `prop-types`
+- if no local component state is set, skip it (this is usually the case when MobX is used for state management)
 
 ``` typescript
 export class ComponentName extends React.Component<{
@@ -34,7 +34,7 @@ Use interfaces when you have a set of common props used in more than a few compo
 interface CommonProps {
   // prop types
 }
-``` 
+```
 
 ``` typescript
 import { CommonProps } from 'interfaces/CommonProps';
@@ -44,7 +44,8 @@ export class ComponentName extends React.Component<CommonProps & { active?: bool
 }
 ```
 
-### Class Members and Methods
+### Class members and methods
+
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
