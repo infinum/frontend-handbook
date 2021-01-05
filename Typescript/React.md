@@ -34,7 +34,7 @@ Use interfaces when you have a set of common props used in more than a few compo
 interface CommonProps {
   // prop types
 }
-``` 
+```
 
 ``` typescript
 import { CommonProps } from 'interfaces/CommonProps';
@@ -45,6 +45,7 @@ export class ComponentName extends React.Component<CommonProps & { active?: bool
 ```
 
 ### Class members and methods
+
 React's lifecycle hooks and render method have to be declared public. Local data and methods that are not passed to child components are generally declared private.
 
 ``` typescript
