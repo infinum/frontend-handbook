@@ -3,6 +3,7 @@
 ## Setting up
 
 ### Importing
+
 After installing it in any way you need (gem, Bower, npm), you need to import the main Susy file into your application.scss file.
 
 ```scss
@@ -12,6 +13,7 @@ After installing it in any way you need (gem, Bower, npm), you need to import th
 The great thing about Susy is that you can import it anywhere without fear of extra CSS, because the only thing Susy offers are mixins and functions which won't compile into the final CSS.
 
 ### Box sizing
+
 The next thing is to make sure that box sizing is set globally.
 Use border-box sizing. This can be easily set up using a Susy mixin:
 
@@ -22,6 +24,7 @@ Use border-box sizing. This can be easily set up using a Susy mixin:
 This will go into the `_core.scss` file.
 
 ### Basic configuration
+
 To set up a Susy configuration, you have to put the configuration object into the `$susy` Sass variable.
 
 For example:
@@ -46,6 +49,7 @@ Use the `$layout` prefix for any Sass variable that holds a Susy configuration. 
 This goes into the `_config.scss` file.
 
 ## Using Susy
+
 You will use Susy primarily through its mixins:
 
  * container
@@ -54,9 +58,10 @@ You will use Susy primarily through its mixins:
  * break
  * gallery
 
-This guide will go in depth on using these correctly. There are also function variants of most of these, which will be covered briefly.
+This guide will go in-depth on using these correctly. There are also function variants of most of these, which will be covered briefly.
 
 ### Container
+
 A container is set on elements whose children are columns (defined by the span mixin). This will set the clearfix on the container element as well as define the width if Susy is configured as static.
 
 Usage:
@@ -68,6 +73,7 @@ Usage:
 ```
 
 ### Span
+
 The span mixin is used on elements that will behave as columns to the grid. A span element should always be underneath an element with a container defined in it.
 
 Example of use:
@@ -119,6 +125,7 @@ Finally, regarding gutters: if you're using the `after` gutter-position value, y
 In most cases, you want to use the `before` or `after` gutter-position, with `after` being preferred.
 
 ### With layout
+
 `with-layout` is a very useful mixin for generating specific context in which to use Susy mixins.
 
 In the Basic configuration section, there was an example layout configuration set in the `$layout-no-gutter` Sass variable.
@@ -174,9 +181,10 @@ $layout-for-section: (
 You can see how this makes Susy very flexible, without the need for custom overriding.
 
 ### Break
+
 You use the `break` mixin to create rows. The break will force a clear on the columns appearing above, making it possible to create a row.
 
-In the case of the following Sass and HTML:
+In the case of the following sass and HTML:
 
 ```scss
 .section {
@@ -207,7 +215,8 @@ In the case of the following Sass and HTML:
 This allows the first column to be on its own in the row (and take half the container width), while the other two columns go to the second row.
 
 ### Gallery
-The `gallery` mixin is used when you need a varying number of same-height columns. As the name suggest, it makes creating a gallery grid easy.
+
+The `gallery` mixin is used when you need a varying number of same-height columns. As the name suggests, it makes creating a gallery grid easy.
 
 The `gallery` mixin is very similiar to the span mixin, except there is no need to define the first or last element. (It allows for a dynamic number of items as such).
 
@@ -226,9 +235,11 @@ Usage:
 ```
 
 ## Other functionality
+
 While these are the flesh of the Susy toolkit, there is some other useful functionality it offers.
 
 ### Push, pull, post
+
 * `push` will move the span the indicated number of column units (margin-left)
 * `pull` will move the span backwards a number of column units (negative margin-left)
 * `post` will move any span after the current one a number of column units (margin-right)
@@ -287,6 +298,7 @@ Will result in:
 ```
 
 ### Functions
+
 If, for some reason, you want to manually set the width of spans or columns, or just need the calculated widths, you can use the functions of the same name as mixins.
 
 Examples:
