@@ -4,7 +4,7 @@
 
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
-A simple form block using BEM could look like this:
+A simple form block using BEM can look like this:
 
 ```html
 <form class="login-form">
@@ -19,7 +19,7 @@ A simple form block using BEM could look like this:
 </form>
 ```
 
-Where the class `login-form` is the block name, classes `login-form__row`, `login-form__label` and `login-form__input` are elements and classes `login-form__input--username` and `login-form__input--password` are modifiers.
+...where the `login-form` class is the block name, the `login-form__row`, `login-form__label`, and `login-form__input` classes are elements, and the `login-form__input--username` and `login-form__input--password` classes are modifiers.
 
 ## Blocks
 
@@ -27,9 +27,9 @@ Syntax: `<block-name>`
 
 ### Block naming
 
-Block name is a dash separated list of words describing the block and its use.
+A block name is a list of words separated with a dash describing the block and its use.
 
-Care should be taken not to use too abstract or vague names. Names such as `button` or `list` should be avoided as they couldn't be properly defined to fit everywhere. As such you cannot reuse them properly. Too specific names are also not very useful, as they could prevent reuse on other parts of the page.
+Take care not to use names that are too abstract or vague. Names such as `button` or `list` should be avoided as they can't be properly defined to fit everywhere. As such, you cannot reuse them properly. Names that are too specific are also not very useful, as they might prevent reuse on other parts of the page.
 
 ```html
 <div class="my-block">
@@ -67,7 +67,7 @@ Care should be taken not to use too abstract or vague names. Names such as `butt
 
 Syntax: `<block-name>--<block-modifier-name>`
 
-A block modifier is a class used to modify the appearance of a block in a certain context. A block modifier name is a dash spearated list of names prefixed with the block name and two dashes.
+A block modifier is a class that is used to modify the appearance of a block in certain contexts. A block modifier name is a list of names separated with a dash and prefixed with the block name and two dashes.
 
 ```scss
 .my-block {
@@ -85,9 +85,9 @@ A block modifier is a class used to modify the appearance of a block in a certai
 </div>
 ```
 
-### Block usage
+### Using blocks
 
-Not everything is a block. This is not Minecraft. Just because an HTML element has children doesn't necessarily mean it is, or should be a block. If an HTML element, and its styling makes no sense in the layout anywhere outside its position, it is not a block. If an HTML element cannot be reused, it is probably not a block. If an HTML element has no children, it is probably not a block. There are cases where this is not true, as each case is unique.
+Not everything is a block. This is not Minecraft. Just because an HTML element has children, that doesn't necessarily mean it is, or should be, a block. If an HTML element and its styling make no sense in the layout anywhere outside its position, it is not a block. If an HTML element cannot be reused, it is probably not a block. If an HTML element has no children, it is probably not a block. There are cases where this is not true as each case is unique.
 
 *A bad block example*
 
@@ -130,7 +130,7 @@ Not everything is a block. This is not Minecraft. Just because an HTML element h
 }
 ```
 
-The "item" block is not really a block, it is actually only meaningful under the link-list (or even main-navigation) block. As such it should just be an element, even though it has a child element.
+The "item" block is not really a block. Actually, it is meaningful only under the link-list (or even main-navigation) block. As such, it should be only an element, even though it has a child element.
 
 *Fixed example*
 
@@ -175,10 +175,10 @@ Syntax: `<block-name>__<element-name>`
 
 ### Element naming
 
-Element name is a dash separated list of words describing the element and its use and purpose under its block. It is prefixed with the block name and two underscores or just two underscores as a shorthand. Usage of full name is recommended as overriding behavior might occur otherwise.
+An element name is a list of words separated with a dash describing the element and its use and purpose under its block. It is prefixed with the block name and two underscores or just two underscores as a shorthand. Using a full name is recommended. Otherwise, an overriding behavior might occur.
 
-Unlike blocks, element naming can be abstract and vague, as it is only meaningful under its parent block. Still, care should be taken to have names that describe the element's use in a block. There is no point in using the block name in the element name, as that would only bring redundancy.
-A nice thing from SASS to use for writing elements is the parent - & symbol. A block with an element can be written in sass as:
+Unlike blocks, naming elements can be abstract and vague, as they are meaningful only under their parent block. Still, you should take care not to have names that describe the element's use in a block. There is no point in using the block name in the element name as that would only result in redundancy.
+The parent & symbol from sass proves very useful when writing elements. A block with an element can be written in sass as:
 
 ```scss
 .my-block {
@@ -190,7 +190,7 @@ A nice thing from SASS to use for writing elements is the parent - & symbol. A b
 }
 ```
 
-Resulting in css:
+Resulting in a CSS:
 
 ```scss
 .my-block {
@@ -203,7 +203,7 @@ Resulting in css:
 }
 ```
 
-If you actually need it to nest inside of the block class, in the SASS you would have to use the & before the element, or use string interpolation.
+If you need it to nest inside of the block class, in sass, you would have to use the & symbol before the element or string interpolation.
 
 Example:
 
@@ -233,7 +233,7 @@ Results in:
   }
 ```
 
-Where the `&` will interpolate into the block name. Use it.
+...where the `&` character will interpolate into the block name. Use it.
 
 Examples:
 
@@ -281,7 +281,7 @@ Syntax:
 <block-name>__<element-name>--<element-modifier-name>
 ```
 
-An element modifier is a class used to modify the appearance of a element in a certain context. A element modifier name is a dash separated list of names prefixed with the element name and two dashes.
+An element modifier is a class that is used to modify the appearance of an element in certain contexts. An element modifier name is a list of names separated with a dash and prefixed with the element name and two dashes.
 
 ```scss
 
@@ -306,9 +306,9 @@ An element modifier is a class used to modify the appearance of a element in a c
 </div>
 ```
 
-### Element usage
+### Using elements
 
-Elements only make sense inside a block. Never should an element be without its block, either in HTML or SASS. When reusing the block, its elements don't necessarily have to be used in the same order, or at all.
+Elements make sense only inside a block. Never should an element be without its block, either in HTML or sass. When reusing the block, its elements don't necessarily have to be used in the same order, nor do they have to be used at all.
 
 *Bad elements example*
 
@@ -360,9 +360,9 @@ Elements only make sense inside a block. Never should an element be without its 
 }
 ```
 
-The `highlighted` block is not really a block, it is an element, as it can only live inside of the statistic block. Also, the `highlighted__text` element it houses also makes sense only inside the statistic, so it is an element of statistic, and not highlighted.
+The `highlighted` block is not really a block. It is an element because it can live inside of the statistic block only. Also, the `highlighted__text` element it houses also makes sense only inside the statistic, so it is an element of the statistic, not highlighted.
 
-The `statistics-list__statistic--no-first` modifier doesn't make sense, as the modifier should be applied to the statistic block. The `statistics-list__statistic` element shouldn't worry about its content implementation, it should only have styles based on its position and appearance inside the "statistics-list" block.
+The `statistics-list__statistic--no-first` modifier doesn't make sense because the modifier should be applied to the statistic block. The `statistics-list__statistic` element shouldn't worry about its content implementation; it should have styles that are based only on its position and appearance inside the "statistics-list" block.
 
 *Fixed example*
 
@@ -417,6 +417,6 @@ The `statistics-list__statistic--no-first` modifier doesn't make sense, as the m
 
 ### Other notes
 
-* A HTML element can be a block and an element, and can have any number of modifiers for both of those, but will never be 2 or more blocks, or 2 or more elements.
+* An HTML element can be a block and an element, and can have any number of modifiers for both. However, it will never be 2 or more blocks, or 2 or more elements.
 * **A block should never care about its position on the page, only about its appearance.** If a block needs to be positioned inside the block it is in, it is probably also an element of the parent block.
-* A modifier should not be used for a dynamic way of changing the appearance of a block or an element. An is-class is used for that. As a modifier contains the block name it should not be selected through JavaScript, as well as any other block or element class.
+* A modifier should not be used to change the appearance of a block or an element in a dynamic way. An IS class is used for that. As the modifier contains the block name, it should not be selected through JavaScript, as well as any other block or element class.

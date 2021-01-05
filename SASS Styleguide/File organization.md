@@ -71,14 +71,14 @@ If everything is done correctly, load order shouldn't matter, so using wildcards
 * \_folder.scss
 * application.scss
 
-The `folder.scss` file would contain:
+the `folder.scss` file would contain:
 
 ```css
 @import 'folder/first';
 @import 'folder/second';
 ```
 
-And the `application.scss` file would contain:
+and the `application.scss` file would contain:
 
 ```css
 @import 'folder';
@@ -92,7 +92,7 @@ The vendor folder should have CSS or SCSS files that are obtained from outside s
 
 Overrides are files that directly override vendor classes. For example, Bootstrap's `modal` class would be overridden in the `bootstrap.scss` inside the override folder with the `modal` class.
 
-Any global overrides for the vendor files should go into the override folder, with the same name as the vendor file, so they can easily be found when necessary.
+Any global overrides for the vendor files should go into the override folder with the same name as the vendor file, so that they can be easily found when necessary.
 
 ### Core and config
 
@@ -128,7 +128,7 @@ When you're working on a project with `_shame.scss`, always check the file when 
 The colors file should only contain color variables of the base and global kind.
 All colors for blocks or elements should go into their local file on the top.
 
-Base colors are actual color values used on the site. They will be used by both global colors and block-element colors. 
+Base colors are actual color values used on the site. They will be used by both global colors and block-element colors.
 
 Avoid using names that correspond to the actual colors when naming color variables. Better use something like `rouge`, `wood`, `mercury`, etc.
 
@@ -151,7 +151,7 @@ $primary-color: $base-red-color;
 $primary-text-color: $base-light-gray-color;
 ```
 
-Block element colors go into their respective files on the top, and are defined as such:
+Block element colors go into their respective files on the top and are defined as such:
 
 Syntax: `[block-name][__element-name]-<property>-color`
 
@@ -217,7 +217,8 @@ $breakpoint-tablet: '(max-width: 991px)';
 
 The placeholders file should contain globally shared pseudoclasses (or placeholders). Pseudoclasses in SASS are classes beginning with %, which generate no CSS
 output but can be extended using the SASS directive @extend.
-Examples of using a global placeholder.
+
+Examples of using a global placeholder:
 
 * [SASS reference on pseudoclasses](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#placeholder_selectors_)
 * [SASS reference on extend](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#extend)
@@ -260,7 +261,8 @@ Examples of using a global placeholder.
 ### Mixins
 
 The mixins file should contain any global mixin that can help organize SASS better. If your project contains a lot of mixins, it is recommended that you put them in separate files and group them according to their purpose. Then put all those files inside a new folder called **mixins**.
-For instance, adding clearfix.
+
+For instance, adding clearfix:
 
 ```scss
 @mixin clearfix() {
