@@ -1,10 +1,10 @@
-Here are some links that might help you with your frontend troubles.
+Here are some links that might help you with your front end troubles.
 
 ## External links
 * [MDN](https://developer.mozilla.org/en-US/)
 * [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 * [Susy documentation](http://susydocs.oddbird.net/en/latest/)
-* [Tips and tricks for DevTools](https://developer.chrome.com/devtools/docs/tips-and-tricks)
+* [Tips and Tricks for DevTools](https://developer.chrome.com/devtools/docs/tips-and-tricks)
 * [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/)
 * [Eloquent JavaScript](http://eloquentjavascript.net/)
 * [Can I use](http://caniuse.com/)

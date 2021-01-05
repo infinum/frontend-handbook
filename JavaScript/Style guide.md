@@ -211,7 +211,7 @@ function sayHi(name) {
 
 ## [Functions](#functions)
 
-Never use `arguments`, opt to use rest syntax `...` instead.
+Never use `arguments`; opt to use rest syntax `...` instead.
 
 ```js
 // bad
@@ -232,7 +232,7 @@ Use default parameter syntax rather than mutating function arguments.
 // really bad
 function handleThings(opts) {
   // No! We shouldn't mutate function arguments.
-  // Double bad: if opts is falsy it'll be set to an object which may
+  // Double bad: if opts is falsy, it'll be set to an object which may
   // be what you want but it can introduce subtle bugs.
   opts = opts || {};
   // ...
@@ -251,7 +251,7 @@ function handleThings(opts = {}) {
   // ...
 }
 
-Always put default parameters last.
+Always put the default parameters last.
 
 // bad
 function handleThings(opts = {}, name) {
@@ -266,7 +266,7 @@ function handleThings(name, opts = {}) {
 
 ## [Arrow functions](#arrow-functions)
 
-When you must use function expressions (as when passing an anonymous function), use arrow function notation.
+When you must use function expressions (e.g., when passing an anonymous function), use arrow function notation.
 
 ```js
 // bad
@@ -411,7 +411,7 @@ function checkName(hasName) {
 
 ## [Hoisting](#hoisting)
 
-`var` declarations get hoisted to the top of their scope, their assignment does not. `const` and `let` declarations have [Temporal Dead Zones (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). It's important to know why [typeof is no longer safe](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15).
+`var` declarations get hoisted to the top of their scope; their assignment does not. `const` and `let` declarations have [Temporal Dead Zones (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). It's important to know why [typeof is no longer safe](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15).
 
 ```js
 // we know this wouldn't work (assuming there
