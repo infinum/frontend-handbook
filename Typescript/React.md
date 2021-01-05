@@ -16,7 +16,7 @@ export class ComponentName extends React.Component<{/*prop types*/}, {/*state ty
 
 For validating props in TypeScript classes:
 - use TypeScript's built-in types instead of `prop-types`
-- if no local component state is set, skip it (when MobX is used for state management, this is usually always the case)
+- if no local component state is set, skip it (this is usually the case when MobX is used for state management)
 
 ``` typescript
 export class ComponentName extends React.Component<{
