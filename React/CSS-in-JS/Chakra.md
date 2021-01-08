@@ -45,24 +45,99 @@ For including `<CSSReset />` just add `resetCSS` prop to `<ChakraProvider>`
 ### Style props
 
 Style props are a way to alter the style of a component by simply passing props to it. It helps to save time by providing helpful shorthand ways to style components.
-
 Alternative to that is using sx prop that takes an object with style rules.
 
-```tsx
-// shorthand width prop
-<Box w="400px">Lorem Ipsum is simply dummy text</Box>
+Style props should be used for one-off styles:
 
-// sx prop
-<Box sx={{ width: '400px'}}>Lorem Ipsum is simply dummy text</Box>
+```tsx
+<Button display="block" mt="md">
+  Click me!
+</Button>
+```
+
+`sx` prop should be used when you have multiple styles:
+
+```tsx
+<Button
+  sx={{
+    display: "block",
+    mt: "md",
+    color: "primary.100",
+    mx: 12,
+  }}
+>
+  Click me!
+</Button>
 ```
 
 For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
+
+<!-- There is also `__css` prop that is similar to `sx`. The only difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
+
+`__css` prop should be used in atom components for defining based styles.
+
+```tsx
+  const Button =
+``` -->
+
+### Chakra Factory
+
+Chakra factory serves as an object of chakra JSX elements, and also a function that can be used to enable custom component receive chakra's style props.
+
+```tsx
+import { chakra } from "@chakra-ui/react";
+
+// object
+<chakra.button
+  sx={{
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  }}
+>
+  Click me
+</chakra.button>;
+
+// function
+chakra("button", {
+  baseStyle: {
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  },
+});
+```
+
+This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
+
+Chakra factory function should be only used in atom components. They will be defined with base style and can be overridden by `sx` prop because `baseStyle` is merged before `sx` ([merge order](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L104))
+
+#### Custom component example
+
+For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` or style props to `<DatePicker />`
+
+Example:
+
+```tsx
+import DatePicker from "react-datepicker";
+import { chakra } from "@chakra-ui/react";
+
+const StyledaDatepicker = chakra(DatePicker);
+
+export const Datepicker = () => (
+  <StyledaDatepicker sx={{ width: "100%", bg: "blue.100" }} />
+);
+```
+
+Chakra factory function will pass `className` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
+
+For more about chakra factory read [docs](https://chakra-ui.com/docs/features/chakra-factory)
 
 #### The `as` polymorphic prop
 
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
 
-`as` prop (`polymorphic prop`) is feature from emotion borrowed from styled-components
+`as` prop (`polymorphic prop`) is a feature of emotion borrowed from styled-components
 
 - [emotion as prop](https://emotion.sh/docs/styled#as-prop)
 - [styled-components polymorphic prop](https://styled-components.com/docs/api#as-polymorphic-prop)
@@ -181,8 +256,6 @@ src
             └── button.ts
 ```
 
-<!-- TODO maybe detail description of each folder or list of files per folder? -->
-
 ### Colors
 
 Color naming should a single value or an object with keys in range from 50 to 900.
@@ -258,8 +331,6 @@ Global styles are theme-aware styles you can apply to any html element globally.
 
 They are defined in `src/styles/theme/styles.ts` file.
 
-<!-- TODO maybe what should be defined in global -->
-
 Example:
 
 ```ts
@@ -319,7 +390,7 @@ For responsive styles, array or object syntax can be used.
 </Text>
 ```
 
-In case we need to skip cretan breakpoint, `null` is passed at that position in the array to avoid generating unnecessary CSS.
+In case we need to skip a certain breakpoint, `null` is passed at that position in the array to avoid generating unnecessary CSS.
 
 Example:
 
@@ -332,55 +403,6 @@ Array and Object syntax work for every style prop in the theme specification, wh
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
 
 For more about responsive styles read [styled-system responsive styles docs](https://styled-system.com/responsive-styles/)
-
-### Chakra Factory
-
-Chakra factory serves as an object of chakra JSX elements, and also a function that can be used to enable custom component receive chakra's style props.
-
-```tsx
-import { chakra } from "@chakra-ui/react";
-
-// object
-<chakra.button
-  sx={{
-    shadow: "lg",
-    rounded: "lg",
-    bg: "white",
-  }}
->
-  Click me
-</chakra.button>;
-
-// function
-chakra("button", {
-  baseStyle: {
-    shadow: "lg",
-    rounded: "lg",
-    bg: "white",
-  },
-});
-```
-
-This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
-
-For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` or style props to `<DatePicker />`
-
-Example:
-
-```tsx
-import DatePicker from "react-datepicker";
-import { chakra } from "@chakra-ui/react";
-
-const ChakraDatepicker = chakra(DatePicker);
-
-export const Datepicker = () => (
-  <ChakraDatepicker sx={{ width: "100%", bg: "blue.100" }} />
-);
-```
-
-Chakra factory function will pass `className` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
-
-For more about chakra factory read [docs](https://chakra-ui.com/docs/features/chakra-factory)
 
 ### Custom components style
 
@@ -414,8 +436,6 @@ const baseStyle: StyleObjectOrFn = {
 };
 ```
 
-<!-- TODO change this example to use color schema -->
-
 `variants` represents visual style.
 
 ```tsx
@@ -430,7 +450,7 @@ const variants: { [variant: string]: StyleObjectOrFn } = {
       bg: 'neutral.200',
     }
   },
-	outline: (props: Dict): SystemStyleObject => ({
+  outline: (props: Dict): SystemStyleObject => ({
     bg: 'transparent',,
     border: '1px solid',
     borderColor: 'primary.100',
