@@ -101,7 +101,7 @@ const TabNavigator: React.FC<ITabNavigatorProps> = (props) => {
 ```
 
 #### 1.4 Drawer
-Usually, applications have one navigation tab which should be in `navigation/drawer`. When using tab navigation, each `Tab.Screen` component should target a stack with related screens.
+Applications with drawer navigation should be defined in `navigation/drawer`. When using drawer navigation, each `Drawer.Screen` component should target a stack or single related screen.
 
  ```typescript
 const Drawer = createDrawerNavigator();
