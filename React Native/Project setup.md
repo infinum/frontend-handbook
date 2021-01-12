@@ -12,7 +12,7 @@ When starting a new React Native project there are two possible options / tools 
 
 When creating a new RN project check CLI [commands](https://github.com/react-native-community/cli/blob/master/docs/commands.md) to get familiar with all options.
 
-Generally, most of our projects use `typescript` and `npm` as package manager. This means that for creation & initialization of a new project u need to use command:
+Generally, most of our projects use `typescript` and `npm` as package manager. This means that for creation & initialization of a new project you need to use command:
 
 ````sh
 npx react-native init AwesomeProjectName --template react-native-template-typescript --npm
