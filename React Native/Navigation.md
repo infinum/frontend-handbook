@@ -142,7 +142,7 @@ export interface IHomeRouteProps {
 ```
 3.
  ```typescript
-export type HomeStackScreenProps<T extends keyof HomeStackParamList = {
+export type HomeStackScreenProps<T extends keyof HomeStackParamList> = {
 	navigation: StackNavigationProp<HomeStackParamList, T>;
 	route: RouteProp<HomeStackParamList, T>;
 };
