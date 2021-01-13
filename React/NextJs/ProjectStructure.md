@@ -1,10 +1,6 @@
 # Project file structure
 
 ## Organizing components
-(For PR Review):
-I believe this section will be refactored once we get around with all chakra stuff and component organization methodology.
-I kept going with only atomic design approach.
-
 ### UI Components
 
 Before implementing [atomic design methodology](https://github.com/danilowoz/react-atomic-design), our common practice was separating components by the scope of the page + core components + shared components like this:
@@ -16,16 +12,16 @@ Lowercase folders were indicators of a page scope (except of core).
 ├── src
 └── components
     ├── core
-    │   └── Button
-    │       ├── index.tsx
+    │   └── button
+    │       ├── Button.tsx
     │       └── stories.tsx
     ├── admin
-    │   └── WelcomeBanner
-    │       └── index.tsx
-    ├── Carousel
-    │   └── index.tsx
-    └── Card
-        └── index.tsx
+    │   └── welcome-banner
+    │       └── WelcomeBanner.tsx
+    ├── carousel
+    │   └── Carousel.tsx
+    └── card
+        └── Card.tsx
 ```
 
 With atomic design, we would completely separate all UI components and build them as a blocks of atoms, molecules and organisms (together with templates and pages for putting everything together at the end) 
@@ -36,17 +32,17 @@ src
 └── components
     └── ui
         ├── atoms
-        │   └── Button
+        │   └── button
         │       ├── Button.tsx
         │       └── stories.tsx
         ├── molecules
-        │   ├── Card
-        │   │   └── index.tsx
-        │   └── WelcomeBanner
-        │       └── index.tsx
+        │   ├── card
+        │   │   └── Card.tsx
+        │   └── welcome-banner
+        │       └── WelcomeBanner.tsx
         └── organisms
-            └── Carousel
-                └── index.tsx
+            └── carousel
+                └── Carousel.tsx
 ```
 
 ## Different molecule layouts
@@ -58,11 +54,11 @@ In this case, inside a specific molecule, we could add a subfolder `layouts` (no
 ```
 .
 └── molecules
-    └── Card
+    └── card
         ├── layouts
         │   ├── Desktop.tsx
         │   └── Mobile.tsx
-        └── index.tsx
+        └── Card.tsx
 ```
 
 For this case, inside `index.tsx` we would have something like this:
@@ -95,12 +91,12 @@ You will define your different layouts inside `layouts` folder:
 .
 └── components
     └── layouts
-        ├── AdminLayout
-        │   └── index.tsx
-        ├── MainLayout
-        │   └── index.tsx
-        └── BlogLayout
-            └── index.tsx
+        ├── admin-layout
+        │   └── AdminLayout.tsx
+        ├── main-layout
+        │   └── MainLayout.tsx
+        └── blog-layout
+            └── BlogLayout.tsx
 ```
 
 Then, when creating your routes (pages), you will wrap your page in the layout that represents the current page:
@@ -128,14 +124,14 @@ export default function Admin() {
 
 ## Setting up store
 
-Your datx store will be placed in the root of the `src` folder as follows:
+Your datx store and models will be placed in the root of the `src` folder as follows:
 
 ```
 src
+├── models
+│   ├── User.ts
+│   └── Session.ts
 └── store
-    ├── models
-    │   ├── User.ts
-    │   └── Session.ts
     ├── utlis
     │   ├── config.ts
     │   └── initializeStore.ts
@@ -150,7 +146,7 @@ In `src/fetchers` you will organize your (swr) fetchers, usually by the model on
 // src/fetchers/user.ts
 
 import { AppCollection } from '../store';
-import { User } from '../store/models/User';
+import { User } from '../models/User';
 
 export async function fetchUser(store: AppCollection, id: string): Promise<User> {
   try {
@@ -176,37 +172,36 @@ _Sync with @mamihi_official_
 
 ## Tests
 
-(For PR Review):
-I personally did not do testing that much, so I found inspiration for writing in some projects and blogs.
-I believe this section will be refactored.
+When organizing test files, here are couple of quick rules:
+- Components, utils, fetchers... should have a test file in the same folder where they are placed
+- When testing pages, create `__tests__/pages` folder because how next treats pages folder.
+- All mocks should be placed in `__mocks` folder
 
-### Components
-
-When testing atoms or molecules, you ussualy want to place test file within the same folder:
-```
-└── atoms
-    └── Button
-        ├── __snapshots__
-        ├── index.tsx
-        ├── stories.tsx
-        └── Button.test.tsx
-```
-
-### Utils and hooks
-
-Testing files for hooks and files are gona be placed in a special subfolder so it could be catched when running tests.
+Folder structure would look something like this:
 
 ```
-  .
-  ├── hooks
-  │   ├── __tests__
-  │   │   ├── useModal.test.ts
-  │   │   └── useNotification.test.ts
-  │   ├── useModal.ts
-  │   └── useNotification.ts
-  └── utils
-      ├── __tests__
-      │   └── generateFileTree.test.ts
-      └── generateFileTree.ts
-
+src
+.
+├── __mocks__
+│   └── react-i18next.tsx
+├── __tests__
+│   ├── pages
+│   │   └── user.test.ts
+│   └── test-utils.tsx
+├── pages
+│   └── user.ts
+├── fetchers
+│   └── users
+│      ├── users.ts
+│      └── users.test.ts
+└── components
+    └── ui
+        ├── atoms
+        │   └── button
+        │       ├── Button.test.tsx
+        │       └── Button.tsx
+        └── molecules
+            └── user-card
+                ├── UserCard.test.tsx
+                └── UserCard.tsx
 ```
