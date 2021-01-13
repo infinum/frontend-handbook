@@ -23,13 +23,13 @@ The fingerprinted links to JS and CSS chunks will be different for each build an
 
 JS and CSS chunks that are linked to from the `index.html` file are fingerprinted and because of that they can be cached indefinitely. If we create a new application build, the `index.html` file will be re-validated and the client will load new chunks.
 
-**Rule #2**: Cache fingerprinted JS and CSS files with a long expiration time
+**Rule #2**: Cache fingerprinted JS and CSS files with a long expiration time!
 
 ## Static assets
 
-The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on Webpack configuration and the way that the assets are used, fingerprint all the images and other static assets. In Angular, static assets like images and custom fonts are placed in `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]assets/`.
+The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on Webpack configuration and the way that the assets are used, fingerprint all the images and other static assets. In Angular, static assets like images and custom fonts are placed in `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
 
-The files from `assets/` directory do not get fingerprinted. Because of this, it is important to set up correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
+The files from `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
 
 1. Well, add fingerprinting to these files!
 2. Utilize transfer protocol caching mechanism
@@ -44,7 +44,7 @@ This caching mechanism could also be applied to JS and CSS chunks in a way that 
 
 _One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file!
 
-**Rule #3**: Implement cache re-validation using ETags for all static assets
+**Rule #3**: Implement cache re-validation using ETags for all static assets!
 
 ## Cache re-validation implementation
 
