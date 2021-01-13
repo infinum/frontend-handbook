@@ -167,15 +167,32 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 ## Setting up theming and styles
 
-_Sync with @mamihi_official_
-* Styles will probably be a part of components organization
+When creating styles for your core components, you will create `components` folder inside of styles folder. Styles folder will contain all core stylings and theme setup.
+
+Check out [styling guide](styling-guide-section-link) for other styling related stuff.
+
+
+```
+src
+├── styles
+    └── theme
+        ├── index.ts # main theme endpoint
+        ├── styles.ts # global styles
+        ├── foundations # colors, typography, sizes...
+            ├── fontSizes.ts
+            └── colors.ts
+        ├── components # components styles
+            └── button.ts
+```
 
 ## Tests
 
 When organizing test files, here are couple of quick rules:
 - Components, utils, fetchers... should have a test file in the same folder where they are placed
 - When testing pages, create `__tests__/pages` folder because how next treats pages folder.
-- All mocks should be placed in `__mocks` folder
+- All mocks should be placed in `__mocks__` folder
+
+For other in depth guides for testing take a look at the [testing guide](link-to-testing-section).
 
 Folder structure would look something like this:
 
