@@ -13,11 +13,11 @@ Application build files in `dist` directory include:
 
 ## Index file
 
-The entry-point into a Single Page Application (SPA) like Angular is the `index.html` file. During the build process, the source `src/index.html` is taken and updated with links to the generated JS and CSS chunks and placed into `dist/[project-name]/index.html`.
+The entry-point into a Single Page Application (SPA), like Angular, is the `index.html` file. During the build process, the source `src/index.html` is taken and updated with links to the generated JS and CSS chunks and placed into `dist/[project-name]/index.html`.
 
-The fingerprinted links to JS and CSS chunks will be different for each build and the `index.html` file will be different as well. Because of this, it is important that the `index.html` file is not cached permanently on the client and that the client requests cache revalidation. If the client has a stale `index.html` file, he will try loading stale JS and CSS chunks as well. Those might or might not be in his cache and depending on this the client might get a completely outdated app or a broken app that is missing some chunks.
+Fingerprinted links to JS and CSS chunks will be different for each build, and the `index.html` file will be different as well. Because of this, it is important that the `index.html` file is not cached permanently on the client and that the client requests cache revalidation. If the client has a stale `index.html` file, it will try loading stale JS and CSS chunks as well. Those might or might not be in its cache, and depending on this the client might get a completely outdated app or a broken app that is missing some chunks.
 
-**Rule #1**: Do not cache the built `index.html` file, Revalidate it each time!
+**Rule #1**: Do not cache the built `index.html` file. Revalidate it each time!
 
 ## JS and CSS chunks
 
@@ -27,22 +27,22 @@ JS and CSS chunks that are linked to from the `index.html` file are fingerprinte
 
 ## Static assets
 
-The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on Webpack configuration and the way that the assets are used, fingerprint all the images and other static assets. In Angular, static assets like images and custom fonts are placed in `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
+The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on Webpack configuration and the way that the assets are used, fingerprint all the images and other static assets. In Angular, static assets like images and custom fonts are placed in the `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
 
-The files from `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
+The files from the `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
 
 1. Well, add fingerprinting to these files!
-2. Utilize transfer protocol caching mechanism
+2. Utilize the transfer protocol caching mechanism
 
 The first solution is actually a hack, just like fingerprinting JS and CSS chunks is a hack. Ideally, we want to rely on the transfer protocol to handle the caching, without the need for fingerprinting.
 
-In the world of Web, the application files are served via HTTP protocol 99.99% of the time. It makes sense to implement the built-in mechanisms offered by HTTP to handle caching of static assets. You can read more about the different caching mechanisms available in HTTP [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching).
+In the world of Web, application files are served via the HTTP protocol 99.99% of the time. It makes sense to use the built-in mechanisms offered by HTTP to handle caching of static assets. You can read more about the different caching mechanisms available in HTTP [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching).
 
 For our use case of static assets serving, we must adopt cache re-validation using ETags. The short description of this method is that the Web server calculates the hash of the file being served and sends that hash to the client together with the file itself. The client can cache this file and when fetching the same file in the future, the client sends that hash value of the cached file in the request headers as well. Depending on whether the hashes match or not, the server can return 200 with new version of the file or 304 without any payload.
 
 This caching mechanism could also be applied to JS and CSS chunks in a way that would not require fingerprinting those files, but since Angular already fingerprints those files, we will leave it as-is.
 
-_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file!
+_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file!
 
 **Rule #3**: Implement cache re-validation using ETags for all static assets!
 
@@ -58,7 +58,7 @@ If the application files are served statically, the static file server must be c
 
 #### Nginx example
 
-Nginx configuration file for the site should be update to enable cache re-validation for the `assets/` directory:
+The Nginx configuration file for the site should be updated to enable cache re-validation for the `assets/` directory:
 
 ```bash
     server {
