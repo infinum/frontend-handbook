@@ -32,7 +32,7 @@ If a component is used in multiple places, it should be extracted to the nearest
     - `pages/`
       - `users-container/`
       - `posts-container/`
-- `PostsCount` component is used only inside `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes.
+- `PostsCount` component is used only inside the `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes.
   - `src/app/`
     - `pages/`
       - `users-container/`
@@ -84,7 +84,7 @@ If a pipe is very specific and tied to a particular component, create it alongsi
 
 ## Shared modules
 
-If you have any `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`.
+If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`.
 
 ## Custom types
 
@@ -92,7 +92,7 @@ Generic TypeScript `type` declarations should be placed in `src/app/types`. If t
 
 ## Assets, global styles, and partials
 
-As defined by `angular-cli`, assets placed in `src/assets` will be served statically.
+As defined by the `angular-cli`, assets placed in `src/assets` will be served statically.
 
 Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
 
