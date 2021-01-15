@@ -12,19 +12,18 @@ Lowercase folders were indicators of a page scope (except of core).
 ├── src
 └── components
     ├── core
-    │   └── button
-    │       ├── Button.tsx
-    │       └── stories.tsx
+    │   └── Button
+    │       ├── index.tsx
     ├── admin
-    │   └── welcome-banner
-    │       └── WelcomeBanner.tsx
-    ├── carousel
-    │   └── Carousel.tsx
-    └── card
-        └── Card.tsx
+    │   └── WelcomeBanner
+    │       └── index.tsx
+    ├── AlbumsCarousel
+    │   └── AlbumsCarousel.tsx
+    └── UserCard
+        └── index.tsx
 ```
 
-With atomic design, we would completely separate all UI components and build them as a blocks of atoms, molecules and organisms (together with templates and pages for putting everything together at the end) 
+With atomic design, we would completely separate all UI components and build them as a blocks of atoms, molecules and organisms (together with templates and pages for putting everything together at the end).
 
 ```
 src
@@ -34,15 +33,15 @@ src
         ├── atoms
         │   └── button
         │       ├── Button.tsx
-        │       └── stories.tsx
+        │       └── Button.stories.tsx
         ├── molecules
-        │   ├── card
-        │   │   └── Card.tsx
+        │   ├── user-card
+        │   │   └── UserCard.tsx
         │   └── welcome-banner
         │       └── WelcomeBanner.tsx
         └── organisms
-            └── carousel
-                └── Carousel.tsx
+            └── albums-carousel
+                └── AlbumsCarousel.tsx
 ```
 
 ## Different molecule layouts
@@ -54,22 +53,22 @@ In this case, inside a specific molecule, we could add a subfolder `layouts` (no
 ```
 .
 └── molecules
-    └── card
+    └── user-card
         ├── layouts
-        │   ├── Desktop.tsx
-        │   └── Mobile.tsx
-        └── Card.tsx
+        │   ├── UserCard.mobile.tsx
+        │   └── UserCard.desktop.tsx
+        └── UserCard.tsx
 ```
 
 For this case, inside `index.tsx` we would have something like this:
 ```tsx
-  export const Card = () => {
+  export const UserCard = () => {
     return (
       <Media at="sm">
-        <Mobile />
+        <UserCardMobile />
       </Media>
       <Media at="md">
-        <Desktop />
+        <UserCardDesktop />
       </Media>
     )
   }
@@ -121,6 +120,112 @@ export default function Admin() {
   )
 }
 ```
+
+### Extracting utility functions and hooks
+
+Sometimes, you will have complex functions or effects inside your component that will affect the readability of your component.
+In that case, you should extract them into a separated file `utils.ts`.
+
+Main goal of this file is to store functions and hooks that are **specific for that component**, so we could keep our root `hooks` and `utils` folders clean and for global usage purposes only.
+
+Example:
+
+```
+.
+├── ...
+└── albums-carousel
+    ├── AlbumsCarousel.tsx
+    └── utils.ts
+```
+
+**Cluttered component**
+```tsx
+... imports ...
+
+export const AlbumsCarousel = (props) => {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [highlighted, setHighlighted] = useState(null);
+  const [zoom, setZoom] = useState(1);
+
+  const modals = useModals();
+  const carouselRef = useRef();
+
+  const showLoginModal = () => {
+    modals.open(Modals.Login);
+  };
+
+  const highlightAlbum = (id: number) => {
+    setIsPlaying(false);
+    setHighlighted(id);
+    carouselRef.current.collapseItems();
+  };
+
+  const formatReleaseDate = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const timezonedStart = new Date(start.valueOf() + start.getTimezoneOffset() * 60 * 1000);
+    const timezonedEnd = new Date(end.valueOf() + end.getTimezoneOffset() * 60 * 1000);
+
+    if (isSameDay(timezonedStart, timezonedEnd)) {
+      return `${format(timezonedStart, 'd MMMM yyyy')}`;
+    }
+
+    if (!isSameYear(timezonedStart, timezonedEnd)) {
+      return `${format(timezonedStart, 'd MMMM yyyy')} ${String.fromCharCode(8212)} ${format(
+        timezonedEnd,
+        'd MMMM yyyy',
+      )}`;
+    }
+
+    if (!isSameMonth(timezonedStart, timezonedEnd)) {
+      return `${format(timezonedStart, 'd MMMM')} ${String.fromCharCode(8212)} ${format(
+        timezonedEnd,
+        'd MMMM yyyy',
+      )}`;
+    }
+
+    return `${format(timezonedStart, 'd')} ${String.fromCharCode(8212)} ${format(
+      timezonedEnd,
+      'd MMMM yyyy',
+    )}`;
+  }
+
+  return (
+    //...
+  )
+}
+```
+
+**Cleaned**
+```tsx
+... other imports ...
+import { formatReleaseDate } from './utils';
+
+export const AlbumsCarousel = (props) => {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [highlighted, setHighlighted] = useState(null);
+  const [zoom, setZoom] = useState(1);
+
+  const modals = useModals();
+  const carouselRef = useRef();
+
+  const showLoginModal = () => {
+    modals.open(Modals.Login);
+  };
+
+  const highlightAlbum = (id: number) => {
+    setIsPlaying(false);
+    setHighlighted(id);
+    carouselRef.current.collapseItems();
+  };
+
+  return (
+    //...
+    // formatReleaseDate used somewhere here
+  )
+}
+```
+
 
 ## Setting up store
 
