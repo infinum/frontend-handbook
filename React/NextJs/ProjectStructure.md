@@ -1,6 +1,40 @@
 # Project file structure
 
 ## Organizing components
+
+### Utility components
+
+Utility components are basically components that don't have any impact on the UI itself.
+For example, Meta component for populating `<Head>`.
+
+Example:
+
+```tsx
+import React, { FC } from 'react';
+import Head from 'next/head';
+
+export const Meta: FC = () => {
+  return (
+    <Head>
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <title>Infinum</title>
+    </Head>
+  );
+};
+```
+
+```
+src
+.
+└── components
+    ├── utilities
+    │   └── meta
+    │       └── Meta.tsx
+    └── ui
+        └── ...ui components...
+```
 ### UI Components
 
 Before implementing [atomic design methodology](https://github.com/danilowoz/react-atomic-design), our common practice was separating components by the scope of the page + core components + shared components like this:
