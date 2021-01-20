@@ -45,9 +45,9 @@ For including `<CSSReset />` just add `resetCSS` prop to `<ChakraProvider>`
 ### Style props
 
 Style props are a way to alter the style of a component by simply passing props to it. It helps to save time by providing helpful shorthand ways to style components.
-Alternative to that is using sx prop that takes an object with style rules.
+Alternative to that is using chakra factory.
 
-Style props should be used for one-off styles:
+Style props should be used for one-off styles (up to max 3 props):
 
 ```tsx
 <Button display="block" mt="md">
@@ -55,7 +55,26 @@ Style props should be used for one-off styles:
 </Button>
 ```
 
-`sx` prop should be used when you have multiple styles:
+Components that have more than 3 styles should be moved to separate component.
+Every `Box` or `Flex` components should be moved to separate component, regarding of number of styles, with a descriptive name.
+
+(NOTE: Where to create that component will be added after we decide!)
+
+```tsx
+const ListWrapper = chakra(Box, {
+  baseStyle: {
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  },
+});
+```
+
+For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
+
+`sx` prop works similar to `style` prop. It takes an object with styles.
+
+Example:
 
 ```tsx
 <Button
@@ -70,15 +89,7 @@ Style props should be used for one-off styles:
 </Button>
 ```
 
-For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
-
-<!-- There is also `__css` prop that is similar to `sx`. The only difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
-
-`__css` prop should be used in atom components for defining based styles.
-
-```tsx
-  const Button =
-``` -->
+There is also `__css` prop that is similar to `sx`. The only difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
 
 ### Chakra Factory
 
@@ -87,7 +98,16 @@ Chakra factory serves as an object of chakra JSX elements, and also a function t
 ```tsx
 import { chakra } from "@chakra-ui/react";
 
-// object
+// preferred way!
+chakra("button", {
+  baseStyle: {
+    shadow: "lg",
+    rounded: "lg",
+    bg: "white",
+  },
+});
+
+// using sx prop
 <chakra.button
   sx={{
     shadow: "lg",
@@ -97,15 +117,6 @@ import { chakra } from "@chakra-ui/react";
 >
   Click me
 </chakra.button>;
-
-// function
-chakra("button", {
-  baseStyle: {
-    shadow: "lg",
-    rounded: "lg",
-    bg: "white",
-  },
-});
 ```
 
 This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
@@ -124,9 +135,7 @@ import { chakra } from "@chakra-ui/react";
 
 const StyledaDatepicker = chakra(DatePicker);
 
-export const Datepicker = () => (
-  <StyledaDatepicker sx={{ width: "100%", bg: "blue.100" }} />
-);
+export const Datepicker = () => <StyledaDatepicker w="100%" bg="blue.100" />;
 ```
 
 Chakra factory function will pass `className` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
@@ -297,32 +306,27 @@ Example:
 </Button>
 ```
 
-Also pseudo elements can be used in theme or in `sx` prop
+Also pseudo elements can be used in theme or in chakra factory:
 
 ```tsx
-<Button
-  sx={{
-    bg: 'blue.100',
+const Card = chakra("div", {
+  baseStyle: {
+    bg: "blue.100",
     _hover: {
-      bg: 'white
-    }
-  }}
->
-  Submit
-</Button>
+      bg: "white",
+    },
+  },
+});
 
 // or
-
-<Button
-  sx={{
-    bg: 'blue.100',
-    ':hover': {
-      bg: 'white
-    }
-  }}
->
-  Submit
-</Button>
+const Card = chakra("div", {
+  baseStyle: {
+    bg: "blue.100",
+    ":hover": {
+      bg: "white",
+    },
+  },
+});
 ```
 
 ### Global styles
@@ -398,7 +402,7 @@ Example:
 <Text fontSize={["24px", null, "56px"]}>Lorem Ipsum is simply dummy text</Text>
 ```
 
-Array and Object syntax work for every style prop in the theme specification, which means you can change most properties at a given breakpoint.
+Array and Object syntax work for every style prop in the theme specification, which means you can change most properties at a given breakpoint. Preferred way is to use array.
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
 
