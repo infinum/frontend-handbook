@@ -478,6 +478,53 @@ const AllProviders = ({ children }) => (
 More can be found on [this issue](https://github.com/vercel/swr/issues/781).
 [Additional info](https://medium.com/frontend-digest/using-testing-libary-with-useswr-f595919de2fd).
 
+### Server side rendering
+
+For testing pages that are rendered on server we use [next-page-tester](https://github.com/toomuchdesign/next-page-tester).
+It is used for testing pages that fetch data in `getServerSideProps` or `getStaticProps`.
+
+User page example:
+
+```tsx
+const UserPage: NextPage<any> = ({ data }) => {
+  return <UserTemplate users={data} />;
+};
+
+export async function getServerSideProps() {
+  const store = new AppCollection();
+
+  const data = await fetchUsers(store);
+
+  return { props: { data } };
+}
+
+export default UserPage;
+```
+
+Test example:
+
+```tsx
+describe("User Page", () => {
+  it("User page is rendered", async () => {
+    (fetchUsers as jest.Mock).mockResolvedValue([
+      new User({
+        id: "1",
+        name: "Test user",
+        role: new Role({ name: RoleTypes.User }),
+      }),
+    ]);
+
+    const { render } = await getPage({
+      route: "/user",
+    });
+
+    render();
+
+    expect(screen.getByText("Buzz")).toBeDefined();
+  });
+});
+```
+
 ## Fetchers
 
 Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to the fetcher that is tested.
