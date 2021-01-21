@@ -112,7 +112,7 @@ const withMockStore = (PageComponent: NextPage) => {
 };
 ```
 
-Now while testing we can wrap a component in `<StoreMockContext.Consumer>` to get access to the store. Store is needed when we need to mock datx model with relationships.
+Now, while testing we can wrap the component in `<StoreMockContext.Consumer>` to get access to the store. The store is needed for mocking the datx model with relationships.
 
 After mocking all providers and the store, we export everything:
 
@@ -127,7 +127,7 @@ export * from "@testing-library/react";
 export { customRender as render };
 ```
 
-Now, when testing components we won't import `render` from `__tests__/test-utils.tsx` instead of  `@testing-library/react`, like this:
+Now, when testing components we won't import `render` from `__tests__/test-utils.tsx` instead of `@testing-library/react`, like this:
 
 ```tsx
 import { render } from "__tests__/test-utils";
@@ -227,7 +227,7 @@ module.exports = {
 
 ## Basic component test
 
-Based on [the Guiding Principles](https://testing-library.com/docs/guiding-principles/), your tests should resemble how users interact with your code (component, page, etc.) as much as possible.
+Based on [the Guiding Principles](https://testing-library.com/docs/guiding-principles/), your tests should resemble how users interact with your code (component, page, etc.) as much as possible. In this context, the user is not the end application user, but some parent component that would use the component that is being tested.
 
 Query priorities ([more info](https://testing-library.com/docs/guide-which-query/)):
 
