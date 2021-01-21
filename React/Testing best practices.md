@@ -1,16 +1,16 @@
 # React Testing
 
-Tools we used for testing are [React-Testing-Library](https://testing-library.com/docs/) and [Jest](https://jestjs.io/docs/en/getting-started)
+Tools we use for testing are [React-Testing-Library](https://testing-library.com/docs/) and [Jest](https://jestjs.io/docs/en/getting-started)
 
 ## Setup
 
-First of all install jest
+First of all, install Jest:
 
 ```bash
 npm install --save-dev jest @types/jest
 ```
 
-Add test script to `package.json`
+Add a test script to `package.json`:
 
 ```js
   "scripts": {
@@ -19,7 +19,7 @@ Add test script to `package.json`
   }
 ```
 
-Create `jest.config.js` in root of project
+Create the `jest.config.js` file in project root:
 
 ```js
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
 };
 ```
 
-Add `preset` to `.babelrc`
+Add the `preset` property to `.babelrc`:
 
 ```js
 {
@@ -40,7 +40,7 @@ Add `preset` to `.babelrc`
 }
 ```
 
-Next install react-test-library
+Next, install `react-test-library`:
 
 ```bash
 npm i --save-dev @testing-library/react
@@ -48,7 +48,7 @@ npm i --save-dev @testing-library/react
 
 ### User events
 
-For mocking events [testing-library/user-event](https://github.com/testing-library/user-event) is used.
+Use [testing-library/user-event](https://github.com/testing-library/user-event) for mocking events:
 
 ```bash
 npm install --save-dev @testing-library/user-event
@@ -56,7 +56,7 @@ npm install --save-dev @testing-library/user-event
 
 ### Testing hooks
 
-For testing hooks [react-hooks-testing-library](https://github.com/testing-library/react-hooks-testing-library) is used.
+Use [react-hooks-testing-library](https://github.com/testing-library/react-hooks-testing-library) for testing hooks:
 
 ```bash
 npm install --save-dev @testing-library/react-hooks
@@ -68,7 +68,7 @@ npm install --save-dev @testing-library/react-hooks
 npm install --save-dev jest-svg-transformer
 ```
 
-Add `transform` section to `jest.config.js`
+Add the `transform` property to `jest.config.js`:
 
 ```js
 module.exports = {
@@ -84,7 +84,7 @@ module.exports = {
 
 ### Mock providers and store
 
-While testing we need to mock various providers like [`<ChakraProvider>`](https://chakra-ui.com/docs/getting-started#setup-provider/). To mock all provider we can create `./__tests__/test-utils.tsx` file where we will export [custom render](https://testing-library.com/docs/react-testing-library/setup/#custom-render) method with all providers.
+While testing, we need to mock various providers like [`<ChakraProvider>`](https://chakra-ui.com/docs/getting-started#setup-provider/). To mock all providers, we can create `./__tests__/test-utils.tsx` file where we will export [custom render](https://testing-library.com/docs/react-testing-library/setup/#custom-render) method with all providers:
 
 ```tsx
 const AllProviders = ({ children }) => (
@@ -92,7 +92,7 @@ const AllProviders = ({ children }) => (
 );
 ```
 
-Beside providers we need to mock [datx](https://datx.dev/) store
+Beside providers, we need to mock the [datx](https://datx.dev/) store:
 
 ```tsx
 export const StoreMockContext = React.createContext<AppCollection | null>(null);
@@ -114,7 +114,7 @@ const withMockStore = (PageComponent: NextPage) => {
 
 Now while testing we can wrap a component in `<StoreMockContext.Consumer>` to get access to the store. Store is needed when we need to mock datx model with relationships.
 
-After mocking all providers and store all needs to be exported.
+After mocking all providers and the store, we export everything:
 
 ```tsx
 const customRender = (ui: React.ReactElement, options?: any) =>
@@ -127,7 +127,7 @@ export * from "@testing-library/react";
 export { customRender as render };
 ```
 
-Now when testing components we won't import `render` from `@testing-library/react` but instead from `__tests__/test-utils.tsx` like this:
+Now, when testing components we won't import `render` from `__tests__/test-utils.tsx` instead of  `@testing-library/react`, like this:
 
 ```tsx
 import { render } from "__tests__/test-utils";
@@ -155,7 +155,7 @@ import { render } from "@test-utils";
 
 ### Folder structure
 
-All tests should be defined in the same directory where the file being tested is. There is one exception and that is `pages` folder because Next.js doesn't allow tests in `pages` folder. Thats why we have `__tests__` folder in the root of our application.
+All tests should be defined in the same directory where the file being tested is. There is one exception, and that is the `pages` folder because Next.js doesn't allow tests in the `pages` folder. That's why we have the `__tests__` folder in the root of our application.
 
 Example:
 
@@ -188,9 +188,9 @@ src
 
 ### `__mocks__`
 
-Manual mocks are used to stub out functionality with mock data. For example, instead of accessing a resource from `node_modules` you might want to create a mock module that allows you to use fake data. Manual mocks are defined by writing a module in a `__mocks__/` subdirectory immediately adjacent to the module. ([docs](https://jestjs.io/docs/en/manual-mocks))
+Manual mocks are used to stub out functionality with mock data. For example, instead of accessing a resource from `node_modules` you might want to create a mock module that allows you to use fake data. Manual mocks are defined by writing a module in the `__mocks__/` subdirectory immediately adjacent to the module. ([docs](https://jestjs.io/docs/en/manual-mocks))
 
-For example if we want to mock [react-i18next](https://react.i18next.com/), we will create `./__mocks__/react-i18next.tsx`
+For example, if we want to mock [react-i18next](https://react.i18next.com/), we will create `./__mocks__/react-i18next.tsx`
 
 ```tsx
 import {
@@ -227,9 +227,9 @@ module.exports = {
 
 ## Basic component test
 
-Based on [the Guiding Principles](https://testing-library.com/docs/guiding-principles/), your test should resemble how users interact with your code (component, page, etc.) as much as possible.
+Based on [the Guiding Principles](https://testing-library.com/docs/guiding-principles/), your tests should resemble how users interact with your code (component, page, etc.) as much as possible.
 
-Priority ([more info](https://testing-library.com/docs/guide-which-query/)):
+Query priorities ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
    - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
@@ -285,7 +285,7 @@ describe("Button", () => {
 });
 ```
 
-### Molecules test example
+### Molecule test example
 
 Component:
 
@@ -345,7 +345,7 @@ describe("UserCardSection", () => {
 });
 ```
 
-### Templates test example
+### Template test example
 
 Component:
 
@@ -379,7 +379,7 @@ describe("UserTemplate", () => {
 });
 ```
 
-## Page component test
+## Page component testing
 
 Pages tests should be located in `src/__tests__/pages` folder because Next.js is not allowing tests in `/pages` folder. Test name should be the same as the page file with `test.tsx` extension.
 
@@ -453,11 +453,11 @@ describe("User Page", () => {
 });
 ```
 
-Because of testing `useSWR` behavior which will re-render DOM after fetcher promise is resolved we need to use `findByTestId` method that returns a promise that will resolve when element is added to DOM.
+Because of testing `useSWR` behavior (which will re-render DOM after fetcher promise is resolved), we need to use `findByTestId` method that returns a promise that will resolve when the element is added to DOM.
 
 ### SWR testing
 
-Testing swr had few known issues. One is cache persistent across tests. To fix that we need to add this:
+Testing swr has a few known issues. One is cache persistency across tests. To fix that we need to add this:
 
 ```tsx
 afterEach(async () => {
@@ -475,7 +475,7 @@ const AllProviders = ({ children }) => (
 );
 ```
 
-More can be found on [this issue](https://github.com/vercel/swr/issues/781).
+More can be found in [this issue](https://github.com/vercel/swr/issues/781).
 [Additional info](https://medium.com/frontend-digest/using-testing-libary-with-useswr-f595919de2fd).
 
 ### Server side rendering
@@ -531,9 +531,9 @@ Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to
 
 ### Using datx:
 
-When testing fetchers that use Datx, we create mocked store Datx store and instead of making API calls with `request` we need to mock `request` and test just test functionality of the fetcher.
+When testing fetchers that use Datx, we create mocked store Datx store and instead of making API calls with `request` we need to mock `request` and test the functionality of the fetcher.
 
-In example below our fetcher fetches one User model and if user doesn't have a relationship to Role model we add a default one.
+In the example below our fetcher fetches one User model and if the user doesn't have a relationship to Role model we add a default one.
 
 ```tsx
 export async function fetchUser(
@@ -608,7 +608,7 @@ For more info about testing asynchronous code read [docs](https://jestjs.io/docs
 
 ## Hooks
 
-The `react-hooks-testing-library` creates a simple test harness for React hooks that handles running them within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This library aims to provide a testing experience as close as possible to natively using your hook from within a real component.
+`react-hooks-testing-library` creates a simple test harness for React hooks that handles running them within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This library aims to provide a testing experience as close as possible to how your hook is used in a real component.
 
 ### Example hook:
 
@@ -654,4 +654,4 @@ describe("useModal", () => {
 });
 ```
 
-If any part of your test is preforming an update that action needs to be wrapped into `act()`. More info about [act()](https://reactjs.org/docs/test-utils.html#act).
+If any part of your test is preforming an update, that action needs to be wrapped into `act()`. More info about [act()](https://reactjs.org/docs/test-utils.html#act).
