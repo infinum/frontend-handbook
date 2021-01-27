@@ -1,5 +1,3 @@
-# PROJECT SETUP
-
 When starting a new React Native project there are two possible options / tools which can be used to set up your project.
 
  1. [Expo](https://expo.io/), which is generally used if you need quick & easy solution. Even though it can speed up the whole process of setup and development of RN app, it comes with set of options and [limitations](https://docs.expo.io/introduction/why-not-expo/) which can be a dealbreaker for your project needs.

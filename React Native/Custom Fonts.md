@@ -1,5 +1,3 @@
-## Custom fonts
-
 For this tutorial we will be using custom font that can be 
 downloaded here https://www.onlinewebfonts.com/download/3a88649e176a40a6d80b395ca0ae430d
 
