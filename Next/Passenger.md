@@ -32,8 +32,6 @@ If you try to run this it will work 🎉! But soon we found out that the app is 
 
 ## The real fix!
 
-My good friend and colleague [Darko Kukovec](https://darko.kukovec.eu) had an idea to wrap up the next bin and fool passenger into starting it. A few taps away he has this:
-
 ```javascript
 const path = require('path');
 
