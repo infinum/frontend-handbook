@@ -1,6 +1,6 @@
 ## How to CSS
 
-This is an opinionated collection of resources on how to start with CSS. It's mostly curated with folks new to CSS, but anyone can refresh their memory.
+This is an opinionated collection of resources on how to start with CSS. It's mostly curated for folks new to CSS, but anyone can refresh their memory.
 
 It consists of games, videos and articles split into 4 categories:
 
