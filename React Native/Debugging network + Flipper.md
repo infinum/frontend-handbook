@@ -1,4 +1,4 @@
-Flipper - is a very nice tool for debugging RN applications.
+Flipper is a very nice tool for debugging RN applications.
 
 ### Setup
 

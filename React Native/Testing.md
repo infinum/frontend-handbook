@@ -18,7 +18,7 @@ To have more matchers we can also install https://github.com/testing-library/jes
 
 ### Testing Styled components
 
-#### !! NOT WORKING in ("jest-styled-components": "7.0.3") !! https://github.com/styled-components/jest-styled-components/issues/294
+*** !! NOT WORKING in ("jest-styled-components": "7.0.3") !! https://github.com/styled-components/jest-styled-components/issues/294 ***
 
 As styled-components is our RN way of styling - we need to know how to test it. But not now :\
 
