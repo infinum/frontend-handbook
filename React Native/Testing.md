@@ -1,5 +1,3 @@
-### Intro
-
 Testing React Native is similar to default React testing, so for a quick intro in React testing - you can check
 my video tutorial https://www.youtube.com/watch?v=AhH5xFPwNHg.
 
