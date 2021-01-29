@@ -3,33 +3,34 @@ React Native implements `Stylesheet API` which uses javascript to create styles.
 Applying styles in RN is done through `styles` prop. All core components in RN implement `styles` prop which accepts styles as javascript objects or array of objects with style parameters written in `camelCase` format.
 
 ```javascript
-<View  style={{ flex: 1, backgroundColor: '#0fd0fd', borderRadius:  4 }} />
+<View style={{ flex: 1, backgroundColor: "#0fd0fd", borderRadius: 4 }} />
 ```
 
 ## StyleSheet API
+
 Using `Stylesheet API` for creating styles is highly recommended since it consists of several optimisations. Each style object created with the API is registered with unique ID. This way styles can be reused by referring to their ID. Also, this allows javascript to send a single style configuration over bridge only once and then be reused on native side, instead of sending multiple configurations for same styles. In the end this allows styles to be more efficient, performant and apps / components more scalable and easier to maintain.
 
 To create styles, the API implements a **`create`** method.
 
 ```javascript
 const styles = StyleSheet.create({
-	container:  { borderRadius:  4, borderWidth:  0.5, borderColor:  '#d6d7da'  },
-	title:  { fontSize:  19, fontWeight:  'bold'  },
-	activeTitle:  { color:  'red'  }
+  container: { borderRadius: 4, borderWidth: 0.5, borderColor: "#d6d7da" },
+  title: { fontSize: 19, fontWeight: "bold" },
+  activeTitle: { color: "red" },
 });
 ```
 
 ```javascript
 <View style={styles.container}>
-	<Text style={styles.title} />
+  <Text style={styles.title} />
 </View>
 ```
 
 **Note:** Styles should always be defined outside of the `render` function.
 
 ```javascript
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 export default App = () => (
   <View style={container}>
@@ -41,11 +42,11 @@ const page = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   text: {
     fontSize: 30,
-    color: '#000'
+    color: "#000",
   },
 });
 ```
@@ -57,31 +58,35 @@ More on the `Stylesheet API` can be found on:
 Important thing to recognize here is that all measurement values are written as numbers, not pixels like we are used to in web development. That is because all dimensions in React Native are unitless, and represent density-independent pixels. Setting dimensions this way is common for components that should always render at exactly the same size, regardless of screen dimensions.
 
 ### Flexbox
-RN uses Flexbox algorithm for defining the component layout. Flexbox properties on RN are practicly identical to web with one difference and that is  `flexDirection`. Default value for `flexDirection` property in RN is `column`, where on web it is `row`.
+
+RN uses Flexbox algorithm for defining the component layout. Flexbox properties on RN are practicly identical to web with one difference and that is `flexDirection`. Default value for `flexDirection` property in RN is `column`, where on web it is `row`.
 
 More on Flexbox layout can be found on:
 [https://reactnative.dev/docs/flexbox](https://reactnative.dev/docs/flexbox)
 
-## STYLED-COMPONENTS
+## Styled-components
 
 Styling in RN can also be done with `styled components` which is more familiar approach for React developers.
 
 When starting a new project **`styled-components`** should be your default styling option as it consumes styling rules which are identical to React, and provides theming.
 
 Currently there are 2 main libraries used:
+
 1. [Styled components](https://styled-components.com/docs/basics#react-native)
 2. [Emotion](https://emotion.sh/docs/@emotion/native)
 
 There are almost no differences between them, but we decided that `styled-components` should be the option when starting a new project. Main reason for that is theming typings which can easily be defined when using `styled-components` while on the other hand `emotion` library doesn't have that clean solution yet.
 
-**Note:** `emotion`  had announced that theming will get better typings in version 11.
+**Note:** `emotion` had announced that theming will get better typings in version 11.
 
 Next paragraphs inside the section are related to configuration & usage of `styled-components` library.
 
-#### INSTALLATION
+#### Installation
+
 `npm install --save styled-components` or `yarn add styled-components`
 
-#### USAGE
+#### Usage
+
 To use `styled-components` inside RN app make sure to import `styled-components/native` package as it provides all styling rules needed for RN.
 
 ```javascript
@@ -108,6 +113,7 @@ const MyReactNativeComponent: React.FunctionComponent = () => {
 ```
 
 If you want to style your own (custom) components using the `styled-components` there are 2 main steps:
+
 1. Top element of your component needs implement / use `style` props and accept it's value from component prop.
 
 ```javascript
@@ -161,11 +167,13 @@ const App: React.FunctionComponent = () => {
 }
 
 ```
-This means that when you're defining your styles inside `AppCircle`,  you're actually creating a normal `Circle` component, that has your styles attached to it. Important thing to mention here is that `AppCircle` inherits all the props from `Circle` component.
+
+This means that when you're defining your styles inside `AppCircle`, you're actually creating a normal `Circle` component, that has your styles attached to it. Important thing to mention here is that `AppCircle` inherits all the props from `Circle` component.
 
 When defining styled component in RN you can provide style properties directly:
 
 ***styled-components:***
+
 ```javascript
 import React from 'react'
 import styled from 'styled-components/native'
@@ -190,6 +198,7 @@ This kind of styling should be applied only in case you have some dynamic styles
 **Note:** *flex property works like CSS shorthand, and not the legacy flex property in React Native. Setting flex: 1 sets flexShrink to 1 in addition to setting flexGrow to 1 and flexBasis to 0.*
 
 ***Emotion:***
+
 ```javascript
 import React from 'react'
 import styled from 'styled-components/native'
@@ -207,7 +216,7 @@ export const Circle: React.FunctionComponent = () => {
 }
 ```
 
-#### THEMING
+#### Theming
 
 Theming in RN with `styled-components` is identical to React.
 More on theming can be found on:
