@@ -36,48 +36,45 @@ src
 ```
 ### UI Components
 
-Before implementing [atomic design methodology](https://github.com/danilowoz/react-atomic-design), our common practice was separating components by the scope of the page + core components + shared components like this:
-
-Lowercase folders were indicators of a page scope (except of core).
+When adding UI components, you should be able to distinguish them by:
+1. Page scope based components
+2. Components that are shared all accross the app
+3. Large and complex components which contain a lot of stylings, different layouts and child components.
+   
+Lowercase folders are indicators of a page scoped components, shared components and meta components, while PascalCase folders and filenames should be used for components naming.
 
 ```
+components
 .
-├── src
-└── components
-    ├── core
-    │   └── Button
-    │       ├── index.tsx
-    ├── admin
-    │   └── WelcomeBanner
-    │       └── index.tsx
-    ├── AlbumsCarousel
-    │   └── AlbumsCarousel.tsx
-    └── UserCard
-        └── index.tsx
+├── shared
+│   └── WelcomeBox
+│       └── WelcomeBox.tsx
+├── admin
+│   └── AdminBanner
+│       └── AdminBanner.tsx
+└── Gallery
+    ├── Gallery.tsx
+    └── components
+        ├── Arrows.tsx
+        ├── Breadcrumbs.tsx
+        └── ...
 ```
 
-With atomic design, we would completely separate all UI components and build them as a blocks of atoms, molecules and organisms (together with templates and pages for putting everything together at the end).
+## Elements
+
+If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
+
+Example:
 
 ```
-src
+...
 .
-└── components
-    └── ui
-        ├── atoms
-        │   └── button
-        │       ├── Button.tsx
-        │       └── Button.stories.tsx
-        ├── molecules
-        │   ├── user-card
-        │   │   └── UserCard.tsx
-        │   └── welcome-banner
-        │       └── WelcomeBanner.tsx
-        └── organisms
-            └── albums-carousel
-                └── AlbumsCarousel.tsx
+└── WelcomeCard
+    ├── WelcomeCard.tsx
+    └── WelcomeCard.elements.ts
 ```
 
-## Different molecule layouts
+## Different component layouts
 
 Sometimes, you might want to create a molecule specific for mobile and desktop. You might use a tool like [fresnel](https://github.com/artsy/fresnel) for detecting mediaqueries.
 
@@ -85,8 +82,8 @@ In this case, inside a specific molecule, we could add a subfolder `layouts` (no
 
 ```
 .
-└── molecules
-    └── user-card
+└── admin
+    └── UserCard
         ├── layouts
         │   ├── UserCard.mobile.tsx
         │   └── UserCard.desktop.tsx
@@ -110,65 +107,22 @@ For this case, inside `index.tsx` we would have something like this:
 This is the case **only** for layouts that would add too much complexity when using standard css queries.
 
 
-### Layouts
-
-With Layouts, we generally define overall page structure that will be presented to the user based on a specific auth state or a specific page.
-
-For example, your app could have an Admin dashboard on `/admin` route which has a fixed header and sidebars on both right and left, and scrollable content in the middle (you're most likely familiar with this kind of layout).
-
-You will define your different layouts inside `layouts` folder:
-
-```
-.
-.
-└── components
-    └── layouts
-        ├── admin-layout
-        │   └── AdminLayout.tsx
-        ├── main-layout
-        │   └── MainLayout.tsx
-        └── blog-layout
-            └── BlogLayout.tsx
-```
-
-Then, when creating your routes (pages), you will wrap your page in the layout that represents the current page:
-
-```tsx
-// pages/index.tsx
-
-export default function Home() {
-  return (
-    <MainLayout>
-      ...
-    </MainLayout>
-  )
-}
-
-// pages/admin.tsx
-export default function Admin() {
-  return (
-    <AdminLayout>
-      ...
-    </AdminLayout>
-  )
-}
-```
-
 ### Extracting utility functions and hooks
 
 Sometimes, you will have complex functions or effects inside your component that will affect the readability of your component.
-In that case, you should extract them into a separated file `utils.ts`.
+In that case, you should extract them into separated files `utils.ts` and `hooks.ts`.
 
-Main goal of this file is to store functions and hooks that are **specific for that component**, so we could keep our root `hooks` and `utils` folders clean and for global usage purposes only.
+Main goal of these files is to store functions and hooks that are **specific for that component**, so we could keep our root `hooks` and `utils` folders clean and for global usage purposes only.
 
 Example:
 
 ```
 .
 ├── ...
-└── albums-carousel
+└── AlbumsCarousel
     ├── AlbumsCarousel.tsx
-    └── utils.ts
+    └── AlbumsCarousel.utils.ts
+    └── AlbumsCarousel.hooks.ts
 ```
 
 **Cluttered component**
@@ -259,6 +213,49 @@ export const AlbumsCarousel = (props) => {
 }
 ```
 
+### Layouts
+
+With Layouts, we generally define overall page structure that will be presented to the user based on a specific auth state or a specific page.
+
+For example, your app could have an Admin dashboard on `/admin` route which has a fixed header and sidebars on both right and left, and scrollable content in the middle (you're most likely familiar with this kind of layout).
+
+You will define your different layouts inside `layouts` folder:
+
+```
+.
+.
+└── components
+    └── layouts
+        ├── admin-layout
+        │   └── AdminLayout.tsx
+        ├── main-layout
+        │   └── MainLayout.tsx
+        └── blog-layout
+            └── BlogLayout.tsx
+```
+
+Then, when creating your routes (pages), you will wrap your page in the layout that represents the current page:
+
+```tsx
+// pages/index.tsx
+
+export default function Home() {
+  return (
+    <MainLayout>
+      ...
+    </MainLayout>
+  )
+}
+
+// pages/admin.tsx
+export default function Admin() {
+  return (
+    <AdminLayout>
+      ...
+    </AdminLayout>
+  )
+}
+```
 
 ## Setting up store
 
