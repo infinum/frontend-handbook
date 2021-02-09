@@ -30,10 +30,9 @@ src
 .
 └── components
     ├── utilities
-    │   └── meta
+    │   └── Meta
     │       └── Meta.tsx
-    └── ui
-        └── ...ui components...
+    ...
 ```
 ### UI Components
 
