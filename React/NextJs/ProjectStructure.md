@@ -60,12 +60,11 @@ components
         └── ...
 ```
 
-#### `components` folder vs `elements.ts` file
-
-elements.ts file is used for styles (chakra factories) used in that component and all child components that will be stored in `components` folder.
+#### `components` folder
 
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
-Keep in mind that those components will have their styles written in the `elements.ts` that is stored in the component root folder (in this case `Gallery` folder).
+
+Note: There _should_ be only one level of `components` folder inside the component folder.
 
 ## Elements
 
