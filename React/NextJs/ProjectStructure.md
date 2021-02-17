@@ -60,6 +60,13 @@ components
         └── ...
 ```
 
+#### `components` folder vs `elements.ts` file
+
+elements.ts file is used for styles (chakra factories) used in that component and all child components that will be stored in `components` folder.
+
+When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
+Keep in mind that those components will have their styles written in the `elements.ts` that is stored in the component root folder (in this case `Gallery` folder).
+
 ## Elements
 
 If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
@@ -304,7 +311,7 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 When creating styles for your core components, you will create `components` folder inside of styles folder. Styles folder will contain all core stylings and theme setup.
 
-Check out [styling guide](styling-guide-section-link) for other styling related stuff.
+Check out [styling guide(needs update)](styling-guide-section-link) for other styling related stuff.
 
 
 ```
@@ -323,11 +330,12 @@ src
 ## Tests
 
 When organizing test files, here are couple of quick rules:
+
 - Components, utils, fetchers... should have a test file in the same folder where they are placed
 - When testing pages, create `__tests__/pages` folder because how next treats pages folder.
 - All mocks should be placed in `__mocks__` folder
 
-For other in depth guides for testing take a look at the [testing guide](link-to-testing-section).
+For other in depth guides for testing take a look at the [testing guide(needs update)](link-to-testing-section).
 
 Folder structure would look something like this:
 
@@ -344,16 +352,11 @@ src
 │   └── user.ts
 ├── fetchers
 │   └── users
-│      ├── users.ts
-│      └── users.test.ts
+│       ├── users.ts
+│       └── users.test.ts
 └── components
-    └── ui
-        ├── atoms
-        │   └── button
-        │       ├── Button.test.tsx
-        │       └── Button.tsx
-        └── molecules
-            └── user-card
-                ├── UserCard.test.tsx
-                └── UserCard.tsx
+    └── shared
+        └── Button
+            ├── Button.test.tsx
+            └── Button.tsx
 ```
