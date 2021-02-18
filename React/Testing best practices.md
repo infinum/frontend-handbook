@@ -172,18 +172,13 @@ src
 │   └── user.ts
 ├── fetchers
 │   └── users
-│      ├── users.ts
-│      └── users.test.ts
+│       ├── users.ts
+│       └── users.test.ts
 └── components
-    └── ui
-        ├── atoms
-        │   └── button
-        │       ├── Button.test.tsx
-        │       └── Button.tsx
-        └── molecules
-            └── user-card
-                ├── UserCard.test.tsx
-                └── UserCard.tsx
+    └── shared
+        └── Button
+            ├── Button.test.tsx
+            └── Button.tsx
 ```
 
 ### `__mocks__`
@@ -248,7 +243,7 @@ Query priorities ([more info](https://testing-library.com/docs/guide-which-query
 
 - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
-### Atom test example
+### Base components test example
 
 Component:
 
@@ -285,11 +280,13 @@ describe("Button", () => {
 });
 ```
 
-### Molecule test example
+### Components that uses a base component test example
 
 Component:
 
 ```tsx
+import { Button } from "components/Button";
+
 const UserCard: FC<UserCardProps> = ({ label }) => (
   <Card>
     <h3>{label}</h3>
@@ -311,70 +308,6 @@ describe("UserCard", () => {
     const { getByText } = render(<UserCard label={username} />);
 
     expect(getByText(username)).toBeDefined();
-  });
-});
-```
-
-### Organism test example
-
-Component:
-
-```tsx
-const UserCardSection: FC<UserCardSectionProps> = ({ title }) => (
-  <Section>
-    <h1>{title}</h1>
-    <UserCard label="Test User" />
-  </Section>
-);
-```
-
-Test:
-
-```tsx
-jest.mock("components/user-card");
-(UserCard as jest.Mock).mockReturnValue(<div />);
-
-describe("UserCardSection", () => {
-  it("Is rendering", () => {
-    const title = "Test Title";
-
-    const { getByText } = render(<UserCardSection title={title} />);
-
-    expect(getByText(title)).toBeDefined();
-  });
-});
-```
-
-### Template test example
-
-Component:
-
-```tsx
-export const UserTemplate: FC<UserTemplateProps> = (props) => (
-  <Grid {...props}>
-    <GridItem>
-      <Navbar />
-    </GridItem>
-    <GridItem>
-      <UserCardSection title="Test title" />
-    </GridItem>
-  </Grid>
-);
-```
-
-Test:
-
-```tsx
-jest.mock("components/user-card-section");
-(UserCardSection as jest.Mock).mockReturnValue(<div />);
-
-describe("UserTemplate", () => {
-  it("Is rendering", () => {
-    const { getByTestId } = render(
-      <UserTemplate data-testid="user-template-testid" />
-    );
-
-    expect(getByTestId("user-template-testid")).toBeDefined();
   });
 });
 ```
