@@ -102,7 +102,9 @@ If you are using Angular, make sure to add an override for templates parser:
 }
 ```
 
-If you just added Prettier to an existing codebase, you should probably run it once and let it format the whole codebase. This will probably create a lot of modifications which you can skim through and if it checks out you can commit the changes. It is possible that some things might break after Prettier is run. In particular, we noticed some issues with the way Prettier formats SCSS, so you might want to exclude SCSS from Prettier:
+If you just added Prettier to an existing codebase, you should probably run it once and let it format the whole codebase. This will probably create a lot of modifications which you can skim through and if it checks out you can commit the changes.
+
+It is possible that some things might break after Prettier is run. In particular, we noticed some issues with the way Prettier formats SCSS, so you might want to exclude SCSS from Prettier in case you notice issues:
 
 ```bash
 # .prettierignore
@@ -110,6 +112,8 @@ If you just added Prettier to an existing codebase, you should probably run it o
 # It sometimes breaks SCSS (https://github.com/prettier/prettier/issues/6092)
 *.scss
 ```
+
+If you do not notice issues with Prettier and SCSS, we recommend keeping Prettier on for SCSS files as well.
 
 Developers should set up their code editors to run Prettier whenever they save a file. This is not a bullet-proof solution because some editors might not have support for this (either natively or via plug-ins). Going one step further, we recommend running Prettier via the pre-commit hook. This ensures that the committed code is formatted even if the developer who wrote it did not have his editor set up to format on file save.
 
@@ -133,6 +137,7 @@ To ensure editor settings are in-line with prettier settings, create a workspace
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.insertSpaces": false,
+  "editor.detectIndentation": true
   "[scss]": {
     "editor.formatOnSave": false
   }
@@ -146,6 +151,7 @@ root = true
 [*]
 charset = utf-8
 indent_style = tab
+indent_size = 2 # GitHub uses this value for indentation size when showing code on the Web
 insert_final_newline = true
 trim_trailing_whitespace = true
 ```
@@ -162,7 +168,8 @@ Infinum created various rulesets for ESLint and TSLint which you can check out [
 
 ### Stylelint
 
-Just like with ESLint and TSLint, Infinum provides a ruleset for Stylelint as well. You can find it [here](https://github.com/infinum/stylelint-config).
+If you have no issues with prettier SCSS formatting and you decide to use Prettier, it is recommended to install [stylelint-prettier](https://github.com/prettier/stylelint-prettier) plugin and preset.
+
 
 ### Putting it all together
 
@@ -183,15 +190,16 @@ Here is the complete example which runs TypeScript compilation check on all file
     }
   },
   "lint-staged": {
-    "src/**/*.{json,md,component.html}": [
+    "**/*.{json,md,html}": [
       "prettier --write"
     ],
-    "src/**/*.ts": [
+    "**/*.ts": [
       "prettier --write",
       "ng-lint-staged lint:ng --tsConfig=./tsconfig.base.json --"
     ],
-    "src/*.scss": [
+    "**/*.scss": [
       "stylelint --syntax=scss"
+      "prettier --write" // add or remove this line depending on whether you run stylelint on SCSS
     ]
   }
 }
@@ -210,17 +218,19 @@ Here is the complete example which runs TypeScript compilation check on all file
 ```
 
 ```js
-// stylelint.config.js
-module.exports = {
-  "extends": "@infinumjs/stylelint-config"
+// .stylelintrc.json
+{
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": true
+  }
 }
-
 ```
 
 For this example, you will have to install the following `devDependencies`:
 
 ```bash
-npm i -D concurrently husky lint-staged ng-lint-staged stylelint prettier tslint-config-prettier @infinumjs/tslint-config-angular @infinumjs/stylelint-config
+npm i -D concurrently husky lint-staged ng-lint-staged stylelint stylelint-prettier prettier tslint-config-prettier @infinumjs/tslint-config-angular
 ```
 
 Some notes:
