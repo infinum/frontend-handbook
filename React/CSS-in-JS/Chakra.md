@@ -58,8 +58,6 @@ Style props should be used for one-off styles (up to max 3 props):
 Components that have more than 3 styles should be moved to separate component.
 Every `Box` or `Flex` components should be moved to separate component, regarding of number of styles, with a descriptive name.
 
-(NOTE: Where to create that component will be added after we decide!)
-
 ```tsx
 const ListWrapper = chakra(Box, {
   baseStyle: {
@@ -119,9 +117,24 @@ chakra("button", {
 </chakra.button>;
 ```
 
-This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/develop/packages/system/src/system.utils.ts#L9) supported.
+This reduces the need to create custom component wrappers and name them. Syntax is available for common html elements. See the reference for the full [list of elements](https://github.com/chakra-ui/chakra-ui/blob/main/packages/system/src/system.utils.ts#L9) supported. Beside list of elements, we can pass a function as [see custom components](#custom-component-example)
 
-Chakra factory function should be only used in atom components. They will be defined with base style and can be overridden by `sx` prop because `baseStyle` is merged before `sx` ([merge order](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L104))
+Chakra factory will be defined with base style and can be overridden by `sx` prop because `baseStyle` is merged before `sx`. Components created using chakra factory can be overridden by also using chakra factory ([merge order](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L104))
+
+Example:
+
+```tsx
+const Button = chakra("button", {
+  baseStyle: {
+    bg: "white",
+  },
+});
+const FbButton = chakra(Button, {
+  baseStyle: {
+    bg: "primary.500",
+  },
+});
+```
 
 #### Custom component example
 
@@ -135,7 +148,9 @@ import { chakra } from "@chakra-ui/react";
 
 const StyledaDatepicker = chakra(DatePicker);
 
-export const Datepicker = () => <StyledaDatepicker w="100%" bg="blue.100" />;
+export const Datepicker = (props) => (
+  <StyledaDatepicker w="100%" bg="blue.100" {...props} />
+);
 ```
 
 Chakra factory function will pass `className` to `DatePicker input` component with all styles. In this case `input` will be rendered with custom `bg` and `width` styles.
@@ -405,6 +420,9 @@ Example:
 Array and Object syntax work for every style prop in the theme specification, which means you can change most properties at a given breakpoint. Preferred way is to use array.
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
+
+_NOTE: there is an issue with having `strict: false` in tsconfig when using `createBreakpoints`.
+Error that breaks the build: `Type '(() => string) & (() => string)' is not assignable to type 'string'`. Current workaround is to add `strictNullChecks: true` to tsconfig. ([github issue](https://github.com/chakra-ui/chakra-ui/issues/3372))_
 
 For more about responsive styles read [styled-system responsive styles docs](https://styled-system.com/responsive-styles/)
 
