@@ -71,19 +71,26 @@ If an enum is used across multiple top-level modules, you can place the enum in 
 
 If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be:
 
+`src/app/interfaces/translatable-enum.interface.ts`
 ```typescript
 export interface ITranslatableEnum {
   translationKey: string;
 }
+```
+
+`src/app/enums/http-status.enum.ts`
+```typescript
+export enum HttpStatus {
+  200_OK: 200,
+  ...
+}
 
 export const httpStatusCodeData: Record<HttpStatus, ITranslatableEnum> = {
-  [HttpStatus.OK_200]: {
+  [HttpStatus.200_OK]: {
     translationKey: 'http.success'
   }
 }
 ```
-
-If the enum data is a bit more complex, defining an interface for it can be useful.
 
 ## Guards
 
