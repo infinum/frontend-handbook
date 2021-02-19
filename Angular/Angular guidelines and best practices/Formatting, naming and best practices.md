@@ -171,7 +171,7 @@ If you need to set many classes, `[ngClass]="{ ... }"` is the way to go. Example
 
 ## Prefix interfaces
 
-Interfaces should be prefixed with `I`. This might be a polarizing decision, but you should do it because you might have cases where some class implements an interface, and you also have a stub class which implements the same interface.
+Interfaces should be prefixed with `I`. This might be a polarizing decision, but you should do it because you might have cases where some class implements an interface, and you also have a stub class that implements the same interface.
 
 ```typescript
 // bad
