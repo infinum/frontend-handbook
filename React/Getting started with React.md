@@ -14,7 +14,7 @@ In the next sections we will cover some topics related to React ecosystem used i
 - [Official documentation](https://nextjs.org/docs/getting-started)
 - [Learn next](https://nextjs.org/learn/basics/create-nextjs-app)
 - [Examples](https://github.com/vercel/next.js/tree/canary/examples)
-- [Handbook Introduction](/handbook/books/frontend/react/nextjs/introduction)
+- [Handbook Introduction](/handbook/books/frontend/react/next/introduction)
 
 ### Typescript
 
@@ -39,11 +39,16 @@ You can start using it by adding this VSCode plugin https://github.com/prettier/
 Here is an example of `.prettierrc`:
 ```json
 {
-  "singleQuote": true,
-  "trailingComma": "all",
-  "arrowParens": "always",
+  "$schema": "http://json.schemastore.org/prettierrc",
   "printWidth": 120,
-  "bracketSpacing": true
+  "endOfLine": "lf",
+  "useTabs": true,
+  "arrowParens": "always",
+  "quoteProps": "as-needed",
+  "bracketSpacing": true,
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "es5",
 }
 ```
 ##### OPTIONAL:
@@ -59,21 +64,13 @@ This will format your code every time save file.
 
 We use [Eslint](https://eslint.org/) to find and fix problems in our JavaScript code.
 
-- [Eslint config React](https://www.npmjs.com/package/@infinumjs/eslint-config-react)
+- [Eslint config React JS](https://www.npmjs.com/package/@infinumjs/eslint-config-react-js)
+- [Eslint config React TS](https://www.npmjs.com/package/@infinumjs/eslint-config-react-ts)
 
 ### Testing
 
-Automated testing is very important in software development. It gives us the assurance that code won't break when we add new features or change some existing implementation.
-
-For testing React applications we use these libraries:
-- [jest](https://jestjs.io/)
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-- [React Hooks Testing Library](https://github.com/testing-library/react-hooks-testing-library)
-- [React Testing Library - User Event](https://github.com/testing-library/user-event)
-- [Simulate react-select events for react-testing-library](https://github.com/romgain/react-select-event)
+Automated testing is very important in software development. It gives us the assurance that code won't break when we add new features or change some existing implementation. You can read more about how to test in a [separate testing chapter](https://handbook.infinum.co/books/frontend/React/Testing%20best%20practices).
 
 ### Internationalization
 
 We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react.i18next](https://react.i18next.com/) for implementing internationalization in React applications.
-
-- [Internationalization setup](/)
