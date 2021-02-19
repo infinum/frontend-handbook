@@ -13,7 +13,7 @@ Here are some links that might help you with your front end troubles.
 * [Webpack](https://webpack.js.org/)
 * [TypeScript](https://www.typescriptlang.org/)
 * [WebpackBin](https://www.webpackbin.com/)
-* [FrontendCookies](https://infinum.co/frontend-cookies) weekly newsletter
+* [FrontendCookies](https://infinum.com/frontend-cookies) weekly newsletter
 * [Infinum on npm](https://www.npmjs.com/~infinumco)
 
 ## Useful libs
