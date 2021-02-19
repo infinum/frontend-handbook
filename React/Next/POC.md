@@ -21,8 +21,8 @@ Since many of our projects use modals, it proved to be very useful to be able to
 ⎮   ├─ login.tsx
 ⎮   ├─ register.tsx
 |   └─ modal.tsx
-├─ fetchers
-|   └─ user.ts
+└─ fetchers
+    └─ fetcher.ts
 ...
 ```
 
@@ -85,6 +85,9 @@ export default Index;
 // /hooks/useUser.tsx
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import useSWR from 'swr'
+
+import { fetcher } from '../fetchers/fetcher';
 
 function getUser() {
   const user = localStorage.getItem('user');
@@ -98,12 +101,15 @@ export function useUser({
   redirectIfFound = false,
 } = {}) {
   const router = useRouter();
-  // you should use swr to fetch user from the api
-  const user = getUser();
+  const { data: user, mutate: mutateUser, error, isValidating } = useSWR('/api/user', fetcher);
 
   useEffect(() => {
-    // if no redirect needed, just return (example: already on /dashboard)
-    if (!redirectTo) return;
+    // https://swr.vercel.app/advanced/performance#dependency-collection
+    const hydration = session === undefined && error === undefined && isValidating === false;
+
+    // if no redirect needed, just return (example: already on admin /dashboard)
+    // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
+    if (!redirectTo || hydration || isValidating) return;
 
     if (
       // If redirectTo is set, redirect if the user was not found.
@@ -115,21 +121,51 @@ export function useUser({
     }
   }, [router, redirectTo, user]);
 
-  return user;
+  return { user, mutateUser };
 };
 ```
+
+Here is the implementation of simple `fetcher`
+
+```jsx
+// ./fetchers/fetcher.js
+export async function fetcher(...args) {
+  try {
+    const response = await fetch(...args)
+
+    // if the server replies, there's always some data in json
+    // if there's a network error, it will throw at the previous line
+    const data = await response.json()
+
+    if (response.ok) {
+      return data
+    }
+
+    const error = new Error(response.statusText)
+    error.response = response
+    error.data = data
+    throw error
+  } catch (error) {
+    if (!error.data) {
+      error.data = { message: error.message }
+    }
+    throw error
+  }
+}
+```
+
 
 Here is an example of how we can use `useUser`:
 
 ```jsx
-// /pages/admin/index.tsx
+// ./pages/admin/index.tsx
 import React from 'react';
 // ...
 import { Layout } from '../components/layouts/Layout';
 import { useUser } from '../hooks/useUser';
 
 const Admin = () => {
-  const user = useUser({
+  const { user } = useUser({
     redirectTo: '/login'
   });
 
