@@ -9,22 +9,20 @@ Since many of our projects use modals, it proved to be very useful to be able to
 ```
 ...
 ├─ components
-⎮   ├─ hoc
-⎮   ⎮   └─ withAuth.tsx
-⎮   ⎮   └─ withModal.tsx
 ⎮   ├─ layouts
 ⎮   ⎮   └─ Layout.tsx
 ⎮   ├─ modals
-|   |   └─ index.tsx
 |   |   └─ Newsletter.tsx
 |   └─ LoginRegisterForm.tsx
+├─ hooks
+|   ├─ useUser.tsx
 ├─ pages
 |   ├─ index.tsx
 ⎮   ├─ login.tsx
 ⎮   ├─ register.tsx
-|   └─ with-hoc-modal.tsx
-├─ services
-|   └─ auth.ts
+|   └─ modal.tsx
+├─ fetchers
+|   └─ user.ts
 ...
 ```
 
@@ -35,13 +33,11 @@ Since many of our projects use modals, it proved to be very useful to be able to
 `Layout.tsx` is an example of a layout page for all pages. Here is an example of how we can extend `Head` section for adding global fonts.
 
 ```jsx
-// /components/layouts/layout.tsx
+// /components/layouts/Layout.tsx
 import React, { Fragment } from 'react';
 import Head from 'next/head';
 
-import withAuth from '../hoc/withAuth';
-
-const Layout = (props) => {
+export const Layout = (props) => {
   return (
     <Fragment>
       <Head>
@@ -64,8 +60,6 @@ const Layout = (props) => {
     </Fragment>
   );
 };
-
-export default Layout;
 ```
 
 Here is an example of how we can use `Layout`:
@@ -75,69 +69,81 @@ Here is an example of how we can use `Layout`:
 import React from 'react';
 // ...
 import Layout from '../components/layouts/Layout';
-import withAuth from '../components/hoc/withAuth';
 
 const Index = () => {
   // ...
   return <Layout>Home Page content</Layout>;
 };
-export default withAuth(Index);
+export default Index;
 ```
 
-Index page in this example is used as a private page, so we are using withAuth hoc.
+### Auth
 
-### Higher order components
-
-From the React documentation, Higher-Order Components (HOC) are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
-
-### WithAuth
-
-`withAuth` is simple HOC which checks if the user is authenticated, and if not, the user is redirected to the login page.
+`useUser` is simple hook which checks if the user is authenticated, and if not, the user is redirected to the login page.
 
 ```jsx
-// /components/higherOrderComponents/withAuth.tsx
-import * as React from 'react';
-import { useEffectOnce } from 'react-use';
+// /hooks/useUser.tsx
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-function isLoggedIn() {
+function getUser() {
   const user = localStorage.getItem('user');
   const userObject = JSON.parse(user);
 
-  return userObject ? !!userObject.token : false;
+  return userObject;
 }
 
-const withAuth = (Component) => (props) => {
+export function useUser({
+  redirectTo = false,
+  redirectIfFound = false,
+} = {}) {
   const router = useRouter();
+  // you should use swr to fetch user from the api
+  const user = getUser();
 
-  useEffectOnce(() => {
-    if (!isLoggedIn()) {
-      router.push('/login');
+  useEffect(() => {
+    // if no redirect needed, just return (example: already on /dashboard)
+    if (!redirectTo) return;
+
+    if (
+      // If redirectTo is set, redirect if the user was not found.
+      (redirectTo && !redirectIfFound && !user) ||
+      // If redirectIfFound is also set, redirect if the user was found
+      (redirectIfFound && user)
+    ) {
+      router.push(redirectTo);
     }
-  });
+  }, [router, redirectTo, user]);
 
-  return <Component {...props} />;
+  return user;
 };
-export default withAuth;
 ```
 
-### WithModal
-
-Another HOC is `WithModal`, which pushes modalName inside props that can be used inside components.
+Here is an example of how we can use `useUser`:
 
 ```jsx
-// /components/higherOrderComponents/withModal.tsx
+// /pages/admin/index.tsx
 import React from 'react';
-import { useRouter } from 'next/router';
+// ...
+import { Layout } from '../components/layouts/Layout';
+import { useUser } from '../hooks/useUser';
 
-import useModalName from '../../customEffects/useModalName';
+const Admin = () => {
+  const user = useUser({
+    redirectTo: '/login'
+  });
 
-const withModal = (Component) => (props) => {
-  const modalName = useModalName();
-
-  return <Component modalName={modalName} {...props} />;
+  return (
+    <Layout>
+      {user ? (
+        <div>Admin Page content</div>
+      ) : (
+        <Skeleton />
+      )}
+    </Layout>
+  );
 };
-export default withModal;
+export default Index;
 ```
 
 ### Page with Modal
@@ -145,35 +151,39 @@ export default withModal;
 Example of how can we use modal on a page:
 
 ```jsx
-// /pages/with-hoc-modal.tsx
-import React, { useState } from 'react';
+// /pages/modal.tsx
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
-import modals from '../components/modals';
+import { useRouter } from 'next/router';
 
-import WithModal from '../components/hoc/withModal';
 import Layout from '../components/layouts/Layout';
-import withAuth from '../components/hoc/withAuth';
+import modals from '../components/modals';
+import { useUser } from '../hooks/useUser';
 
-const pageUrlSlug = 'with-hoc-modal';
+export const ModalPage = () => {
+  const router = useRouter();
 
-export const withHocModalPage = (props: { modalName: string, onModalClose: () => void }) => {
-  const [name, setName] = useState(0);
-  React.useEffect(() => {
-    setName(name || Date.now());
-  }, []);
-
-  const onModalClose = () => {
-    Router.push(`/${pageUrlSlug}`);
-  };
+  const onModalClose = useCallback(() => {
+    router.push({
+      pathname: router.pathname
+    });
+  }, [router]);
 
   const Modal = modals[props.modalName];
 
   return (
     <Layout>
-      <h1>Page with hoc modal</h1>
+      <h1>Page modal</h1>
       {name}
-      <Link href={`/${pageUrlSlug}?email=testtt&modal=newsletter`} shallow>
+      <Link
+        href={{
+          pathname: router.pathname,
+          query: {
+            modal: 'newsletter'
+          },
+        }}
+        shallow
+      >
         <a>here</a>
       </Link>
       {Modal && <Modal onClose={onModalClose} />}
@@ -181,17 +191,7 @@ export const withHocModalPage = (props: { modalName: string, onModalClose: () =>
   );
 };
 
-export default withAuth(WithModal(withHocModalPage));
-```
-
-We are storing the `Date.now()` value in a local state, and it's easy to show that the state is preserved between toggling the modal.
-To `Layout` we are passing the `onClose` callback, so we would know where to route after closing the modal. In other words, we want to show the same page without query params. If there were some params we needed to preserve, we would use something like the following:
-
-```jsx
-Router.push({
-  pathname: `/${pageUrlSlug}`,
-  query: { name: 'some name' },
-});
+export default ModalPage;
 ```
 
 ### Dynamic Modal rendering
