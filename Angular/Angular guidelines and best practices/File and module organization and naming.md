@@ -10,12 +10,15 @@ Services should be placed in `src/app/services`.
 
 Try to keep the code grouped by domain. For example, if you have a `Post` class, `IPost` interface, and a `PostService` used for managing the blog posts, you can have all these files inside one directory like so:
 
-- `src/app/services/post/`
-  - `post.service.ts`
-  - `post.service.spec.ts`
-  - `post.interface.ts`
-  - `post.model.ts`
-  - `post.model.spec.ts`
+```
+
+src/app/services/post/
+├── post.service.ts
+├── post.service.spec.ts
+├── post.interface.ts
+├── post.model.ts
+└── post.model.spec.ts
+```
 
 ## Pages
 
@@ -26,20 +29,27 @@ Container components that are loaded directly via routing (by either `component`
 If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. Here are some examples:
 
 - Post component is used in `posts-container` (list of posts) and `users-container` (user's list of posts) top-level routes:
-  - `src/app/`
-    - `components/`
-      - `post/`
-    - `pages/`
-      - `users-container/`
-      - `posts-container/`
+
+```
+src/app/
+├── components/
+│   └── post/
+└── pages/
+    ├── users-container/
+    └── posts-container/
+```
+
 - `PostsCount` component is used only inside the `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes.
-  - `src/app/`
-    - `pages/`
-      - `users-container/`
-        - `components/`
-          - `posts-count/`
-        - `user-details-container/`
-        - `users-list-container/`
+
+```
+src/app/
+└── pages/
+    └── users-container/
+        ├── components/
+        │   └── posts-count/
+        ├── user-details-container/
+        └── users-list-container/
+```
 
 ## Animations
 

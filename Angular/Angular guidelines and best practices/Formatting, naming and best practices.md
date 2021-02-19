@@ -155,14 +155,18 @@ Some other component's template:
 ></my-app-component>
 ```
 
-## Prefer the `[class]` over `[ngClass]` syntax
+## `[class]` vs `[ngClass]` syntax
+
+If you have to set just one class depending on some condition, `[class.class-name]="condition"` is the way to go. Example:
 
 ```html
-<!-- bad -->
-<div [ngClass]="{ 'active': isActive }"></div>
-
-<!-- good -->
 <div [class.active]="isActive"></div>
+```
+
+If you need to set many classes, `[ngClass]="{ ... }"` is the way to go. Example:
+
+```html
+<div [ngClass]="{ 'active': isActive, 'main-item': isMainItem, 'accent': isAccent }"></div>
 ```
 
 ## Prefix interfaces
