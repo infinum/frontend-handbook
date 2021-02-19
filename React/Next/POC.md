@@ -119,7 +119,7 @@ export function useUser({
     ) {
       router.push(redirectTo);
     }
-  }, [router, redirectTo, user]);
+  }, [router, redirectTo, user, error, isValidating]);
 
   return { user, mutateUser };
 };
