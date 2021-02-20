@@ -105,7 +105,7 @@ export function useUser({
 
   useEffect(() => {
     // https://swr.vercel.app/advanced/performance#dependency-collection
-    const hydration = session === undefined && error === undefined && isValidating === false;
+    const hydration = user === undefined && error === undefined && isValidating === false;
 
     // if no redirect needed, just return (example: already on admin /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
@@ -205,7 +205,7 @@ export const ModalPage = () => {
     });
   }, [router]);
 
-  const Modal = modals[props.modalName];
+  const Modal = modals[router.query.modal];
 
   return (
     <Layout>
