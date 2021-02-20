@@ -179,7 +179,7 @@ const Admin = () => {
     </Layout>
   );
 };
-export default Index;
+export default Admin;
 ```
 
 ### Page with Modal
