@@ -232,11 +232,11 @@ You will define your different layouts inside `layouts` folder:
 .
 └── components
     └── layouts
-        ├── admin-layout
+        ├── AdminLayout
         │   └── AdminLayout.tsx
-        ├── main-layout
+        ├── MainLayout
         │   └── MainLayout.tsx
-        └── blog-layout
+        └── BlogLayout
             └── BlogLayout.tsx
 ```
 
