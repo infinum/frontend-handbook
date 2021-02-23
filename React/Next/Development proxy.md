@@ -1,6 +1,6 @@
 ## Motivation
 
-When developing applications, sometimes you want to test your local changes against data from different environment. For example: creating a production hotfix requires you to locally connect to the production api. Maybe even testing the solution on a different device e.g. a [phone connected to your machine](https://developers.google.com/web/tools/chrome-devtools/remote-debugging). That api could have http-only cookies that cannot be manipulated on the client and require a proxy that can intercept a request and do some modifications on it.
+When developing applications, sometimes you want to test your local changes against data from a different environment. For example: creating a production hotfix requires you to locally connect to the production API. Maybe even testing the solution on a different device e.g. a [phone connected to your machine](https://developers.google.com/web/tools/chrome-devtools/remote-debugging). That API could have http-only cookies that cannot be manipulated on the client and require a proxy that can intercept a request and do some modifications on it.
 
 ## The issue
 
@@ -18,7 +18,7 @@ Prerequisites:
 
 - NextJS [API Routes](https://nextjs.org/docs/api-routes/introduction) with the [Optional catch all API route](https://nextjs.org/docs/api-routes/dynamic-api-routes#optional-catch-all-api-routes)
 - NextJS [API middleware](https://nextjs.org/docs/api-routes/api-middlewares) using [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware)
-- a way to pick the proper URL to proxy (`PROXY_ENV` in this case)
+- a way to pick the proper URL to the proxy (`PROXY_ENV` in this case)
 
 ```js
 // pages/api/[[...slug]].ts
@@ -57,8 +57,8 @@ export const config = {
 };
 ```
 
-We can then run `PROXY_ENV=<insert-env> next dev` and then NextJS development instance will point to the appropriate api endpoint.
+We can then run `PROXY_ENV=<insert-env> next dev` and then NextJS development instance will point to the appropriate API endpoint.
 
 ## The implications
 
-The only problem with this approach is that the defined NextJS route (`pages/api/[[...slug]]`) can be reached in production since NextJS doesn't support conditonal removal of API routes. We avoided the invocation of the proxy middleware by check if the current environment is NOT "development" and returned a 404 (can be changed to something more suitable).
+The only problem with this approach is that the defined NextJS route (`pages/api/[[...slug]]`) can be reached in production since NextJS doesn't support conditional removal of API routes. We avoided the invocation of the proxy middleware by check if the current environment is NOT "development" and returned a 404 (can be changed to something more suitable).
