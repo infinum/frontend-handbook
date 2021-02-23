@@ -1,10 +1,8 @@
-## POC
-
 We made POC which uses some of the above features. We built an app which can be exported to static HTML files (wouldn't need any server processing) and that contains modals which we can access with a link.
 
 Since many of our projects use modals, it proved to be very useful to be able to access them directly by adding query parameters to the URL.
 
-### App structure
+## App structure
 
 ```
 ...
@@ -30,7 +28,7 @@ Since many of our projects use modals, it proved to be very useful to be able to
 
 `login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful, the user is redirected to the index page which acts as the home page.
 
-### Layouts
+## Layouts
 
 `Layout.tsx` is an example of a layout page for all pages. Here is an example of how we can extend `Head` section for adding global fonts.
 
@@ -86,11 +84,11 @@ export default withAuth(Index);
 
 Index page in this example is used as a private page, so we are using withAuth hoc.
 
-### Higher order components
+## Higher order components
 
 From the React documentation, Higher-Order Components (HOC) are **functions which take components and returns a new component**. They are used when we need to re-use some component logic.
 
-### WithAuth
+## WithAuth
 
 `withAuth` is simple HOC which checks if the user is authenticated, and if not, the user is redirected to the login page.
 
@@ -121,7 +119,7 @@ const withAuth = (Component) => (props) => {
 export default withAuth;
 ```
 
-### WithModal
+## WithModal
 
 Another HOC is `WithModal`, which pushes modalName inside props that can be used inside components.
 
@@ -140,7 +138,7 @@ const withModal = (Component) => (props) => {
 export default withModal;
 ```
 
-### Page with Modal
+## Page with Modal
 
 Example of how can we use modal on a page:
 
@@ -194,7 +192,7 @@ Router.push({
 });
 ```
 
-### Dynamic Modal rendering
+## Dynamic Modal rendering
 
 The only thing that is left to do is to show how we are rendering the modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until URL params contain the modal name.
 

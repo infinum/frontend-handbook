@@ -1,5 +1,3 @@
-# Project file structure
-
 ## Organizing components
 
 ### Utility components

@@ -1,5 +1,3 @@
-# React Guidelines and Best Practices
-
 *Guides are not rules and should not be followed blindly. Use your head and think.*
 
 ### Split components in smaller ones to increase reusability

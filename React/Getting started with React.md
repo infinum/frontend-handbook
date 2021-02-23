@@ -1,5 +1,3 @@
-# Getting started with React
-
 ## React
 
 [React](https://reactjs.org/) is not a Framework, it is a JavaScript library for building user interfaces.

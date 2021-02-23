@@ -1,5 +1,3 @@
-# Common SSR errors
-
 ## Avoid usage of `:first-child` CSS selector with Emotion 10
 
 If `:first-child` CSS selector is used in server-side rendered applications, React will show this warning in the console:

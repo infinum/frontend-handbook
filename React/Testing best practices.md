@@ -1,5 +1,3 @@
-# React Testing
-
 Tools we use for testing are [React-Testing-Library](https://testing-library.com/docs/) and [Jest](https://jestjs.io/docs/en/getting-started)
 
 ## Setup
