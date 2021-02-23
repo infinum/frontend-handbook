@@ -28,14 +28,37 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 let apiUrl: string;
 
-switch (process.env.PROXY_ENV) { // pick API endpoint depending on the PROXY_ENV, assign to apiUrl }
+switch (process.env.PROXY_ENV) { 
+  // pick API endpoint depending on the PROXY_ENV, assign to apiUrl 
+  case 'production':
+    apiUrl = 'https://production.example.com';
+    break;
+  case 'uat':
+    apiUrl = 'https://uat.example.com';
+    break;
+  default:
+    apiUrl = 'https://staging.example.com';
+}
 
 const proxy = createProxyMiddleware({
   target: apiUrl,
   changeOrigin: true,
   logLevel: 'debug',
   cookieDomainRewrite: 'localhost',
-  onProxyRes: (proxyRes: IncomingMessage) => { // You can manipulate the cookie here },
+  onProxyRes: (proxyRes: IncomingMessage) => { 
+    // You can manipulate the cookie here
+
+    if (!proxyRes.headers['set-cookie']) {
+      return;
+    }
+
+    // For example you can remove secure and SameSite security flags so browser can save the cookie in dev env
+    const adaptCookiesForLocalhost = proxyRes.headers['set-cookie'].map((cookie) =>
+      cookie.replace(/; secure/gi, '').replace(/; SameSite=None/gi, ''),
+    );
+
+    proxyRes.headers['set-cookie'] = adaptCookiesForLocalhost;
+  },
   onError: (err: Error) => console.error(err),
 });
 
