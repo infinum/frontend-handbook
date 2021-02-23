@@ -35,6 +35,7 @@ We are obligated to use it on every project.
 You can start using it by adding this VSCode plugin https://github.com/prettier/prettier-vscode and creating `.prettierrc` in the root of your project.
 
 Here is an example of `.prettierrc`:
+
 ```json
 {
   "$schema": "http://json.schemastore.org/prettierrc",
@@ -49,7 +50,7 @@ Here is an example of `.prettierrc`:
   "trailingComma": "es5",
 }
 ```
-##### OPTIONAL:
+#### OPTIONAL:
 You can enable `formatOnSave` in VSCode by creating `.vscode/settings.json` and adding these settings:
 ```
 {

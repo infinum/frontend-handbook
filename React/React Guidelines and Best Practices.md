@@ -14,6 +14,7 @@ export const SocialButton = ({ type, ...rest }) => {
       </Button>
     );
   }
+
   if (type === 'facebook') {
     return (
       <Button onClick={() => window.open('facebookAuthLink')} {...rest}>
@@ -22,6 +23,7 @@ export const SocialButton = ({ type, ...rest }) => {
       </Button>
     );
   }
+
   if (type === 'linkedIn') {
     return (
       <Button onClick={() => window.open('linkedAuthLink')} {...rest}>
@@ -45,6 +47,7 @@ export const SocialButton = ({ href, icon, children, ...rest }) => {
     </Button>
   );
 };
+
 export const GoogleSocialButton = (props) => {
   return (
     <SocialButton href={googleAuthLink} icon={<GoogleIcon />} {...props}>
@@ -52,6 +55,7 @@ export const GoogleSocialButton = (props) => {
     </SocialButton>
   );
 };
+
 export const FacebookSocialButton = (props) => {
   return (
     <SocialButton href={FacebookAuthLink} icon={<FacebookIcon />} {...props}>

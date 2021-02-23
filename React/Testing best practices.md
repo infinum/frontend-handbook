@@ -225,21 +225,20 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 Query priorities ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
-   - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
-   - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
-   - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
-
-- `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
-- `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
+  - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
+  - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
+  - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
+  - `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
+  - `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
 
 2. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
 
-- `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
-- `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
+  - `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
+  - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
 3. Test IDs
 
-- `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+  - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 ### Base components test example
 
