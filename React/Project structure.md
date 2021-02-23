@@ -35,8 +35,9 @@ src
 ### UI Components
 
 When adding UI components, you should be able to distinguish them by:
+
 1. Page scope based components
-2. Components that are shared all accross the app
+2. Components that are shared all across the app
 3. Large and complex components which contain a lot of stylings, different layouts and child components.
    
 Lowercase folders are indicators of a page scoped components, shared components and meta components, while PascalCase folders and filenames should be used for components naming.

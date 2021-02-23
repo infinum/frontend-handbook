@@ -68,7 +68,7 @@ We use [Eslint](https://eslint.org/) to find and fix problems in our JavaScript 
 
 ### Testing
 
-Automated testing is very important in software development. It gives us the assurance that code won't break when we add new features or change some existing implementation. You can read more about how to test in a [separate testing chapter](https://handbook.infinum.co/books/frontend/React/Testing%20best%20practices).
+Automated testing is very important in software development. It gives us the assurance that code won't break when we add new features or change some existing implementation. You can read more about how to test in a [separate testing chapter](https://infinum.com/handbook/books/frontend/react/testing-best-practices).
 
 ### Internationalization
 
