@@ -1,5 +1,3 @@
-# Project file structure
-
 ## Organizing components
 
 ### Utility components
@@ -97,6 +95,7 @@ In this case, inside a specific molecule, we could add a subfolder `layouts` (no
 ```
 
 For this case, inside `index.tsx` we would have something like this:
+
 ```tsx
   export const UserCard = () => {
     return (
@@ -132,6 +131,7 @@ Example:
 ```
 
 **Cluttered component**
+
 ```tsx
 ... imports ...
 
@@ -190,6 +190,7 @@ export const AlbumsCarousel = (props) => {
 ```
 
 **Cleaned**
+
 ```tsx
 ... other imports ...
 import { formatReleaseDate } from './utils';
@@ -320,9 +321,9 @@ src
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
         ├── foundations # colors, typography, sizes...
-            ├── fontSizes.ts
-            └── colors.ts
-        ├── components # components styles
+        │   ├── fontSizes.ts
+        │   └── colors.ts
+        └── components # components styles
             └── button.ts
 ```
 

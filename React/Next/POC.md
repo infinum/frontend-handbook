@@ -1,25 +1,23 @@
-## POC
-
 We made POC which uses some of the above features. We built an app which can be exported to static HTML files (wouldn't need any server processing) and that contains modals which we can access with a link.
 
 Since many of our projects use modals, it proved to be very useful to be able to access them directly by adding query parameters to the URL.
 
-### App structure
+## App structure
 
 ```
 ...
 ├─ components
-⎮   ├─ layouts
-⎮   ⎮   └─ Layout.tsx
-⎮   ├─ modals
+│   ├─ layouts
+│   │   └─ Layout.tsx
+│   ├─ modals
 |   |   └─ Newsletter.tsx
 |   └─ LoginRegisterForm.tsx
 ├─ hooks
 |   ├─ useUser.tsx
 ├─ pages
 |   ├─ index.tsx
-⎮   ├─ login.tsx
-⎮   ├─ register.tsx
+│   ├─ login.tsx
+│   ├─ register.tsx
 |   └─ modal.tsx
 └─ fetchers
     └─ fetcher.ts
@@ -28,16 +26,16 @@ Since many of our projects use modals, it proved to be very useful to be able to
 
 `login.tsx` and `register.tsx` are public pages whose functionality is self-explanatory. Once login is successful, the user is redirected to the index page which acts as the home page.
 
-### Layouts
+## Layouts
 
 `Layout.tsx` is an example of a layout page for all pages. Here is an example of how we can extend `Head` section for adding global fonts.
 
 ```jsx
 // /components/layouts/Layout.tsx
-import React, { Fragment } from 'react';
+import React, { Fragment, FC } from 'react';
 import Head from 'next/head';
 
-export const Layout = (props) => {
+export const Layout: FC = (props) => {
   return (
     <Fragment>
       <Head>
@@ -97,7 +95,7 @@ function getUser() {
 }
 
 export function useUser({
-  redirectTo = false,
+  redirectTo = '',
   redirectIfFound = false,
 } = {}) {
   const router = useRouter();
@@ -109,7 +107,9 @@ export function useUser({
 
     // if no redirect needed, just return (example: already on admin /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
-    if (!redirectTo || hydration || isValidating) return;
+    if (!redirectTo || hydration || isValidating) {
+      return;
+    }
 
     if (
       // If redirectTo is set, redirect if the user was not found.
@@ -131,25 +131,25 @@ Here is the implementation of simple `fetcher`
 // ./fetchers/fetcher.js
 export async function fetcher(...args) {
   try {
-    const response = await fetch(...args)
+    const response = await fetch(...args);
 
     // if the server replies, there's always some data in json
     // if there's a network error, it will throw at the previous line
-    const data = await response.json()
+    const data = await response.json();
 
     if (response.ok) {
-      return data
+      return data;
     }
 
-    const error = new Error(response.statusText)
-    error.response = response
-    error.data = data
-    throw error
+    const error = new Error(response.statusText);
+    error.response = response;
+    error.data = data;
+    throw error;
   } catch (error) {
     if (!error.data) {
-      error.data = { message: error.message }
+      error.data = { message: error.message };
     }
-    throw error
+    throw error;
   }
 }
 ```
@@ -159,12 +159,12 @@ Here is an example of how we can use `useUser`:
 
 ```jsx
 // ./pages/admin/index.tsx
-import React from 'react';
+import React, { FC } from 'react';
 // ...
 import { Layout } from '../components/layouts/Layout';
 import { useUser } from '../hooks/useUser';
 
-const Admin = () => {
+const Admin: FC = () => {
   const { user } = useUser({
     redirectTo: '/login'
   });
@@ -182,13 +182,13 @@ const Admin = () => {
 export default Admin;
 ```
 
-### Page with Modal
+## Page with Modal
 
 Example of how can we use modal on a page:
 
 ```jsx
 // /pages/modal.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -196,7 +196,7 @@ import Layout from '../components/layouts/Layout';
 import modals from '../components/modals';
 import { useUser } from '../hooks/useUser';
 
-export const ModalPage = () => {
+export const ModalPage: FC = () => {
   const router = useRouter();
 
   const onModalClose = useCallback(() => {
@@ -230,7 +230,7 @@ export const ModalPage = () => {
 export default ModalPage;
 ```
 
-### Dynamic Modal rendering
+## Dynamic Modal rendering
 
 The only thing that is left to do is to show how we are rendering the modal. In the next code snippet, we can see that modal is loaded dynamically. In that way, no component will load a modal component until URL params contain the modal name.
 

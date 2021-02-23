@@ -1,8 +1,7 @@
-# Common SSR errors
-
 ## Avoid usage of `:first-child` CSS selector with Emotion 10
 
 If `:first-child` CSS selector is used in server-side rendered applications, React will show this warning in the console:
+
 ```
 The pseudo class ":first-child" is potentially unsafe when doing server-side rendering. Try changing it to ":first-of-type"
 ```
@@ -11,6 +10,7 @@ Default server-side rendering in Emotion 10 renders the `<style>` tag inline wit
 This approach enables streaming and requires no additional configuration, but does not work with nth child or similar selectors.
 
 Here is an example of the `:first-child` selector:
+
 ```jsx
 import styled from "@emotion/styled";
 
@@ -30,6 +30,7 @@ export default () => (
 ```
 
 This is the DOM structure generated on the server-side:
+
 ```html
 <div>
   <style data-emotion-css="1fyxi0m">
@@ -54,6 +55,7 @@ This is the DOM structure generated on the server-side:
   <p class="css-1fyxi0m">Subtitle</p>
 </div>
 ```
+
 Since the first child is a `<style>` instead of a `<p>` element, the `:first-child` selector won't work.
 
 ### Solution

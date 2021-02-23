@@ -1,5 +1,3 @@
-# Chakra UI
-
 Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.
 
 ## Getting started
@@ -269,14 +267,14 @@ Theme folder structure:
 
 ```bash
 src
-├── styles
+└── styles
     └── theme
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
         ├── foundations # colors, typography, sizes...
-            ├── fontSizes.ts
-            └── colors.ts
-        ├── components # components styles
+        │   ├── fontSizes.ts
+        │   └── colors.ts
+        └── components # components styles
             └── button.ts
 ```
 
