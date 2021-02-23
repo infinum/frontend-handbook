@@ -95,7 +95,7 @@ function getUser() {
 }
 
 export function useUser({
-  redirectTo = false,
+  redirectTo = '',
   redirectIfFound = false,
 } = {}) {
   const router = useRouter();
