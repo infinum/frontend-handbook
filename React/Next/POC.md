@@ -32,10 +32,10 @@ Since many of our projects use modals, it proved to be very useful to be able to
 
 ```jsx
 // /components/layouts/Layout.tsx
-import React, { Fragment } from 'react';
+import React, { Fragment, FC } from 'react';
 import Head from 'next/head';
 
-export const Layout = (props) => {
+export const Layout: FC = (props) => {
   return (
     <Fragment>
       <Head>
@@ -157,12 +157,12 @@ Here is an example of how we can use `useUser`:
 
 ```jsx
 // ./pages/admin/index.tsx
-import React from 'react';
+import React, { FC } from 'react';
 // ...
 import { Layout } from '../components/layouts/Layout';
 import { useUser } from '../hooks/useUser';
 
-const Admin = () => {
+const Admin: FC = () => {
   const { user } = useUser({
     redirectTo: '/login'
   });
@@ -186,7 +186,7 @@ Example of how can we use modal on a page:
 
 ```jsx
 // /pages/modal.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -194,7 +194,7 @@ import Layout from '../components/layouts/Layout';
 import modals from '../components/modals';
 import { useUser } from '../hooks/useUser';
 
-export const ModalPage = () => {
+export const ModalPage: FC = () => {
   const router = useRouter();
 
   const onModalClose = useCallback(() => {
