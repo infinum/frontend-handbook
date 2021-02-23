@@ -81,9 +81,9 @@ Example:
 
 ## Different component layouts
 
-Sometimes, you might want to create a molecule specific for mobile and desktop. You might use a tool like [fresnel](https://github.com/artsy/fresnel) for detecting mediaqueries.
+Sometimes, you might want to create a component specific for mobile and desktop. You might use a tool like [fresnel](https://github.com/artsy/fresnel) for detecting media queries.
 
-In this case, inside a specific molecule, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our molecule would look like on specific media query.
+In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on specific media query.
 
 ```
 .
@@ -305,7 +305,7 @@ export async function fetchUser(store: AppCollection, id: string): Promise<User>
 
 ```
 
-You will use your fetcher functions with `useSwr` hook inside of your components (organisms, molecules, pages).
+You will use your fetcher functions with `useSwr` hook inside of your components.
 
 
 ## Setting up theming and styles
