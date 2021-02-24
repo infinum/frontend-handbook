@@ -77,10 +77,6 @@ The Nginx configuration file for the site should be updated to enable cache re-v
     }
 ```
 
-#### S3 + CloudFront example
-
-TODO
-
 ### Server-side rendering
 
 If the application uses Server-side rendering, then the caching should be handled by the Node.js server.
