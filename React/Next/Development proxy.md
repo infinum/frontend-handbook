@@ -1,6 +1,6 @@
 ## Motivation
 
-When developing applications, sometimes you want to test your local changes against data from a different environment. For example: creating a production hotfix requires you to locally connect to the production API. Maybe even testing the solution on a different device e.g. a [phone connected to your machine](https://developers.google.com/web/tools/chrome-devtools/remote-debugging). That API could have http-only cookies that cannot be manipulated on the client and require a proxy that can intercept a request and do some modifications on it.
+When developing applications, you sometimes want to test your local changes against data from a different environment. For example, creating a production hotfix requires you to locally connect to the production API. Maybe even testing the solution on a different device, e.g. a [phone connected to your machine](https://developers.google.com/web/tools/chrome-devtools/remote-debugging). That API could have http-only cookies that cannot be manipulated on the client and require a proxy that can intercept some requests and do some modifications to them.
 
 ## The issue
 
