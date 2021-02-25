@@ -84,4 +84,4 @@ We can then run `PROXY_ENV=<insert-env> next dev` and then NextJS development in
 
 ## The implications
 
-The only problem with this approach is that the defined NextJS route (`pages/api/[[...slug]]`) can be reached in production since NextJS doesn't support conditional removal of API routes. We avoided the invocation of the proxy middleware by check if the current environment is NOT "development" and returned a 404 (can be changed to something more suitable).
+The only problem with this approach is that the defined NextJS route (`pages/api/[[...slug]]`) can be reached in production because NextJS doesn't support conditional removal of API routes. We can avoid the invocation of the proxy middleware by checking if the current environment is NOT "development" and return a 404 (can be changed to something more suitable).
