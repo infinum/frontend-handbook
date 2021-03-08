@@ -48,7 +48,7 @@ Because bugs can cause financial loss, for example in stock exchange or on your 
 more important because software malfunctioning can endanger people.
 In 1985 several patients died of radiation overdose resulted from a race condition in code.
 In 1994 aeroplane crashed due to bug killing 264 people.
-Same year helicopter crashed and killed 29 people because flying system went down.
+Same year, a helicopter crashed and killed 29 people because flying system went down.
 The list goes on.
 
 Maybe you are thinking now doing small projects or projects that cannot put anyone in danger
@@ -57,7 +57,7 @@ happen.
 
 After all, will your boss be happy because of you developing broken software?
 
-Or you might be thinking that testing means more time to deliver software, and it will take you really
+Or you might be thinking that testing means more time to deliver software, and it will be really
 slow, but searching for that one character bug that destroys large application flow is more time-consuming and expensive - and stressful.
 
 ### Types of testing
@@ -66,7 +66,7 @@ There are lots of types, categories, groupings and ways of testing, again we are
 software testing.
 
 We will mention some of them, but feel free to look on the Internet for more
-because list can go long and classification can vary.
+because the list can go long and classification can vary.
 
 Common types you will find are:
 1. Unit testing
@@ -75,9 +75,9 @@ Common types you will find are:
     You usually check if for specific input, to a function for example, you get specific output.
     Or if function returns nothing, you might test if something else was done inside its body like other
     function call or some variable being modified.
-    Unit testing usually do developers who wrote the code.
+    Unit testing is usually done by the same developers who wrote the code.
 
-    One thing to remember is that you do not test code that is it not yours.
+    One thing to remember is that you do not test code that is not yours.
     You do not test if React will call componentDidMount or not, or that JSX will be compiled correctly,
     or that some external function will do whatever it should be doing.
     External libraries and code should already have their tests.
@@ -87,13 +87,13 @@ Common types you will find are:
 
     Since we know what are unit tests, we can now describe what are integration tests and what is
     integration testing.
-    Basically, it is testing of units combined and tested as group.
+    Basically, it is testing of units combined and tested as a group.
     Purpose of these tests are checking if interaction between units is correct and that there are no
     faults.
     
     It is more complex than unit testing, and sometimes you also need to have some configuration.
     For example if you test that after some „add“ button click, your list will have one item more.
-    These tests usually do code authors as well.
+    These tests are usually done by the code authors as well.
 
 3. System testing
 
@@ -118,8 +118,8 @@ Common types you will find are:
     lowered for correct amount, and correct amount should be added to seller, correct items should be
     ordered and so on.
     So like a real world application usage.
-    As you can already see, end to end testing is really difficult to be done with automatic tests.
-    This kind of tests usually do QA people since it might require separate database and backend from staging/development one.
+    As you can already see, end to end testing is really difficult to do with automatic tests.
+    This kind of tests is usually done by QA people, since it might require a separate database and backend from staging/development one.
 
 Above list of testing types can be also called functional and there are more than these types.
 There are also non-functional testing types, like:
@@ -130,7 +130,7 @@ There are also non-functional testing types, like:
 - Acceptance testing
 - And more...
 
-Remember, what and how should software is tested and by whom depends on your organization,
+Remember, what and how should software be tested and by whom depends on your organization,
 company or team.
 For example, Quality Assurance team might do one set of tests instead of you.
 Or maybe you will do all by yourself.
@@ -231,7 +231,7 @@ added.
 Can you see how these checks are describing usage similar to your requirements?
 This is very important.
 Imagine someone goes to your tests first.
-He can know what your code does, if we assume that tests pass, without going to source.
+They can know what your code does, if we assume that tests pass, without going to source.
 This is something that is making tests cost effective.
 If someone needs to know functionality or refactor, it will be easy to do.
 We can add few more tests and continue to talk about TDD.
@@ -322,7 +322,7 @@ When working on a project as a team you decide
 It is not different when deciding these points (and more) for application testing.
 
 There are some "laws" created by community and us which need to be followed, but rest is on you and your team.
-Main point is that everyone is on the same page after made decisions.
+The main point is that everyone is on the same page after the decisions are made.
 
 #### "Laws"
 
