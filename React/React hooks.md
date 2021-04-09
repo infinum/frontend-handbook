@@ -355,8 +355,7 @@ export const MyList: FC = () => {
 
 #### You don't have to avoid "inlining" non-expensive functions
 
-React is good at optimizing, so if you prematurely decide to wrap a function inside a `useCallback`, in most cases you will get slower performance. This is because memoization is expensive.
-In most cases, even if you improve performance, it will be an insignificant gain compared to simple and maintainable code you had before.
+React is good at optimizing, so if you prematurely decide to wrap a function inside a `useCallback`, often you will end up with slower performance. This is because memoization is expensive. In most cases, even if you improve performance, it will be an insignificant gain compared to simple and maintainable code you had before.
 
 ```jsx
 export const MyButton: FC = () => {
