@@ -1,10 +1,9 @@
 ### React hooks
 
-#### Hooks flow
-
 React Hooks were introduced in version 16.8.0 as Function Component counterpart of Class Component Lifecycle.
 For more information, see the official [React Hooks API Reference](https://reactjs.org/docs/hooks-reference.html).
 
+#### Hooks flow
 Before we start using hooks in React we need to understand the flow.
 
 Here is a flow diagram that explains the new flow of a Hooks component.
