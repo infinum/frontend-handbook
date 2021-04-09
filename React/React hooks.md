@@ -358,7 +358,7 @@ export const MyList: FC = () => {
 React is good at optimizing, so if you prematurely decide to wrap a function inside a `useCallback` and declare it in the component scope, you might get slower performance in many cases, because how memoization can be expensive. In most cases, even if you improve performance, it will be insignificant in comparison to making your code less clean and harder to maintain.
 
 ```jsx
-export const IncrementButton: FC = ({ onClick, stepSize }) => {
+export const StepButton: FC = ({ onClick, stepSize }) => {
   /** 
   * You don't have to optimise (wrap in useCallback) because onClick and stepSize 
   * are the same on each render and React can optimise this by itself.
@@ -370,28 +370,96 @@ export const IncrementButton: FC = ({ onClick, stepSize }) => {
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
 
-  const increment = useCallback((stepSize) => { setState((previousCount) => previousCount + stepSize) }, []);
+  const increment = useCallback((stepSize) => { setCount((previousCount) => previousCount + stepSize) }, []);
 
   return (
     <div>
       <div>Count {count}</div>
-      <IncrementButton onClick={increment} stepSize={2} />
+      <StepButton onClick={increment} stepSize={2} />
     </div>
   );
 }
 ```
 
-```jsx
-// Or event BETTER (using the encapsulation)
-const useCount = (initialState = 0) => {
-  const [state, setState] = React.useState(initialState);
+#### Hooks encapsulation
 
-  const handlers = React.useMemo(
+Common problem with hooks is that the components using them could go out of control and become unreadable and messy. 
+That happens when you have multiple `useEffect` and `useCallback` in you FC component body, and that happens often if you are building real world product. To overcome this problem we can do the same thing as in class based component, split things in smaller chunks of logic and put them somewhere else, e.g. private methods of class component, custom hooks in Function components.
+
+The Problem:
+
+This is the continuation of previous section, but we will expand it with some additional requirements. 
+We need to add input field in which we can input the thing we are counting, and add decrement and reset handlers for counter.
+
+This is the previous code:
+```jsx
+export const MyComponent: FC = () => {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback((stepSize) => { setCount((previousCount) => previousCount + stepSize) }, []);
+
+  return (
+    <div>
+      <div>Count {count}</div>
+      <StepButton onClick={increment} stepSize={2} />
+    </div>
+  );
+}
+```
+
+This is the updated code with additional features.
+```jsx
+export const MyComponent: FC = () => {
+  const [count, setCount] = useState(0);
+  const [inputState, setInputState] = useState('')
+
+  const increment = useCallback((stepSize) => { setCount((previousCount) => previousCount + stepSize) }, []);
+  const decrement = useCallback((stepSize) => { setCount((previousCount) => previousCount + stepSize) }, []);
+  const reset = useCallback(() => { setCount(0) }, []);
+
+  const handleInputChange = useCallback(e => {
+    setInputState(e.target.value);
+  }, []);
+
+  return (
+    <div>
+      <div>
+        <label htmlFor="entity">Entity</label>
+        <input
+          type="text"
+          id="entity"
+          onChange={handleInputChange}
+          value={inputState}
+        />
+      </div>
+      <div>Count {count}</div>
+      <StepButton onClick={increment} stepSize={2} />
+      <StepButton onClick={decrement} stepSize={-2} />
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+```
+
+You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, e.g. custom hooks.
+
+The Solution:
+
+```jsx
+const useCount = (initialState = 0) => {
+  const [state, setState] = useState(() => initialState);
+
+  const handlers = useMemo(
     () => ({
       increment: (stepSize = 1) => {
         setState(previousCount => previousCount + stepSize)
       },
-      // you can add additional handlers (decrement, reset)
+      decrement: (stepSize = -1) => { 
+        setState((previousCount) =>  previousCount + stepSize)
+      },
+      reset: () => {
+        setState(0)
+      }
     }),
     [initialState]
   );
@@ -399,17 +467,44 @@ const useCount = (initialState = 0) => {
   return [state, handlers];
 }
 
+const useInput = (initialState = '') => {
+  const [state, setState] = useState(() => initialState);
+
+  const handlers = useMemo(() => ({
+    handleInputChange: (event) => {
+      setState(event.target.value);
+    }
+  })), []);
+
+  return [state, handlers]
+}
+
 export const MyComponent: FC = () => {
-  const [state, { increment }] = useCounter();
+  const [count, { increment, decrement, reset }] = useCounter();
+  const [inputState, { handleInputChange }] = useInput();
 
   return (
     <div>
+      <div>
+        <label htmlFor="entity">Entity</label>
+        <input
+          type="text"
+          id="entity"
+          onChange={handleInputChange}
+          value={inputState}
+        />
+      </div>
       <div>Count {count}</div>
-      <IncrementButton onClick={increment} stepSize={2} />
+      <StepButton onClick={increment} stepSize={2} />
+      <StepButton onClick={decrement} stepSize={-2} />
+      <button onClick={reset}>Reset</button>
     </div>
   );
-}
 ```
+
+Useful links:
+1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)
+1. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)
 
 #### Before you use memoization
 
