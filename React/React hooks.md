@@ -374,7 +374,37 @@ export const MyComponent: FC = () => {
 
   return (
     <div>
-      <div>{count}</div>
+      <div>Count {count}</div>
+      <IncrementButton onClick={increment} stepSize={2} />
+    </div>
+  );
+}
+```
+
+```jsx
+// Or event BETTER (using the encapsulation)
+const useCount = (initialState = 0) => {
+  const [state, setState] = React.useState(initialState);
+
+  const handlers = React.useMemo(
+    () => ({
+      increment: (stepSize = 1) => {
+        setState(previousCount => previousCount + stepSize)
+      },
+      // you can add additional handlers (decrement, reset)
+    }),
+    [initialState]
+  );
+
+  return [state, handlers];
+}
+
+export const MyComponent: FC = () => {
+  const [state, { increment }] = useCounter();
+
+  return (
+    <div>
+      <div>Count {count}</div>
       <IncrementButton onClick={increment} stepSize={2} />
     </div>
   );
