@@ -90,13 +90,13 @@ export const MyComponent: FC = () => {
 }
 ```
 
-While you might think that a value will never change, it is not garanteed, and React could use a stale value or reference, which might introduce bugs that are hard to trace in the future.
+While you might think that a value will never change, it is not guaranteed, and React could use a stale value or reference, which might introduce bugs that are hard to trace in the future.
 
-If you are doing this, there is good chance that you should rethink the implemenation and you actually need an alternative approach.
+If you are doing this, there is good chance that you should rethink the implementation and you actually need an alternative approach.
 
 #### Derive new state from the previous state value, if possible
 
-This way, you can avoid using state values as hook dependencies and causing additional rerenders.
+This way, you can avoid using state values as hook dependencies and causing additional re-renders.
 
 ```jsx
 // BAD
@@ -124,7 +124,7 @@ export const Counter: FC = ({ incrementBy = 1 }) => {
 ```
 
 #### Prefer splitting individual state items, instead of using a single state object
-While in some case, it will make more sense to group state items into a single object, if it's not neccessary, store them individually:
+While in some case, it will make more sense to group state items into a single object, if it's not necessary, store them individually:
 
 ```jsx
 
@@ -227,7 +227,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
   useEffect(() => {
     /**
-      On each render, `useEffect` is causing an additional rerender,
+      On each render, `useEffect` is causing an additional re-render,
       since it's dependency is an object with a new reference every time.
     */
   }, [nonMemoizedObject])
@@ -236,7 +236,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 }
 ```
 
-Assuming that `propA` and `propB` are primitive (or memoized, non-primitive) values, with `useMemo` you are ensuring that non-primitive references are retained throughout rerenders, until `propA` or `propB` have changed.
+Assuming that `propA` and `propB` are primitive (or memoized, non-primitive) values, with `useMemo` you are ensuring that non-primitive references are retained throughout re-renders, until `propA` or `propB` have changed.
 
 ```jsx
 export const MyComponent: FC = ({ propA, propB }) => {
@@ -246,14 +246,14 @@ export const MyComponent: FC = ({ propA, propB }) => {
   }, [propA, propB]);
 
   useEffect(() => {
-    // Triggers rerenders only if object values have changed and `memoizedObject` is recreated
+    // Triggers re-renders only if object values have changed and `memoizedObject` is recreated
   }, [memoizedObject])
  
   // ...
 }
 ```
 
-You can apply the same way of thinking if you need to pass an non-primitive value as a prop to a component and you know it will cause a large subtree to rerender each time it changes:
+You can apply the same way of thinking if you need to pass an non-primitive value as a prop to a component and you know it will cause a large subtree to re-render each time it changes:
 
 ```jsx
 export const MyComponent: FC = ({ propA, propB }) => {
@@ -270,13 +270,16 @@ export const MyComponent: FC = ({ propA, propB }) => {
 }
 ```
 
-#### Do not use `useMemo` as a garantee that it will be a constant throughout component rerenders
+#### Do not use `useMemo` as a semantic guarantee that it will be a constant throughout component re-renders
 
-If you need a value to stay the same throughout rerenders, you might think of `useMemo` as a nice way to "mimick" a constant. While it might seem that way, [it is not garanteed](https://reactjs.org/docs/hooks-reference.html#usememo) that it will not get garbage collected and that the value will not be recalculated.
+If you need a value to stay the same throughout re-renders, you might think of `useMemo` as a nice way to "mimic" a constant. While it might seem that way, [it is not guaranteed](https://reactjs.org/docs/hooks-reference.html#usememo).
+
+> **You may rely on useMemo as a performance optimization, not as a semantic guarantee.** In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for offscreen components. Write your code so that it still works without useMemo — and then add it to optimize performance.
 
 ```jsx
+// BAD
 export const MyComponent: FC = () => {
-  const id = useMemo(() => generateId(), []); // Not garanteed to be a constant
+  const id = useMemo(() => generateId(), []); // Not guaranteed to be a constant
 
   // ...
 }
@@ -285,15 +288,16 @@ export const MyComponent: FC = () => {
 Alternative approach, with lazy initialization:
 
 ```jsx
+// GOOD
 export const MyComponent: FC = () => {
-  const [id, _] = useState(() => generateId()); // Initial value will stay the same throughout rerenders
+  const [id, _] = useState(() => generateId()); // Initial value will stay the same throughout re-renders
 
   // ...
 }
 ```
 
 You can also store the value in a ref:
-_Note: updating ref values will not trigger a rerender._
+> Note: updating ref values will not trigger a re-render.
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -307,23 +311,43 @@ export const MyComponent: FC = () => {
 }
 ```
 
-If you want the component to rerender when the value is set:
+If you still need to trigger update imperatively you can use `useUpdate`
 
 ```jsx
-export const Component: FC = () => {
-  const [id, setId] = useState();
+const updateReducer = (num: number): number => (num + 1) % 1_000_000;
 
-  useEffect() => {
-    if (!id) {
-      setId(generateId());
-    }
-  }, [id]);
+export default function useUpdate(): () => void {
+  const [, update] = useReducer(updateReducer, 0);
 
-  // ...
+  return update;
 }
 ```
 
-#### Wrap functions with `useCallback` it they can cause large subtrees to rerender too often
+#### Two-pass rendering
+
+If you intentionally need to render something different on the server and the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect`. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
+
+Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the previous paragraph
+
+```jsx
+const useIsClient = () => {
+  const [isClient, setClient] = useState(false);
+
+  useEffect(() => {
+    setClient(true)
+  }, []);
+
+  return isClient;
+}
+
+export const Component: FC = () => {
+  const isClient = useIsClient();
+
+  return <div>{isClient ? 'Client' : 'Server'}</div>
+}
+```
+
+#### Wrap functions with `useCallback` it they can cause large subtrees to re-render too often
 
 While it is mostly unnecessary to wrap functions with `useCallback`, since the memoization process will usually be as expensive or more, it can be useful if functions' dependencies change often or if they are passed down to a large subtree of children.
 
@@ -341,7 +365,7 @@ export const MyButton: FC = () => {
 ```
 
 ```jsx
-// Here, memoization is probably useful, because `onClick` will stay the same if other state rerenders the component, and will not trigger a large subtree to rerender unnecessarily
+// Here, memoization is probably useful, because `onClick` will stay the same if other state re-renders the component, and will not trigger a large subtree to re-render unnecessarily
 export const MyList: FC = () => {
   // ...
 
@@ -508,7 +532,7 @@ Useful links:
 
 #### Before you use memoization
 
-Have in mind that React is really good at optimizing rerenders by default.
+Have in mind that React is really good at optimizing re-renders by default.
 
 You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculations can be expensive and you could end up using more memory than you would without them and make you code more complicated to read and maintain.
 
