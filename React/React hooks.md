@@ -383,7 +383,7 @@ Have in mind that React is really good at optimizing rerenders by default.
 
 You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculation's can be expensive and you could end up using more memory than you would without them and make you code more complicated to read and maintain.
 
-If it's not obvious that memoization is necessary, profile your app performance without it first, using React dev tools, and then optimize if necessary.
+If it's not obvious that memoization is necessary, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.
 
 <figure class="image">
   <img src="/img/react-hooks/profiler.png" alt="React Devtools Profiler">
