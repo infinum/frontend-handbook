@@ -371,7 +371,7 @@ export const MyButton: FC = () => {
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
 
-  const increment = useCallBack((stepSize = 1) => { setState((previousCount) => previousCount + stepSize) });
+  const increment = useCallback((stepSize = 1) => { setState((previousCount) => previousCount + stepSize) });
 
   return <Button onClick={onButtonClick} />;
 }
