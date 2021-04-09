@@ -236,23 +236,6 @@ export const MyComponent: FC = ({ propA, propB }) => {
 }
 ```
 
-Assuming that `propA` and `propB` are primitive (or memoized, non-primitive) values, with `useMemo` you are ensuring that non-primitive references are retained throughout rerenders, until `propA` or `propB` have changed.
-
-```jsx
-export const MyComponent: FC = ({ propA, propB }) => {
-  const memoizedObject = useMemo(() => {
-    a: propA,
-    b: propB,
-  }, [propA, propB]);
-
-  useEffect(() => {
-    // Triggers rerenders only if object values have changed and `memoizedObject` is recreated
-  }, [memoizedObject])
- 
-  // ...
-}
-```
-
 You can apply the same way of thinking if you need to pass an non-primitive value as a prop to a component and you know it will cause a large subtree to rerender each time it changes:
 
 ```jsx
