@@ -381,6 +381,25 @@ export const MyComponent: FC = () => {
 
 Have in mind that React is really good at optimizing rerenders by default.
 
-You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculation's can be expensive and you could end up using more memory than you would without them and make you code more complicated to read and mantain.
+You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculation's can be expensive and you could end up using more memory than you would without them and make you code more complicated to read and maintain.
 
 If it's not obvious that memoization is necessary, profile your app performance without it first, using React dev tools, and then optimize if necessary.
+
+<figure class="image">
+  <img src="/img/react-hooks/profiler.png" alt="React Devtools Profiler">
+  <figcaption>
+    <a href="https://github.com/facebook/react/tree/master/packages/react-devtools" target="_blank">
+    React Devtools Profiler
+    </a>
+  </figcaption>
+</figure>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">⚛️🛠 Prototype of a new Profiler feature, &quot;Scheduled by&quot;, enumerating which fibers triggered the current commit (which ones called set state).<br><br>Would this be useful? Could it be more useful? <a href="https://t.co/7AvVHB0wPY">pic.twitter.com/7AvVHB0wPY</a></p>&mdash; Brian Vaughn 🖤 (@brian_d_vaughn) <a href="https://twitter.com/brian_d_vaughn/status/1126950967201546240?ref_src=twsrc%5Etfw">May 10, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+If you want to dive deeper here are some useful articles:
+1. [When to useMemo and useCallback
+](https://kentcdodds.com/blog/usememo-and-usecallback)
+1. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)
+1. [Profile a React App for Performance
+](https://kentcdodds.com/blog/profile-a-react-app-for-performance)
+1. [React Production Performance Monitoring](https://kentcdodds.com/blog/react-production-performance-monitoring)
