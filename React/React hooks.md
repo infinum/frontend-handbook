@@ -20,7 +20,6 @@ export const MyComponent: FC = ({ numberProp, stringProps }) => {
 
   const previousStateRef = useRef();
 
-  // 1. Run Lazy initializers (e.g.() => { previousStateRef.current = state })
   useEffect(() => {
     // 3. Run effect
     previousStateRef.current = state;
