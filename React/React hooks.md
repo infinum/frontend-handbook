@@ -14,7 +14,7 @@ Here is a flow diagram that explains the new flow of a Hooks component.
 Here is the code example that explains this flow.
 
 ```jsx
-export const MyComponent: FC = ({ numberProp, stringProps }) => {
+export const MyComponent: FC = () => {
   // 1. Run Lazy initializers (e.g.() => 0)
   const [state, setState] = useState(() => 0); 
 
