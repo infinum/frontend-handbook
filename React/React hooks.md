@@ -273,7 +273,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 }
 ```
 
-#### Wrap non-primitive values with useMemo, if you are using them as depenencies or sending them as props
+#### Wrap non-primitive values with useMemo, if you are using them as dependencies or sending them as props
 
 Since objects will be recreated on each render, they will also have a different reference every time - and `useEffect` will treat it as a changed dependency.
 
