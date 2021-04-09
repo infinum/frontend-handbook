@@ -355,25 +355,29 @@ export const MyList: FC = () => {
 
 #### You don't have to avoid "inlining" non-expensive functions
 
-React is good at optimizing, so if you prematurly decide to wrap a function inside a `useCallback` and declare it in the component scope, you might get slower performance in many cases, because how memoization can be expensive. In most cases, even if you improve performance, it will be insignificant in comparison to making your code less clean and harder to mantain.
+React is good at optimizing, so if you prematurely decide to wrap a function inside a `useCallback` and declare it in the component scope, you might get slower performance in many cases, because how memoization can be expensive. In most cases, even if you improve performance, it will be insignificant in comparison to making your code less clean and harder to maintain.
 
 ```jsx
-export const MyButton: FC = () => {
-  // ...
-
-  return <Button onClick={(e: SyntheticEvent<HTMLButtonElement>) => setValue(e.target.value)} />;
+export const IncrementButton: FC = ({ onClick, stepSize }) => {
+  /** 
+  * You don't have to optimise (wrap in useCallback) because onClick and stepSize 
+  * are the same on each render and React can optimise this by itself.
+  **/
+  return <button onClick={() => onClick(stepSize)}>Increment for {stepSize}</button>;
 }
-```
 
-
-```jsx
 // GOOD
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
 
-  const increment = useCallback((stepSize = 1) => { setState((previousCount) => previousCount + stepSize) });
+  const increment = useCallback((stepSize) => { setState((previousCount) => previousCount + stepSize) }, []);
 
-  return <Button onClick={onButtonClick} />;
+  return (
+    <div>
+      <div>{count}</div>
+      <IncrementButton onClick={increment} stepSize={2} />
+    </div>
+  );
 }
 ```
 
