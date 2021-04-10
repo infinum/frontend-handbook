@@ -17,7 +17,7 @@ Here is the code example that explains this flow.
 
 ```jsx
 export const MyComponent: FC = () => {
-  // 1. Run Lazy initializers (e.g.() => 0)
+  // 1. Run Lazy initializers (i.e. () => 0)
   const [state, setState] = useState(() => 0); 
 
   const previousStateRef = useRef();
@@ -602,7 +602,7 @@ export const MyComponent: FC = () => {
 #### Hooks encapsulation
 
 Common problem with hooks is that the components using them could go out of control and become unreadable and messy. 
-That happens when you have multiple `useEffect` and `useCallback` in you Function Component body, and that happens often if you are building real world product. To overcome this problem we can do the same thing as we would do the Class Component, split things in smaller chunks of logic and put them somewhere else, e.g. private methods of Class Component or custom hooks in Function Components.
+That happens when you have multiple `useEffect` and `useCallback` in you Function Component body, and that happens often if you are building real world product. To overcome this problem we can do the same thing as we would do the Class Component, split things in smaller chunks of logic and put them somewhere else, i.e. private methods of Class Component or custom hooks in Function Components.
 
 The Problem:
 
@@ -659,7 +659,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, e.g. custom hooks.
+You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
 
 The Solution:
 
