@@ -8,7 +8,7 @@ This chapter will assume opting in to Play App Signing.
 ### Generating an upload key
 To create your *upload key*, you can run this command in the terminal. *(do it in* `android/app`*)*  
   
-```bash
+```
 keytool -genkey -v -keystore release.keystore -alias my-key-alias -storetype PKCS12 -keyalg RSA -keysize 2048 -validity 10000
 ```
   
@@ -52,28 +52,34 @@ MYAPP_KEY_PASSWORD=*****
 
 #### Generating the APK
 
-If you want to generate the apk file for testing purposes or uploading to Labs, you can do it by running this command in `android` directory:  
-```bash
+If you want to generate the apk file for testing purposes or uploading to Labs, you can do it by running this command in `android` directory: 
+
+```
 ./gradlew assembleRelease
 ```
+
 The APK will be located in `android/app/build/outputs/apk/release/app-release.apk` and will be signed with your `upload key`.  
   
 If your app has multiple flavours like in this example:
+
 ```
 productFlavors {
     staging { ... }
     production { ... }
 }
 ```
+
 you would use `assembleStagingRelease` or `assembleProductionRelease` commands.  
 
 #### Generating the bundle
 
 If you want to upload the app to Google Play, it's recommended you generate an AAB file.  
 Like with generating the APK, you use the same command but replace `assemble` with `bundle`, like this:  
-```bash
+
+```
 ./gradlew bundleRelease
 ```
+
 The AAB will be located in `android/app/build/outputs/bundle/release/app-release.aab` and you can upload it to Google Play.  
   
 If your project for some reason requires uploading the APK file to Google Play, you can upload the one signed with the *upload key* but you lose the benefits of app spliting. Read more about this [here](https://developer.android.com/guide/app-bundle).

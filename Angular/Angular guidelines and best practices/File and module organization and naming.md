@@ -10,12 +10,15 @@ Services should be placed in `src/app/services`.
 
 Try to keep the code grouped by domain. For example, if you have a `Post` class, `IPost` interface, and a `PostService` used for managing the blog posts, you can have all these files inside one directory like so:
 
-- `src/app/services/post/`
-  - `post.service.ts`
-  - `post.service.spec.ts`
-  - `post.interface.ts`
-  - `post.model.ts`
-  - `post.model.spec.ts`
+```
+
+src/app/services/post/
+├── post.service.ts
+├── post.service.spec.ts
+├── post.interface.ts
+├── post.model.ts
+└── post.model.spec.ts
+```
 
 ## Pages
 
@@ -26,20 +29,27 @@ Container components that are loaded directly via routing (by either `component`
 If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. Here are some examples:
 
 - Post component is used in `posts-container` (list of posts) and `users-container` (user's list of posts) top-level routes:
-  - `src/app/`
-    - `components/`
-      - `post/`
-    - `pages/`
-      - `users-container/`
-      - `posts-container/`
-- `PostsCount` component is used only inside `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes.
-  - `src/app/`
-    - `pages/`
-      - `users-container/`
-        - `components/`
-          - `posts-count/`
-        - `user-details-container/`
-        - `users-list-container/`
+
+```
+src/app/
+├── components/
+│   └── post/
+└── pages/
+    ├── users-container/
+    └── posts-container/
+```
+
+- `PostsCount` component is used only inside the `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes:
+
+```
+src/app/
+└── pages/
+    └── users-container/
+        ├── components/
+        │   └── posts-count/
+        ├── user-details-container/
+        └── users-list-container/
+```
 
 ## Animations
 
@@ -61,11 +71,28 @@ If an enum is used across multiple top-level modules, you can place the enum in 
 
 If you need some metadata for the enum, create an enum data file which exports what is basically a dictionary with enum values used as keys, and use whatever you need for values. One such example would be:
 
+`src/app/interfaces/translatable-enum.interface.ts`
+
 ```typescript
-export const httpStatusCodeData = { [HttpStatus.OK_200]: { translationKey: 'http.success' } }
+export interface ITranslatableEnum {
+  translationKey: string;
+}
 ```
 
-If the enum data is a bit more complex, defining an interface for it can be useful.
+`src/app/enums/http-status.enum.ts`
+
+```typescript
+export enum HttpStatus {
+  200_OK: 200,
+  ...
+}
+
+export const httpStatusCodeData: Record<HttpStatus, ITranslatableEnum> = {
+  [HttpStatus.200_OK]: {
+    translationKey: 'http.success'
+  }
+}
+```
 
 ## Guards
 
@@ -84,7 +111,7 @@ If a pipe is very specific and tied to a particular component, create it alongsi
 
 ## Shared modules
 
-If you have any `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`.
+If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`.
 
 ## Custom types
 
@@ -92,9 +119,9 @@ Generic TypeScript `type` declarations should be placed in `src/app/types`. If t
 
 ## Assets, global styles, and partials
 
-As defined by `angular-cli`, assets placed in `src/assets` will be served statically.
+As defined by the `angular-cli`, assets placed in `src/assets` will be served statically.
 
-Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](/books/frontend/SASS%20Styleguide/File%20organization), so please check it out.
+Global styles should be placed in the `src/app/styles` dir. The styles dir has a very similar structure as that described in the [SASS Styleguide](https://infinum.com/handbook/books/frontend/sass-styleguide/file-organization), so please check it out.
 
 ## NgxFormObject
 
