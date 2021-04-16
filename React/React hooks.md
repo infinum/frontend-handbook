@@ -728,7 +728,7 @@ export const MyComponent: FC = () => {
   );
 ```
 
-Useful links:
+Useful links:  
 1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)  
 2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)  
 
