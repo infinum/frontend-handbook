@@ -615,6 +615,7 @@ This is a continuation of the previous section, but we will expand on it with so
 We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
 
 This is the previous code:  
+
 ```jsx
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
@@ -631,6 +632,7 @@ export const MyComponent: FC = () => {
 ```
 
 This is the updated code with additional features.  
+
 ```jsx
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
