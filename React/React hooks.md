@@ -729,8 +729,8 @@ export const MyComponent: FC = () => {
 ```
 
 Useful links:
-1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)
-1. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)
+1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)  
+2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)  
 
 #### Before you use memoization
 
