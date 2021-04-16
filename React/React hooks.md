@@ -918,7 +918,7 @@ export const MyComponent: FC = () => {
 
 In the above example `setCounter1`, `setCounter2` and `setCounter3` updates inside click handler will be batched and component will be re-rendered only once.
 
-The problem appears when we have async handler and React can't perform aromatic batching.
+The problem appears when we have async handler and React can't perform automatic batching.
 
 The Problem ⚡  
 
