@@ -42,14 +42,17 @@ export const MyComponent: FC = () => {
 ```
 
 In the "Mount" phase you will see:  
-```
+
+```jsx
 Prev: undefined
 Current: 0
 ```
+
 This is because `useEffect` is called after the first render and because assigning a value to `ref` does not trigger a re-render - instead, the value is populated and waiting for the next update phase.
 
 When `button` is clicked, React will trigger the `update` phase and the result will be:  
-```
+
+```jsx
 Prev: 0
 Current: 1
 ```
@@ -735,7 +738,7 @@ You might get tempted to wrap values and functions with `useMemo` and `useCallba
 If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.
 
 <figure class="image">
-  <img src="/handbook/img/react-hooks/profiler.png" alt="React Devtools Profiler">
+  <img src="handbook/img/frontend/react-hooks/profiler.png" alt="React Devtools Profiler">
   <figcaption>
     <a href="https://github.com/facebook/react/tree/master/packages/react-devtools" target="_blank">
     React Devtools Profiler
