@@ -1,19 +1,22 @@
 ### React hooks
 
-React Hooks were introduced in version 16.8.0 as Function Component counterpart of Class Component Lifecycle.  
+React Hooks were introduced in version 16.8.0 as function component counterpart of class component lifecycles.  
 For more information, see the official [React Hooks API Reference](https://reactjs.org/docs/hooks-reference.html).
 
 #### Hooks flow
-Before we start using hooks in React we need to understand the flow.
+Before starting, it is important to understand the flow of react hooks.
 
-Here is a flow diagram that explains the new flow of a Hooks component.
+Here is a diagram that explains it visually:
+
+
+![hooks-flow](https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png)
 <br/>
 <br/>
 ![hooks-flow](https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png)
 
 > Most important thing here is to notice how "Run Effects" phase is executed last!
 
-Here is the code example that explains this flow.
+Here is a code example that explains this flow:
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -45,9 +48,9 @@ In the "Mount" phase you will see:
 Prev: undefined
 Current: 0
 ```
-This is because `useEffect` is called after the first render and also assigning values to `ref` does not trigger re-render, instead, the value is populated and waiting for next update phase.
+This is because `useEffect` is called after the first render and because assigning a value to `ref` does not trigger a re-render - instead, the value is populated and waiting for the next update phase.
 
-When button is clicked React will trigger `Update` phase and result will be:
+When `button` is clicked, React will trigger the `update` phase and the result will be:
 ```
 Prev: 0
 Current: 1
@@ -74,7 +77,7 @@ export const MyComponent: FC = ({ numberProp, stringProps }) => {
 }
 ```
 
-For non-primitive values like objects, arrays and functions, React will do a reference comparison using [Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is). This means that we must provide the same reference of `objectProp`, `arrayProp`, `functionProp` to `Child` on every re-render if we don't want to trigger `useEffect` every time. This can be achieved by extracting them outside component function or wrapping them in `useMemo` or `useCallback`.  
+For non-primitive values like objects, arrays and functions, React will do a reference comparison using [Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is). This means that we must provide the same reference of `objectProp`, `arrayProp`, `functionProp` to `Child` on every re-render if we don't want to trigger `useEffect` every time. This can be achieved by extracting them outside of the component or wrapping them in `useMemo` or `useCallback`.  
 Check [Using Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is#using_object.is) section on MDN for better understanding.
 
 > There is [JavaScript Records & Tuples Proposal](https://github.com/tc39/proposal-record-tuple) which will invalidate above arguments and make thing simpler.
@@ -121,7 +124,7 @@ const Parent: FC = () => {
   );
 }
 
-// FUTURE with Records & Tuples (finger crossed)
+// FUTURE with Records & Tuples (fingers crossed)
 const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
@@ -147,8 +150,8 @@ export const MyComponent: FC = () => {
 }
 ```
 
-if you don't provide dependency array at all `useEffect` will be called on `mount` and every `update`.
-For example, this could be used for storing previous value or you want to send an event to an analytics service on each state change.
+If you don't provide a dependency array at all, `useEffect` will be called on `mount` and on each `update`.
+For example, this could be used for storing previous values or sending events to an analytics service on each state change.
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -156,14 +159,15 @@ export const MyComponent: FC = () => {
   const prevRef = useRef();
 
   useEffect(() => {
-    // runs on mount every update
+    // runs on mount and on each update
     prevRef.current = state;
   })
 
   // ...
 }
 ```
-You may think why can't we just do it without `useEffect`. What's the difference? Well, there is thing called `not block rendering` (Concurrent Mode) and we can consider this as a kind of preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
+You may think to yourself "Why can't we just do it without `useEffect`?". What's the difference? 
+There is an upcoming React feature called [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html), so we can consider this approach as kind of a preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
 
 Useful links:
 1. [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect)
@@ -227,7 +231,7 @@ If you are doing this, there is good chance that you should rethink the implemen
 
 #### Derive new state from the previous state value, if possible
 
-This way, you can avoid using state values as hook dependencies and causing additional re-renders.
+re-renders.
 
 ```jsx
 // BAD
@@ -343,7 +347,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 }
 ```
 
-#### Defer creation of non-primitive values if you are using them within dependency array
+#### Defer creation of non-primitive values if you are using them within a dependency array
 
 Since objects will be recreated on each render, they will also have a different reference every time - and `useEffect` will treat it as a changed dependency.
 
@@ -407,7 +411,7 @@ export const MyDataChartWithIntersection: FC = ({ xAxisData, yAxisData }) => {
 
 If you need a value to stay the same throughout re-renders, you might think of `useMemo` as a nice way to "mimic" a constant. While it might seem that way, [it is not guaranteed](https://reactjs.org/docs/hooks-reference.html#usememo).
 
-> **You may rely on useMemo as a performance optimization, not as a semantic guarantee.** In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for offscreen components. Write your code so that it still works without useMemo — and then add it to optimize performance.
+> **You may rely on useMemo as a performance optimization, not as a semantic guarantee.** In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for offscreen components. Write your code so that it still works without useMemo — and then add it to optimize performance when it's necessary.
 
 ```jsx
 // BAD
@@ -418,7 +422,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-The best approach is with lazy initialization:
+The best approach is to use lazy initialization:
 
 ```jsx
 // GOOD
@@ -454,7 +458,7 @@ export const MyComponent: FC = () => {
 
 #### Imperative update
 
-When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger update imperatively you can use custom `useUpdate` hook.
+When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger an update imperatively you can use a custom `useUpdate` hook.
 
 > This example demonstrate how `react-hook-form` works internally!
 
@@ -519,7 +523,7 @@ const Form: FC = () => {
 
 #### Two-pass rendering
 
-If you intentionally need to render something different on the server and the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect`. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
+If you intentionally need to render something different on the server or on the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect`. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
 
 Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the previous paragraph
 
@@ -541,7 +545,7 @@ export const Component: FC = () => {
 }
 ```
 
-#### Wrap functions with `useCallback` it they can cause large subtrees to re-render too often
+#### Wrap functions with `useCallback` if they can cause large subtrees to re-render too often
 
 While it is mostly unnecessary to wrap functions with `useCallback`, since the memoization process will usually be as expensive or more, it can be useful if functions' dependencies change often or if they are passed down to a large subtree of children.
 
@@ -559,7 +563,7 @@ export const MyButton: FC = () => {
 ```
 
 ```jsx
-// Here, memoization is probably useful, because `onClick` will stay the same if other state re-renders the component, and will not trigger a large subtree to re-render unnecessarily
+// Here, memoization is probably useful, because `onClick` will stay the same if other state changes re-render the component, and will not trigger a large subtree to re-render unnecessarily
 export const MyList: FC = () => {
   // ...
 
@@ -601,13 +605,13 @@ export const MyComponent: FC = () => {
 
 #### Hooks encapsulation
 
-Common problem with hooks is that the components using them could go out of control and become unreadable and messy. 
+A common problem with hooks is that the components using them can go out of control and become unreadable and messy. 
 That happens when you have multiple `useEffect` and `useCallback` in you Function Component body, and that happens often if you are building real world product. To overcome this problem we can do the same thing as we would do the Class Component, split things in smaller chunks of logic and put them somewhere else, i.e. private methods of Class Component or custom hooks in Function Components.
 
 The Problem:
 
-This is the continuation of previous section, but we will expand it with some additional requirements.  
-We need to add input field in which we can input the thing we are counting, and add decrement and reset handlers for counter.
+This is a continuation of the previous section, but we will expand on it with some additional requirements.  
+We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
 
 This is the previous code:
 ```jsx
@@ -692,7 +696,7 @@ const useInput = (initialState = '') => {
     handleInputChange: (event) => {
       setState(event.target.value);
     }
-  })), []);
+  })), [initialState]);
 
   return [state, handlers]
 }
