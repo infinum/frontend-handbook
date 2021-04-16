@@ -610,7 +610,7 @@ export const MyComponent: FC = () => {
 A common problem with hooks is that the components using them can go out of control and become unreadable and messy. 
 This happens if you have multiple invocations of `useEffect` and `useCallback` in your function component body, which happens often if you are building real world products. To overcome this problem we can do the same thing as we would do in class components - split things into smaller chunks of logic and extract them, i.e. private methods of class components or custom hooks in function components.
 
-The Problem:
+The Problem ⚡
 
 This is a continuation of the previous section, but we will expand on it with some additional requirements.  
 We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
@@ -669,7 +669,7 @@ export const MyComponent: FC = () => {
 
 You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
 
-The Solution:
+The Solution ✅  
 
 ```jsx
 const useCount = (initialState = 0) => {
@@ -731,6 +731,291 @@ export const MyComponent: FC = () => {
 Useful links:
 1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)  
 2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)  
+
+#### Handling actions via useEffect  
+
+One of the best and most thoughtful hooks introduced by React is the "useEffect" hook. It enables the processing of actions related to prop or state changes. Despite its helpful functionality, it is also often used in places where it may not be needed.
+
+Imagine a component that fetches a list of items and render them to the DOM. In addition, if the request is successful, we would like to call the "onSuccess" function, which is passed on to the component as a prop.
+
+This is dangerous ❌
+```jsx
+function DataList({ onSuccess }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    callApi()
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      onSuccess();
+    }
+  }, [loading, error, data, onSuccess]);
+
+  return <div>Data: {data}</div>;
+}
+```
+
+The Problem ⚡  
+
+There are two useEffect hooks, the first one is handling the api call on the initial render and the second one will call the onSuccess function, by assuming when there is no loading, no error, but data in the state, it must have been a successful call. Makes sense right?
+
+Sure for the first call this is true and probably will never fail. But you also loose the direct connection between the action and the function that needs to be called. There is no guarantee that this case will only happen if the fetch action has succeeded and this is something we as developers really don't like.
+
+The Solution ✅  
+
+A straight forward solution would be to set the "onSuccess" function to the actual place where the call was successful:  
+
+```jsx
+function DataList({ onSuccess }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  const fetchData = () => {
+    setLoading(true);
+    callApi()
+      .then((fetchedData) => {
+        setData(fetchedData);
+        onSuccess();
+      })
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return <div>{data}</div>;
+}
+```
+
+Now it is quite clear at first sight when the onSuccess is called, exactly in the success case of the api call.
+
+#### Single responsibility useEffects
+
+Remember the times when we only had the componentWillReceiveProps or componentDidUpdate methods to hook into the rendering process of a react component? It is bringing back dark memories and also realizing the beauty of using the useEffect hook and especially that you can have as much as you want of them.
+
+But sometimes forgetting and using a "useEffect" for several things brings back those dark memories. For example, imagine you have a component that fetches some data from the backend in some way, and also displays breadcrumbs depending on the current location.
+
+This is dangerous ❌  
+
+```jsx
+function Example(props) {
+  const location = useLocation();
+
+  const fetchData = () => {
+    /*  Calling the api */
+  };
+
+  const updateBreadcrumbs = () => {
+    /* Updating the breadcrumbs*/
+  };
+
+  useEffect(() => {
+    fetchData();
+    updateBreadcrumbs();
+  }, [location.pathname]);
+
+  return (
+    <div>
+      <BreadCrumbs />
+    </div>
+  );
+}
+```
+
+The Problem ⚡  
+
+There are two use cases, the "data-fetching" and "displaying breadcrumbs". Both are updated with an useEffect hook. This single useEffect hooks will run when the fetchData and updateBreadcrumbs functions or the location changes. The main problem is now, we also call the fetchData function when the location changes. This might be a side effect we haven't thought of.
+
+The Solution ✅  
+
+Splitting up the effect makes sure, they are only used for one effect and the unexpected side effects are gone.
+
+```jsx
+function Example(props) {
+  const location = useLocation();
+
+  const updateBreadcrumbs = () => {
+    /* Updating the breadcrumbs*/
+  };
+
+  useEffect(() => {
+    updateBreadcrumbs();
+  }, [location.pathname]);
+
+  const fetchData = () => {
+    /*  Calling the api */
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <BreadCrumbs />
+    </div>
+  );
+}
+```
+
+Bonus Points, the use cases are now also logically sorted within the component.
+
+#### Async useEffect (batched updates)
+
+If state updates are done synchronously React may batch them together and perform one re-render, according to [React documentation](https://reactjs.org/docs/state-and-lifecycle.html).
+
+```jsx
+export const MyComponent: FC = () => {
+  const [counter1, setCounter1] = useState(0);
+  const [counter2, setCounter2] = useState(0);
+  const [counter3, setCounter3] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
+
+  useEffect(() => {
+    setRenderCount(renderCount + 1);
+  }, [counter1, counter2, counter3]);
+
+  const handleClick = () => {
+    // React will batch these updates
+    setCounter1(counter1 + 1);
+    setCounter2(counter2 + 1);
+    setCounter3(counter3 + 1);
+  }
+
+  return (
+    <div>
+      <h1>Function Component</h1>
+      <div>
+        Counter1: {counter1}
+      </div>
+      <div>
+        Counter2: {counter2}
+      </div>
+      <div>
+        Counter3: {counter3}
+      </div>
+      <br/>
+      <div>Component was rendered {renderCount} times</div>
+      <button onClick={handleClick}>Click me</button>
+    </div>
+  );
+```
+
+In the above example `setCounter1`, `setCounter2` and `setCounter3` updates inside click handler will be batched adn component will be re-rendered only once.
+
+The problem appears when we have async handler and React can't perform aromatic batching.
+
+The Problem ⚡  
+
+```jsx
+export const MyComponent: FC = () => {
+  const [counter1, setCounter1] = useState(0);
+  const [counter2, setCounter2] = useState(0);
+  const [counter3, setCounter3] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
+
+  useEffect(() => {
+    setRenderCount(renderCount + 1);
+  }, [counter1, counter2, counter3]);
+
+  const handleClickAsync = async () => {
+    await setCounter1(counter1 + 1);
+    // React will not be able to batch these two updates 
+    setCounter2(counter2 + 1);
+    setCounter3(counter3 + 1);
+  }
+
+  const handleClickThen = () => {
+    Promise.resolve().then(res => {
+      setCounter1(counter1 + 1);
+      setCounter2(counter2 + 1);
+      setCounter3(counter3 + 1);
+    });
+  }
+
+  return (
+    <div className='App'>
+      <h1>Function Component</h1>
+      <div>
+        Counter1: {counter1}
+      </div>
+      <div>
+        Counter2: {counter2}
+      </div>
+      <div>
+        Counter3: {counter3}
+      </div>
+      <br/>
+      <div>Component was rendered {renderCount} times</div>
+      <button onClick={handleClickAsync}>Async handler</button>
+      <button onClick={handleClickThen}>Then handler</button>
+    </div>
+  );
+```
+
+The Solution  ✅  
+
+```jsx
+import ReactDOM from "react-dom";
+
+export const MyComponent: FC = () => {
+  const [counter1, setCounter1] = useState(0);
+  const [counter2, setCounter2] = useState(0);
+  const [counter3, setCounter3] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
+
+  useEffect(() => {
+    setRenderCount(renderCount + 1);
+  }, [counter1, counter2, counter3]);
+
+  const handleClickThen = () => {
+    Promise.resolve().then(res => {
+
+      // Manual batch
+      ReactDOM.unstable_batchedUpdates(() => {
+        setCounter1(counter1 + 1);
+        setCounter2(counter2 + 1);
+        setCounter3(counter3 + 1);
+      });
+    });
+  }
+
+  return (
+    <div className='App'>
+      <h1>Function Component</h1>
+      <div>
+        Counter1: {counter1}
+      </div>
+      <div>
+        Counter2: {counter2}
+      </div>
+      <div>
+        Counter3: {counter3}
+      </div>
+      <br/>
+      <div>Component was rendered {renderCount} times</div>
+      <button onClick={handleClickThen}>Then handler</button>
+    </div>
+  );
+```
+
+
+1. [React State Batch Update](https://medium.com/swlh/react-state-batch-update-b1b61bd28cd2)
 
 #### Before you use memoization
 
