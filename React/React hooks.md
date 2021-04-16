@@ -8,11 +8,9 @@ Before starting, it is important to understand the flow of react hooks.
 
 Here is a diagram that explains it visually:
 
-
 ![hooks-flow](https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png)
 <br/>
 <br/>
-![hooks-flow](https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png)
 
 > Most important thing here is to notice how "Run Effects" phase is executed last!
 
@@ -43,21 +41,21 @@ export const MyComponent: FC = () => {
 }
 ```
 
-In the "Mount" phase you will see:
+In the "Mount" phase you will see:  
 ```
 Prev: undefined
 Current: 0
 ```
 This is because `useEffect` is called after the first render and because assigning a value to `ref` does not trigger a re-render - instead, the value is populated and waiting for the next update phase.
 
-When `button` is clicked, React will trigger the `update` phase and the result will be:
+When `button` is clicked, React will trigger the `update` phase and the result will be:  
 ```
 Prev: 0
 Current: 1
 ```
 
-You can play with the example in codesandbox:
-<iframe src="https://codesandbox.io/embed/react-flow-example-8x30c?fontsize=14&hidenavigation=1&theme=light"
+You can play with the example in codesandbox:  
+<iframe src="https://codesandbox.io/embed/react-flow-example-8x30c?fontsize=14&hidenavigation=1&theme=dark"
      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
      title="react-flow-example"
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -231,7 +229,7 @@ If you are doing this, there is good chance that you should rethink the implemen
 
 #### Derive new state from the previous state value, if possible
 
-re-renders.
+This way, you can avoid using state values as hook dependencies and causing additional re-renders.
 
 ```jsx
 // BAD
@@ -514,7 +512,7 @@ const Form: FC = () => {
 }
 ```
 
-<iframe src="https://codesandbox.io/embed/large-form-update-uskuh?fontsize=14&hidenavigation=1&theme=light"
+<iframe src="https://codesandbox.io/embed/large-form-update-uskuh?fontsize=14&hidenavigation=1&theme=dark"
      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
      title="large-form-update"
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -613,7 +611,7 @@ The Problem:
 This is a continuation of the previous section, but we will expand on it with some additional requirements.  
 We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
 
-This is the previous code:
+This is the previous code:  
 ```jsx
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
@@ -629,7 +627,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-This is the updated code with additional features.
+This is the updated code with additional features.  
 ```jsx
 export const MyComponent: FC = () => {
   const [count, setCount] = useState(0);
@@ -737,7 +735,7 @@ You might get tempted to wrap values and functions with `useMemo` and `useCallba
 If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.
 
 <figure class="image">
-  <img src="/img/react-hooks/profiler.png" alt="React Devtools Profiler">
+  <img src="/handbook/img/react-hooks/profiler.png" alt="React Devtools Profiler">
   <figcaption>
     <a href="https://github.com/facebook/react/tree/master/packages/react-devtools" target="_blank">
     React Devtools Profiler
@@ -750,10 +748,8 @@ If it's not obvious that memoization is needed, profile your app performance wit
 
 <br/>
 
-If you want to dive deeper here are some useful articles:
-1. [When to useMemo and useCallback
-](https://kentcdodds.com/blog/usememo-and-usecallback)
+If you want to dive deeper here are some useful articles:  
+1. [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
 1. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)
-1. [Profile a React App for Performance
-](https://kentcdodds.com/blog/profile-a-react-app-for-performance)
+1. [Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance)
 1. [React Production Performance Monitoring](https://kentcdodds.com/blog/react-production-performance-monitoring)
