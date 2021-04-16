@@ -58,6 +58,7 @@ Current: 1
 ```
 
 You can play with the example in codesandbox:  
+
 <iframe src="https://codesandbox.io/embed/react-flow-example-8x30c?fontsize=14&hidenavigation=1&theme=dark"
      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
      title="react-flow-example"
