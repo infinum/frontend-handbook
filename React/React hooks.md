@@ -606,7 +606,7 @@ export const MyComponent: FC = () => {
 #### Hooks encapsulation
 
 A common problem with hooks is that the components using them can go out of control and become unreadable and messy. 
-That happens when you have multiple `useEffect` and `useCallback` in you Function Component body, and that happens often if you are building real world product. To overcome this problem we can do the same thing as we would do the Class Component, split things in smaller chunks of logic and put them somewhere else, i.e. private methods of Class Component or custom hooks in Function Components.
+This happens if you have multiple invocations of `useEffect` and `useCallback` in your function component body, which happens often if you are building real world products. To overcome this problem we can do the same thing as we would do in class components - split things into smaller chunks of logic and extract them, i.e. private methods of class components or custom hooks in function components.
 
 The Problem:
 
