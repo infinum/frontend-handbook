@@ -18,7 +18,7 @@ After we exported and optimized the icon, we can add it to our codebase. We will
 
 ### a. `src/assets/icons`
 
-We should add an icon in this folder if the icon uses only one color and will be used as an icon in buttons/dropdowns/... such as `StarIcon`, `ChevronIcon`, etc. One last change needed before we add it to the codebase is to change the `fill` color to `currentColor`. This way, a developer can use any color with a simple `color: {ourColor}` style in CSS.
+We should add an icon in this folder if the icon uses only one color and will be used as an icon in buttons/dropdowns/... such as `StarIcon`, `ChevronIcon`, etc. One last change needed before we add it to the codebase is to change the `fill` color to `currentColor`. This way, a developer can use any color with a simple `color: ${someColor}` style in CSS.
 
 Example in code:
 
@@ -31,6 +31,8 @@ const AddButton = () => (
   </Button>
 );
 ```
+
+> Make sure that SVG element has only the `viewBox` property (without `width` and `height`). Context, where the icon is used, should provide `width` and `height` to the icon.
 
 ### b. `public/images`
 
