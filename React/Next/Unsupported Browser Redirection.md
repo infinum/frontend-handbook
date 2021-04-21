@@ -7,12 +7,12 @@ their own ways of connecting to the Internet (including TVs and refrigerators).
 Because of that you need some easy mechanism to just tell: "We are so sorry, but please install more 
 sophisticated browser" - without your application crashing before it can even show the message.
 
-Luckily from Next.js version [10.1.0](https://github.com/vercel/next.js/releases/tag/v10.1.0) 
-(`Add has route field`) you can use some specific property for redirects in `next.config.js` that 
+Luckily, from Next.js version [10.1.0](https://github.com/vercel/next.js/releases/tag/v10.1.0) 
+(`Add has route field`), you can use some specific property for redirects in `next.config.js` that 
 can help you with that.
 
 ## The issue
-Your application maybe covers a lot of varieties of the browsers, but still there are many browsers used broadly 
+Your application may cover a lot of different browsers, but still there are many commonly used browsers 
 which probably can not run your application - either it does not look good or crashes. 
 
 There might be issues with your own implementation or some 3rd party library, and you can not replace
@@ -24,14 +24,13 @@ This is where Next.js redirects and `has` property shines.
 
 ## The fix
 
-https://nextjs.org/docs/api-reference/next.config.js/redirects#header-cookie-and-query-matching
+There is more to talk about redirects, which can also be read in 
+[Next.js redirects by header, cookie and query matching](https://nextjs.org/docs/api-reference/next.config.js/redirects#header-cookie-and-query-matching), 
+but the most important is the `has` property which allows you to configure in what circumstances should your application be redirected when hitting some path.
 
-There is more to talk about redirects, but mostly important is this `has` property which allows you 
-to configure in what circumstances should your application be redirected when hitting some path.
-
-So without further ado, here is Next.js config with redirection logic which permanently redirects any 
-path to `not-supported.html` file located in `public` folder if user comes with the browser which 
-user-agent header matches regex, in our case for Internet Explorer.
+So without further ado, here is the Next.js config which redirects requests from any
+unsupported browser (user-agent header matches regex, in our case for Internet Explorer)
+to the `not-supported.html` file located in the `public` folder.
 
 ```js
 // next.config.js
