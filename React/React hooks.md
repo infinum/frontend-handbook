@@ -742,7 +742,7 @@ If it's not obvious that memoization is needed, profile your app performance wit
 [![React Devtools Profiler](/img/react-hooks/profiler.png)](https://github.com/facebook/react/tree/master/packages/react-devtools)
 [React Devtools Profiler](https://github.com/facebook/react/tree/master/packages/react-devtools)
 
-<div style="margin:0 auto; min-width:550px;">
+<div style="margin:0 auto; max-width:550px;">
   <blockquote class="twitter-tweet">
     <p lang="en" dir="ltr">
       ⚛️🛠 Prototype of a new Profiler feature, &quot;Scheduled by&quot;, enumerating which fibers triggered the current commit (which ones called set state).<br><br>Would this be useful? Could it be more useful? <a href="https://t.co/7AvVHB0wPY">pic.twitter.com/7AvVHB0wPY</a>
