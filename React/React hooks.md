@@ -435,7 +435,18 @@ export const MyComponent: FC = () => {
 ```
 
 You can also store the value in a ref:
-> Note: updating ref values will not trigger a re-render.
+> Note: updating ref values will not trigger a re-render.  
+
+>WARNING!  
+>This may not work in Concurrent Mode, The explanation is here in the [twitter thread](https://twitter.com/sstur_/status/1384934568285900806)
+>
+> Consider this:
+>
+> 1. render starts
+> 2. you update the ref
+> 3. react concurrent mode has to throw away the work and doesn't commit
+>
+> You now have a ref that isn't the latest value, it's a value for a render that was never committed.
 
 ```jsx
 type Result<T> = { v: T };
