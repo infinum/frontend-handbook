@@ -170,7 +170,7 @@ export const MyComponent: FC = () => {
 You may think to yourself "Why can't we just do it without `useEffect`?". What's the difference? 
 There is an upcoming React feature called [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html), so we can consider this approach as kind of a preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
 
-Useful links:
+Useful links:  
 1. [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect)
 
 ## Avoid misusing hook dependencies
