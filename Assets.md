@@ -38,7 +38,7 @@ const AddButton = () => (
 
 If the image is using complex colors gradients/multiple colors/... it probably belongs to this category.
 
-> Before adding it, you can check if this image could be smaller in size using `png` or `jpg` image format. If this is the case, use that instead of `SVG`.
+> Before adding it, you can check if this image could be smaller in size using `png` or `jpg` image format. If this is the case, use that one instead of `SVG`. If you opt in for this, be careful if this icon will be used in large formats, `png` and `jpg` could strech and result as a pixelated image.
 
 Example in code:
 
