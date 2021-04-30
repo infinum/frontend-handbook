@@ -325,7 +325,7 @@ const App: FC = () => {
   // ...
 }
 ```
-_Note: `cleanup` is always a function_
+_Note: `cleanup` is always a function._
 
 ## Wrap values derived from expensive calculations with `useMemo`
 
@@ -461,13 +461,11 @@ _Note: updating ref values will not trigger a re-render._
 
 Storing a "constant" value in a ref might not work with Concurrent Mode. You can see an explanation in this [twitter thread](https://twitter.com/sstur_/status/1384934568285900806).
 
-Consider this:
+Consider this case:
 
-```jsx
-1. render starts
-2. you update the ref
-3. react concurrent mode has to throw away the work and doesn't commit
-```
+1. Render starts
+2. You update the ref
+3. React concurrent mode has to throw away the work and doesn't commit
 
 You now have a ref that isn't the latest value, it's a value for a render that was never committed.
 
