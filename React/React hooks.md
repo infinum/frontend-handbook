@@ -1,4 +1,4 @@
-React Hooks were introduced in version 16.8.0 as function component counterpart of class component lifecycles.  
+React Hooks were introduced in version 16.8.0 as function component counterpart of class component lifecycles.
 For more information, see the official [React Hooks API Reference](https://reactjs.org/docs/hooks-reference.html).
 
 ## Hooks flow
@@ -10,7 +10,7 @@ Here is a diagram that explains it visually:
 <br/>
 <br/>
 
-> Most important thing here is to notice how "Run Effects" phase is executed last!
+_Note: The most important thing here is to notice how the "Run Effects" phase is executed last._
 
 Here is a code example that explains this flow:
 
@@ -24,7 +24,7 @@ export const MyComponent: FC = () => {
   useEffect(() => {
     // 3. Run effect
     previousStateRef.current = state;
-  }); // no deps array, we want this to be called on every render!
+  }); // no deps array, because we want this to be called on every render
 
   // 2. Render
   return (
@@ -39,7 +39,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-In the "Mount" phase you will see:  
+In the "Mount" phase you will see:
 
 ```jsx
 Prev: undefined
@@ -55,7 +55,7 @@ Prev: 0
 Current: 1
 ```
 
-You can play with the example in codesandbox:  
+You can try this example out in `codesandbox`:
 
 <iframe src="https://codesandbox.io/embed/react-flow-example-8x30c?fontsize=14&hidenavigation=1&theme=dark"
   class="codesandbox"
@@ -78,10 +78,10 @@ export const MyComponent: FC = ({ numberProp, stringProps }) => {
 }
 ```
 
-For non-primitive values like objects, arrays and functions, React will do a reference comparison using [Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is). This means that we must provide the same reference of `objectProp`, `arrayProp`, `functionProp` to `Child` on every re-render if we don't want to trigger `useEffect` every time. This can be achieved by extracting them outside of the component or wrapping them in `useMemo` or `useCallback`.  
+For non-primitive values like objects, arrays and functions, React will do a reference comparison using [Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is). This means that we must provide the same reference of `objectProp`, `arrayProp`, `functionProp` to `Child` on every re-render if we don't want to trigger `useEffect` every time. This can be achieved by extracting them outside of the component or wrapping them in `useMemo` or `useCallback`.
 Check [Using Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is#using_object.is) section on MDN for better understanding.
 
-> There is [JavaScript Records & Tuples Proposal](https://github.com/tc39/proposal-record-tuple) which will invalidate above arguments and make thing simpler.
+_Note: There is a [JavaScript Records & Tuples Proposal](https://github.com/tc39/proposal-record-tuple) which will invalidate above arguments and make things simpler._
 
 ```jsx
 const Child: FC = ({ objectProp, arrayProp, functionProp }) => {
@@ -125,7 +125,7 @@ const Parent: FC = () => {
   );
 }
 
-// FUTURE with Records & Tuples (fingers crossed)
+// FUTURE with Records & Tuples
 const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
@@ -167,7 +167,8 @@ export const MyComponent: FC = () => {
   // ...
 }
 ```
-You may think to yourself: "Why can't we just do it without `useEffect`?. What's the difference?"
+You may think to yourself: "Why can't we just do it without `useEffect`?. What's the difference?".
+
 There is an upcoming React feature called [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html), so we can consider this approach as kind of a preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
 
 Useful links:  
@@ -324,7 +325,7 @@ const App: FC = () => {
   // ...
 }
 ```
-> `cleanup` is always a function!
+_Note: `cleanup` is always a function._
 
 ## Wrap values derived from expensive calculations with `useMemo`
 
@@ -435,18 +436,6 @@ export const MyComponent: FC = () => {
 ```
 
 You can also store the value in a ref:
-> Note: updating ref values will not trigger a re-render.  
-
->WARNING!  
->This may not work in Concurrent Mode, The explanation is here in the [twitter thread](https://twitter.com/sstur_/status/1384934568285900806)
->
-> Consider this:
->
-> 1. render starts
-> 2. you update the ref
-> 3. react concurrent mode has to throw away the work and doesn't commit
->
-> You now have a ref that isn't the latest value, it's a value for a render that was never committed.
 
 ```jsx
 type Result<T> = { v: T };
@@ -468,11 +457,23 @@ export const MyComponent: FC = () => {
 }
 ```
 
+_Note: updating ref values will not trigger a re-render._
+
+Storing a "constant" value in a ref might not work with Concurrent Mode. You can see an explanation in this [twitter thread](https://twitter.com/sstur_/status/1384934568285900806).
+
+Consider this case:
+
+1. Render starts
+2. You update the ref
+3. React concurrent mode has to throw away the work and doesn't commit
+
+You now have a ref that isn't the latest value, it's a value for a render that was never committed.
+
 ## Imperative update
 
 When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger an update imperatively, you can use a custom `useUpdate` hook.
 
-> This example demonstrate how `react-hook-form` works internally!
+_Note: This example demonstrates how `react-hook-form` works internally._
 
 ```jsx
 const updateReducer = (num: number): number => (num + 1) % 1_000_000;
@@ -484,7 +485,7 @@ const useUpdate = () => {
 }
 
 // Large form
-// This is how react-hook-form works in a nutshell
+// This is how react-hook-form works, in a nutshell
 const Form: FC = () => {
   const formRef = useRef();
 
