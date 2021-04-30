@@ -744,13 +744,13 @@ Useful links:
 
 ## Handling actions via useEffect  
 
-One of the best and most thoughtful hooks introduced by React is the "useEffect" hook. It enables the processing of actions related to prop or state changes. Despite its helpful functionality, it is also often used in places where it may not be needed.
+`useEffect` is one of most thoughtful hooks introduced by React, also one of the most complex one. It gives us ability to handle side-effects in more controlled manner. It can react to any state or property change and do some actions. Despite its helpful functionality, it is often misused.
 
-Imagine a component that fetches a list of items and render them to the DOM. In addition, if the request is successful, we would like to call the "onSuccess" function, which is passed on to the component as a prop.
+Imagine we have to fetch a list of users and render them. After fetching is done we want to call `onSuccess` callback and do something in the parent.
 
 This is dangerous ❌
 ```jsx
-function DataList({ onSuccess }) {
+function UserList({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
@@ -773,22 +773,22 @@ function DataList({ onSuccess }) {
     }
   }, [loading, error, data, onSuccess]);
 
-  return <div>Data: {data}</div>;
+  return <div>Users: {data}</div>;
 }
 ```
 
 The Problem ⚡  
 
-There are two useEffect hooks, the first one is handling the api call on the initial render and the second one will call the onSuccess function, by assuming when there is no loading, no error, but data in the state, it must have been a successful call. Makes sense right?
+There are two useEffect hooks, the first one is handling the api call on the initial render and the second one will call the onSuccess function, by assuming when there is no loading, no error, but data in the state, it must have been a successful call.
 
 Sure for the first call this is true and probably will never fail. But you also loose the direct connection between the action and the function that needs to be called. There is no guarantee that this case will only happen if the fetch action has succeeded and this is something we as developers really don't like.
 
 The Solution ✅  
 
-A straight forward solution would be to set the "onSuccess" function to the actual place where the call was successful:  
+A straight forward solution would be to set the `onSuccess` function to the actual place where the call was successful:  
 
 ```jsx
-function DataList({ onSuccess }) {
+function UserList({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
@@ -808,7 +808,7 @@ function DataList({ onSuccess }) {
     fetchData();
   }, []);
 
-  return <div>{data}</div>;
+  return <div>Users: {data}</div>;
 }
 ```
 
@@ -836,7 +836,7 @@ function Example(props) {
 
   useEffect(() => {
     fetchData();
-    updateBreadcrumbs();
+    updateBreadcrumbs(location.pathname);
   }, [location.pathname]);
 
   return (
@@ -849,7 +849,9 @@ function Example(props) {
 
 The Problem ⚡  
 
-There are two use cases, the "data-fetching" and "displaying breadcrumbs". Both are updated with an useEffect hook. This single useEffect hooks will run when the fetchData and updateBreadcrumbs functions or the location changes. The main problem is now, we also call the fetchData function when the location changes. This might be a side effect we haven't thought of.
+In this example we have two side-effects, first is "data-fetching" and second is "displaying breadcrumbs". They are independent but still `useEffect` is triggered if `location.pathname` changes.
+
+There are two use cases, the "data-fetching" and "displaying breadcrumbs". Both are updated with an useEffect hook. This single useEffect hooks will run when the fetchData and updateBreadcrumbs functions on the location changes. The main problem is now, we also call the fetchData function when the location pathname changes. This might be a side effect we haven't thought of.
 
 The Solution ✅  
 
@@ -864,7 +866,7 @@ function Example(props) {
   };
 
   useEffect(() => {
-    updateBreadcrumbs();
+    updateBreadcrumbs(location.pathname);
   }, [location.pathname]);
 
   const fetchData = () => {
