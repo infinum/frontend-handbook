@@ -64,7 +64,7 @@ src
 │       │   │   └── Section.tsx
 │       │   └── Card
 │       │       └── Card.tsx
-│       ├── inputs
+│       ├── fields
 │       │   └── TextField
 │       │       └── TextField.tsx
 │       └── todo
@@ -139,7 +139,9 @@ You can check the [Open UI](https://open-ui.org/components/card.research) standa
 #### Shared *Feature* based domains
 
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
-They are shared components that encapsulate some specific feature of an app.
+They are shared components that encapsulate some specific feature of an app.  
+
+Component name is always composed out of two parts `Context` + `Domain`, for example `ArticlesPanel` where `Articles` is context and `Panel` is domain.
 
 Here are some examples of feature domain names:
 <table>
@@ -149,8 +151,8 @@ Here are some examples of feature domain names:
     <th>Description</th>
   </tr>
   <tr>
-    <td>`inputs`</td>
-    <td>`InputField`, `TextField`</td>
+    <td>`fields`</td>
+    <td>`InputField`, `TextareaField`</td>
     <td>
       Specific form fields prepared to be used with [React Hook Form](https://react-hook-form.com/) library.
       Built out of multiple parts, for example `InputGroup`, `InputLeftElement`, `Input` form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
@@ -158,7 +160,7 @@ Here are some examples of feature domain names:
   </tr>
   <tr>
     <td>`overlays`</td>
-    <td>`UnsupportedBrowser`, `BugsnagError`</td>
+    <td>`UnsupportedBrowserOverlay`, `BugsnagErrorOverlay`</td>
     <td>Components that covers the whole page and prevents user to interact with the page in some degree.</td>
   </tr>
   <tr>
@@ -182,13 +184,6 @@ Here are some examples of feature domain names:
     <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as `navigations`</td>
   </tr>
   <tr>
-    <td>`utilities`</td>
-    <td>`Meta`, `BugsnagErrorBoundary`</td>
-    <td>
-    Utility components usually does not have any visual representation on the screen, but they are still reusable declarative components. `Meta` inserts `meta` tags into document `head`. `BugsnagErrorBoundary` catches the error, triggers the Bugsnag report and render fallback component
-    </td>
-  </tr>
-  <tr>
     <td>`panels`</td>
     <td>`ArticlesPanel`, `EventPanel`, `EventSidebarPanel`, `GroupPanel`</td>
     <td>
@@ -205,6 +200,8 @@ Here are some examples of feature domain names:
 #### Shared *Entity* based domain
 
 We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
+
+Component name is always composed out of two parts `Entity` + `Context`, for example `TodoList` where `Todo` is entity and `List` is context.
 
 <table>
   <tr>
@@ -227,6 +224,25 @@ We can refer to them as **_molecules_** also, but they are tied to some entity, 
   <tr>
     <td>`ticket`</td>
     <td>`TicketList`, `TicketCreateForm`, `TicketCard`, ...</td>
+  </tr>
+</table>
+
+#### Shared *utility* domain
+
+Utility components usually does not have any visual representation on the screen, but they are still reusable declarative components.
+
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>`utilities`</td>
+    <td>`Meta`,  `BugsnagErrorBoundary`</td>
+    <td>
+     `Meta` inserts `meta` tags into document `head`. `BugsnagErrorBoundary` catches the error, triggers the Bugsnag report and render fallback component
+    </td>
   </tr>
 </table>
 
