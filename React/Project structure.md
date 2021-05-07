@@ -34,30 +34,176 @@ src
 ```
 ### UI Components
 
-When adding UI components, you should be able to distinguish them by:
+When adding UI components, you should be able to group them in two root domains:
 
-1. Page scope based components
-2. Components that are shared all across the app
-3. Large and complex components which contain a lot of stylings, different layouts and child components.
+1. `pages` - page scope based components
+2. `shared` - Components that are shared all across the app
    
-Lowercase folders are indicators of a page scoped components, shared components and meta components, while PascalCase folders and filenames should be used for components naming.
+Folder naming rules:
+
+ 1. `kebab-case` folder name indicates domain name
+ 2. `PascalCase` folders and filenames should be used for components naming
 
 ```
-components
-.
-├── shared
-│   └── WelcomeBox
-│       └── WelcomeBox.tsx
-├── admin
-│   └── AdminBanner
-│       └── AdminBanner.tsx
-└── Gallery
-    ├── Gallery.tsx
-    └── components
-        ├── Arrows.tsx
-        ├── Breadcrumbs.tsx
-        └── ...
+src
+├── components
+│   ├── pages
+│   │   ├── home
+│   │   │   ├── HomeHeaderSection
+│   │   │   │   └── HomeHeaderSection.tsx
+│   │   │   └── HomeTodoListSection
+│   │   │       └── HomeTodoListSection.tsx
+│   │   └── todo
+│   │       ├── TodoHeaderSection
+│   │       │   └── TodoHeaderSection.tsx
+│   │       └── TodoCreateFormSection
+│   │           └── TodoCreateFormSection.tsx
+│   └── shared
+│       ├── core
+│       │   ├── Section
+│       │   │   └── Section.tsx
+│       │   └── Card
+│       │       └── Card.tsx
+│       ├── inputs
+│       │   └── TextField
+│       │       └── TextField.tsx
+│       └── todo
+│           ├── TodoCard
+│           │   └── TodoCard.tsx
+│           ├── TodoList
+│           │   └── TodoList.tsx
+│           └── TodoCreateForm
+│               └── TodoCreateForm.tsx
+└── pages
+    ├── index.tsx
+    └── todo
+        └── [id]
+            └── index.tsx
 ```
+
+#### Shared *core* components
+
+We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
+You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments.
+
+<table>
+  <tr>
+    <th>Components</th>
+    <th>Parts</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Card</td>
+    <td>
+      `Card`,  `CardImage`,  `CardImageOverlay`,  `CardTitle`, `CardDescription`, ...
+    </td>
+    <td>
+      From these parts, you'll be able to compose multiple more specific __molecules__ like `ProductCard` or `UserCard`.
+    </td>
+  </tr>
+  <tr>
+    <td>Section</td>
+    <td>
+      `Section`,  `SectionHeader`, `SectionBody`, ..
+    </td>
+    <td>
+      This might have multiple background schemes like `dimmed`, `inverted`, `light`.
+    </td>
+  </tr>
+  <tr>
+    <td>Search</td>
+    <td>
+      `Search`, `SearchInput`, `SearchEmpty`, SearchResults`, ...
+    </td>
+    <td>
+      `Search` uses context to provide shared state to other parts.
+      `SearchInput` renders input and it could be placed anywhere in the DOM structure (for example, in the page `Header`).
+      `SearchEmpty` and `SearchResults` handles switching between states and showing the result.
+    </td>
+  </tr>
+</table>
+
+#### Shared *Feature* based domains:
+
+We can refer to them as **_molecules_**,
+
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>`inputs`</td>
+    <td>`InputField`, `TextField`</td>
+    <td rowspan="11">
+      todo
+    </td>
+  </tr>
+  <tr>
+    <td>`overlays`</td>
+    <td>`UnsupportedBrowser`, `BugsnagError`</td>
+  </tr>
+  <tr>
+    <td>`layouts`</td>
+    <td>`MainLayout`, `AdminLayout`</td>
+  </tr>
+  <tr>
+    <td>`messages`</td>
+    <td>`NoResultsMessage`, `EmptyListMessage`, `LoadingMessage`</td>
+  </tr>
+  <tr>
+    <td>`navigations`</td>
+    <td>`MainNavigation`, `AdminNavigation`</td>
+  </tr>
+  <tr>
+    <td>`footers`</td>
+    <td>`MainFooter`, `AdminFooter`</td>
+  </tr>
+  <tr>
+    <td>`utilities`</td>
+    <td>`Meta`, `BugsnagErrorBoundary`</td>
+  </tr>
+  <tr>
+    <td>`overlays`</td>
+    <td>`UnsupportedBrowser`, `BugsnagError`</td>
+  </tr>
+  <tr>
+    <td>`panels`</td>
+    <td>`ArticlesPanel`, `EventPanel`, `EventSidebarPanel`, `GroupPanel`</td>
+  </tr>
+  <tr>
+    <td>`markdowns`</td>
+    <td>`ArticleMarkdown`, `AnnouncementMarkdown`</td>
+  </tr>
+</table>
+
+#### Examples of shared *Entity* based domain:
+
+We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
+
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>`todo`</td>
+    <td>`TodoList`, `TodoCreateForm`, `TodoCard`, ...</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>`user`</td>
+    <td>`UserList`, `UserCreateForm`, `UserCard`, ...</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>`ticket`</td>
+    <td>`TicketList`, `TicketCreateForm`, `TicketCard`, ...</td>
+    <td></td>
+  </tr>
+</table>
 
 #### `components` folder
 
