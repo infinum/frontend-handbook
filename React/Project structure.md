@@ -98,7 +98,7 @@ You can check the [Open UI](https://open-ui.org/components/card.research) standa
       `Card`,  `CardImage`,  `CardImageOverlay`,  `CardTitle`, `CardDescription`, ...
     </td>
     <td>
-      From these parts, you'll be able to compose multiple more specific __molecules__ like `ProductCard` or `UserCard`.
+      From these parts, you'll be able to compose multiple more specific **_molecules_** like `ProductCard` or `UserCard`.
     </td>
   </tr>
   <tr>
