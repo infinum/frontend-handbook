@@ -138,8 +138,10 @@ You can check the [Open UI](https://open-ui.org/components/card.research) standa
 
 #### Shared *Feature* based domains
 
-We can refer to them as **_molecules_**,
+We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
+They are shared components that encapsulate some specific feature of an app.
 
+Here are some examples of feature domain names:
 <table>
   <tr>
     <th>Domains</th>
@@ -150,44 +152,53 @@ We can refer to them as **_molecules_**,
     <td>`inputs`</td>
     <td>`InputField`, `TextField`</td>
     <td rowspan="11">
-      todo
+      Specific form fields prepared to be used with [React Hook Form](https://react-hook-form.com/) library.
+      Built out of multiple parts, for example `InputGroup`, `InputLeftElement`, `Input` form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
     </td>
   </tr>
   <tr>
     <td>`overlays`</td>
     <td>`UnsupportedBrowser`, `BugsnagError`</td>
+    <td>Components that covers the whole page and prevents user to interact with the page in some degree.</td>
   </tr>
   <tr>
     <td>`layouts`</td>
     <td>`MainLayout`, `AdminLayout`</td>
+    <td>Components that are shared across the pages and renders the application shell (navigation and footer)</td>
   </tr>
   <tr>
     <td>`messages`</td>
-    <td>`NoResultsMessage`, `EmptyListMessage`, `LoadingMessage`</td>
+    <td>`NoResultsMessage`, `EmptyListMessage`, `LoadingMessage`, `ErrorMessage`</td>
+    <td>Reusable messages components that could be shared across the pages for handling empty list results, loading states or ErrorBoundaries fallback</td>
   </tr>
   <tr>
     <td>`navigations`</td>
     <td>`MainNavigation`, `AdminNavigation`</td>
+    <td>Different navigations used in layouts to support different app shell styles. They could handle user logged-in/logged-out states and mobile/desktop layouts</td>
   </tr>
   <tr>
     <td>`footers`</td>
     <td>`MainFooter`, `AdminFooter`</td>
+    <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as `navigations`</td>
   </tr>
   <tr>
     <td>`utilities`</td>
     <td>`Meta`, `BugsnagErrorBoundary`</td>
-  </tr>
-  <tr>
-    <td>`overlays`</td>
-    <td>`UnsupportedBrowser`, `BugsnagError`</td>
+    <td>
+    Utility components usually does not have any visual representation on the screen, but they are still reusable declarative components. `Meta` inserts `meta` tags into document `head`. `BugsnagErrorBoundary` catches the error, triggers the Bugsnag report and render fallback component
+    </td>
   </tr>
   <tr>
     <td>`panels`</td>
     <td>`ArticlesPanel`, `EventPanel`, `EventSidebarPanel`, `GroupPanel`</td>
+    <td>
+      Specific panels that holds filtering dropdowns for narrowing down the list results. Usually consists of core `Panel` compound component for sharing the styles and sorting dropdowns.
+    </td>
   </tr>
   <tr>
     <td>`markdowns`</td>
     <td>`ArticleMarkdown`, `AnnouncementMarkdown`</td>
+    <td>Components that handles parsing of the markdown and styling of the generated HTML</td>
   </tr>
 </table>
 
@@ -204,17 +215,18 @@ We can refer to them as **_molecules_** also, but they are tied to some entity, 
   <tr>
     <td>`todo`</td>
     <td>`TodoList`, `TodoCreateForm`, `TodoCard`, ...</td>
-    <td></td>
+    <td colspan="3">
+      They should accept primitive props like `resourceId` and hook to the resource fetching layer via `SWR`. 
+    </td>
   </tr>
   <tr>
     <td>`user`</td>
     <td>`UserList`, `UserCreateForm`, `UserCard`, ...</td>
-    <td></td>
+
   </tr>
   <tr>
     <td>`ticket`</td>
     <td>`TicketList`, `TicketCreateForm`, `TicketCard`, ...</td>
-    <td></td>
   </tr>
 </table>
 
