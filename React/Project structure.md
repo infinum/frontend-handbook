@@ -84,7 +84,7 @@ src
 #### Shared *core* components
 
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
-You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components should be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks).
+You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
 
 <table>
   <tr>
@@ -119,6 +119,19 @@ You can check the [Open UI](https://open-ui.org/components/card.research) standa
       `Search` uses context to provide shared state to other parts.
       `SearchInput` renders input and it could be placed anywhere in the DOM structure (for example, in the page `Header`).
       `SearchEmpty` and `SearchResults` handles switching between states and showing the result.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      ReactSelect
+    </td>
+    <td>
+      `ReactSelect`, 
+      `./components/ClearIndicator`, 
+      `./components/Control`, ...
+    </td>
+    <td>
+     The list of custom components can be find [here](https://react-select.com/components)
     </td>
   </tr>
 </table>
@@ -463,7 +476,7 @@ Check out [styling guide(needs update)](styling-guide-section-link) for other st
 
 ```
 src
-├── styles
+└── styles
     └── theme
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
