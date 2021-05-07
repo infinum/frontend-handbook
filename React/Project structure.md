@@ -178,7 +178,7 @@ We can refer to them as **_molecules_**,
   </tr>
 </table>
 
-#### Examples of shared *Entity* based domain:
+#### Shared *Entity* based domain
 
 We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
 
