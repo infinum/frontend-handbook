@@ -123,7 +123,7 @@ You can check the [Open UI](https://open-ui.org/components/card.research) standa
   </tr>
 </table>
 
-#### Shared *Feature* based domains:
+#### Shared *Feature* based domains
 
 We can refer to them as **_molecules_**,
 
