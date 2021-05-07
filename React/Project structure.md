@@ -215,7 +215,7 @@ We can refer to them as **_molecules_** also, but they are tied to some entity, 
   <tr>
     <td>`todo`</td>
     <td>`TodoList`, `TodoCreateForm`, `TodoCard`, ...</td>
-    <td colspan="3">
+    <td rowspan="3">
       They should accept primitive props like `resourceId` and hook to the resource fetching layer via `SWR`. 
     </td>
   </tr>
