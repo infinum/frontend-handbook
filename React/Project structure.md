@@ -84,7 +84,7 @@ src
 #### Shared *core* components
 
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
-You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components should be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks)
+You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components should be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks).
 
 <table>
   <tr>
