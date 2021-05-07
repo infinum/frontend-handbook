@@ -151,7 +151,7 @@ Here are some examples of feature domain names:
   <tr>
     <td>`inputs`</td>
     <td>`InputField`, `TextField`</td>
-    <td rowspan="11">
+    <td>
       Specific form fields prepared to be used with [React Hook Form](https://react-hook-form.com/) library.
       Built out of multiple parts, for example `InputGroup`, `InputLeftElement`, `Input` form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
     </td>
