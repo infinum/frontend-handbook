@@ -238,6 +238,8 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
+> Moving things to`.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+
 ## Different component layouts
 
 Sometimes, you might want to create a component specific for mobile and desktop. You might use a tool like [fresnel](https://github.com/artsy/fresnel) for detecting media queries.
