@@ -37,7 +37,7 @@ src
 When adding UI components, you should be able to group them in two root domains:
 
 1. `pages` - page scope based components
-2. `shared` - Components that are shared all across the app
+2. `shared` - components that are shared all across the app
    
 Folder naming rules:
 
