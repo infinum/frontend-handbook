@@ -1,6 +1,6 @@
 > If the reviews hurt they're probably right on some level. - Sean Lennon
 
-In the Infinum JavaScript team we love code reviews. We love getting them and giving them. This document aims to show how a good pull request should look like (no matter what SCV solution or tool). The main idea is to give your reviewer as much context as possible to allow them to focus on the feature or fix you have delivered.
+In the Infinum JavaScript team we love code reviews. We love getting them and giving them. This document aims to show how a good pull request should look like (no matter what SCM solution or tool). The main idea is to give your reviewer as much context as possible to allow them to focus on the feature or fix you have delivered.
 
 ## Creating a pull request
 
@@ -27,3 +27,9 @@ The following are extra but highly recommended:
 -   Marked **A** title showing a concise description along with a task ID
 -   Marked **B** description containing relevant documentation and links
 -   Marked **C** a screen shoot of the developed feature
+
+## When and who merges the pull request?
+
+When the code review is completed with an appropriate number of approvers having signed off the feature the code can be merged.
+
+You, as the developer, know best when and how this code should be merged. You press the green merge button!
