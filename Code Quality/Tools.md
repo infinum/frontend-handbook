@@ -1,5 +1,3 @@
-## Code quality
-
 There are many tools for ensuring a constant level of code quality is maintained on a project. Different tools do different things in different ways. This handbook covers some of those tools.
 
 If you have already read this section of the Handbook and are here just for the config files, [jump ahead](#putting-it-all-together) (+ [editor files](#editor-files)).
@@ -162,14 +160,13 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 Infinum created various rulesets for ESLint and TSLint which you can check out [here](https://github.com/infinum/js-linters). We encourage you to use some of these presets, as per your needs:
 
-  - [Base ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config/README.md)
-  - [React ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config-react/README.md)
-  - [Angular TSLint config](https://github.com/infinum/js-linters/tree/master/tslint-config-angular)
+-   [Base ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config/README.md)
+-   [React ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config-react/README.md)
+-   [Angular TSLint config](https://github.com/infinum/js-linters/tree/master/tslint-config-angular)
 
 ### Stylelint
 
 If you have no issues with prettier SCSS formatting and you decide to use Prettier, it is recommended to install [stylelint-prettier](https://github.com/prettier/stylelint-prettier) plugin and preset.
-
 
 ### Putting it all together
 
@@ -235,8 +232,8 @@ npm i -D concurrently husky lint-staged ng-lint-staged stylelint stylelint-prett
 
 Some notes:
 
-  - it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
-  - `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
-  - `concurrently` speeds up things by running `tsc` checks in parallel
-  - `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
-  - `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
+-   it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+-   `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+-   `concurrently` speeds up things by running `tsc` checks in parallel
+-   `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
+-   `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
