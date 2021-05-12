@@ -19,7 +19,7 @@ The following are extra but highly recommended:
 -   A summary of changes and reasoning behind them
 -   A TODO list of missing details on large pull requests
 -   A list of open questions if there are any
--   A video demonstration of the feature (you can reuse this later for a client demo!)
+-   A video demonstration of the feature
 
 ## Example
 

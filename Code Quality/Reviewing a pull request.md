@@ -37,7 +37,11 @@ This guide should help you review code better. A good code review will provide a
 
 Reviewing a pull request could (and should) take time. This is not to be rushed since you vouch for the quality of the code that's on review.
 
-If you review code for either multiple projects or you work in a larger team, you might want to think about assigning a certain fixed part of the day to do them (e.g. I review pull requests in the morning). Everything that comes during the day is to be reviewed first thing tomorrow. This should not include urgent things that block hot fixes, etc. Communicate this time to your project manager so it can be correctly reflected in your sprint availability.
+Pull requests should not stay unattended for more than 24 hours. This means you should pick them up and start the review in that period. When you do them however is entirely up to you and your team.
+
+This can be specifically hard to do if you review multiple projects or work in a larger team. If this is the case you might want to think about assigning a certain part of the day to do them.
+
+Be sure to communicate this to your project manager so it gets reflected in your sprint availability.
 
 Code review is an integral part of the development cycle and therefore should be time tracked on the appropriate task/service on the project.
 
