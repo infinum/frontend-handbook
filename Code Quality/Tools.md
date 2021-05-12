@@ -160,8 +160,8 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 Infinum created various rulesets for ESLint and TSLint which you can check out [here](https://github.com/infinum/js-linters). We encourage you to use some of these presets, as per your needs:
 
--   [Base ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config/README.md)
--   [React ESLint config](https://github.com/infinum/js-linters/blob/master/eslint-config-react/README.md)
+-   [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
+-   [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
 -   [Angular TSLint config](https://github.com/infinum/js-linters/tree/master/tslint-config-angular)
 
 ### Stylelint
