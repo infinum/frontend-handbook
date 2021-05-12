@@ -11,7 +11,7 @@ Your pull request should have **all of the below**:
 -   A description that includes
     -   links to the design files that you used
     -   relevant links to documentation outlining your work
-    -   a screen shoot of a feature or fix you delivered
+    -   a screenshot of a feature or fix you delivered
 
 The following are extra but highly recommended:
 
@@ -26,7 +26,7 @@ The following are extra but highly recommended:
 
 -   Marked **A** title showing a concise description along with a task ID
 -   Marked **B** description containing relevant documentation and links
--   Marked **C** a screen shoot of the developed feature
+-   Marked **C** a screenshot of the developed feature
 
 ## When and who merges the pull request?
 
