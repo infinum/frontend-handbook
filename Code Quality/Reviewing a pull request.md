@@ -9,11 +9,11 @@ This guide should help you review code better. A good code review will provide a
 
 ## Language of the code review
 
--   be concise
--   do not ask, advise
--   do not assume the level of knowledge
--   be open for discussion, but do not bike shed
--   recommend fixes instead of pointing out errors
+-   Be concise
+-   Do not ask, advise
+-   Do not assume the level of knowledge
+-   Be open for discussion, but do not bike shed
+-   Recommend fixes instead of pointing out errors
 
 ### Good examples:
 
@@ -55,11 +55,11 @@ You, too, are taking part in the chain of quality assurance here.
 
 ## Common things to look out for
 
--   the code should have been linted and prettified before the code review
--   the code should be tested using unit tests
--   the code should not lower the code coverage on the project
--   the code should follow the design specification
--   tricky parts of the code that are hard to understand should have either inline documentation or a link to external documentation
+-   The code should have been linted and prettified before the code review
+-   The code should be tested using unit tests
+-   The code should not lower the code coverage on the project
+-   The code should follow the design specification
+-   Tricky parts of the code that are hard to understand should have either inline documentation or a link to external documentation
 
 ## Responsibility
 

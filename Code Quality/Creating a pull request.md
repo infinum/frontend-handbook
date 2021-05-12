@@ -9,16 +9,16 @@ Your pull request should have **all of the below**:
 -   Task ID (Productive, Jira, etc.)
 -   A title
 -   A description that includes
-    -   links to the design files that you used
-    -   relevant links to documentation outlining your work
-    -   a screenshot of a feature or fix you delivered
+    -   Links to the design files that you used
+    -   Relevant links to documentation outlining your work
+    -   A screenshot of a feature or fix you delivered
 
 The following are extra but highly recommended:
 
--   a summary of changes and reasoning behind them
--   a TODO list of missing details on large pull requests
--   a list of open questions if there are any
--   a video demonstration of the feature (you can reuse this later for a client demo!)
+-   A summary of changes and reasoning behind them
+-   A TODO list of missing details on large pull requests
+-   A list of open questions if there are any
+-   A video demonstration of the feature (you can reuse this later for a client demo!)
 
 ## Example
 
