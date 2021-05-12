@@ -12,16 +12,16 @@ This guide should help you review code better. A good code review will provide a
 -   be concise
 -   do not ask, advise
 -   do not assume the level of knowledge
--   be open for discussion, but do not bike ßshed
+-   be open for discussion, but do not bike shed
 -   recommend fixes instead of pointing out errors
 
 ### Good examples:
 
-> this won't work because the function you're calling as `async`.
+> this won't work because the function you're calling is `async`.
 
-> this file is palaced in the incorrect folder, it should go to `components/shared`
+> this file is placed in the incorrect folder, it should go to `components/shared`
 
-> I'm not sure this does what you want it to do. Looking at the service as a whole you should probably allow the end user to construct this out of available functions.
+> I'm not sure this does what you want it to do. Looking at the service as a whole you should probably allow the end user to construct this out of exported functions.
 
 ### Bad examples:
 
@@ -31,11 +31,13 @@ This guide should help you review code better. A good code review will provide a
 
 > naming is not correct here
 
+> pls fix.
+
 ## When do I review pull requests?
 
 Reviewing a pull request could (and should) take time. This is not to be rushed since you vouch for the quality of the code that's on review.
 
-If you review code for either multiple projects or you work in a larger team you might want to think about assigning a certain fixed part of the day to do them (e.g. I review pull requests in the morning). Everything that comes during the day is to be reviewed first thing tomorrow. This should not include urgent things that block hot fixes, etc.
+If you review code for either multiple projects or you work in a larger team, you might want to think about assigning a certain fixed part of the day to do them (e.g. I review pull requests in the morning). Everything that comes during the day is to be reviewed first thing tomorrow. This should not include urgent things that block hot fixes, etc.
 
 Code review is an integral part of the development cycle and therefore should be time tracked on the appropriate task/service on the project.
 
