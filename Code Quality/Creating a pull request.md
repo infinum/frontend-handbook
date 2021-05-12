@@ -7,6 +7,8 @@ In the Infinum JavaScript team we love code reviews. We love getting them and gi
 Your pull request should have **all of the below**:
 
 -   The code should have been linted and prettified before the code review
+-   Pull requests should not be large and should contain a single feature
+    -   Create multiple pull requests in smaller chunks if needed
 -   Task ID (Productive, Jira, etc.)
 -   A title
 -   A description that includes
