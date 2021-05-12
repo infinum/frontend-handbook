@@ -17,11 +17,11 @@ This guide should help you review code better. A good code review will provide a
 
 ### Good examples:
 
-> this won't work because the function you're calling is `async`.
+> this won't work because the function is `async`.
 
 > this file should go to `components/shared` because this is atom component and can be reused on another page
 
-> I'm not sure this does what you want it to do. Looking at the service as a whole you should probably allow the end user to construct this out of exported functions.
+> I'm not sure this does what it's meant to do. Looking at the service as a whole the code should probably allow the end user to construct this out of exported functions.
 
 ### Bad examples:
 
