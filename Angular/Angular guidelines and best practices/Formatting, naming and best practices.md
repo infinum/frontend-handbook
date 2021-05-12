@@ -605,7 +605,7 @@ Covering all the various operators is out of the scope of this handbook. Please 
 
 ## Observables and async/await
 
-You can use async/await to await for the completion of observables. Keep in mind that this probably does not make too much sense for observables emits more than one value, but it might be OK for things like HTTP requests.
+You can use async/await to await for the completion of observables. Keep in mind that this probably does not make too much sense for observables that emit more than one value, but it might be OK for things like HTTP requests.
 
 To convert an observable to a promise, just call `obs$.toPromise()` and then you can await it.
 

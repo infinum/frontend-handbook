@@ -473,7 +473,7 @@ You now have a ref that isn't the latest value, it's a value for a render that w
 
 When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger an update imperatively, you can use a custom `useUpdate` hook.
 
-_Note: This example demonstrates how `react-hook-form` works internally_
+_Note: This example demonstrates how `react-hook-form` works internally._
 
 ```jsx
 const updateReducer = (num: number): number => (num + 1) % 1_000_000;
