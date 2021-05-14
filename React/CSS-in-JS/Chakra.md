@@ -94,7 +94,7 @@ The main difference is that `__css` prop will be merged before `sx` prop ([githu
 We should __ONLY__ use it for building primitive `core` components.
 
 ```jsx
-import { chakra, HTMLChakraProps } from '@chakra-ui/react';
+import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
 import { __DEV__ } from "@chakra-ui/utils";
 
 export interface CardOptions {};
