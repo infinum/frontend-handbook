@@ -68,6 +68,8 @@ const ListWrapper = chakra(Box, {
 
 For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
 
+### The `sx` prop
+
 `sx` prop works similar to `style` prop. It takes an object with styles.
 
 Example:
@@ -85,7 +87,33 @@ Example:
 </Button>
 ```
 
-There is also `__css` prop that is similar to `sx`. The only difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
+### The `__css` prop
+
+`__css` prop that is similar to `sx` but it is designed __ONLY__ for internal use (hence the private prefix `__`).
+The main difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).  
+We should __ONLY__ use it for building primitive `core` components.
+
+```jsx
+import { chakra, HTMLChakraProps } from '@chakra-ui/react';
+import { __DEV__ } from "@chakra-ui/utils";
+
+export interface CardOptions {};
+
+export interface CardProps
+  extends HTMLChakraProps<"div">,
+    CardOptions,
+    ThemingProps<"Card"> {};
+
+export const Card = forwardRef<CardProps, "div">(({ variant, ...rest }, ref) => {
+  const styles = useStyleConfig("Card", { variant });
+
+  return <chakra.div ref={ref} __css={styles} {...rest} />;
+});
+
+if (__DEV__) {
+  Card.displayName = "Card"
+}
+```
 
 ### Chakra Factory
 
