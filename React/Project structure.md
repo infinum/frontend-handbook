@@ -186,7 +186,7 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
     <td><code>todo</code></td>
     <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
     <td rowspan="3">
-      They should accept primitive props like <code>resourceId</code> and hook to the resource fetching layer via <code>SWR</code>. 
+      They should accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>. 
     </td>
   </tr>
   <tr>
