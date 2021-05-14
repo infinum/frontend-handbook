@@ -127,12 +127,72 @@ const Button = chakra("button", {
     bg: "white",
   },
 });
+```
+
+__Update (14.05.2021.)__
+
+Previously we had this example:
+```tsx
 const FbButton = chakra(Button, {
   baseStyle: {
     bg: "primary.500",
   },
 });
 ```
+
+We decided this is not the way to go and instead we should make special `colorScheme` in the theme.
+
+Theme:
+```ts
+// ./src/styles/theme/foundations/colors.ts
+const colors = {
+  facebook: {
+    50: "#E8F4F9",
+    100: "#D9DEE9",
+    200: "#B7C2DA",
+    300: "#6482C0",
+    400: "#4267B2",
+    500: "#385898",
+    600: "#314E89",
+    700: "#29487D",
+    800: "#223B67",
+    900: "#1E355B",
+  },
+}
+
+// ./src/styles/theme/components/button.ts
+function variantSolid(props: Dict) {
+  const { colorScheme } = props;
+
+  if (colorScheme === 'facebook') {
+    return {
+
+    }
+  }
+}
+
+const variants = {
+  solid: variantSolid
+};
+
+export default {
+  variants,
+};
+```
+
+Usage:
+```tsx
+const ExampleForm = () => {
+  return (
+    <form>
+      // ...some inputs
+      <Button colorScheme="facebook" />
+    </form>
+  )
+}
+```
+
+> NOTE: `facebook` color scheme was used just for demonstration purpose, you can do the similar thing with any other social button. Chakra UI already supports `facebook`, `messenger`, `whatsapp`, `twitter`, `telegram` color schemes OTB. You can find the example [here](https://chakra-ui.com/docs/form/button#social-buttons)
 
 #### Custom component example
 
