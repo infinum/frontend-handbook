@@ -58,6 +58,7 @@ src
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
 You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
 
+Here are some examples of core components:
 <table>
   <tr>
     <th>Components</th>
