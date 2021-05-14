@@ -198,6 +198,8 @@ const ExampleForm = () => {
 
 > NOTE: `facebook` color scheme was used just for demonstration purpose, you can do the similar thing with any other social button. Chakra UI already supports `facebook`, `messenger`, `whatsapp`, `twitter`, `telegram` color schemes OTB. You can find the example [here](https://chakra-ui.com/docs/form/button#social-buttons)
 
+> 
+
 #### Custom component example
 
 For example `react-datepicker` can be wrapped in chakra factory function so we can pass `sx` or style props to `<DatePicker />`
@@ -344,7 +346,7 @@ src
 
 ### Colors
 
-Color naming should a single value or an object with keys in range from 50 to 900.
+Color naming should a single value or an object with keys in range from `50` to `900`.
 
 Example:
 
@@ -365,6 +367,14 @@ export const colors = {
   },
 };
 ```
+
+#### How to generate colors
+
+We recommend adding a palette that ranges from `50` to `900`. Tools like [Themera](https://themera.vercel.app/), [Smart Swatch](https://smart-swatch.netlify.app/), [Coolors](https://coolors.co/232020-553739-955e42-9c914f-748e54) or [Palx](https://palx.jxnblk.com/) are available to generate these palettes.
+
+Sometimes you can get different or incomplete color palette from designer.
+For example, designer provided us with only one `primary` color value `#68aaf8`.  
+In this case you can use this [tool](https://codesandbox.io/s/chakra-color-palette-2w7wl?file=/src/App.tsx:1178-1191) to generate the color palette, but have in mind that this tool is still in beta and have some bus.
 
 ### Pseudo props
 
