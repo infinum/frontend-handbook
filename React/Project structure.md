@@ -1,70 +1,229 @@
 ## Organizing components
+### UI Components
 
-### Utility components
+When adding UI components, you should be able to group them in two root domains:
 
-Utility components are basically components that don't have any impact on the UI itself.
-For example, Meta component for populating `<Head>`.
+1. `pages` - page scope based components
+2. `shared` - components that are shared all across the app
+   
+Folder naming rules:
 
-Example:
-
-```tsx
-import React, { FC } from 'react';
-import Head from 'next/head';
-
-export const Meta: FC = () => {
-  return (
-    <Head>
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      <link rel="shortcut icon" href="/favicon.ico" />
-      <title>Infinum</title>
-    </Head>
-  );
-};
-```
+ 1. `kebab-case` folder name indicates domain name
+ 2. `PascalCase` folders and filenames should be used for components naming
 
 ```
 src
-.
-└── components
-    ├── utilities
-    │   └── Meta
-    │       └── Meta.tsx
-    ...
+├── components
+│   ├── pages
+│   │   ├── home
+│   │   │   ├── HomeHeaderSection
+│   │   │   │   └── HomeHeaderSection.tsx
+│   │   │   └── HomeTodoListSection
+│   │   │       └── HomeTodoListSection.tsx
+│   │   └── todo
+│   │       ├── TodoHeaderSection
+│   │       │   └── TodoHeaderSection.tsx
+│   │       └── TodoCreateFormSection
+│   │           └── TodoCreateFormSection.tsx
+│   └── shared
+│       ├── core
+│       │   ├── Section
+│       │   │   └── Section.tsx
+│       │   └── Card
+│       │       └── Card.tsx
+│       ├── fields
+│       │   └── TextField
+│       │       └── TextField.tsx
+│       ├── todo
+│       │   ├── TodoCard
+│       │   │   └── TodoCard.tsx
+│       │   ├── TodoList
+│       │   │   └── TodoList.tsx
+│       │   └── TodoCreateForm
+│       │       └── TodoCreateForm.tsx
+│       └── utilities
+│             ├── BugsnagErrorBoundary
+│             │   └── BugsnagErrorBoundary.tsx
+│             └── Meta
+│                 └── Meta.tsx
+└── pages
+    ├── index.tsx
+    └── todo
+        └── [id]
+            └── index.tsx
 ```
-### UI Components
 
-When adding UI components, you should be able to distinguish them by:
+#### Shared *core* components
 
-1. Page scope based components
-2. Components that are shared all across the app
-3. Large and complex components which contain a lot of stylings, different layouts and child components.
-   
-Lowercase folders are indicators of a page scoped components, shared components and meta components, while PascalCase folders and filenames should be used for components naming.
+We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
+You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
 
-```
-components
-.
-├── shared
-│   └── WelcomeBox
-│       └── WelcomeBox.tsx
-├── admin
-│   └── AdminBanner
-│       └── AdminBanner.tsx
-└── Gallery
-    ├── Gallery.tsx
-    └── components
-        ├── Arrows.tsx
-        ├── Breadcrumbs.tsx
-        └── ...
-```
+Here are some examples of core components:
+<table>
+  <tr>
+    <th>Components</th>
+    <th>Parts</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Card</td>
+    <td>
+      <code>Card</code>, <code>CardImage</code>, <code>CardImageOverlay</code>, <code>CardTitle</code>, <code>CardDescription</code>, ...
+    </td>
+    <td>
+      From these parts, you'll be able to compose multiple more specific <b>molecules</b> like <code>ProductCard</code> or <code>UserCard</code>.
+    </td>
+  </tr>
+  <tr>
+    <td>Section</td>
+    <td>
+      <code>Section</code>, <code>SectionHeader</code>, <code>SectionBody</code>, ..
+    </td>
+    <td>
+      This might have multiple background schemes like <code>dimmed</code>, <code>inverted</code>, <code>light</code>.
+    </td>
+  </tr>
+  <tr>
+    <td>Search</td>
+    <td>
+      <code>Search</code>, <code>SearchInput</code>, <code>SearchEmpty</code>, <code>SearchResults</code>, ...
+    </td>
+    <td>
+      <code>Search</code> uses context to provide shared state to other parts.
+      <code>SearchInput</code> renders input and it could be placed anywhere in the DOM structure (for example, in the page <code>Header</code>).
+      <code>SearchEmpty</code> and <code>SearchResults</code> handles switching between states and showing the result.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      ReactSelect
+    </td>
+    <td>
+      <code>ReactSelect</code>,<br>
+      <code>./components/ClearIndicator</code>,<br>
+      <code>./components/Control</code>, ...
+    </td>
+    <td>
+     The list of custom components can be find <a href="https://react-select.com/components">here</a>
+    </td>
+  </tr>
+</table>
+
+#### Shared *Feature* based domains
+
+We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
+They are shared components that encapsulate some specific feature of an app.  
+
+Component name is always composed out of two parts `Context` + `Domain`, for example `ArticlesPanel` where `Articles` is context and `Panel` is domain.
+
+Here are some examples of feature domain names:
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>fields</code></td>
+    <td><code>InputField</code>, <code>TextareaField</code></td>
+    <td>
+      Specific form fields prepared to be used with <a href="https://react-hook-form.com/">React Hook Form</a> library.
+      Built out of multiple parts, for example <code>InputGroup</code>, <code>InputLeftElement</code>, <code>Input</code> form <a href="https://chakra-ui.com/docs/form/input#add-elements-inside-input">Chakra UI</a>
+    </td>
+  </tr>
+  <tr>
+    <td><code>overlays</code></td>
+    <td><code>UnsupportedBrowserOverlay</code>, <code>BugsnagErrorOverlay</code></td>
+    <td>Components that covers the whole page and prevents user to interact with the page in some degree.</td>
+  </tr>
+  <tr>
+    <td><code>layouts</code></td>
+    <td><code>MainLayout</code>, <code>AdminLayout</code></td>
+    <td>Components that are shared across the pages and renders the application shell (navigation and footer)</td>
+  </tr>
+  <tr>
+    <td><code>messages</code></td>
+    <td><code>NoResultsMessage</code>, <code>EmptyListMessage</code>, <code>LoadingMessage</code>, <code>ErrorMessage</code></td>
+    <td>Reusable messages components that could be shared across the pages for handling empty list results, loading states or ErrorBoundaries fallback</td>
+  </tr>
+  <tr>
+    <td><code>navigations</code></td>
+    <td><code>MainNavigation</code>, <code>AdminNavigation</code></td>
+    <td>Different navigations used in layouts to support different app shell styles. They could handle user logged-in/logged-out states and mobile/desktop layouts</td>
+  </tr>
+  <tr>
+    <td><code>footers</code></td>
+    <td><code>MainFooter</code>, <code>AdminFooter</code></td>
+    <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as <code>navigations</code></td>
+  </tr>
+  <tr>
+    <td><code>panels</code></td>
+    <td><code>ArticlesPanel</code>, <code>EventPanel</code>, <code>EventSidebarPanel</code>, <code>GroupPanel</code></td>
+    <td>
+      Specific panels that holds filtering dropdowns for narrowing down the list results. Usually consists of core <code>Panel</code> compound component for sharing the styles and sorting dropdowns.
+    </td>
+  </tr>
+  <tr>
+    <td><code>markdowns</code></td>
+    <td><code>ArticleMarkdown</code>, <code>AnnouncementMarkdown</code></td>
+    <td>Components that handles parsing of the markdown and styling of the generated HTML</td>
+  </tr>
+</table>
+
+#### Shared *Entity* based domain
+
+We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
+
+Component name is always composed out of two parts `Entity` + `Context`, for example `TodoList` where `Todo` is entity and `List` is context.
+
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>todo</code></td>
+    <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
+    <td rowspan="3">
+      They should accept primitive props like <code>resourceId</code> and hook to the resource fetching layer via <code>SWR</code>. 
+    </td>
+  </tr>
+  <tr>
+    <td><code>user</code></td>
+    <td><code>UserList</code>, <code>UserCreateForm</code>, <code>UserCard</code>, ...</td>
+
+  </tr>
+  <tr>
+    <td><code>ticket</code></td>
+    <td><code>TicketList</code>, <code>TicketCreateForm</code>, <code>TicketCard</code>, ...</td>
+  </tr>
+</table>
+
+#### Shared *utility* domain
+
+Utility components usually does not have any visual representation on the screen, but they are still reusable declarative components.
+
+<table>
+  <tr>
+    <th>Domains</th>
+    <th>Components</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>utilities</code></td>
+    <td><code>Meta</code>,  <code>BugsnagErrorBoundary</code></td>
+    <td>
+     <code>Meta</code> inserts <code>meta</code> tags into document <code>head</code>. <code>BugsnagErrorBoundary</code> catches the error, triggers the Bugsnag report and render fallback component
+    </td>
+  </tr>
+</table>
 
 #### `components` folder
 
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
 Note: There _should_ be only one level of `components` folder inside the component folder.
-
 ## Elements
 
 If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
@@ -78,6 +237,8 @@ Example:
     ├── WelcomeCard.tsx
     └── WelcomeCard.elements.ts
 ```
+
+> Moving things to`.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
 
 ## Different component layouts
 
@@ -265,6 +426,40 @@ export default function Admin() {
 }
 ```
 
+### Utility components
+
+Utility components are basically components that don't have any impact on the UI itself.
+For example, Meta component for populating `<Head>`.
+
+Example:
+
+```tsx
+import React, { FC } from 'react';
+import Head from 'next/head';
+
+export const Meta: FC = () => {
+  return (
+    <Head>
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <title>Infinum</title>
+    </Head>
+  );
+};
+```
+
+```
+src
+.
+└── components
+    ├── shared
+    │   ├── utilities
+    │   │   └── Meta
+    │   │       └── Meta.tsx
+    ...
+```
+
 ## Setting up store
 
 Your datx store and models will be placed in the root of the `src` folder as follows:
@@ -317,7 +512,7 @@ Check out [styling guide(needs update)](styling-guide-section-link) for other st
 
 ```
 src
-├── styles
+└── styles
     └── theme
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
