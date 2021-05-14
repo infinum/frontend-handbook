@@ -166,8 +166,12 @@ function variantSolid(props: Dict) {
 
   if (colorScheme === 'facebook') {
     return {
-
+      bg: 'facebook.500',
     }
+  }
+
+  return {
+    bg: `${colorScheme}.200`,
   }
 }
 
