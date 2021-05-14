@@ -53,8 +53,7 @@ Style props should be used for one-off styles (up to max 3 props):
 </Button>
 ```
 
-Components that have more than 3 styles should be moved to separate component.
-Every `Box` or `Flex` components should be moved to separate component, regarding of number of styles, with a descriptive name.
+Components that have more than 3 styles should be moved to separate component. To further improve readability, it is advised to move every `Box` or `Flex` component to a separate component, with a descriptive name.
 
 ```tsx
 const ListWrapper = chakra(Box, {
