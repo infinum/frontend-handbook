@@ -89,7 +89,7 @@ Example:
 
 ### The `__css` prop
 
-`__css` prop that is similar to `sx` but it is designed __ONLY__ for internal use (hence the private prefix `__`).
+`__css` prop is similar to `sx` but it is designed __ONLY__ for internal use (hence the private prefix `__`).
 The main difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).  
 We should __ONLY__ use it for building primitive `core` components.
 
