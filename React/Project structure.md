@@ -1,37 +1,4 @@
 ## Organizing components
-
-### Utility components
-
-Utility components are basically components that don't have any impact on the UI itself.
-For example, Meta component for populating `<Head>`.
-
-Example:
-
-```tsx
-import React, { FC } from 'react';
-import Head from 'next/head';
-
-export const Meta: FC = () => {
-  return (
-    <Head>
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      <link rel="shortcut icon" href="/favicon.ico" />
-      <title>Infinum</title>
-    </Head>
-  );
-};
-```
-
-```
-src
-.
-└── components
-    ├── utilities
-    │   └── Meta
-    │       └── Meta.tsx
-    ...
-```
 ### UI Components
 
 When adding UI components, you should be able to group them in two root domains:
@@ -67,13 +34,18 @@ src
 │       ├── fields
 │       │   └── TextField
 │       │       └── TextField.tsx
-│       └── todo
-│           ├── TodoCard
-│           │   └── TodoCard.tsx
-│           ├── TodoList
-│           │   └── TodoList.tsx
-│           └── TodoCreateForm
-│               └── TodoCreateForm.tsx
+│       ├── todo
+│       │   ├── TodoCard
+│       │   │   └── TodoCard.tsx
+│       │   ├── TodoList
+│       │   │   └── TodoList.tsx
+│       │   └── TodoCreateForm
+│       │       └── TodoCreateForm.tsx
+│       └── utilities
+│             ├── BugsnagErrorBoundary
+│             │   └── BugsnagErrorBoundary.tsx
+│             └── Meta
+│                 └── Meta.tsx
 └── pages
     ├── index.tsx
     └── todo
@@ -151,48 +123,48 @@ Here are some examples of feature domain names:
     <th>Description</th>
   </tr>
   <tr>
-    <td>`fields`</td>
-    <td>`InputField`, `TextareaField`</td>
+    <td><code>fields</code></td>
+    <td><code>InputField</code>, <code>TextareaField</code></td>
     <td>
       Specific form fields prepared to be used with [React Hook Form](https://react-hook-form.com/) library.
-      Built out of multiple parts, for example `InputGroup`, `InputLeftElement`, `Input` form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
+      Built out of multiple parts, for example <code>InputGroup</code>, <code>InputLeftElement</code>, <code>Input</code> form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
     </td>
   </tr>
   <tr>
-    <td>`overlays`</td>
-    <td>`UnsupportedBrowserOverlay`, `BugsnagErrorOverlay`</td>
+    <td><code>overlays</code></td>
+    <td><code>UnsupportedBrowserOverlay</code>, <code>BugsnagErrorOverlay</code></td>
     <td>Components that covers the whole page and prevents user to interact with the page in some degree.</td>
   </tr>
   <tr>
-    <td>`layouts`</td>
-    <td>`MainLayout`, `AdminLayout`</td>
+    <td><code>layouts</code></td>
+    <td><code>MainLayout</code>, <code>AdminLayout</code></td>
     <td>Components that are shared across the pages and renders the application shell (navigation and footer)</td>
   </tr>
   <tr>
-    <td>`messages`</td>
-    <td>`NoResultsMessage`, `EmptyListMessage`, `LoadingMessage`, `ErrorMessage`</td>
+    <td><code>messages</code></td>
+    <td><code>NoResultsMessage</code>, <code>EmptyListMessage</code>, <code>LoadingMessage</code>, <code>ErrorMessage</code></td>
     <td>Reusable messages components that could be shared across the pages for handling empty list results, loading states or ErrorBoundaries fallback</td>
   </tr>
   <tr>
-    <td>`navigations`</td>
-    <td>`MainNavigation`, `AdminNavigation`</td>
+    <td><code>navigations</code></td>
+    <td><code>MainNavigation</code>, <code>AdminNavigation</code></td>
     <td>Different navigations used in layouts to support different app shell styles. They could handle user logged-in/logged-out states and mobile/desktop layouts</td>
   </tr>
   <tr>
-    <td>`footers`</td>
-    <td>`MainFooter`, `AdminFooter`</td>
+    <td><code>footers</code></td>
+    <td><code>MainFooter</code>, <code>AdminFooter</code></td>
     <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as `navigations`</td>
   </tr>
   <tr>
-    <td>`panels`</td>
-    <td>`ArticlesPanel`, `EventPanel`, `EventSidebarPanel`, `GroupPanel`</td>
+    <td><code>panels</code></td>
+    <td><code>ArticlesPanel</code>, <code>EventPanel</code>, <code>EventSidebarPanel</code>, <code>GroupPanel</code></td>
     <td>
-      Specific panels that holds filtering dropdowns for narrowing down the list results. Usually consists of core `Panel` compound component for sharing the styles and sorting dropdowns.
+      Specific panels that holds filtering dropdowns for narrowing down the list results. Usually consists of core <code>Panel</code> compound component for sharing the styles and sorting dropdowns.
     </td>
   </tr>
   <tr>
-    <td>`markdowns`</td>
-    <td>`ArticleMarkdown`, `AnnouncementMarkdown`</td>
+    <td><code>markdowns</code></td>
+    <td><code>ArticleMarkdown</code>, <code>AnnouncementMarkdown</code></td>
     <td>Components that handles parsing of the markdown and styling of the generated HTML</td>
   </tr>
 </table>
@@ -210,20 +182,20 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
     <th>Description</th>
   </tr>
   <tr>
-    <td>`todo`</td>
-    <td>`TodoList`, `TodoCreateForm`, `TodoCard`, ...</td>
+    <td><code>todo</code></td>
+    <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
     <td rowspan="3">
-      They should accept primitive props like `resourceId` and hook to the resource fetching layer via `SWR`. 
+      They should accept primitive props like <code>resourceId</code> and hook to the resource fetching layer via <code>SWR</code>. 
     </td>
   </tr>
   <tr>
-    <td>`user`</td>
-    <td>`UserList`, `UserCreateForm`, `UserCard`, ...</td>
+    <td><code>user</code></td>
+    <td><code>UserList</code>, <code>UserCreateForm</code>, <code>UserCard</code>, ...</td>
 
   </tr>
   <tr>
-    <td>`ticket`</td>
-    <td>`TicketList`, `TicketCreateForm`, `TicketCard`, ...</td>
+    <td><code>ticket</code></td>
+    <td><code>TicketList</code>, <code>TicketCreateForm</code>, <code>TicketCard</code>, ...</td>
   </tr>
 </table>
 
@@ -238,10 +210,10 @@ Utility components usually does not have any visual representation on the screen
     <th>Description</th>
   </tr>
   <tr>
-    <td>`utilities`</td>
-    <td>`Meta`,  `BugsnagErrorBoundary`</td>
+    <td><code>utilities</code></td>
+    <td><code>Meta</code>,  <code>BugsnagErrorBoundary</code></td>
     <td>
-     `Meta` inserts `meta` tags into document `head`. `BugsnagErrorBoundary` catches the error, triggers the Bugsnag report and render fallback component
+     <code>Meta</code> inserts <code>meta</code> tags into document <code>head</code>. <code>BugsnagErrorBoundary</code> catches the error, triggers the Bugsnag report and render fallback component
     </td>
   </tr>
 </table>
@@ -251,7 +223,6 @@ Utility components usually does not have any visual representation on the screen
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
 Note: There _should_ be only one level of `components` folder inside the component folder.
-
 ## Elements
 
 If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
@@ -452,6 +423,40 @@ export default function Admin() {
     </AdminLayout>
   )
 }
+```
+
+### Utility components
+
+Utility components are basically components that don't have any impact on the UI itself.
+For example, Meta component for populating `<Head>`.
+
+Example:
+
+```tsx
+import React, { FC } from 'react';
+import Head from 'next/head';
+
+export const Meta: FC = () => {
+  return (
+    <Head>
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <title>Infinum</title>
+    </Head>
+  );
+};
+```
+
+```
+src
+.
+└── components
+    ├── shared
+    │   ├── utilities
+    │   │   └── Meta
+    │   │       └── Meta.tsx
+    ...
 ```
 
 ## Setting up store
