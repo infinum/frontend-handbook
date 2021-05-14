@@ -552,7 +552,8 @@ src
 │       └── users.test.ts
 └── components
     └── shared
-        └── Button
-            ├── Button.test.tsx
-            └── Button.tsx
+        └── core
+            └── Button
+                ├── Button.test.tsx
+                └── Button.tsx
 ```
