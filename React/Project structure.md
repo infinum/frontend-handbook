@@ -68,30 +68,30 @@ Here are some examples of core components:
   <tr>
     <td>Card</td>
     <td>
-      `Card`,  `CardImage`,  `CardImageOverlay`,  `CardTitle`, `CardDescription`, ...
+      <code>Card</code>, <code>CardImage</code>, <code>CardImageOverlay</code>, <code>CardTitle</code>, <code>CardDescription</code>, ...
     </td>
     <td>
-      From these parts, you'll be able to compose multiple more specific **_molecules_** like `ProductCard` or `UserCard`.
+      From these parts, you'll be able to compose multiple more specific <b>molecules</b> like <code>ProductCard</code> or <code>UserCard</code>.
     </td>
   </tr>
   <tr>
     <td>Section</td>
     <td>
-      `Section`,  `SectionHeader`, `SectionBody`, ..
+      <code>Section</code>, <code>SectionHeader</code>, <code>SectionBody</code>, ..
     </td>
     <td>
-      This might have multiple background schemes like `dimmed`, `inverted`, `light`.
+      This might have multiple background schemes like <code>dimmed</code>, <code>inverted</code>, <code>light</code>.
     </td>
   </tr>
   <tr>
     <td>Search</td>
     <td>
-      `Search`, `SearchInput`, `SearchEmpty`, SearchResults`, ...
+      <code>Search</code>, <code>SearchInput</code>, <code>SearchEmpty</code>, <code>SearchResults</code>, ...
     </td>
     <td>
-      `Search` uses context to provide shared state to other parts.
-      `SearchInput` renders input and it could be placed anywhere in the DOM structure (for example, in the page `Header`).
-      `SearchEmpty` and `SearchResults` handles switching between states and showing the result.
+      <code>Search</code> uses context to provide shared state to other parts.
+      <code>SearchInput</code> renders input and it could be placed anywhere in the DOM structure (for example, in the page <code>Header</code>).
+      <code>SearchEmpty</code> and <code>SearchResults</code> handles switching between states and showing the result.
     </td>
   </tr>
   <tr>
@@ -99,12 +99,12 @@ Here are some examples of core components:
       ReactSelect
     </td>
     <td>
-      `ReactSelect`, 
-      `./components/ClearIndicator`, 
-      `./components/Control`, ...
+      <code>ReactSelect</code>,<br>
+      <code>./components/ClearIndicator</code>,<br>
+      <code>./components/Control</code>, ...
     </td>
     <td>
-     The list of custom components can be find [here](https://react-select.com/components)
+     The list of custom components can be find <a href="https://react-select.com/components">here</a>
     </td>
   </tr>
 </table>
@@ -127,8 +127,8 @@ Here are some examples of feature domain names:
     <td><code>fields</code></td>
     <td><code>InputField</code>, <code>TextareaField</code></td>
     <td>
-      Specific form fields prepared to be used with [React Hook Form](https://react-hook-form.com/) library.
-      Built out of multiple parts, for example <code>InputGroup</code>, <code>InputLeftElement</code>, <code>Input</code> form [Chakra UI](https://chakra-ui.com/docs/form/input#add-elements-inside-input)
+      Specific form fields prepared to be used with <a href="https://react-hook-form.com/">React Hook Form</a> library.
+      Built out of multiple parts, for example <code>InputGroup</code>, <code>InputLeftElement</code>, <code>Input</code> form <a href="https://chakra-ui.com/docs/form/input#add-elements-inside-input">Chakra UI</a>
     </td>
   </tr>
   <tr>
@@ -154,7 +154,7 @@ Here are some examples of feature domain names:
   <tr>
     <td><code>footers</code></td>
     <td><code>MainFooter</code>, <code>AdminFooter</code></td>
-    <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as `navigations`</td>
+    <td>Different footers used in layouts to support different app shell styles. Serves the same purpose as <code>navigations</code></td>
   </tr>
   <tr>
     <td><code>panels</code></td>
