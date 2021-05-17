@@ -53,7 +53,7 @@ Next up is scanning the files for common errors or typos, etc. - things that sta
 
 You should have the project you're reviewing checked out locally and you should run **both** the project and the tests on **every** pull request. Your review is not complete unless you click through the feature and verify at least the happy path.
 
-Take a look at the code coverage and look for missing things there, are all branched tested or even developed?
+Take a look at the code coverage and look for missing things there, are all branches tested or even developed?
 
 You, too, are taking part in the chain of quality assurance here.
 
