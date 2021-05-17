@@ -69,4 +69,4 @@ Some of this checks can be automated on pull requests (e.g. code coverage). Talk
 
 ## Responsibility
 
-Every developer is responsible for their code. But - you as a reviewer share the responsibility as well when you sign off a feature and allow merge of it.
+Every developer is responsible for their code. But - you as a reviewer share the responsibility as well when you sign off a feature and allow it to merge.
