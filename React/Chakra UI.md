@@ -158,7 +158,8 @@ const Button = chakra("button", {
 
 __Update (14.05.2021.)__
 
-Previously we had this example:
+Previously we had this example:  
+
 ```tsx
 const FbButton = chakra(Button, {
   baseStyle: {
@@ -169,7 +170,8 @@ const FbButton = chakra(Button, {
 
 We decided this is not the way to go and instead we should make special `colorScheme` in the theme.
 
-Theme:
+Theme:  
+
 ```ts
 // ./src/styles/theme/foundations/colors.ts
 const colors = {
@@ -211,7 +213,8 @@ export default {
 };
 ```
 
-Usage:
+Usage:  
+
 ```tsx
 const ExampleForm = () => {
   return (
