@@ -65,7 +65,7 @@ You, too, are taking part in the chain of quality assurance here.
 -   The code should follow the design specification
 -   Tricky parts of the code that are hard to understand should have either inline documentation or a link to external documentation
 
-Some of this checks can be automated on pull requests (e.g. code coverage). Talk to your resident devops to help you set this up.
+Some of these checks can be automated on pull requests (e.g. code coverage). Talk to your resident devops to help you set this up.
 
 ## Responsibility
 
