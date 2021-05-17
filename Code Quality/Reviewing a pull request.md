@@ -12,7 +12,7 @@ This guide should help you review code better. A good code review will provide a
 -   Be concise
 -   Do not ask, advise
 -   Do not assume the level of knowledge
--   Be open for discussion, but do not bike shed
+-   Be open for discussion, but do not bikeshed
 -   Recommend fixes instead of pointing out errors
 
 ### Good examples:
