@@ -51,7 +51,7 @@ Start by reading the feature that's delivered. Look at the design files, get to 
 
 Next up is scanning the files for common errors or typos, etc. - things that stand out right away. Comment them and if they are blocking enough return the pull request to the developer.
 
-You should have the project you're reviewing checked out locally and you should run **both** the project and the tests on **every** pull request. Your review is not complete unless you click thru the feature and verify at least the happy path.
+You should have the project you're reviewing checked out locally and you should run **both** the project and the tests on **every** pull request. Your review is not complete unless you click through the feature and verify at least the happy path.
 
 Take a look at the code coverage and look for missing things there, are all branched tested or even developed?
 
