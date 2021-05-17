@@ -68,6 +68,8 @@ const ListWrapper = chakra(Box, {
 
 For more about style props read [docs](https://chakra-ui.com/docs/features/style-props)
 
+### The `sx` prop
+
 `sx` prop works similar to `style` prop. It takes an object with styles.
 
 Example:
@@ -85,7 +87,33 @@ Example:
 </Button>
 ```
 
-There is also `__css` prop that is similar to `sx`. The only difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
+### The `__css` prop
+
+`__css` prop is similar to `sx` but it is designed __ONLY__ for internal use (hence the private prefix `__`).
+The main difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).  
+We should __ONLY__ use it for building primitive `core` components.
+
+```jsx
+import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
+import { __DEV__ } from "@chakra-ui/utils";
+
+export interface CardOptions {};
+
+export interface CardProps
+  extends HTMLChakraProps<"div">,
+    CardOptions,
+    ThemingProps<"Card"> {};
+
+export const Card = forwardRef<CardProps, "div">(({ variant, ...rest }, ref) => {
+  const styles = useStyleConfig("Card", { variant });
+
+  return <chakra.div ref={ref} __css={styles} {...rest} />;
+});
+
+if (__DEV__) {
+  Card.displayName = "Card"
+}
+```
 
 ### Chakra Factory
 
@@ -127,12 +155,78 @@ const Button = chakra("button", {
     bg: "white",
   },
 });
+```
+
+__Update (14.05.2021.)__
+
+Previously we had this example:
+```tsx
 const FbButton = chakra(Button, {
   baseStyle: {
     bg: "primary.500",
   },
 });
 ```
+
+We decided this is not the way to go and instead we should make special `colorScheme` in the theme.
+
+Theme:
+```ts
+// ./src/styles/theme/foundations/colors.ts
+const colors = {
+  facebook: {
+    50: "#E8F4F9",
+    100: "#D9DEE9",
+    200: "#B7C2DA",
+    300: "#6482C0",
+    400: "#4267B2",
+    500: "#385898",
+    600: "#314E89",
+    700: "#29487D",
+    800: "#223B67",
+    900: "#1E355B",
+  },
+}
+
+// ./src/styles/theme/components/button.ts
+function variantSolid(props: Dict) {
+  const { colorScheme } = props;
+
+  if (colorScheme === 'facebook') {
+    return {
+      bg: 'facebook.500',
+    }
+  }
+
+  return {
+    bg: `${colorScheme}.200`,
+  }
+}
+
+const variants = {
+  solid: variantSolid
+};
+
+export default {
+  variants,
+};
+```
+
+Usage:
+```tsx
+const ExampleForm = () => {
+  return (
+    <form>
+      // ...some inputs
+      <Button colorScheme="facebook" />
+    </form>
+  )
+}
+```
+
+> NOTE: `facebook` color scheme was used just for demonstration purpose, you can do the similar thing with any other social button. Chakra UI already supports `facebook`, `messenger`, `whatsapp`, `twitter`, `telegram` color schemes OTB. You can find the example [here](https://chakra-ui.com/docs/form/button#social-buttons)
+
+> 
 
 #### Custom component example
 
@@ -280,7 +374,7 @@ src
 
 ### Colors
 
-Color naming should a single value or an object with keys in range from 50 to 900.
+Color naming should a single value or an object with keys in range from `50` to `900`.
 
 Example:
 
@@ -301,6 +395,14 @@ export const colors = {
   },
 };
 ```
+
+#### How to generate colors
+
+We recommend adding a palette that ranges from `50` to `900`. Tools like [Themera](https://themera.vercel.app/), [Smart Swatch](https://smart-swatch.netlify.app/), [Coolors](https://coolors.co/232020-553739-955e42-9c914f-748e54) or [Palx](https://palx.jxnblk.com/) are available to generate these palettes.
+
+Sometimes you can get different or incomplete color palette from designer.
+For example, designer provided us with only one `primary` color value `#68aaf8`.  
+In this case you can use this [POC tool](https://codesandbox.io/s/chakra-color-palette-2w7wl?file=/src/App.tsx:1178-1191) to generate the color palette while retaining the exact color value, but have in mind that this tool is still in beta and have some bugs.
 
 ### Pseudo props
 
