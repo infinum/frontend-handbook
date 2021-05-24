@@ -404,7 +404,7 @@ We recommend adding a palette that ranges from `50` to `900`. Tools like [Themer
 
 Sometimes you can get different or incomplete color palette from designer.
 For example, designer provided us with only one `primary` color value `#68aaf8`.  
-In this case you can use this [POC tool](https://codesandbox.io/s/chakra-color-palette-2w7wl?file=/src/App.tsx:1178-1191) to generate the color palette while retaining the exact color value, but have in mind that this tool is still in beta and have some bugs.
+In this case you can use this tool [color-scheme-builder](https://color-scheme-builder.vercel.app/) to generate the color palette while retaining the exact color value.
 
 ### Pseudo props
 
