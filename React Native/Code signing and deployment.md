@@ -41,74 +41,13 @@ android {
 }
 ```
 
-Then to set values to those variables (`MYAPP_KEY_ALIAS` and `MYAPP_KEY_PASSWORD`), create *(or edit)* the `android/gradle.properties` file and add values you used in creating the keystore.
+Then to set values to those variables (`MYAPP_KEY_ALIAS` and `MYAPP_KEY_PASSWORD`), create *(or edit)* the `~/.gradle/gradle.properties` file and add values you used in creating the keystore. You can do the same thing on a project level by creating or editing `android/gradle.properties` but make sure to put this file into the `.gitignore`. The first approach is more secure and recommended.
 
 ```
 MYAPP_KEY_ALIAS=my-key-alias
 MYAPP_KEY_PASSWORD=*****
 ```
 
-#### A security enthusiast or just sceptical? Follow this!
-
-Another more secure way to store your keystore password is by storing the password value into the Keychain Access (let's say a more apple-ish way). To do it this way first add a password into your keychain by clicking on the edit like button. A modal will pop up where you fiel in your account data, the keystore password and also a name for the password. 
-
-If you deal with multiple projects/apps/clients that don't belong to the same Google Play account, name
-your password *android_keystore_`APP_NAME`* (or android_keystore_`CLIENT_NAME`).
-
-Now you can test if you successfully added the keystore password by runing the below command from terminal.
-
-`Note: Replace the APP_NAME part with your actual app name.`
-
-```
-security find-generic-password -s android_keystore_APP_NAME -w
-```
-
-Now if you successfully see your keystore password in the terminal, it's time to edit `android/app/build.gradle` file.
-Add the following to the begining of the build.gradle file.
-
-```
-def getPassword(String currentUser, String keyChain) {
-   def stdout = new ByteArrayOutputStream()
-   def stderr = new ByteArrayOutputStream()
-   exec {
-       commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
-       standardOutput = stdout
-       errorOutput = stderr
-       ignoreExitValue true
-   }
-   //noinspection GroovyAssignabilityCheck
-      stdout.toString().trim()
-}
-```
-
-After you defined the above function, add the next line of code before the defining block for the keystore password.
-
-```
-def pass = getPassword("YOUR_USER_NAME","android_keystore_APP_NAME")
-```
-
-And the final step is to replace/add the keyPassword.
-
-```
-android {
-    ...
-    defaultConfig { ... }
-    signingConfigs {
-        release {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            storePassword pass // Change this
-            keyPassword pass // Change this
-        }
-    }
-    buildTypes {
-        release {
-            ...
-            signingConfig signingConfigs.release
-        }
-    }
-}
-```
 
 ### Building
 
