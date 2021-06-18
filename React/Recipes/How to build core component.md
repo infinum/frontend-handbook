@@ -286,24 +286,3 @@ Creating `core` card component with theme driven and reusable compound component
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
-
-## Chakra UI factory
-
-## Single element component
-
-### Theming
-
-## Multipart component
-compound component
-
-### Multipart Theming
-
-## Reusing other `core` component styles in the theme
-
-import Image theme to Card theme
-
-## Importance of `forwardRef`
-
-## Better development experience
-
-`__DEV__`
