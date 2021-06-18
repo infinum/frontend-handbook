@@ -53,8 +53,7 @@ Style props should be used for one-off styles (up to max 3 props):
 </Button>
 ```
 
-Components that have more than 3 styles should be moved to separate component.
-Every `Box` or `Flex` components should be moved to separate component, regarding of number of styles, with a descriptive name.
+Components that have more than 3 styles should be moved to separate component. To further improve readability, it is advised to move every `Box` or `Flex` component to a separate component, with a descriptive name.
 
 ```tsx
 const ListWrapper = chakra(Box, {
@@ -159,7 +158,8 @@ const Button = chakra("button", {
 
 __Update (14.05.2021.)__
 
-Previously we had this example:
+Previously we had this example:  
+
 ```tsx
 const FbButton = chakra(Button, {
   baseStyle: {
@@ -170,7 +170,8 @@ const FbButton = chakra(Button, {
 
 We decided this is not the way to go and instead we should make special `colorScheme` in the theme.
 
-Theme:
+Theme:  
+
 ```ts
 // ./src/styles/theme/foundations/colors.ts
 const colors = {
@@ -212,7 +213,8 @@ export default {
 };
 ```
 
-Usage:
+Usage:  
+
 ```tsx
 const ExampleForm = () => {
   return (
