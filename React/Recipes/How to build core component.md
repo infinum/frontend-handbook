@@ -1,15 +1,18 @@
 ## The Problem ⚡
 
 When we think about design (slicing of the web page) we usually think in a page based context.  
-In design file we usually get set of pages which consists of some elements, and if we start extracting our components based on the single page view we usually end up with a lot of un-reusable one-off components. Those component will bloat out codebase more and more as project grows. Bundle size will become bigger because we will generate a lot of JS code per each new page, which will eventually slow down our page.
+In design file we get set of pages which consists of UI elements, and if we start extracting our components based on the single page view we often end up with a lot of un-reusable one-off components. Those component will bloat out codebase more and more as project grows. Bundle size will become bigger because we will generate a lot of JS code per each new page, which will eventually slow down our page.
 
 To solve this component we need to shift our mindset from vertical (page based) "slicing" flow to horizontal flow.
 
 ![Vertical vs Horizontal Flow](/img/react-recipes/vertical_vs_horizontal.svg)
 
-To do this we need ...
+To do this we need to focus more on Design System and reusability of components.
+If your design doesn't have any Design System you should as designer to make on.
 
 ### Card design
+
+![Cards](/img/react-recipes/cards.png)
 
 ### Multiple similar cards
 
@@ -174,6 +177,15 @@ export const UserCardV1: FC<IUserCardProps> = ({ user }) => (
 
 > The same thing should be done with the JobCard component.
 
+<iframe 
+  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-v1-b2xv0?fontsize=14&hidenavigation=1&theme=dark"
+  class="codesandbox"
+  style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
+  title="recipa-how-to-build-core-components-v1"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
 ### Solution #2
 
 Extracting styled props into `SystemStyleObject` objects and extracting them to `ComponentName.styles.tsx` file.
@@ -251,6 +263,14 @@ export const UserCardV2: FC<IUserCardProps> = ({ user }) => (
 );
 ```
 
+<iframe 
+  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-v2-pyokb?fontsize=14&hidenavigation=1&theme=dark"
+  style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
+  title="recipa-how-to-build-core-components-v2"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
 ### Solution #3
 
 Creating `core` card component with theme driven and reusable compound components.
@@ -258,7 +278,8 @@ Creating `core` card component with theme driven and reusable compound component
 ```tsx
 ```
 
-<iframe src="https://codesandbox.io/embed/recipa-how-to-build-core-components-ko2g9?fontsize=14&hidenavigation=1&theme=dark"
+<iframe 
+  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-ko2g9?fontsize=14&hidenavigation=1&theme=dark"
   class="codesandbox"
   style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
   title="recipa-how-to-build-core-components"
