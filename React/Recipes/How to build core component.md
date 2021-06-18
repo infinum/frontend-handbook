@@ -1,8 +1,17 @@
 ## The Problem ⚡
 
+When we think about design (slicing of the web page) we usually think in a page based context.  
+In design file we usually get set of pages which consists of some elements, and if we start extracting our components based on the single page view we usually end up with a lot of un-reusable one-off components. Those component will bloat out codebase more and more as project grows. Bundle size will become bigger because we will generate a lot of JS code per each new page, which will eventually slow down our page.
+
+To solve this component we need to shift our mindset from vertical (page based) "slicing" flow to horizontal flow.
+
+![Vertical vs Horizontal Flow](/img/react-recipes/vertical_vs_horizontal.svg)
+
+To do this we need ...
+
 ### Card design
 
-### multiple similar cards
+### Multiple similar cards
 
 First step is to bootstrap the layout with inline props.
 
@@ -130,7 +139,9 @@ export const CardDescription = chakra(Text, {
     textAlign: "center"
   }
 });
+```
 
+```tsx
 // ./components/shared/user/JobCard/UserCardV2.tsx
 
 import * as React from "react";
@@ -204,7 +215,9 @@ export const cardDescription = {
   mb: "5",
   textAlign: "center"
 };
+```
 
+```tsx
 // ./components/shared/user/JobCard/UserCardV3.tsx
 
 import * as React from "react";
