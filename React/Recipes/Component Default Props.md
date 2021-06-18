@@ -36,10 +36,10 @@ export interface IExampleProps {
 
 const Example: FC<IExampleProps> = ({ children, height = HEIGHT }) => {
 
-  const position = calculatePositionBasedOnHeight(HEIGHT);
+  const position = calculatePositionBasedOnHeight(height);
 
   return (
-    <div style={{ height: HEIGHT }}>
+    <div style={{ height }}>
       <div style={{ position: 'absolute', left: position.x, top: position.y }}>
        {children}
       </div>
@@ -98,7 +98,7 @@ const edgeCaseLoader = (src) = `${src}?timestamp=${Date.now()}&w=500`;
 const MyImage: FC<IMyImageProps> = (props) => {
   const loader = props.isSomeEdgeCase ? edgeCaseLoader : myLoader;
 
-  // we start adding more and more if/else statements here code grows out of proportions
+  // we start adding more and more if/else statements here and code grows out of proportions
 
   <Image {...props} loader={loader} />
 };
