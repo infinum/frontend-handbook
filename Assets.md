@@ -25,7 +25,9 @@ Before using this a SVG icon this way, few things are mandatory:
 
 We should add an icon to this folder if it uses only one color and will be used in components like buttons and dropdowns and/or will be inlined with the code. The `fill` property of the icon source should be changed to `currentColor`. This way its color can be changed by setting the `color: ${someColor}` style in CSS.
 
-Example in code:
+##### Examples:
+
+1. React.js example
 
 ```jsx
 import AddIcon from 'src/assets/icons/icon-add.svg';
@@ -36,6 +38,8 @@ const AddButton = () => (
   </Button>
 );
 ```
+
+> For this to work in your repository, you need to configure `next-react-svg` or `svg-react-loader` or something similar.
 
 #### b. `public/images`
 
