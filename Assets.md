@@ -18,7 +18,12 @@ After we exported and optimized the icon, we can add it to our codebase. We will
 
 #### a. `src/assets/icons`
 
-We should add an icon to this folder if it uses only one color and will be used in components like buttons and dropdowns. The `fill` property of the icon source should be changed to `currentColor`. This way its color can be changed by setting the `color: ${someColor}` style in CSS.
+Before using this a SVG icon this way, few things are mandatory:
+
+- Make sure that the SVG element has only the `viewBox` property (without `width` and `height`). The context surrounding the icon should define its dimensions.
+- Sometimes, designers use `<mask>` element in SVGs. Those elemens are referenced by ID and if you use multiple SVGs per HTML document, mulitple `mask` elements will have same ID and as a result, SVGs won't work as expected. Often these `mask` elements are simple to resolve by hand so make sure to remove them.
+
+We should add an icon to this folder if it uses only one color and will be used in components like buttons and dropdowns and/or will be inlined with the code. The `fill` property of the icon source should be changed to `currentColor`. This way its color can be changed by setting the `color: ${someColor}` style in CSS.
 
 Example in code:
 
@@ -31,8 +36,6 @@ const AddButton = () => (
   </Button>
 );
 ```
-
-> Make sure that the SVG element has only the `viewBox` property (without `width` and `height`). The context surrounding the icon should define its dimensions.
 
 #### b. `public/images`
 
