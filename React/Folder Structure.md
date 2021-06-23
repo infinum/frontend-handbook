@@ -1,0 +1,46 @@
+## Folder structure
+
+- **app/**
+  - **bin/**
+      - build.sh
+  - **src/**
+    - **models/**
+      - user.ts
+      - trip.ts
+    - **state/**
+      - app-data.ts
+    - **utils/**
+      - fetcher.ts
+      - currency-converter.ts
+    - **components/**
+      - **ui/**
+        - Input.tsx
+        - Button.tsx
+        - Alert.tsx
+        - LoginForm.tsx
+        - TripList.tsx
+        - Trip.tsx
+      - **containers/**
+        - Login.tsx
+        - Register.tsx
+        - Home.tsx
+    - **pages/**
+      - index.tsx
+      - login.tsx
+      - register.tsx
+  - **.github/**
+    - CODEOWNERS
+  - **tests/**
+    - **unit/**
+      - trip.test.js
+    - **integration/**
+      - login.test.js
+    - **end-to-end/**
+      - login.test.js
+  - README.md
+  - .prettierrc.json
+  - .eslintrc
+  - .yarnlock
+  - .gitignore
+  - .editorconfig
+  - .jsconfig / .tsconfig
