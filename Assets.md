@@ -21,7 +21,7 @@ After we exported and optimized the icon, we can add it to our codebase. We will
 Prior to using an SVG icon this way, check the following:
 
 - Make sure that the SVG element has only the `viewBox` property (without `width` and `height`). The context surrounding the icon should define its dimensions.
-- Sometimes, designers use the `<mask>` element in SVGs. Those elements are referenced by an ID, and if you use multiple SVGs per an HTML document, multiple `mask` elements will have the same ID. As a result, SVGs won't work as expected. Often these `mask` elements are simple to resolve by hand so make sure to remove them.
+- Sometimes, designers use the `<mask>` element in SVGs. Those elements are referenced by an ID, and if you use multiple SVGs per an HTML document, multiple `mask` elements will have the same ID. As a result, SVGs won't work as expected. Often these `mask` elements are simple to resolve manually so after resolving them make sure to remove them.
 
 We should add an icon to this folder if it uses only one color and will be used in components like buttons and dropdowns and/or will be inlined with the code. The `fill` property of the icon source should be changed to `currentColor`. This way its color can be changed by setting the `color: ${someColor}` style in CSS.
 
