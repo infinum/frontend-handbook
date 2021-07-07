@@ -1,7 +1,3 @@
-## React
-
-[React](https://reactjs.org/) is not a Framework, it is a JavaScript library for building user interfaces.
-With React you will use declarative programming paradigm for building component based systems which could be reused anywhere.
 
 In the next sections we will cover some topics related to React ecosystem used inside our company.
 
