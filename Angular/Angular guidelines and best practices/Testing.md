@@ -136,7 +136,7 @@ Surely there must be a way to do this by utilizing some TypeScript magic?
 First thing you could try is this:
 
 ```typescript
-export UserTestingService implements UserService {}
+export class UserTestingService implements UserService {}
 ```
 
 That seems reasonable, right? Well, TypeScript behaves a bit strange in this regard, as it will require you to implement not only the public members of `UserService`, but also private and protected members. You can read about why that is [here](https://github.com/microsoft/TypeScript/issues/18499).
@@ -148,7 +148,7 @@ export type ExtractPublic<T extends object> = {
   [K in keyof T]: T[K];
 };
 
-export UserTestingService implements ExtractPublic<UserService> {}
+export class UserTestingService implements ExtractPublic<UserService> {}
 ```
 
 Now we have to implement only the public members of `UserService`.
