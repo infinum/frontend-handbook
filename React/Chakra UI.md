@@ -251,6 +251,26 @@ Chakra factory function will pass `className` to `DatePicker input` component wi
 
 For more about chakra factory read [docs](https://chakra-ui.com/docs/features/chakra-factory)
 
+
+### Single element component
+
+#### Theming
+
+### Multipart component
+compound component
+
+#### Multipart Theming
+
+### Reusing other `core` component styles in the theme
+
+import Image theme to Card theme
+
+### Importance of `forwardRef`
+
+### Better development experience
+
+`__DEV__`
+
 #### The `as` polymorphic prop
 
 The `as` prop is a feature that all Chakra UI components have and it allows you to pass an HTML tag or component to be rendered.
