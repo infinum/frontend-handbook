@@ -1,4 +1,3 @@
-
 In the next sections we will cover some topics related to React ecosystem used inside our company.
 
 ## Next.js Framework
@@ -13,8 +12,8 @@ In the next sections we will cover some topics related to React ecosystem used i
 ### Typescript
 
 Next.js supports TypeScript by default and has built-in types for pages and the API.
-- [Get started with TypeScript in Next.js](https://nextjs.org/docs/basic-features/typescript).
 
+- [Get started with TypeScript in Next.js](https://nextjs.org/docs/basic-features/typescript).
 
 If you are unfamiliar with Typescript you can go through [documentation](https://www.typescriptlang.org/docs/home.html) or play with it in a [playground](https://www.typescriptlang.org/play/index.html).
 
@@ -43,16 +42,20 @@ Here is an example of `.prettierrc`:
   "bracketSpacing": true,
   "singleQuote": true,
   "semi": true,
-  "trailingComma": "es5",
+  "trailingComma": "es5"
 }
 ```
+
 #### OPTIONAL:
+
 You can enable `formatOnSave` in VSCode by creating `.vscode/settings.json` and adding these settings:
+
 ```
 {
   "editor.formatOnSave": true,
 }
 ```
+
 This will format your code every time save file.
 
 ### Eslint
@@ -69,3 +72,5 @@ Automated testing is very important in software development. It gives us the ass
 ### Internationalization
 
 We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react.i18next](https://react.i18next.com/) for implementing internationalization in React applications.
+
+Now that you have everything set and ready, you can start with the tutorials and official documentation explained in the next chapter.
