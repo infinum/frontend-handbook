@@ -73,4 +73,4 @@ Automated testing is very important in software development. It gives us the ass
 
 We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react.i18next](https://react.i18next.com/) for implementing internationalization in React applications.
 
-Now that you have everything set and ready, you can start with the tutorials and official documentation explained in the next chapter.
+Now that you have everything set and ready, you can start with the tutorials and official documentation explained in the [next chapter](/books/frontend/react/official-documentation).

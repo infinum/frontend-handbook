@@ -15,4 +15,4 @@ And for those who prefer learning by typing their own code, visit [Intro to Reac
 - [Completing the game](https://reactjs.org/tutorial/tutorial.html#completing-the-game)
 - [Adding time travel](https://reactjs.org/tutorial/tutorial.html#adding-time-travel)
 
-And for best learning experience, feel free to combine the two approaches and have some fun as well. Don't forget to check out other useful resources to expand your knowledge even further.
+And for best learning experience, feel free to combine the two approaches and have some fun as well. Don't forget to check out [other useful resources](/books/frontend/react/other-useful-resources) to expand your knowledge even further.
