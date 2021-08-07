@@ -1,10 +1,10 @@
 ## Motivation
 
-Almost every application we create, there is some a session. What is saved in this session is not important now. The session needs to be accessible in our components and based on that data we can restrict/allow users accesses to a page.
+In almost every application we create, there is some session. _What is saved in this session is not essential now._ The session needs to be accessible in our components and based on that data, we can restrict/allow users access to a page.
 
 ## `useSession` hook
 
-In order to make a session accessible in the React component we'll create a `useSession` hook that will expose a session.
+To make a session accessible in the React component, we'll create a `useSession` hook that will expose a session.
 
 ### SWR example
 
@@ -59,7 +59,7 @@ export const useAuth = ({ onLogin, onLogout, ...config }: IUseAuthOptions = {}) 
 };
 ```
 
-This will expose session data as well as a basic session handlers: `login` and `logout`. Now, this can be used in any component to get session data.
+This hook will expose session data and basic session handlers: `login` and `logout. Now, this hook can use this in any component to get session data.
 
 ```tsx
 const SomeComponent = () => {
@@ -108,17 +108,17 @@ const Content = () => {
 }
 ```
 
-Although this might look like a simple page redirect, render will occur and might hurt app performance. Once page is loaded and page component is mounted, `state.data` will be `undefined`. Once request to read a session, `state.data` or `state.error` will be defined and re-render will occur. This means that all child components will be re-rendered too which can potentially be an expensive operation. To optimize this, we'll create a component that will handle redirect.
+Although this might look like a simple page redirect, render will occur and might hurt app performance. Once the page is loaded and the component is mounted, `state.data` will be `undefined`. Once request to read a session, `state.data` or `state.error` will be defined, and re-render will occur. This means that all child components will be re-rendered, too, which can potentially be an expensive operation. To optimize this, we'll create a component that will handle the redirect.
 
 ```tsx
 interface IAuthRedirectProps {
   /**
    * URL used to redirect a user to
-   * By default, if only this prop is set, component will redirect if no session is found
+   * By default, if only this prop is set, the component will redirect if no session is found
    */
   to: Url | string;
   /**
-   * If this is set to `true` user will be redirected if he is logged in.
+   * If this property is set to `true`, user will be redirected if he is logged in.
    * Useful when you don't want to show login page to already logged in users.
    */
   ifFound?: boolean;
@@ -167,7 +167,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 };
 ```
 
-If we now implement this in our example this now looks like this.
+If we now implement this in our example, this now looks like this.
 
 ```tsx
 const SomePrivatePage = () => {
@@ -194,7 +194,7 @@ const Content = () => {
 }
 ```
 
-Now, when the redirect logic is separated to a separate component, any state update won't trigger a re-render. As a result, this will speed up a re-render.
+Now, any state update won't trigger a re-render when the redirect logic is separated into a separate component. As a result, this will speed up a re-render.
 
 ### Props
 
@@ -202,11 +202,11 @@ In `AuthRedirect` props we have defined multiple properties:
 
 #### `to`
 
-`to` property is used as an argument when calling `router.push`. If redirect needs to occur, this is where user will be redirected
+`to` property is used as an argument when calling `router.push`. If redirect needs to occur, this is where user will be redirected.
 
 #### `ifFound`
 
-`ifFound` property is an optional property. It can be used to change the logic when the redirect needs to occur. If set to `true`, redirect will occur if the session exists - this is useful to hide login/registration page when session exists.
+`ifFound` property is an optional property. It can be used to change the logic when the redirect needs to occur. If set to `true, a redirect will occur if the session exists - this is useful to hide the login/registration page when the session exists.
 
 ```tsx
 // redirect if session exits
@@ -215,9 +215,11 @@ In `AuthRedirect` props we have defined multiple properties:
 
 #### `condition`
 
-`condition` property is an optional property. This property is a function that takes session as an argument and returns a boolean. It will determine if a redirect should occur or not. This can be useful if you need to create a redirect on some condition based on a session.
+`condition` property is an optional property. This property is a function that takes the session as an argument and returns a boolean. It will determine if a redirect should occur or not. This can be useful if you need to create a redirect on some condition based on a session.
 
 ```tsx
 // redirect if logged in user is not an admin
 <AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'}>
 ```
+
+This property has a higher priority then a default behavior.
