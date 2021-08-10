@@ -12,6 +12,8 @@ To make a session accessible in the React component, we'll create a `useSession`
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
 
+import { useDatx } from '@/hooks/useDatx';
+
 interface IUseAuthOptions extends SWRConfiguration {
   /**
    * on logout success callback
@@ -59,7 +61,7 @@ export const useAuth = ({ onLogin, onLogout, ...config }: IUseAuthOptions = {}) 
 };
 ```
 
-This hook will expose session data and basic session handlers: `login` and `logout. Now, this hook can use this in any component to get session data.
+This hook will expose session data and basic session handlers: `login` and `logout. Now, this hook can be used in any component to get session data.
 
 ```tsx
 const SomeComponent = () => {
@@ -87,15 +89,13 @@ const SomePrivatePage = () => {
   }, [state, router]);
 
   return (
-    <>
-      <Layout>
-        <Header />
+    <Layout>
+      <Header />
 
-        <Content />
+      <Content />
 
-        <Footer />
-      </Layout>
-    </>
+      <Footer />
+    </Layout>
   );
 };
 
@@ -130,17 +130,17 @@ interface IAuthRedirectProps {
 }
 
 const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
-  const { state } = useAuth();
+  const { state: { data, isValidating, error }} = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     // if state is validating, wait until request is done
-    if (state.isValidating) {
+    if (isValidating) {
       return;
     }
 
     // https://swr.vercel.app/advanced/performance#dependency-collection
-    const hydration =
-      state.data === undefined && state.error === undefined && state.isValidating === false;
+    const hydration = data === undefined && error === undefined && isValidating === false;
 
     if (hydration) {
       return;
@@ -155,12 +155,12 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
       return;
     }
 
-    const shouldRedirect = (ifFound && state.data) || (!ifFound && !state.data);
+    const shouldRedirect = (ifFound && data) || (!ifFound && !data);
 
     if (shouldRedirect) {
       router.push(to);
     }
-  }, [state.data, state.isValidating, state.error, to, condition, ifFound, router]);
+  }, [data, isValidating, error, to, condition, ifFound, router]);
 
   // this component renders nothing since it is only used to redirect if needed.
   return null;
