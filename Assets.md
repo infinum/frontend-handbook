@@ -25,9 +25,7 @@ Prior to using an SVG icon this way, check the following:
 
 We should add an icon to this folder if it uses only one color and will be used in components like buttons and dropdowns and/or will be inlined with the code. The `fill` property of the icon source should be changed to `currentColor`. This way its color can be changed by setting the `color: ${someColor}` style in CSS.
 
-##### Examples:
-
-1. React.js example
+React.js example:
 
 ```jsx
 import AddIcon from 'src/assets/icons/icon-add.svg';
