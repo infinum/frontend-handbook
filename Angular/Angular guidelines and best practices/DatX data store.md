@@ -1,0 +1,206 @@
+This chapter covers setup and use DatX data store within Angular project and how to use it in tests. If you are not familiar with it yet, resources below can help.
+
+## Resources
+
+You can read up on DatX at official [docs site](https://datx.dev/docs/getting-started/installation). Infinum also published article [working with JSON API](https://infinum.com/the-capsized-eight/working-with-JSON-API) with examples.
+
+## Why use DatX
+
+Apart from providing possible single source of truth for any shared data with a basic querying and referencing support, it also provides options to extend any entity with mixins such as [withActions](https://datx.dev/docs/mixins/with-actions), [withMeta](https://datx.dev/docs/mixins/with-meta), [withPatches](https://datx.dev/docs/mixins/with-patches), which enhance entities with usefull utility functions, or network related ones like [withNetwork](https://datx.dev/docs/mixins/with-network), [jsonapi](https://datx.dev/docs/mixins/jsonapi) or, useful in Angular's case, [jsonapiAngular](https://datx.dev/docs/mixins/jsonapi-angular). Especially with [jsonapi](https://datx.dev/docs/mixins/jsonapi) and/or [jsonapiAngular](https://datx.dev/docs/mixins/jsonapi-angular), interacting with [JSONAPI standard](https://jsonapi.org/) compliat backend can be much easier then building requests manually and more managable than building API related code with some sort of generator.
+
+## Dependencies
+Let's start by installing all DatX related dependencies we will need:
+```
+npm i --save @datx/core @datx/jsonapi @datx/jsonapi-angular mobx
+```
+
+## Defining models and their relationships
+
+This topic is heavily described in the resources above, so please, refer to them. By convention you can put all models in `src/app/models` directory and collections to `src/app/collections` of your Angular project. Once you are finished describing all *Resource Objects* you can move to the next section, just remember that you will most likely want to use *jsonapiAngular* so that you can work with observables when calling async methods on models.
+
+## Store setup and injection
+
+To create and provide single instance of Collection accross entire Angular app, you can create custom DI token eg. APP_COLLECTION, see [InjectionToken docs](https://angular.io/api/core/InjectionToken) and then provide said token in root module, like so:
+
+```ts
+// injection-tokens.ts
+import { InjectionToken } from '@angular/core';
+import { AppCollection } from '<path-to-collection-definition>';
+
+export const APP_COLLECTION = new InjectionToken<AppCollection>('APP_COLLECTION');
+```
+
+```ts
+// app.module.ts
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { AppCollection } from '<path-to-collection-definition>';
+
+@NgModule({
+	declarations: [AppComponent],
+	imports: [
+		...
+	],
+	providers: [
+    ...
+    {
+      provide: APP_COLLECTION,
+      useValue: new AppCollection();
+    }
+    ...
+  ],
+  bootstrap: [AppComponent],
+}
+export class AppModule {}
+```
+
+Then whenever you want to work with the collection from within Angular's DI container, you can simply use the token above to inject the collection instance.
+
+```ts
+// example.service.ts
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { Inject, Injectable } from '@angular/core';
+import { AppCollection } from '<path-to-collection-definition>';
+
+@Injectable()
+export class ExampleService {
+
+	constructor(
+		@Inject(APP_COLLECTION) protected readonly collection: AppCollection, // app.module.ts scoped instance of AppCollection
+  ) {}
+}
+```
+
+When testing consumers of APP_COLLECTION, just inject the collection under the same token again as with any other dependency:
+
+```ts
+// example.service.spec.ts
+import { AppCollection } from '<path-to-collection-definition>';
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { TestBed } from '@angular/core/testing';
+import { ExampleService } from './example.service';
+
+describe('ExampleService', () => {
+	let service: ExampleService;
+
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [
+				{
+					provide: APP_COLLECTION,
+					useValue: new AppCollection(), // empty mock collection
+				},
+			],
+		});
+		service = TestBed.inject(ExampleService);
+	});
+
+	it('should be created', () => {
+		expect(service).toBeTruthy();
+	});
+});
+```
+
+## Configuring DatX HTTP calls interception
+
+By default, DatX uses Fetch API when invoking HTTP calls, but this means that it also bypass **HttpClient** from `@angular/common/http` and therefore any registered interception logic or similar kind of middleware. Luckily there is a way around that, see [official documentation guide](https://datx.dev/docs/jsonapi-angular/base-fetch).
+
+## Abstracting entity related login into separate service
+
+You might want to abstract away a little of tediousness of working with DatX and/or bound some special logic to a given entity. Since many of the Collection's method require an Entity type as a parameter you can create separate service that will hide this small implementation detail for you. One way to do that would be to extend an abstract class similar to this one:
+
+```ts
+// collection.service.ts
+import { Inject } from '@angular/core';
+import { IModelConstructor, IRawModel, IType } from '@datx/core';
+import { IRequestOptions } from '@datx/jsonapi';
+import { IJsonapiModel, Response } from '@datx/jsonapi-angular';
+import { Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
+import { AppCollection } from '<path-to-collection-definition>';
+import { APP_COLLECTION } from '<path-to-token-definition>';
+
+export abstract class CollectionService<TModel extends IJsonapiModel> {
+	protected abstract readonly ctor: IModelConstructor<TModel>;
+
+	constructor(@Inject(APP_COLLECTION) protected readonly collection: AppCollection) {}
+
+	public create(rawModel: IRawModel | Record<string, unknown>): TModel {
+		if (rawModel.id === null || rawModel.id === undefined || rawModel.id === '') {
+			delete rawModel.id;
+		}
+
+		return this.collection.add(rawModel, this.ctor);
+	}
+
+	public createAndSave(rawModel: IRawModel | Record<string, unknown>): Observable<TModel> {
+		const model = this.create(rawModel);
+		return this.save(model);
+	}
+
+	public findAll(): Array<TModel> {
+		return this.collection.findAll<TModel>(this.ctor);
+	}
+
+	public getAllModels(options?: IRequestOptions): Observable<Array<TModel>> {
+		return this.getMany({
+			...options,
+			queryParams: {
+				...options?.queryParams,
+				custom: options?.queryParams?.custom || [],
+			},
+		}).pipe(map(({ data }: Response<TModel>) => data));
+	}
+
+	public getMany(options?: IRequestOptions): Observable<Response<TModel>> {
+		return this.collection.getMany<TModel>(this.ctor, options);
+	}
+
+	public getManyModels(options?: IRequestOptions): Observable<Array<TModel>> {
+		return this.getMany(options).pipe(map(({ data }: Response<TModel>) => data));
+	}
+
+	public getOne(id: IType, options?: IRequestOptions): Observable<Response<TModel>> {
+		return this.collection.getOne(this.ctor, id.toString(), options);
+	}
+
+	public findOne(id: IType): TModel | null {
+		return this.collection.findOne(this.ctor, id);
+	}
+
+	public getOneModel(id: IType, options?: IRequestOptions): Observable<TModel | null> {
+		return this.getOne(id, options).pipe(map(({ data }: Response<TModel>) => data));
+	}
+
+	public save(model: TModel): Observable<TModel> {
+		return model.save().pipe(mapTo(model));
+	}
+
+	public removeOne(id: IType): void {
+		this.collection.removeOne(this.ctor.type, id);
+	}
+}
+```
+
+And then just extend said class:
+
+```ts
+// entity.service.ts
+import { Inject, Injectable } from '@angular/core';
+import { AppCollection } from '<path-to-collection-definition>';
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { Entity } from '<path-to-entity-definition>';
+import { CollectionService } from '<path-to-collection-service>';
+
+@Injectable({
+	providedIn: 'root',
+})
+export class EntityService extends CollectionService<Project> {
+	protected readonly ctor = Entity;
+
+	constructor(@Inject(APP_COLLECTION) protected readonly collection: AppCollection) {
+		super(collection);
+	}
+}
+```
