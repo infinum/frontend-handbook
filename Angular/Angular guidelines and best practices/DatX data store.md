@@ -109,7 +109,9 @@ import { APP_COLLECTION } from '<path-to-token-definition>';
 import { Inject, Injectable } from '@angular/core';
 import { AppCollection } from '<path-to-collection-definition>';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ExampleService {
   constructor(
     @Inject(APP_COLLECTION) protected readonly collection: AppCollection // app.module.ts scoped instance of AppCollection
@@ -196,9 +198,12 @@ export abstract class CollectionService<TModel extends IJsonapiModel> {
     return this.collection.findAll<TModel>(this.ctor);
   }
 
+	// *Model(s) suffix methods unpack the Model from what would else be a Response object,
+	// this mirrors the default HttpClient behavior where you also don't get Response metadata by default, just the body.
+
+	// get all entities without any sort of filter unless explicitly specified
   public getAllModels(options?: IRequestOptions): Observable<Array<TModel>> {
-    return this.getMany({
-      ...options,
+    return this.getMany(options,
       queryParams: {
         ...options?.queryParams,
         custom: options?.queryParams?.custom || [],
@@ -268,4 +273,195 @@ export class EntityService extends CollectionService<Project> {
     super(collection);
   }
 }
+```
+
+Such service can be injected from within DI container like any other:
+
+```ts
+// entity-list.component.ts
+@Component({
+	...
+})
+export class EntityListComponent {
+	public readonly entities$ = this.entity.getAllModels();
+
+	constructor(private readonly entity: EntityService) {}
+}
+```
+
+When testing these abstractions, it advisable to create doubles, which replace any methods that would query service with an implementation which check in memory collection like this example **CollectionTestingService**:
+
+```ts
+// collection.testing.service.ts
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { IModelConstructor, IRawModel, IType } from '@datx/core';
+import { Response, IJsonapiModel } from '@datx/jsonapi-angular';
+import { Observable } from 'rxjs';
+import { AppCollection } from '<path-to-app-collection>';
+import { ExtractPublic } from '<path-to-extract-public-helper>';
+import { asyncData, asyncError } from '<path-to-helpers>';
+import { CollectionService } from '<path-to-collection-service>';
+
+@Injectable()
+export abstract class CollectionTestingService<TModel extends IJsonapiModel>
+  implements ExtractPublic<CollectionService<TModel>>
+{
+  protected abstract ctor: IModelConstructor<TModel>;
+
+  constructor(protected readonly collection: AppCollection) {}
+
+  public setData(
+    data: Array<IRawModel | Record<string, unknown>>
+  ): Array<TModel> {
+    this.collection.removeAll(this.ctor);
+    return this.collection.add(data, this.ctor);
+  }
+
+  public create(rawModel: IRawModel | Record<string, unknown>): TModel {
+    return this.collection.add(rawModel, this.ctor);
+  }
+
+  public createAndSave(
+    rawModel: IRawModel | Record<string, unknown>
+  ): Observable<TModel> {
+    const model = this.create(rawModel);
+    return this.save(model);
+  }
+
+  public findAll(): Array<TModel> {
+    return this.collection.findAll(this.ctor);
+  }
+
+  public getAllModels(): Observable<Array<TModel>> {
+    return asyncData(this.collection.findAll(this.ctor));
+  }
+
+  public getMany(): Observable<Response<TModel>> {
+    const data = this.collection.findAll(this.ctor);
+    return asyncData({
+      data,
+      meta: { total_count: data.length },
+    } as Response<TModel>);
+  }
+
+  public getManyModels(): Observable<Array<TModel>> {
+    return asyncData(this.collection.findAll(this.ctor));
+  }
+
+  public getOne(id: IType): Observable<Response<TModel>> {
+    return asyncData({
+      data: this.collection.findOne(this.ctor, id),
+    } as Response<TModel>);
+  }
+
+  public getOneModel(id: IType): Observable<TModel | null> {
+    const model = this.collection.findOne(this.ctor, id);
+    return model
+      ? asyncData(model)
+      : asyncError(new HttpErrorResponse({ status: 404 }));
+  }
+
+  public findOne(id: IType): TModel | null {
+    return this.collection.findOne(this.ctor, id);
+  }
+
+  public save(model: TModel): Observable<TModel> {
+    return asyncData(model);
+  }
+
+  public removeOne(id: IType): void {
+    this.collection.removeOne(this.ctor.type, id);
+  }
+}
+```
+
+Where `ExtractPublic` is covered in [Testing chapter](/books/frontend/angular/angular-guidelines-and-best-practices/testing#typing-test-doubles). The `asyncData` and `asyncError` helpers make sure, that values provided are observed on next macrotask at soonest. This makes methods that would normally perform an HTTP call more alike their non-double counterparts.
+
+```ts
+// helpers.ts
+import { asyncScheduler, Observable, of, throwError } from 'rxjs';
+import { observeOn } from 'rxjs/operators';
+
+export function asyncData<TData>(data: TData): Observable<TData> {
+  return of(data).pipe(observeOn(asyncScheduler));
+}
+
+export function asyncError(err: Error): Observable<never> {
+  return throwError(err).pipe(observeOn(asyncScheduler));
+}
+```
+
+Subsequently, you can then create doubles for entity specific services by extending the **CollectionTestingService**:
+
+```ts
+// entity.testing.service.ts
+import { Inject, Injectable } from '@angular/core';
+import { AppCollection } from '<path-to-collection>';
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { Entity } from '<path-to-entity-model-definition>';
+import { EntityService } from '<path-to-entity-service>';
+import { ExtractPublic } from '<path-to-extract-public-type>';
+import { CollectionTestingService } from '<path-to-collection-testing-service>';
+
+@Injectable()
+export class EntityTestingService
+  extends CollectionTestingService<Entity>
+  implements ExtractPublic<EntityService>
+{
+  protected ctor = Entity;
+
+  constructor(
+    @Inject(APP_COLLECTION) protected readonly collection: AppCollection
+  ) {
+    super(collection);
+  }
+}
+```
+
+These can be used in tests for consumers of original entity specific service:
+
+```ts
+// entity-list.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AppCollection } from '<path-to-collection>';
+import { APP_COLLECTION } from '<path-to-token-definition>';
+import { Entity } from '<path-to-entity>';
+import { EntityService } from '<path-to-entity-service>';
+import { EntityTestingService } from '<path-to-entity-service-double>';
+import { EntityListComponent } from '<path-to-component>';
+
+describe('EntityListComponent', () => {
+  let component: EntityListComponent;
+  let fixture: ComponentFixture<EntityListComponent>;
+  let collection: AppCollection;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [EntityListComponent],
+      providers: [
+        {
+          provide: APP_COLLECTION,
+          useValue: new AppCollection(), // empty mock collection
+        },
+        {
+          provide: EntityService,
+          useClass: EntityTestingService, // provide the double instead
+        },
+      ],
+    });
+  });
+
+  beforeEach(() => {
+    collection = TestBed.inject(APP_COLLECTION);
+    collection.add({ name: 'EntityName' }, Entity); // entities available from entity-list.component.ts #getAllModels call
+    fixture = TestBed.createComponent(EntityListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
+});
 ```
