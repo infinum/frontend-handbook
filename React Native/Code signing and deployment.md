@@ -41,7 +41,7 @@ android {
 }
 ```
 
-Then to set values to those variables (`MYAPP_KEY_ALIAS` and `MYAPP_KEY_PASSWORD`), create *(or edit)* the `android/gradle.properties` file and add values you used in creating the keystore.
+Then to set values to those variables (`MYAPP_KEY_ALIAS` and `MYAPP_KEY_PASSWORD`), create *(or edit)* the `~/.gradle/gradle.properties` file and add values you used in creating the keystore. You can do the same thing on a project level by creating or editing `android/gradle.properties`, but make sure to add this file to the `.gitignore`. The first approach is more secure and recommended.
 
 ```
 MYAPP_KEY_ALIAS=my-key-alias
