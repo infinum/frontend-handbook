@@ -23,7 +23,7 @@ Since we didn't include mobx (because it doesn't play nice with RxJS), we need t
 import '@datx/core/disable-mobx';
 ```
 
-Then we need to overwrite mobx path so that it can be resolved by datx, albeit to an **empty** file:
+Next, we need to overwrite mobx path so that it can be resolved by datx, albeit to an **empty** file:
 
 ```ts
 // /tsconfig.json
@@ -39,7 +39,7 @@ Then we need to overwrite mobx path so that it can be resolved by datx, albeit t
 }
 ```
 
-Lastly we bypass `@datx/core/disable-mobx` related import warning by adding its non ECMAScript module dependency to a whitelist:
+Lastly, we bypass `@datx/core/disable-mobx` related import warning by adding its non ECMAScript module dependency to a whitelist:
 
 ```ts
 // angular.json
@@ -60,11 +60,11 @@ Lastly we bypass `@datx/core/disable-mobx` related import warning by adding its 
 
 ## Defining models and their relationships
 
-This topic is heavily described in the resources above, so please, refer to them. By convention you can put all models in `src/app/models` directory and collections to `src/app/collections` of your Angular project. Once you are finished describing all _Resource Objects_ you can move to the next section, just remember that you will most likely want to use _jsonapiAngular_ so that you can work with observables when calling async methods on models.
+This topic is heavily described in the resources above, please refer to them. By convention, you can put all models in `src/app/models` directory and collections to `src/app/collections` of your Angular project. Once you are finished describing all _Resource Objects_ you can move to the next section, just remember that you will most likely want to use _jsonapiAngular_ so that you can work with observables when calling async methods on models.
 
 ## Store setup and injection
 
-To create and provide single instance of Collection accross entire Angular app, you can create custom DI token eg. APP_COLLECTION, see [InjectionToken docs](https://angular.io/api/core/InjectionToken) and then provide said token in root module, like so:
+To create and provide a single instance of Collection accross entire Angular app, you can create custom DI token eg. `APP_COLLECTION`, see [InjectionToken docs](https://angular.io/api/core/InjectionToken) and then provide said token in root module, like so:
 
 ```ts
 // injection-tokens.ts
@@ -101,7 +101,7 @@ import { AppCollection } from '<path-to-collection-definition>';
 export class AppModule {}
 ```
 
-Then whenever you want to work with the collection from within Angular's DI container, you can simply use the token above to inject the collection instance.
+Whenever you want to work with the collection from within Angular's DI container, you can simply use the token above to inject the collection instance.
 
 ```ts
 // example.service.ts
@@ -119,7 +119,7 @@ export class ExampleService {
 }
 ```
 
-When testing consumers of APP_COLLECTION, just inject the collection under the same token again as with any other dependency:
+When testing consumers of APP_COLLECTION, just inject the collection under the same token again, as with any other dependency:
 
 ```ts
 // example.service.spec.ts
@@ -151,11 +151,11 @@ describe('ExampleService', () => {
 
 ## Configuring DatX HTTP calls interception
 
-By default, DatX uses Fetch API when invoking HTTP calls, but this means that it also bypass **HttpClient** from `@angular/common/http` and therefore any registered interception logic or similar kind of middleware. Luckily there is a way around that, see [official documentation guide](https://datx.dev/docs/jsonapi-angular/base-fetch).
+By default, DatX uses Fetch API when invoking HTTP calls, but this means that it also bypasses **HttpClient** from `@angular/common/http` and therefore any registered interception logic or similar kind of middleware. Luckily there is a way around that, see [official documentation guide](https://datx.dev/docs/jsonapi-angular/base-fetch).
 
 ## Abstracting entity related login into separate service
 
-You might want to abstract away a little of the tediousness of working with DatX and/or bound some special logic to a given entity. Since many of the Collection's method require an Entity type as a parameter you can create separate service that will hide this small implementation detail for you. One way to do that would be to extend an abstract class similar to this one:
+You might want to abstract away a bit of the tediousness of working with DatX and/or bind some special logic to a given entity. Since many of the Collection's methods require an Entity type as a parameter you can create separate service that will hide this small implementation detail for you. One way to do that would be to extend an abstract class similar to this one:
 
 ```ts
 // collection.service.ts
@@ -289,7 +289,7 @@ export class EntityListComponent {
 }
 ```
 
-When testing these abstractions, it advisable to create doubles, which replace any methods that would query service with an implementation which check in memory collection like this example **CollectionTestingService**:
+When testing these abstractions, it advisable to create test doubles that replace any methods that would make API calls with an implementation which works with in memory collection, like in this example **CollectionTestingService**:
 
 ```ts
 // collection.testing.service.ts
