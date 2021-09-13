@@ -1,6 +1,6 @@
 > “Good design is like a refrigerator—when it works, no one notices, but when it doesn’t, it sure stinks.” –Irene Au
 
-A good design implementation is important for the end user experience, so we should be careful when implementing the design. To avoid some of the common mistakes, check out the [design implementation checklist](https://paper.dropbox.com/doc/Design-implementation-checklist-ipkZQDB2AMLjzmVYyZkSC).
+A good design implementation is important for the end user experience, so we should be careful when implementing the design. To avoid some of the common mistakes, check out the [design implementation checklist](https://infinum.com/handbook/books/devproc/day-to-day-work/design-implementation-checklist).
 
 ## Communication with designers
 
