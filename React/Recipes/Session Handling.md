@@ -12,9 +12,9 @@ To make a session accessible in the React component, we'll create a `useSession`
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
 
-import { useDatx } from '@/hooks/useDatx';
+import { useDatx } from '@/hooks/useDatx';
 
-interface IUseAuthOptions extends SWRConfiguration {
+interface IUseSessionOptions extends SWRConfiguration {
   /**
    * on logout success callback
    */
@@ -25,7 +25,7 @@ interface IUseAuthOptions extends SWRConfiguration {
   onLogin?(session: SessionModel): void;
 }
 
-export const useAuth = ({ onLogin, onLogout, ...config }: IUseAuthOptions = {}) => {
+export const useSession = ({ onLogin, onLogout, ...config }: IUseSessionOptions = {}) => {
   const datx = useDatx();
 
   const state = useSWR('current_session', () => readSession(), {
@@ -100,7 +100,7 @@ const SomePrivatePage = () => {
 };
 
 const Content = () => {
-  const { state } = useAuth();
+  const { state } = useSession();
 
   const session = state.data;
 
@@ -130,7 +130,9 @@ interface IAuthRedirectProps {
 }
 
 const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
-  const { state: { data, isValidating, error }} = useAuth();
+  const {
+    state: { data, isValidating, error },
+  } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -186,7 +188,7 @@ const SomePrivatePage = () => {
 };
 
 const Content = () => {
-  const { state } = useAuth();
+  const { state } = useSession();
 
   const session = state.data;
 
