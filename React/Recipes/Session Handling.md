@@ -1,67 +1,168 @@
-## Motivation
+## Session model
 
-In almost every application we create, there is some session. _What is saved in this session is not essential now._ The session needs to be accessible in our components and based on that data, we can restrict/allow users access to a page.
+Most of the application we build have some kind of a login and protected pages. To make this possible, we use sessions. Using Datx, let's create a session model class.
+
+```ts
+import { Model, prop } from 'datx';
+
+export class SessionModel extends Model {
+  public static type = 'session';
+}
+```
+
+Session model is not really helpful on it's own and because of that it usually has a relationship to the user model. Now our session model looks like this
+
+```ts
+import { Model, prop } from 'datx';
+import { UserModel } from 'models/UserModel';
+
+export class SessionModel extends Model {
+  public static type = 'session';
+
+  @prop.toOne(UserModel)
+  public user: UserModel;
+}
+```
+
+## Network
+
+Now, when we have defined session model we can create basic fetchers for the session. We'll create three fetchers - `createSession`, `readSession` and `deleteSession`. We'll create those fetchers using Datx.
+
+_Following fetchers assume that application is using cookies for authentication. To use token or something else, the following methods can easily be extended._
+
+```ts
+import { SessionModel } from 'models/SessionModel';
+
+/**
+  Creates and returns a session from an endpoint.
+  User model is included in the response.
+*/
+export async function createSession(datx, loginData) {
+  return fetch(SESSION_API_ENDPOINT, {
+    method: 'POST',
+    body: loginData,
+    // ...rest of the options
+  })
+    .then((res) => res.json())
+    .then((data) => datx.add(data, SessionModel));
+}
+
+/**
+  Based on a cookie, request returns a current session if any.
+  User model is included in the response.
+*/
+export async function readSession(datx) {
+  return fetch(SESSION_API_ENDPOINT, {
+    method: 'GET',
+    // ...rest of the options
+  })
+    .then((res) => res.json())
+    .then((data) => datx.add(data, SessionModel));
+}
+
+/**
+  Deletes a session and clears the cookie.
+*/
+export async function deleteSession(datx) {
+  return (
+    fetch(SESSION_API_ENDPOINT, {
+      method: 'DELETE',
+      // ...rest of the options
+    })
+      .then((res) => res.json())
+      // since only one session can be active per browser, following is OK to do
+      .then((data) => datx.removeAll(SessionModel))
+  );
+}
+```
 
 ## `useSession` hook
 
-To make a session accessible in the React component, we'll create a `useSession` hook that will expose a session.
-
-### SWR example
+To make a session model accessible in the React components, we'll create a `useSession` hook that will expose a session. We have many ways to implement this, but for the sake of this example we'll stick to [SWR](https://swr.vercel.app/). _SWR is a React Hooks library for data fetching._
 
 ```tsx
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
-
-import { useDatx } from '@/hooks/useDatx';
+import { useDatx } from 'hooks/useDatx';
+import { createSession, deleteSession, readSession } from 'fetchers/session';
 
 interface IUseSessionOptions extends SWRConfiguration {
-  /**
-   * on logout success callback
-   */
-  onLogout?(): void;
-  /**
-   * on login success callback
-   */
-  onLogin?(session: SessionModel): void;
+  onLoginError?(error): void;
+  onLoginSuccess?(session): void;
+
+  onLogoutError?(error): void;
+  onLogoutSuccess?(): void;
 }
 
-export const useSession = ({ onLogin, onLogout, ...config }: IUseSessionOptions = {}) => {
+export function useSession({
+  onLoginError,
+  onLoginSuccess,
+  onLogoutError,
+  onLogoutSuccess,
+  ...config
+}: IUseSessionOptions = {}) {
   const datx = useDatx();
 
-  const state = useSWR('current_session', () => readSession(), {
+  const state = useSWR('session', () => readSession(), {
     shouldRetryOnError: false,
     errorRetryCount: 0,
     ...config,
   });
 
   const login = useCallback(
-    async (attributes: ICreateSessionAttributes) => {
-      const session = await state.mutate(createSession(attributes), false);
+    async (attributes) => {
+      const session = createSession(datx, attributes).then(
+        (session) => {
+          onLoginSuccess?.(session);
 
-      if (onLogin) {
-        onLogin(session);
-      }
+          return session;
+        },
+        (error) => {
+          onLoginError?.(error);
 
-      return session;
+          return Promise.reject(error);
+        }
+      );
+
+      return state.mutate(session, false);
     },
-    [state, datx, onLogin]
+    [datx, onLoginError, onLoginSuccess, state]
   );
 
   const logout = useCallback(async () => {
-    const session = await state.mutate(deleteSession(), false);
+    const session = deleteSession(datx).then(
+      () => onLogoutSuccess?.(),
+      (error) => {
+        onLogoutError?.(error);
 
-    if (onLogout) {
-      onLogout();
-    }
+        return Promise.reject(error);
+      }
+    );
 
-    return session;
-  }, [state, datx, onLogout]);
+    return state.mutate(session, false);
+  }, [datx, onLogoutError, onLogoutSuccess, state]);
 
-  return { state, login, logout };
-};
+  return { login, logout, state };
+}
 ```
 
-This hook will expose session data and basic session handlers: `login` and `logout. Now, this hook can be used in any component to get session data.
+Since this there is a lot of code, let's explain section by section.
+
+`useDatx` hook is explained in [DatxStoreProvider](./datx-store-provider)
+
+```ts
+const state = useSWR('session', () => readSession(), {
+  shouldRetryOnError: false,
+  errorRetryCount: 0,
+  ...config,
+});
+```
+
+This part will create a swr state by using `readSession` method. It won't retry on error because if we get an error that should mean that we are not logged in.
+
+Next thing we have are two callbacks - `login` and `logout`. Those two are returned by the hook and can be used in the, i.e., login form to make a login request to the backend API. They both have success and error callbacks that will be called if they are defined. Those two callback will also mutate the swr state.
+
+Now, once we have defined and explained the `useSession` hook, it can be used in any React component that can access to `DatxProvider`.
 
 ```tsx
 const SomeComponent = () => {
@@ -75,18 +176,21 @@ const SomeComponent = () => {
 
 ## `AuthRedirect`
 
-As mentioned in motivation, often there is a need for private/protected pages. To make this possible we can do following:
+As mentioned in the introduction of this section, often there is a need for private (protected) pages. To achieve this we can create following logic:
 
 ```tsx
 const SomePrivatePage = () => {
   const { state } = useSession();
   const router = useRouter();
 
+  const session = state.data;
+  const sessionError = state.error;
+
   useEffect(() => {
-    if (!state.data && state.error) {
+    if (!session && sessionError) {
       router.push('/');
     }
-  }, [state, router]);
+  }, [session, sessionError, router]);
 
   return (
     <Layout>
@@ -108,7 +212,9 @@ const Content = () => {
 }
 ```
 
-Although this might look like a simple page redirect, render will occur and might hurt app performance. Once the page is loaded and the component is mounted, `state.data` will be `undefined`. Once request to read a session, `state.data` or `state.error` will be defined, and re-render will occur. This means that all child components will be re-rendered, too, which can potentially be an expensive operation. To optimize this, we'll create a component that will handle the redirect.
+Although this might look like a simple page redirect, it's not really optimized - rerender will occur and might hurt performance.
+
+Once the page is loaded and the component is mounted, `session` and `sessionError` will be `undefined` since the request did not happen yet. Once request to read a session is triggered, `session` or `sessionError` will be defined, and re-render will occur, and this, potentially, might be an expensive operation. To optimize this, we'll create a component that will handle the redirect based on authentication.
 
 ```tsx
 interface IAuthRedirectProps {
@@ -120,6 +226,8 @@ interface IAuthRedirectProps {
   /**
    * If this property is set to `true`, user will be redirected if he is logged in.
    * Useful when you don't want to show login page to already logged in users.
+   *
+   * Will be ignored if `condition` is defined.
    */
   ifFound?: boolean;
   /**
@@ -143,12 +251,11 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 
     // https://swr.vercel.app/advanced/performance#dependency-collection
     const hydration = data === undefined && error === undefined && isValidating === false;
-
     if (hydration) {
       return;
     }
 
-    // condition has a priority over a ifFound property
+    // `condition` has a priority over a `ifFound` property
     if (condition) {
       if (condition(state.data)) {
         router.push(to);
@@ -186,17 +293,9 @@ const SomePrivatePage = () => {
     </>
   );
 };
-
-const Content = () => {
-  const { state } = useSession();
-
-  const session = state.data;
-
-  return {session ? <PrivateContent /> : <Loading />}
-}
 ```
 
-Now, any state update won't trigger a re-render when the redirect logic is separated into a separate component. As a result, this will speed up a re-render.
+Now, the `useSession` is not called on a page level and therefore won't cause a rerender of a entire page. As a result, this will decrease time needed for a rerender.
 
 ### Props
 
@@ -215,6 +314,8 @@ In `AuthRedirect` props we have defined multiple properties:
 <AuthRedirect to="/" ifFound>
 ```
 
+_NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
+
 #### `condition`
 
 `condition` property is an optional property. This property is a function that takes the session as an argument and returns a boolean. It will determine if a redirect should occur or not. This can be useful if you need to create a redirect on some condition based on a session.
@@ -223,5 +324,3 @@ In `AuthRedirect` props we have defined multiple properties:
 // redirect if logged in user is not an admin
 <AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'}>
 ```
-
-This property has a higher priority then a default behavior.
