@@ -18,6 +18,8 @@ export class Client extends Collection {
 }
 ```
 
+`types` variable should be a populated array with the model that your app uses. For the sake of this demonstration, it will be empty, but in the last section of this page, some examples will be shown.
+
 > To find out more about Datx, check out the [official documentation](https://datx.dev/).
 
 ### JSON:API Client
@@ -103,3 +105,84 @@ export function useDatx() {
 ```
 
 This hook will throw an error if `useDatx` is called without `DatxProvider`. _If you followed the previous step, this will be already implemented in a `index` or `_app` file._
+
+## Usage
+
+In the last section, an example will be shown. Before we start, we'll create a model, i.e. Todo.
+
+```ts
+import { Attribute, Model } from '@datx/core';
+
+export class Todo extends Model {
+  static type = 'todo';
+
+  @Attribute({ isIdentifier: true })
+  public id!: string | number;
+
+  @Attribute()
+  public title!: string;
+
+  @Attribute()
+  public completed!: boolean;
+
+  @Attribute()
+  public createdAt!: string;
+}
+```
+
+Now we need to modify our collection and add this model to types array.
+
+```ts
+import { Todo } from 'models';
+
+export class Client extends Collection {
+  public static types = [Todo];
+}
+```
+
+Once this is set up, and if we assume that all steps defined in this document are done, we can start fetching. For this example, we'll create a component that will fetch `todos` from the API and render them on the page.
+
+Before we create a component, we will create a fetcher.
+
+```tsx
+export const getTodos = (datx) => {
+  return fetch('/todos')
+    .then((res) => res.json())
+    .then((todosRes) => {
+      return todosRes.map((todo) => datx.add(todo, 'todo'));
+    });
+};
+```
+
+Now, we can use the fetcher to create a component.
+
+```tsx
+import useSWR from 'swr';
+
+import { useDatx } from 'store';
+
+export const TodoListSection: FC = (props) => {
+  const datx = useDatx();
+  const { data: todos, error } = useSWR('/todos', () => getTodos(datx));
+
+  if (error) {
+    throw { statusCode: 400 };
+  }
+
+  if (!todos) {
+    return <div {...props}>Loading todos...</div>;
+  }
+
+  return (
+    <section {...props}>
+      {todos.length === 0 && <p>No todos.</p>}
+      {todos.map((todo) => (
+        <div className='flex'>
+          <input type='checkbox' defaultChecked={todo.completed} />
+          <p>{todo.title}</p>
+        </div>
+      ))}
+    </section>
+  );
+};
+```
