@@ -179,6 +179,14 @@ const SomeComponent = () => {
 As mentioned in the introduction of this section, often there is a need for private (protected) pages. To achieve this we can create following logic:
 
 ```tsx
+const Content = () => {
+  const { state } = useSession();
+
+  const session = state.data;
+
+  return {session ? <PrivateContent /> : <Loading />}
+}
+
 const SomePrivatePage = () => {
   const { state } = useSession();
   const router = useRouter();
@@ -202,14 +210,6 @@ const SomePrivatePage = () => {
     </Layout>
   );
 };
-
-const Content = () => {
-  const { state } = useSession();
-
-  const session = state.data;
-
-  return {session ? <PrivateContent /> : <Loading />}
-}
 ```
 
 Although this might look like a simple page redirect, it's not really optimized - rerender will occur and might hurt performance.
@@ -281,16 +281,14 @@ If we now implement this in our example, this now looks like this.
 ```tsx
 const SomePrivatePage = () => {
   return (
-    <>
-      <Layout>
-        <Header />
+    <Layout>
+      <Header />
 
-        <AuthRedirect to="/">
-        <Content />
+      <AuthRedirect to="/">
+      <Content />
 
-        <Footer />
-      </Layout>
-    </>
+      <Footer />
+    </Layout>
   );
 };
 ```
