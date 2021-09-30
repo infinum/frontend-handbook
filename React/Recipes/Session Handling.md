@@ -1,6 +1,6 @@
 ## Session model
 
-Most of the application we build have some kind of a login and protected pages. To make this possible, we use sessions. Using Datx, let's create a session model class.
+Most of the application we build have some kind of a login and protected pages. To make this possible, we use sessions. Using DatX, let's create a session model class.
 
 ```ts
 import { Model, prop } from 'datx';
@@ -26,7 +26,7 @@ export class SessionModel extends Model {
 
 ## Network
 
-Now, when we have defined session model we can create basic fetchers for the session. We'll create three fetchers - `createSession`, `readSession` and `deleteSession`. We'll create those fetchers using Datx.
+Now, when we have defined session model we can create basic fetchers for the session. We'll create three fetchers - `createSession`, `readSession` and `deleteSession`. We'll create those fetchers using DatX.
 
 _Following fetchers assume that application is using cookies for authentication. To use token or something else, the following methods can easily be extended._
 

@@ -4,9 +4,9 @@
 >
 > DatX is an opinionated JS/TS data store. It features support for simple property definition, references to other models, and first-class TypeScript support.
 >
-> To find out more about Datx, check out the [official documentation](https://datx.dev/).
+> To find out more about DatX, check out the [official documentation](https://datx.dev/).
 
-To set up datx store, first, we need to install Datx dependency. To do this, follow [the official documentation](https://datx.dev/docs/getting-started/installation).
+To set up datx store, first, we need to install DatX dependency. To do this, follow [the official documentation](https://datx.dev/docs/getting-started/installation).
 
 After that, we can [create a collection](https://datx.dev/docs/getting-started/configuring-the-collection) and [models](https://datx.dev/docs/getting-started/defining-models).
 
@@ -35,7 +35,7 @@ If you want to follow along completely, here is a list of all needed dependencie
 - [mobx](https://mobx.js.org/README.html)
 - [swr](https://swr.vercel.app/)
 
-After datx store is initialized, we will create a datx context that will enable us to use datx in our web application. For the context, we will need a provider - `DatxProvider`and a hook - `useHook`.
+After datx store is initialized, we will create a datx context that will enable us to use DatX in our web application. For the context, we will need a provider - `DatxProvider`and a hook - `useHook`.
 
 ## DatxProvider
 
