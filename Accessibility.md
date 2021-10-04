@@ -28,7 +28,7 @@ An accessibility tree is a data structure that contains data from the web applic
 
 For an accessibility tree to be an excellent representation of an application, the developer should be careful to express the page's semantics correctly. The developer makes sure that the crucial elements on the page have the correct accessible roles, states, and properties and that all elements specify accessible names and descriptions. To make your life easier, there are a lot of semantic elements already built into the browser, and we can rely on them. E.g., use buttons instead of div and span elements, use proper input type, make sure there are labels and/or text alternatives, etc.
 
-![Google Chrome Accessibility Tree](/img/work.png)
+![Google Chrome Accessibility Tree](/img/accessibility_tree.png)
 
 ## Assistive technologies
 
