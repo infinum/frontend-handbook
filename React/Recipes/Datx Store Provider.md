@@ -35,7 +35,7 @@ If you want to follow along completely, here is a list of all needed dependencie
 - [mobx](https://mobx.js.org/README.html)
 - [swr](https://swr.vercel.app/)
 
-After datx store is initialized, we will create a datx context that will enable us to use DatX in our web application. For the context, we will need a provider - `DatxProvider`and a hook - `useHook`.
+After datx store is initialized, we will create a datx context that will enable us to use DatX in our web application. For the context, we will need a provider - `DatxProvider`and a hook - `useDatx`.
 
 ## DatxProvider
 
@@ -145,12 +145,12 @@ Once this is set up, and if we assume that all steps defined in this document ar
 Before we create a component, we will create a fetcher.
 
 ```tsx
-export const getTodos = (datx) => {
-  return fetch('/todos')
-    .then((res) => res.json())
-    .then((todosRes) => {
-      return todosRes.map((todo) => datx.add(todo, 'todo'));
-    });
+export const getTodos = async (datx) => {
+  const response = await fetch('/todos');
+  const rawTodos = await response.json();
+  const todos = rawTodos.map((rawTodo) => datx.add(rawTodo, 'todo'));
+
+  return todos;
 };
 ```
 
@@ -166,7 +166,11 @@ export const TodoListSection: FC = (props) => {
   const { data: todos, error } = useSWR('/todos', () => getTodos(datx));
 
   if (error) {
-    throw { statusCode: 400 };
+    return (
+      <div {...props}>
+        <p>Something went wrong.</p>
+      </div>
+    );
   }
 
   if (!todos) {
