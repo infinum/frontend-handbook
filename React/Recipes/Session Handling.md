@@ -150,9 +150,9 @@ export function useSession({
 }
 ```
 
-Since this there is a lot of code, let's explain section by section.
+Since this there is a lot of code, so let's explain section by section.
 
-`useDatx` hook is explained in [DatxStoreProvider](./datx-store-provider)
+`useDatx` hook is used to provide DatX collection to our session fetchers. How to set up DatX in an application, you can follow [DatX Store Provider](./datx-store-provider) chapter from this handbook.
 
 ```ts
 const state = useSWR('session', () => readSession(), {
