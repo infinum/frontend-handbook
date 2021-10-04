@@ -1,10 +1,8 @@
-# Accessibility
-
 > "The power of the Web is in its universality. Access by everyone regardless of disability is an essential aspect." – Tim Berners-Lee
 
 ## Motivation
 
-According to (Datareportal)[https://datareportal.com/global-digital-overview], there are 4.72 billion users that use the internet, which is around 60% of the world population. Among those users, many of them have some sort of disability. To say it with numbers, approximately 15% of the world population live with disabilities which translates to about **702 million internet users**. Because of this, it is mandatory that each web app is adequately created and follows accessibility guidelines so all users can use it.
+According to [Datareportal](https://datareportal.com/global-digital-overview), there are 4.72 billion users that use the internet, which is around 60% of the world population. Among those users, many of them have some sort of disability. To say it with numbers, approximately 15% of the world population live with disabilities which translates to about **702 million internet users**. Because of this, it is mandatory that each web app is adequately created and follows accessibility guidelines so all users can use it.
 
 Accessibility in web applications, or web accessibility for short, is a practice used by web developers to make their applications accessible to all users, regardless of disability. Today, this practice makes an application stand out and increases the search engine optimization (SEO) rating.
 
