@@ -38,13 +38,15 @@ import { SessionModel } from 'models/SessionModel';
   User model is included in the response.
 */
 export async function createSession(datx, loginData) {
-  return fetch(SESSION_API_ENDPOINT, {
+  const require = await fetch(SESSION_API_ENDPOINT, {
     method: 'POST',
     body: loginData,
     // ...rest of the options
-  })
-    .then((res) => res.json())
-    .then((data) => datx.add(data, SessionModel));
+  });
+  const rawSession = await res.json();
+  const session = datx.add(data, SessionModel);
+
+  return session;
 }
 
 /**
@@ -52,27 +54,29 @@ export async function createSession(datx, loginData) {
   User model is included in the response.
 */
 export async function readSession(datx) {
-  return fetch(SESSION_API_ENDPOINT, {
+  const require = await fetch(SESSION_API_ENDPOINT, {
     method: 'GET',
     // ...rest of the options
-  })
-    .then((res) => res.json())
-    .then((data) => datx.add(data, SessionModel));
+  });
+  const rawSession = await res.json();
+  const session = datx.add(data, SessionModel);
+
+  return session;
 }
 
 /**
   Deletes a session and clears the cookie.
 */
 export async function deleteSession(datx) {
-  return (
-    fetch(SESSION_API_ENDPOINT, {
-      method: 'DELETE',
-      // ...rest of the options
-    })
-      .then((res) => res.json())
-      // since only one session can be active per browser, following is OK to do
-      .then((data) => datx.removeAll(SessionModel))
-  );
+  await fetch(SESSION_API_ENDPOINT, {
+    method: 'DELETE',
+    // ...rest of the options
+  });
+
+  // since only one session can be active per browser, following is OK to do
+  datx.removeAll(SessionModel);
+
+  return null;
 }
 ```
 
