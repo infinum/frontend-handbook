@@ -56,7 +56,7 @@ To do things with the VoiceOver, it is necessary to learn the VO key. VO stands 
 - Navigation by heading: VO key + <kbd>Command</kbd> + <kbd>H</kbd>
 - Etc.
 
-## Semantics in HTML
+## Semantics in HT&zwnj;ML
 
 By definition semantics in programming refers to the meaning of a piece of code, e.g., _"What effect does running that line of JavaScript have?"_, or _"What purpose or role does that HTML element have?"_ (rather than _"What does it look like?"_).
 
