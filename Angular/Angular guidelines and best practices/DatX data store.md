@@ -2,7 +2,7 @@ This chapter covers setup and use DatX data store within Angular project and how
 
 ## Resources
 
-You can read up on DatX at official [docs site](https://datx.dev/docs/getting-started/installation). Infinum also published article [working with JSON API](https://infinum.com/the-capsized-eight/working-with-JSON-API) with examples. We also have an [example repository](https://github.com/infinum/js-angular-datx-example) that you can take a look at when in doubt about how to set up DatX in an Angular project.
+You can read up on DatX at the official [docs site](https://datx.dev/docs/getting-started/installation). Infinum also published the [working with JSON API](https://infinum.com/the-capsized-eight/working-with-JSON-API) article with examples. We also have an [example repository](https://github.com/infinum/js-angular-datx-example) that you can take a look at when in doubt about how to set up DatX in an Angular project.
 
 ## Why use DatX
 
