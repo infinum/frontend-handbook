@@ -101,7 +101,7 @@ This hook will throw an error if `useDatx` is called without `DatxProvider`. _If
 
 ## Usage
 
-In the last section, an example will be shown. Before we start, we'll create a model, i.e. Todo.
+In this section, an example will be shown. Before we start, we'll create a model, i.e. Todo.
 
 ```ts
 import { Attribute, Model } from '@datx/core';
@@ -150,6 +150,7 @@ export const getTodos = async (datx) => {
 Now, we can use the fetcher to create a component.
 
 ```tsx
+import React, { FC } from 'react';
 import useSWR from 'swr';
 
 import { useDatx } from 'store';
@@ -183,3 +184,142 @@ export const TodoListSection: FC = (props) => {
   );
 };
 ```
+
+## JSON:API usage
+
+Here at Infinum, we like to use [JSON:API specification](https://jsonapi.org/). To make the stack easier to maintain, DatX has an extension just for that, JSON:API, specification - [@datx/jsonapi](https://datx.dev/docs/jsonapi/jsonapi-getting-started). If you want to know more about that, please read more at [the official documentation site](https://datx.dev/docs/jsonapi/jsonapi-getting-started). For the purposes of this example, we'll create a model and show a short demonstration how to DatX it in your application.
+
+To create a JSON:API model you need to decorate existing DatX model using `jsonapi` decorator method from the package.
+
+```ts
+import { Attribute, Model } from '@datx/core';
+import { jsonapi } from '@datx/jsonapi';
+
+export class Flight extends jsonapi(Model) {
+  static type = 'flight';
+
+  @Attribute({ isIdentifier: true })
+  public id!: string | number;
+
+  @Attribute()
+  public airplaneModel!: string;
+
+  @Attribute()
+  public departsAt!: string;
+
+  @Attribute()
+  public arrivesAt!: string;
+
+  @Attribute()
+  public basePrice!: string;
+
+  @Attribute()
+  public currentSeatPrice!: string;
+
+  @Attribute()
+  public name!: string;
+}
+```
+
+Then, we can use this model to create out store:
+
+```ts
+import { Collection } from '@datx/core';
+
+import { Flight } from 'models/flight';
+
+export class AppCollection extends jsonapi(Collection) {
+  public static types = [Flight];
+}
+```
+
+Now, once this is setup we also need to provide out config to DatX. To do this, we need to use `config` object from `@datx/jsonapi`.
+
+```ts
+import { config, CachingStrategy, IRawResponse, ICollectionFetchOpts } from '@datx/jsonapi';
+
+import { apify, deapify } from 'utils/api';
+
+// since we are using swr, swr will handle cache
+config.cache = CachingStrategy.NetworkOnly;
+
+// base url of an api service
+config.baseUrl = 'http://localhost:3000/api/v1/';
+
+// these fetch options will be included on every request
+config.defaultFetchOptions = {
+  // JSON:API standard requires to provide following headers
+  headers: {
+    Accept: 'application/vnd.api+json',
+    'Content-Type': 'application/vnd.api+json',
+  },
+  credentials: 'include',
+};
+
+// in order to handle attributes in camelCase rather than snake_case, we'll transform all prop names to camelCase
+config.transformResponse = (opts: IRawResponse) => {
+  return { ...opts, data: deapify(opts.data) };
+};
+
+// same as previous step, but in reverse; all prop names from camelCase to snake_case
+config.transformRequest = (opts: ICollectionFetchOpts) => {
+  return { ...opts, data: apify(opts.data) };
+};
+```
+
+Mentioned methods `apify` and `deapify` are using `lodash` methods under the hook. For that you'll need to install `lodash` as well:
+
+```bash
+npm install lodash
+```
+
+```ts
+import camelCase from 'lodash/camelCase';
+import snakeCase from 'lodash/snakeCase';
+
+export function apify(obj?: object) {
+  return iterator(obj, snakeCase);
+}
+
+export function deapify(obj?: object) {
+  return iterator(obj, camelCase);
+}
+```
+
+Now, everything is ready for usage in the components:
+
+```tsx
+import React, { FC } from 'react';
+import useSWR from 'swr';
+
+import { useDatx } from 'store';
+import { Flight } from 'models/flight';
+
+export const FlightDetailsSection: FC = ({ flightId, ...rest }) => {
+  const datx = useDatx();
+
+  const { data: flightResponse, error } = useSWR(
+    () => (flightId ? `${Flight.type}-${flightId}` : null), // swr key
+    () => datx.getOne(Flight, flightId) // swr fetcher
+  );
+
+  if (error) {
+    // implement better error handling, this is just for demo purposes
+    return <div {...rest}>Flight fetch error occurred</div>;
+  }
+
+  if (!flightResponse.data) {
+    // implement better loading state, this is just for demo purposes
+    return <div {...rest}>Loading data...</div>;
+  }
+
+  return (
+    <div {...rest}>
+      {/* Handle flight data */}
+      {JSON.stringify(flightResponse.data)}
+    </div>
+  );
+};
+```
+
+As you can see this is not really complicated to set up. But all of his becomes hard to track once you have multiple places with request filters etc. Because swr uses key to cache data and JSON:API supports multiple different parameters, key handling becomes an difficult task. To bypass that, we created a piece of code with better abstraction that will connect three things - DatX, React and SWR. To check out that [click here](https://github.com/infinum/JS-React-Example/tree/master/src/libs/%40datx/jsonapi-react).
