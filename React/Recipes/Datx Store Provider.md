@@ -187,7 +187,7 @@ export const TodoListSection: FC = (props) => {
 
 ## JSON:API usage
 
-Here at Infinum, we like to use [JSON:API specification](https://jsonapi.org/). To make the stack easier to maintain, DatX has an extension just for that, JSON:API, specification - [@datx/jsonapi](https://datx.dev/docs/jsonapi/jsonapi-getting-started). If you want to know more about that, please read more at [the official documentation site](https://datx.dev/docs/jsonapi/jsonapi-getting-started). For the purposes of this example, we'll create a model and show a short demonstration how to DatX it in your application.
+Here at Infinum, we like to use [JSON:API specification](https://jsonapi.org/). To make the stack easier to maintain, DatX has an extension just for that, JSON:API, specification - [@datx/jsonapi](https://datx.dev/docs/jsonapi/jsonapi-getting-started). If you want to know more about that, please read more at [the official documentation site](https://datx.dev/docs/jsonapi/jsonapi-getting-started). For the purposes of this example, we'll create a model and show a short demonstration how to implement DatX jsonapi it in your application.
 
 To create a JSON:API model you need to decorate existing DatX model using `jsonapi` decorator method from the package.
 
@@ -248,7 +248,7 @@ config.baseUrl = 'http://localhost:3000/api/v1/';
 
 // these fetch options will be included on every request
 config.defaultFetchOptions = {
-  // JSON:API standard requires to provide following headers
+  // JSON:API standard requires to provide following headers. The default headers required by the spec are added by default, but you're able to override this.
   headers: {
     Accept: 'application/vnd.api+json',
     'Content-Type': 'application/vnd.api+json',
@@ -267,7 +267,7 @@ config.transformRequest = (opts: ICollectionFetchOpts) => {
 };
 ```
 
-Mentioned methods `apify` and `deapify` are using `lodash` methods under the hook. For that you'll need to install `lodash` as well:
+Mentioned methods `apify` and `deapify` are using `lodash` methods under the hood. For that you'll need to install `lodash` (or only the specific lodash methods) as well:
 
 ```bash
 npm install lodash
@@ -276,6 +276,29 @@ npm install lodash
 ```ts
 import camelCase from 'lodash/camelCase';
 import snakeCase from 'lodash/snakeCase';
+
+/**
+ * Deep iteration trough an object and transformation
+ *
+ * @param obj - Object that needs to be Transformed
+ * @param transformer - Transformer function
+ * @return Transformed object
+ */
+export function iterator(
+  obj: object | undefined,
+  transformer: typeof snakeCase | typeof camelCase
+): object | undefined {
+  if (isArray(obj)) {
+    return map(obj, (value) => iterator(value, transformer));
+  }
+  if (isObject(obj)) {
+    const copy = mapValues(obj, (value) => iterator(value, transformer));
+
+    return mapKeys(copy, (_, key) => transformer(key));
+  }
+
+  return obj;
+}
 
 export function apify(obj?: object) {
   return iterator(obj, snakeCase);
@@ -322,4 +345,4 @@ export const FlightDetailsSection: FC = ({ flightId, ...rest }) => {
 };
 ```
 
-As you can see this is not really complicated to set up. But all of his becomes hard to track once you have multiple places with request filters etc. Because swr uses key to cache data and JSON:API supports multiple different parameters, key handling becomes an difficult task. To bypass that, we created a piece of code with better abstraction that will connect three things - DatX, React and SWR. To check out that [click here](https://github.com/infinum/JS-React-Example/tree/master/src/libs/%40datx/jsonapi-react).
+As you can see this is not really complicated to set up. But all of this becomes hard to track once you have multiple places with request filters etc. Because swr uses the key attribute to cache data and JSON:API supports multiple different parameters, key handling becomes an difficult task. To bypass that, we created a piece of code with better abstraction that will connect three things - DatX, React and SWR. You can checkout the implementation in [our React example repo](https://github.com/infinum/JS-React-Example/tree/master/src/libs/%40datx/jsonapi-react).
