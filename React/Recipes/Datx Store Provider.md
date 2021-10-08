@@ -48,7 +48,6 @@ import { createContext, FC } from 'react';
 import { SWRConfig } from 'swr';
 import { dequal } from 'dequal/lite';
 
-import { compare } from 'utils/compare';
 import { Client } from './Client';
 
 export const DatxContext = createContext<Client>(null);
@@ -59,13 +58,7 @@ interface IDatxProviderProps {
 
 export const DatxProvider: FC<IDatxProviderProps> = ({ client, children }) => (
   <DatxContext.Provider value={client}>
-    <SWRConfig
-      value={{
-        compare: dequal,
-      }}
-    >
-      {children}
-    </SWRConfig>
+    <SWRConfig value={{}}>{children}</SWRConfig>
   </DatxContext.Provider>
 );
 ```
@@ -78,7 +71,7 @@ Let's break things up into sections:
 
 - `DatxProvider` is a wrapper that will serve the context along with some default swr config
 
-- `SWRConfig` is a provider for default swr config. We are providing a custom compare function, `dequal`, since datx works with class objects and by default, swr's default compare method does not work well with class objects.
+- `SWRConfig` is a provider for swr config defaults. Currently, this is empty but if there is a config that should be used for every swr hook, this is a good place to change that.
 
 Once the provider is created, wrap your whole application inside the created provider. In React application, you can do this in `index.ts` file and in Next.js application, you can do this in `_app.ts` file.
 
