@@ -113,16 +113,22 @@ export function useSession({
     ...config,
   });
 
+  const callbackRefs = useRef({ onLoginSuccess, onLoginError, onLogoutSuccess, onLogoutError });
+
+  useEffect(() => {
+    callbackRefs.current = { onLoginSuccess, onLoginError, onLogoutSuccess, onLogoutError };
+  });
+
   const login = useCallback(
     async (attributes) => {
       const session = createSession(datx, attributes).then(
         (session) => {
-          onLoginSuccess?.(session);
+          callbackRefs.current.onLoginSuccess?.(session);
 
           return session;
         },
         (error) => {
-          onLoginError?.(error);
+          callbackRefs.current.onLoginError?.(error);
 
           return Promise.reject(error);
         }
@@ -130,21 +136,21 @@ export function useSession({
 
       return state.mutate(session, false);
     },
-    [datx, onLoginError, onLoginSuccess, state]
+    [datx, state]
   );
 
   const logout = useCallback(async () => {
     const session = deleteSession(datx).then(
-      () => onLogoutSuccess?.(),
+      () => callbackRefs.current.onLogoutSuccess?.(),
       (error) => {
-        onLogoutError?.(error);
+        callbackRefs.current.onLogoutError?.(error);
 
         return Promise.reject(error);
       }
     );
 
     return state.mutate(session, false);
-  }, [datx, onLogoutError, onLogoutSuccess, state]);
+  }, [datx, state]);
 
   return { login, logout, state };
 }
