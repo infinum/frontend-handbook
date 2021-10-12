@@ -1,3 +1,5 @@
+# Motivation
+
 Handling errors is really important for any production ready app. By proper handling of error we can prevent degradation of user experience in production.
 Luckily,  React gave use the right tool for this job, and it's called [Error Boundary](https://reactjs.org/docs/error-boundaries.html)
 

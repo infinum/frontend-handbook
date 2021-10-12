@@ -1,6 +1,8 @@
-## Session model
+## Motivation
 
 Most of the application we build have some kind of a login and protected pages. To make this possible, we use sessions. Using DatX, let's create a session model class.
+
+## Session model
 
 ```ts
 import { Model, prop } from 'datx';
