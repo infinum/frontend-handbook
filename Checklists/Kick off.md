@@ -9,7 +9,7 @@ When you have a go-ahead to start working on a project talk to your Team Lead or
 
 1. Who estimated the project and what technologies are required
 2. Have design files (Figma e.g.) ready for both mobile and desktop (depending on the project)
-3. Understand the requirements of the project (or have someone near by who understands it)
+3. Understand the requirements of the project (or have someone nearby who understands it)
 4. Start the Devops staging deploy process right away (and complete their checklist)
 
 ## Things after filling in the checklist:
