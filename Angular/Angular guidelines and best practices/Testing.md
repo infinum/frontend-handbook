@@ -531,6 +531,44 @@ beforeEach(async(() => {
 }));
 ```
 
+### Alternative approach
+
+Changing change detection strategy from OnPush to Default in tests is not ideal because that could theoretically make the component behave differently when comparing application runtime where it is using OnPush and tests where it is using Default CD.
+
+An alternative approach is to wrap the component you want to test into another component that is declared only in the TestBed and is used only for interacting with the component you want to test via inputs and outputs.
+
+Fixture is created for the host component and fixture.componentInstance will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized, via `debugElement`.
+
+
+```typescript
+@Component({
+  selector: 'counter-host'
+  template: `
+  <counter
+    [value]="value"
+    (valueChange)="onValueChange()
+  >
+  </counter>
+  `
+})
+class CounterHostComponent {
+  public value: number = 0;
+
+  public onValueChange(newValue: number) {
+    console.log(newValue);
+  }
+}
+
+describe('CounterComponent', () => {
+  let fixture: ComponentFixture<CounterHostComponent>;
+  let component: CounterComponent;
+
+  beforeEach(async () => {
+
+  })
+});
+```
+
 ## Testing components with content projection
 
 Components that use content projection cannot be tested in the same way as components that use only inputs for passing the data to the component. The problem is that, during TestBed configuration, you can only configure the testing module. You cannot define the template which would describe how the component is used inside another component's template.
