@@ -2,7 +2,7 @@ If you have created the app using Angular CLI, there is already some structure i
 
 # Keep the code organized by domain
 
-As the project grows in size, it gets harder and harder to maintain a good file organization. For small projects, it might make sense to group all components in `src/app/components` and all models into `src/app/models`, etc. However, once the project gets large enough, this can get hard to navigate through and maintain. For this reason, we recommend grouping the files not by type, but by domain. This means, for example, that you might have one directory that has a mix of services, models, and interfaces that are all connected to a common domain entity.
+As the project grows in size, it gets harder and harder to maintain a good file organization. For small projects, it might make sense to group all components in `src/app/components` and all models into `src/app/models`, etc. However, once the project gets large enough, this can get hard to navigate through and maintain. For this reason, we recommend grouping the files not by type, but by feature/domain. This means, for example, that you might have one directory that has a mix of services, models, and interfaces that are all connected to a common feature/domain.
 
 ## Services and models
 
@@ -15,40 +15,64 @@ Try to keep the code grouped by domain. For example, if you have a `Post` class,
 src/app/services/post/
 ├── post.service.ts
 ├── post.service.spec.ts
+├── post.testing.service.ts
 ├── post.interface.ts
 ├── post.model.ts
 └── post.model.spec.ts
 ```
 
-## Pages
+## Pages and shared components
 
-Container components that are loaded directly via routing (by either `component` or `loadChildren`) should be placed in the `src/app/pages` directory.
+Container components that are loaded directly via routing (by either `component` or `loadChildren`) should be placed in the `src/app/pages` directory. If there are multiple levels of routing, the main `src/app` directory structure can be mimicked under some specific page directory.
 
-## Shared components
+If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. To illustrate this with an example, consider the following routing setup:
 
-If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. Here are some examples:
+- `/` - homepage, redirects to /posts
+- `/posts` - list of posts (renders a list of post-overview components)
+- `/posts/new` - new post form (renders post-form)
+- `/posts/:id/edit` - edit post form (renders post-form)
+- `/posts/:id/view` - post details view (renders post-overview component and post-content components)
+- `/users` - list of users (renders a list of user-avatar components)
+- `/users/:id/view` - user details view (renders user-avatar and a list of post-overview components)
 
-- Post component is used in `posts-container` (list of posts) and `users-container` (user's list of posts) top-level routes:
-
-```
-src/app/
-├── components/
-│   └── post/
-└── pages/
-    ├── users-container/
-    └── posts-container/
-```
-
-- `PostsCount` component is used only inside the `users-container` top-level route, but it is used in both `user-details-container` and `users-list-container` sub-routes:
+Directory structure for such an app should look like this:
 
 ```
 src/app/
-└── pages/
-    └── users-container/
-        ├── components/
-        │   └── posts-count/
-        ├── user-details-container/
-        └── users-list-container/
+  components/
+    post-overview/
+  services/
+    auth/
+    user/
+    post/
+  pages/
+    users/
+      components/
+        user-avatar/
+      pages/
+        users-list/
+          components/
+            users-list/ ???
+          users-list.component.ts # renders some header and users-list component
+          users-list-routing.module.ts # eagerly-loads users-list.component
+          users-list.module.ts
+        user-details/
+      users-routing.module.ts # lazy-loads users-list.module and users-details.module
+      users.module.ts # imports users-routing.module
+    posts/
+      components/
+        post-content/
+        posts-list/
+        post-form/
+      services/
+        social-sharing/ # service that is used only inside posts module
+      pages/
+        posts-index
+        new-post
+      posts-routing.module.ts # lazy-loads
+      posts.module.ts # imports posts-routing.module
+  app-routing.module.ts # lazy-loads users.module and posts.module
+  app.module.ts # imports app-routing.module
 ```
 
 ## Animations
