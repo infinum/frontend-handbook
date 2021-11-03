@@ -23,61 +23,87 @@ src/app/services/post/
 
 ## Pages and shared components
 
-Container components that are loaded directly via routing (by either `component` or `loadChildren`) should be placed in the `src/app/pages` directory. If there are multiple levels of routing, the main `src/app` directory structure can be mimicked under some specific page directory.
+Components that are loaded directly via routing (by either `component` or `loadChildren`) should be placed in the `src/app/pages` directory. If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. If there are multiple levels of routing, the main `src/app` directory structure can be mirrored under some specific page directory. In other words, you can have components, services, pages, etc. directories inside some specific page directory. This helps separate the codebase on a feature/domain-basis.
 
-If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. To illustrate this with an example, consider the following routing setup:
+As an example, please consider the following routing setup:
 
-- `/` - homepage, redirects to /posts
-- `/posts` - list of posts (renders a list of post-overview components)
-- `/posts/new` - new post form (renders post-form)
-- `/posts/:id/edit` - edit post form (renders post-form)
-- `/posts/:id/view` - post details view (renders post-overview component and post-content components)
-- `/users` - list of users (renders a list of user-avatar components)
-- `/users/:id/view` - user details view (renders user-avatar and a list of post-overview components)
+- `/` - homepage, redirects to `/posts`
+- `/users` - list of users (renders a list of `user-avatar` components)
+- `/users/:id/view` - user details view (renders `user-avatar` and a list of `post-overview` components)
+- `/posts` - list of posts (renders a list of `post-overview` and `user-avatar` components)
+- `/posts/new` - new post form (renders `post-form`)
+- `/posts/:id/edit` - edit post form (renders `post-form`)
+- `/posts/:id/view` - post details view (renders `post-overview`, `user-avatar` and `post-content` components)
 
 Directory structure for such an app should look like this:
 
 ```
 src/app/
-  components/
-    post-overview/
-  services/
-    auth/
-    user/
-    post/
-  pages/
-    users/
-      components/
-        user-avatar/
-      pages/
-        users-list/
-          components/
-            users-list/ ???
-          users-list.component.ts # renders some header and users-list component
-          users-list-routing.module.ts # eagerly-loads users-list.component
-          users-list.module.ts
-        user-details/
-      users-routing.module.ts # lazy-loads users-list.module and users-details.module
-      users.module.ts # imports users-routing.module
-    posts/
-      components/
-        post-content/
-        posts-list/
-        post-form/
-      services/
-        social-sharing/ # service that is used only inside posts module
-      pages/
-        posts-index
-        new-post
-      posts-routing.module.ts # lazy-loads
-      posts.module.ts # imports posts-routing.module
-  app-routing.module.ts # lazy-loads users.module and posts.module
-  app.module.ts # imports app-routing.module
+├── components/ # these components are used in both posts and users feature modules
+│   ├── post-overview/ # renders basic info about a post (without full content)
+│   └── user-avatar/ # renders username and profile image
+├── services/ # these services are used in both posts and users feature modules
+│   ├── auth/ # session management, not important for this example
+│   ├── user/
+│   │   ├── user.service.ts # has methods for data fetching
+│   │   ├── user.service.spec.ts
+│   │   ├── user.testing.service.ts
+│   │   ├── user.interface.ts
+│   │   └── user.model.ts
+│   └── post/ # basically the same as user.service
+├── pages/
+│   ├── users/
+│   │   ├── pages/
+│   │   │   ├── users-index/
+│   │   │   │   ├── components/
+│   │   │   │   │   └── users-list/ # renders a list of user-avatar components
+│   │   │   │   ├── users-index.component.ts # renders some header/footer and users-list component
+│   │   │   │   ├── users-index-routing.module.ts # eagerly-loads users-index.component on /
+│   │   │   │   └── users-index.module.ts # imports users-index-routing.module
+│   │   │   └── user-index/
+│   │   │       ├── components/
+│   │   │       │   └── user-details/ # renders user-avatar component, additional user info and a list of user's posts (post-overview)
+│   │   │       ├── user-index.component.ts # renders some header/footer and users-details component
+│   │   │       ├── user-index-routing.module.ts # eagerly-loads user-index.component on /
+│   │   │       └── user-index.module.ts # imports user-index-routing.module
+│   │   ├── users-routing.module.ts # lazy-loads users-list.module on /, user-details.module on /:id/view
+│   │   └── users.module.ts # imports users-routing.module
+│   └── posts/
+│       ├── components/ # these components are used only in posts feature/domain module
+│       │   ├── post-form/ # form used for both editing and creation
+│       │   └── post-content/ # renders post content
+│       ├── services/
+│       │   └── social-sharing/ # service that is used only inside posts module
+│       ├── pages/
+│       │   ├── posts-index/
+│       │   │   ├── components/
+│       │   │   │   └── posts-list/ # renders post-overview and user-avatar component for each post
+│       │   │   ├── posts-index.component.ts # renders some header/footer and posts-list component
+│       │   │   ├── posts-index-routing.module.ts # eagerly-loads posts-index.component on /
+│       │   │   └── posts-index.module.ts # imports posts-index-routing.module
+│       │   ├── post-index/
+│       │   │   ├── components/
+│       │   │   │   └── post-details/ # renders post-overview, user-avatar and post-content components
+│       │   │   ├── post-index.component.ts # renders some header/footer and posts-details component
+│       │   │   ├── post-index-routing.module.ts # eagerly-loads post-index.component on /
+│       │   │   └── post-index.module.ts # imports post-index-routing.module
+│       │   ├── new-post/
+│       │   │   ├── new-post.component.ts # renders some header/footer and post-form component
+│       │   │   ├── new-post-routing.module.ts # eagerly-loads new-post.component on /
+│       │   │   └── new-post.module.ts # imports new-post-routing.module
+│       │   └── edit-post/
+│       │       ├── edit-post.component.ts # renders some header/footer and post-form component
+│       │       ├── edit-post-routing.module.ts # eagerly-loads edit-post.component on /
+│       │       └── edit-post.module.ts # imports edit-post-routing.module
+│       ├── posts-routing.module.ts # lazy-loads posts-index.module on /, new-post.module on /new, edit-post.module on /:id/edit, post-index.module on /:id/view
+│       └── posts.module.ts # imports posts-routing.module
+├── app-routing.module.ts # lazy-loads users.module on /users, posts.module on /posts
+└── app.module.ts # imports app-routing.module
 ```
 
 ## Animations
 
-Store all your animations in `src/app/animations/` and import them for use in component decorators. If you want to have some animation properties customizable, such as a duration configurable, you can export the "animation factory" function which returns the actual `AnimationTriggerMetadata`.
+Store all your animations in `src/app/animations/` and import them for use in component decorators. If you want to have some animation properties customizable, such as a duration configurable, you can export the "animation factory" function which returns the actual `AnimationTriggerMetadata`. Animations are usually quite generic and there is usually not that many of them so it's ok to keep them in the global `animations` directory.
 
 ## Custom classes
 
@@ -85,7 +111,17 @@ Classes that might be used throughout the application (e.g., generic `Dictionary
 
 ## Custom typings
 
-If you are using some JS libs which do not have typings, add your own custom typing in `src/app/custom-typings`.
+If you are using some JS libs which do not have typings or you want to extend some native typings with some custom properties, add your own custom typings in `src/app/custom-types.d.ts`. Example `custom-types.d.ts` file:
+
+```ts
+interface Window { // extend window with `env` object
+	env?: Record<string, string>;
+}
+
+declare module 'json-to-pretty-yaml' { // add typings for vanilla JS lib
+	function stringify(o: any): string;
+}
+```
 
 ## Enumerations
 
@@ -135,7 +171,7 @@ If a pipe is very specific and tied to a particular component, create it alongsi
 
 ## Shared modules
 
-If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`.
+If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`. Keep in mind that having large shared modules is usually unwanted because it makes dependency management hard in the case where shared modules import many other modules.
 
 ## Custom types
 
