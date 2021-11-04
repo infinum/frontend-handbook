@@ -70,8 +70,7 @@ src/app/
 │   │   └── users.module.ts # imports users-routing.module
 │   └── posts/
 │       ├── components/ # these components are used only in posts feature/domain module
-│       │   ├── post-form/ # form used for both editing and creation
-│       │   └── post-content/ # renders post content
+│       │   └── post-form/ # form used for both editing and creation
 │       ├── services/
 │       │   └── social-sharing/ # service that is used only inside posts module
 │       ├── pages/
@@ -83,7 +82,7 @@ src/app/
 │       │   │   └── posts-index.module.ts # imports posts-index-routing.module
 │       │   ├── post-index/
 │       │   │   ├── components/
-│       │   │   │   └── post-details/ # renders post-overview, user-avatar and post-content components
+│       │   │   │   └── post-details/ # renders post-overview and user-avatar components and renders the post content
 │       │   │   ├── post-index.component.ts # renders some header/footer and posts-details component
 │       │   │   ├── post-index-routing.module.ts # eagerly-loads post-index.component on /
 │       │   │   └── post-index.module.ts # imports post-index-routing.module
