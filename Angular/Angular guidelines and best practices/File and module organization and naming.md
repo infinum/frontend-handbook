@@ -29,11 +29,11 @@ As an example, please consider the following routing setup:
 
 - `/` - homepage, redirects to `/posts`
 - `/users` - list of users (renders a list of `user-avatar` components)
-- `/users/:id/view` - user details view (renders `user-avatar` and a list of `post-overview` components)
+- `/users/:id` - user details view (renders `user-avatar` and a list of `post-overview` components)
 - `/posts` - list of posts (renders a list of `post-overview` and `user-avatar` components)
 - `/posts/new` - new post form (renders `post-form`)
+- `/posts/:id` - post details view (renders `post-overview`, `user-avatar` and `post-content` components)
 - `/posts/:id/edit` - edit post form (renders `post-form`)
-- `/posts/:id/view` - post details view (renders `post-overview`, `user-avatar` and `post-content` components)
 
 Directory structure for such an app should look like this:
 
@@ -66,7 +66,7 @@ src/app/
 │   │   │       ├── user-index.component.ts # renders some header/footer and users-details component
 │   │   │       ├── user-index-routing.module.ts # eagerly-loads user-index.component on /
 │   │   │       └── user-index.module.ts # imports user-index-routing.module
-│   │   ├── users-routing.module.ts # lazy-loads users-list.module on /, user-details.module on /:id/view
+│   │   ├── users-routing.module.ts # lazy-loads users-list.module on /, user-details.module on /:id
 │   │   └── users.module.ts # imports users-routing.module
 │   └── posts/
 │       ├── components/ # these components are used only in posts feature/domain module
@@ -95,7 +95,7 @@ src/app/
 │       │       ├── edit-post.component.ts # renders some header/footer and post-form component
 │       │       ├── edit-post-routing.module.ts # eagerly-loads edit-post.component on /
 │       │       └── edit-post.module.ts # imports edit-post-routing.module
-│       ├── posts-routing.module.ts # lazy-loads posts-index.module on /, new-post.module on /new, edit-post.module on /:id/edit, post-index.module on /:id/view
+│       ├── posts-routing.module.ts # lazy-loads posts-index.module on /, new-post.module on /new, edit-post.module on /:id/edit, post-index.module on /:id
 │       └── posts.module.ts # imports posts-routing.module
 ├── app-routing.module.ts # lazy-loads users.module on /users, posts.module on /posts
 └── app.module.ts # imports app-routing.module
