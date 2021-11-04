@@ -531,14 +531,40 @@ beforeEach(async(() => {
 }));
 ```
 
-### Alternative approach
+This is, arguably, not the best solution but it might be the simplest solution and good enough for some cases.
+
+### Alternative approach with a host/wrapper component
 
 Changing change detection strategy from OnPush to Default in tests is not ideal because that could theoretically make the component behave differently when comparing application runtime where it is using OnPush and tests where it is using Default CD.
 
 An alternative approach is to wrap the component you want to test into another component that is declared only in the TestBed and is used only for interacting with the component you want to test via inputs and outputs.
 
-Fixture is created for the host component and fixture.componentInstance will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized, via `debugElement`.
+Fixture is created for the host component and `fixture.componentInstance` will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized, via `debugElement.query` or by adding a `ViewChild` in the host component.
 
+Host component pattern starts to shine when you need to change some input value and trigger CD - you can simply change the public property value on the host component and call `fixture.detectChanges()`. That will trigger `ngOnChanges` and re-render the child component, even if it is using OnPush CD. If you didn't use host component, you would have to manually assign property values and call `ngOnChanges` with the correct `changes` object. That can be tedious to write, or you could even forget to call `ngOnChanges` and then wonder why the tests are not working as expected.
+
+The downside of using a host component is that it is a bit boilerplate-y - you will have to bind potentially many inputs and outputs between the host and child components.
+
+We recommend creating a host component, especially for cases where you need to test input/output interaction.
+
+```typescript
+@Component({
+  selector: 'counter'
+  template: `
+  {{ value }}
+  <button class="counter-button" (click)="onCounterButtonClick()">Increase</button>
+  `
+})
+export class CounterComponent {
+  @Input() public value: number = 0;
+  @Output() public valueChange = new EventEmitter<number>();
+
+  public onCounterButtonClick(): void {
+    this.value++;
+    this.valueChange.emit(this.value);
+  }
+}
+```
 
 ```typescript
 @Component({
@@ -552,22 +578,48 @@ Fixture is created for the host component and fixture.componentInstance will not
   `
 })
 class CounterHostComponent {
-  public value: number = 0;
+  public value: number = 0; // Notice that this doesn't have to be an @Input
 
-  public onValueChange(newValue: number) {
-    console.log(newValue);
-  }
+  public onValueChange(newValue: number) { }
 }
 
 describe('CounterComponent', () => {
   let fixture: ComponentFixture<CounterHostComponent>;
+  let hostComponent: CounterHostComponent;
   let component: CounterComponent;
 
   beforeEach(async () => {
-
+    await TestBed.configureTestingModule({
+      declarations: [CounterComponent, CounterHostComponent],
+      imports: [...],
+      providers: [...],
+    }).compileComponents();
   })
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CounterHostComponent);
+    fixture.detectChanges();
+
+    hostComponent = fixture.componentInstance;
+    component = fixture.debugElement.query(By.css('counter')).componentInstance;
+  });
+
+  it('should emit valueChange event on counter button click', () => {
+    const valueChangeHandlerSpy = spyOn(hostComponent, 'onValueChange');
+    const counterButton = fixture.debugElement.query(By.css('.counter-button')).nativeElement as HTMLButtonElement;
+
+    expect(valueChangeHandlerSpy).toHaveBeenCalledTimes(0);
+
+    counterButton.click();
+
+    expect(valueChangeHandlerSpy).toHaveBeenCalledTimes(1);
+  });
 });
 ```
+
+### Another alternative, ngneat/spectator
+
+If you are willing to add a 3rd party library to the project, [ngneat/spectator](https://github.com/ngneat/spectator) has some useful helpers for setting inputs and triggering CD, even for OnPush components. However, it will change the way you set up tests so it is up to you if you want to go this route or not.
 
 ## Testing components with content projection
 
