@@ -531,7 +531,7 @@ beforeEach(async(() => {
 }));
 ```
 
-This is, arguably, not the best solution but it might be the simplest solution and good enough for some cases.
+This is, arguably, not the best solution, but it might be the simplest, and good enough for some cases.
 
 ### Alternative approach with a host/wrapper component
 
