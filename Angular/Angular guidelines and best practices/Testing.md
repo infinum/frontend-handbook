@@ -778,6 +778,10 @@ describe('DadJokeService', () => {
     httpMock = TestBed.inject(HttpTestingController);
   });
 
+  afterEach(() => {
+    httpMock.verify();
+  });
+
   it('should return the joke if request succeeds', () => {
     const jokeResponse: IJoke = {
       id: '42',
@@ -797,6 +801,8 @@ describe('DadJokeService', () => {
 ```
 
 We added a `httpMock` variable to our `describe` block. We assign it to an instance of `HttpTestingController`, which is provided by `HttpClientTestingModule`.
+
+It is important to be explicit about which exact API calls are expected. For that purpose, we added `afterEach` with the `httpMock.verify()` call. This ensures that there are no unexpected requests hanging at the end of each test.
 
 We also defined a `jokeResponse` variable which is formatted in the same way as a real response JSON would be.
 
