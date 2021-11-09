@@ -535,7 +535,7 @@ This is, arguably, not the best solution, but it might be the simplest, and good
 
 ### Alternative approach with a host/wrapper component
 
-Changing change detection strategy from OnPush to Default in tests is not ideal because that could theoretically make the component behave differently when comparing application runtime where it is using OnPush and tests where it is using Default CD.
+Changing the change detection strategy from OnPush to Default in tests is not ideal because that could theoretically make the component behave differently when comparing the application runtime, where it is using OnPush, and tests, where it is using the Default CD.
 
 An alternative approach is to wrap the component you want to test into another component that is declared only in the TestBed and is used only for interacting with the component you want to test via inputs and outputs.
 
