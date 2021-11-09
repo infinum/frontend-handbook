@@ -580,7 +580,7 @@ export class CounterComponent {
 class CounterHostComponent {
   public value: number = 0; // Notice that this doesn't have to be an @Input
 
-  public onValueChange(newValue: number) { }
+  public onValueChange(newValue: number): void { }
 }
 
 describe('CounterComponent', () => {
