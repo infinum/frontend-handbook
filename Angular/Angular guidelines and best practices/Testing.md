@@ -543,7 +543,7 @@ Fixture is created for the host component and `fixture.componentInstance` will n
 
 Host component pattern starts to shine when you need to change some input value and trigger CD - you can simply change the public property value on the host component and call `fixture.detectChanges()`. That will trigger `ngOnChanges` and re-render the child component, even if it is using OnPush CD. If you didn't use host component, you would have to manually assign property values and call `ngOnChanges` with the correct `changes` object. That can be tedious to write, or you could even forget to call `ngOnChanges` and then wonder why the tests are not working as expected.
 
-The downside of using a host component is that it is a bit boilerplate-y - you will have to bind potentially many inputs and outputs between the host and child components.
+The downside of using a host component is that it is a bit boilerplate-y - you will potentially have to bind many inputs and outputs between the host and child components.
 
 We recommend creating a host component, especially for cases where you need to test input/output interaction.
 
