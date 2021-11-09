@@ -619,10 +619,6 @@ describe('CounterComponent', () => {
 });
 ```
 
-### Another alternative, ngneat/spectator
-
-If you are willing to add a 3rd party library to the project, [ngneat/spectator](https://github.com/ngneat/spectator) has some useful helpers for setting inputs and triggering CD, even for OnPush components. However, it will change the way you set up tests so it is up to you if you want to go this route or not.
-
 ## Testing components with content projection
 
 Components that use content projection cannot be tested in the same way as components that use only inputs for passing the data to the component. The problem is that, during TestBed configuration, you can only configure the testing module. You cannot define the template which would describe how the component is used inside another component's template.
