@@ -539,7 +539,7 @@ Changing the change detection strategy from OnPush to Default in tests is not id
 
 An alternative approach is to wrap the component you want to test into another component that is declared only in the TestBed and is used only for interacting with the component you want to test via inputs and outputs.
 
-Fixture is created for the host component and `fixture.componentInstance` will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized, via `debugElement.query` or by adding a `ViewChild` in the host component.
+Fixture is created for the host component and `fixture.componentInstance` will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized and the first CD cycle is done, via `ViewChild` in the host component.
 
 Host component pattern starts to shine when you need to change some input value and trigger CD - you can simply change the public property value on the host component and call `fixture.detectChanges()`. That will trigger `ngOnChanges` and re-render the child component, even if it is using OnPush CD. If you didn't use host component, you would have to manually assign property values and call `ngOnChanges` with the correct `changes` object. That can be tedious to write, or you could even forget to call `ngOnChanges` and then wonder why the tests are not working as expected.
 
@@ -578,6 +578,8 @@ export class CounterComponent {
   `
 })
 class CounterHostComponent {
+  @ViewChild(CounterComponent, { static: true }) public component: CounterComponent;
+
   public value: number = 0; // Notice that this doesn't have to be an @Input
 
   public onValueChange(newValue: number): void { }
@@ -601,7 +603,7 @@ describe('CounterComponent', () => {
     fixture.detectChanges();
 
     hostComponent = fixture.componentInstance;
-    component = fixture.debugElement.query(By.css('counter')).componentInstance;
+    component = hostComponent.component;
   });
 
   it('should emit valueChange event on counter button click', () => {
