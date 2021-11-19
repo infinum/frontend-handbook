@@ -57,12 +57,14 @@ Same conclusions apply for defining relative path when using `fetch`, `XHR`, `sr
 
 Loading images from the `assets` directory via the `url()` function is a bit different because SCSS transpiler processes SCSS with `postcss-loader` and the loader will throw an error if it can not find the file if it is defined by a relative URL in the `url()` function.
 
-The processing that the compiler does on images also means that they will be fingerprinted and, unless extra precautions are made, there will be duplicates in the final bundle - 1 original copy in `dist/assets` (e.g. for use in templates with `img` `src`) and 1 fingerprinted copy in the `dist/` (e.g. for use in CSS with `url()`). This is [an issue](https://github.com/angular/angular-cli/issues/6599) with Angular CLI and it is not yet clear what the best solution is to avoid duplicate assets for both `/` and custom `base` `href` values. For now, the only solution where the files do not get duplicated is to use absolute paths, but that means that `base` `href` path has to be present in the SCSS paths. If you wanted to create a build for a different `base` `href` path, you would need to update all paths in SCSS URLs as well. Handbook will be updated with a better solution once and if it is found.
+The processing that the compiler does on images (and some other assets) also means that they will be fingerprinted and, unless extra precautions are made, there will be duplicates in the final bundle - 1 original copy in `dist/assets` (e.g. for use in templates with `img` `src`) and 1 fingerprinted copy in the `dist/` (e.g. for use in CSS with `url()`). This is [an issue](https://github.com/angular/angular-cli/issues/6599) with Angular CLI and it is not yet clear what the best solution is to avoid duplicate assets for both `/` and custom `base` `href` values. There are currently some hacky solution, none of which are ideal, as described in [this StackOverflow thread](https://stackoverflow.com/a/62619147) ([+ another Angular issue on the topic](https://github.com/angular/angular-cli/issues/18013#issuecomment-649373940)).
 
 If we wanted to set `logo.png` image as a `background-image` using `url()`, relative path is now relative with respect to the source file structure because it is processed by `postcss`. Here is an overview of what works and what does not work when loading image (`src/assets/logo.png`) as a `background-image` via `url()` from `src/app/app.component.scss`:
 
 | `base` `href` | Path in `url()` in source SCSS | Path in `url()` in transpiled CSS | Works? | Duplicate file in `/dist`? |
 | - | - | - | - | - |
+| `/web/` | `^assets/logo.png` | `assets/logo.png` | <span style="color='green';">✔</span> | - |
+| `/` | `^assets/logo.png` | `assets/logo.png` | <span style="color='green';">✔</span> | - |
 | `/web/` | `~/src/assets/logo.png` | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
 | `/web/` | `../assets/logo.png` | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
 | `/web/` | `../../assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
@@ -79,10 +81,12 @@ Notes:
 
 - Same rules will apply to any asset loading via `url()` (e.g. fonts).
 - `d808b08ce47c5d0c53cd` is example of a hash, different values will appear in reality.
-- Logo image will be present to times in the final bundle:
+- In certain cases, the logo image will be present two times in the final bundle:
   - `/dist/logo.d808b08ce47c5d0c53cd.png` and `/dist/assets/logo.png`
+- `assets/logo.png` + `<base href="/web/">` would work and it would load the image from `https://app.com/web/assets/logo.png` if SCSS transpiled, but it does not. If you set this URL manually in devtools, you will notice that it does indeed work and takes into account `base` `href` value.
+- The last two entries from the table do work, but require source code changes if `base` `href` is changed.
 
-Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For SCSS URLs we recommend using absolute paths, e.g. `/assets/…` in order to avoid assets file duplication. Remember to include `base` `href` in SCSS URLs if using some value other than the default `/`.
+Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For SCSS URLs we recommend using `^assets/…` in order to avoid assets file duplication and make it work for different `base` `href` values without the need to modify URLs in the source files. Keep in mind that this solution could easily stop working if there are some breaking changes in Webpack or the Angular CLI. Handbook will be updated with a better solution once and if it is found.
 
 ## Index file
 
