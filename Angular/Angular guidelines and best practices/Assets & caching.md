@@ -35,8 +35,8 @@ Here is a quick table with a summary of what works and what does not work for di
 | `/` | `./assets/logo.svg` | `/assets/logo.svg` | `https://app.com/assets/logo.svg` | <span style="color:green;">✔</span> |
 | `/` | `/assets/logo.svg` | `/assets/logo.svg` | `https://app.com/assets/logo.svg` | <span style="color:green;">✔</span> |
 | `/` | `assets/logo.svg` | `/assets/logo.svg` | `https://app.com/assets/logo.svg` | <span style="color:green;">✔</span> |
-| `/web/` | `../../assets/logo.svg` | `/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span stype="color:red;">⨯</span> |
-| `/web/` | `../../../../../../../assets/logo.svg` | `/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span stype="color:red;">⨯</span> |
+| `/web/` | `../../assets/logo.svg` | `/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span style="color:red;">⨯</span> |
+| `/web/` | `../../../../../../../assets/logo.svg` | `/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span style="color:red;">⨯</span> |
 | `/web/` | `./assets/logo.svg` | `/web/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span style="color:green;">✔</span> |
 | `/web/` | `/assets/logo.svg` | `/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span style="color:red;">⨯</span> |
 | `/web/` | `assets/logo.svg` | `/web/assets/logo.svg` | `https://app.com/web/assets/logo.svg` | <span style="color:green;">✔</span> |
@@ -73,7 +73,7 @@ If we wanted to set `logo.png` image as a `background-image` using `url()`, rela
 | `/web/` | `assets/logo.png` | Relative | _does not transpile_ | <span style="color:red;">⨯</span> | - |
 | `/web/` | `~assets/logo.png` | Relative | _does not transpile_ | <span style="color:red;">⨯</span> | - |
 | `/web/` | `~/assets/logo.png` | Relative | _does not transpile_ | <span style="color:red;">⨯</span> | - |
-| `/web/` | `/assets/logo.png` | Absolute | `/assets/logo.png` | <span style="color:red;">⨯</span> (missing `/web`) | - |
+| `/web/` | `/assets/logo.png` | Absolute | `/assets/logo.png` | <span style="color:red;">⨯</span> | - |
 | `/` | `/assets/logo.png` | Absolute | `/assets/logo.png` | <span style="color:green;">✔</span> | - |
 | `/web/` | `/web/assets/logo.png` | Absolute | `/web/assets/logo.png` | <span style="color:green;">✔</span> | - |
 
