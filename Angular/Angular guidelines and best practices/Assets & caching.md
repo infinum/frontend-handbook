@@ -12,7 +12,7 @@ Application build files in `dist` directory include:
     - There are some edge cases where duplicate fingerprinted files could be generated, more on that in the following chapter
 - index.html file
 
-## Linking to assets
+## Paths to assets
 
 Angular documentation about deploying applications contains [The base tag](https://angular.io/guide/deployment#the-base-tag) chapter, describing how the hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the <base href>](https://angular.io/guide/router#html5-urls-and-the--base-href).
 
