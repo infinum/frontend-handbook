@@ -59,23 +59,23 @@ Loading images from the `assets` directory via the `url()` function is a bit dif
 
 The processing that the compiler does on images (and some other assets) also means that they will be fingerprinted and, unless extra precautions are made, there will be duplicates in the final bundle - 1 original copy in `dist/assets` (e.g. for use in templates with `img` `src`) and 1 fingerprinted copy in the `dist/` (e.g. for use in CSS with `url()`). This is [an issue](https://github.com/angular/angular-cli/issues/6599) with Angular CLI and it is not yet clear what the best solution is to avoid duplicate assets for both `/` and custom `base` `href` values. There are currently some hacky solutions, none of which are ideal, as described in [this StackOverflow thread](https://stackoverflow.com/a/62619147) ([+ another Angular issue on the topic](https://github.com/angular/angular-cli/issues/18013#issuecomment-649373940)).
 
-If we wanted to set `logo.png` image as a `background-image` using `url()`, relative path is now relative with respect to the source file structure because it is processed by `postcss`. Here is an overview of what works and what does not work when loading image (`src/assets/logo.png`) as a `background-image` via `url()` from `src/app/app.component.scss`:
+If we wanted to set `logo.png` image as a `background-image` using `url()`, relative path is now relative with respect to the source file structure because it is processed by `postcss`. Transpilation will fail if the relative path leads to a file that does not exists. Absolute paths do not get processed and will always transpile. Here is an overview of what works and what does not work when loading image (`src/assets/logo.png`) as a `background-image` via `url()` from `src/app/app.component.scss`:
 
-| `base` `href` | Path in `url()` in source SCSS | Path in `url()` in transpiled CSS | Works? | Duplicate file in `/dist`? |
-| - | - | - | - | - |
-| `/web/` | `^assets/logo.png` | `assets/logo.png` | <span style="color='green';">✔</span> | - |
-| `/` | `^assets/logo.png` | `assets/logo.png` | <span style="color='green';">✔</span> | - |
-| `/web/` | `~/src/assets/logo.png` | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
-| `/web/` | `../assets/logo.png` | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
-| `/web/` | `../../assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `../../../../../../../assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `./assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `~assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `~/assets/logo.png` | _does not transpile_ | <span style="color='red';">⨯</span> | - |
-| `/web/` | `/assets/logo.png` | `/assets/logo.png` | <span style="color='red';">⨯</span> (missing `/web`) | - |
-| `/` | `/assets/logo.png` | `/assets/logo.png` | <span style="color='green';">✔</span> | - |
-| `/web/` | `/web/assets/logo.png` | `/web/assets/logo.png` | <span style="color='green';">✔</span> | - |
+| `base` `href` | Path in `url()` in source SCSS | Path type | Path in `url()` in transpiled CSS | Works? | Duplicate file in `/dist`? |
+| - | - | - | - | - | - |
+| `/web/` | `^assets/logo.png` | Special | `assets/logo.png` | <span style="color='green';">✔</span> | - |
+| `/` | `^assets/logo.png` | Special | `assets/logo.png` | <span style="color='green';">✔</span> | - |
+| `/web/` | `~/src/assets/logo.png` | Relative | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
+| `/web/` | `../assets/logo.png` | Relative | `/web/logo.d808b08ce47c5d0c53cd.png` | <span style="color='green';">✔</span> | `/logo.d808b08ce47c5d0c53cd.png` |
+| `/web/` | `../../assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `../../../../../../../assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `./assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `~assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `~/assets/logo.png` | Relative | _does not transpile_ | <span style="color='red';">⨯</span> | - |
+| `/web/` | `/assets/logo.png` | Absolute | `/assets/logo.png` | <span style="color='red';">⨯</span> (missing `/web`) | - |
+| `/` | `/assets/logo.png` | Absolute | `/assets/logo.png` | <span style="color='green';">✔</span> | - |
+| `/web/` | `/web/assets/logo.png` | Absolute | `/web/assets/logo.png` | <span style="color='green';">✔</span> | - |
 
 Notes:
 
@@ -119,7 +119,7 @@ For our use case of static assets serving, we must adopt cache re-validation usi
 
 This caching mechanism could also be applied to JS and CSS chunks in a way that would not require fingerprinting those files, but since Angular already fingerprints those files, we will leave it as-is.
 
-_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file!
+_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file! Please check out [Loading assets via SCSS](#loading-assets-via-scss) sub-chapters that covers this topic.
 
 **Rule #3**: Implement cache re-validation using ETags for all static assets!
 
