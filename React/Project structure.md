@@ -115,7 +115,7 @@ Here are some examples of core components:
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
 They could be shared between feature components and encapsulates some specific logic of an feature.  
 
-We can split them into two domains:
+We can split them into three domains:
 1. `UI` - higher order user interface components
 2. `Entity` - UI representation of a data models
 3. `utility` - headless utility components
