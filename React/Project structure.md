@@ -118,7 +118,7 @@ They could be shared between feature components and encapsulates some specific l
 We can split them into three domains:
 1. `UI` - higher order user interface components
 2. `Entity` - UI representation of a data models
-3. `utility` - headless utility components
+3. `Utility` - headless utility components
 
 #### Shared *UI* domain
 
