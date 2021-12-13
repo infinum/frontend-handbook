@@ -3,8 +3,9 @@
 
 When adding UI components, you should be able to group them in two root domains:
 
-1. `pages` - page scope based components
+1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
+3. `features` - root folder for components based on a specific feature (could be scoped by page or island)
    
 Folder naming rules:
 
@@ -14,7 +15,12 @@ Folder naming rules:
 ```
 src
 ├── components
-│   ├── pages
+│   ├── core
+│   │   ├── Section
+│   │   │   └── Section.tsx
+│   │   └── Card
+│   │       └── Card.tsx
+│   ├── features
 │   │   ├── home
 │   │   │   ├── HomeHeaderSection
 │   │   │   │   └── HomeHeaderSection.tsx
@@ -26,11 +32,6 @@ src
 │   │       └── TodoCreateFormSection
 │   │           └── TodoCreateFormSection.tsx
 │   └── shared
-│       ├── core
-│       │   ├── Section
-│       │   │   └── Section.tsx
-│       │   └── Card
-│       │       └── Card.tsx
 │       ├── fields
 │       │   └── TextField
 │       │       └── TextField.tsx
@@ -53,7 +54,7 @@ src
             └── index.tsx
 ```
 
-#### Shared *core* components
+### *Core* domain
 
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
 You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
@@ -109,12 +110,19 @@ Here are some examples of core components:
   </tr>
 </table>
 
-#### Shared *Feature* based domains
+### *Shared* domain
 
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
-They are shared components that encapsulate some specific feature of an app.  
+They could be shared between feature components and encapsulates some specific logic of an feature.  
 
-Component name is always composed out of two parts `Context` + `Domain`, for example `ArticlesPanel` where `Articles` is context and `Panel` is domain.
+We can split them into three domains:
+1. `UI` - higher order user interface components
+2. `Entity` - UI representation of a data models
+3. `Utility` - headless utility components
+
+#### Shared *UI* domain
+
+Component name is always composed out of two parts `Context` + `Domain`, for example `InputField` where `Input` is context and `Field` is domain.
 
 Here are some examples of feature domain names:
 <table>
@@ -170,7 +178,7 @@ Here are some examples of feature domain names:
   </tr>
 </table>
 
-#### Shared *Entity* based domain
+#### Shared *Entity* domain
 
 We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
 
@@ -271,7 +279,7 @@ For this case, inside `index.tsx` we would have something like this:
   }
 ```
 
-This is the case **only** for layouts that would add too much complexity when using standard css queries.
+> This is the case **only** for layouts that would add too much complexity when using standard css media queries.
 
 
 ### Extracting utility functions and hooks
@@ -428,8 +436,8 @@ export default function Admin() {
 
 ### Utility components
 
-Utility components are basically components that don't have any impact on the UI itself.
-For example, Meta component for populating `<Head>`.
+Utility components are headless, which means that they don't have any impact on the UI itself.
+For example, Meta component for injecting meta tags inside document `<head>`.
 
 Example:
 
