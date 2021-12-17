@@ -156,7 +156,7 @@ The Nginx configuration file for the site should be updated to enable cache re-v
 
 ### Server-side rendering
 
-If the application uses Server-side rendering, then the caching should be handled by the Node.js server.
+If the application uses server-side rendering, then caching should be handled by the Node.js server.
 
 When using Angular Universal, `server.ts` includes a piece of code in charge of serving the application client build files (this includes `index.html`, JS and CSS chunks, and files from `assets/`). This piece of code should be updated to force cache re-validation:
 
