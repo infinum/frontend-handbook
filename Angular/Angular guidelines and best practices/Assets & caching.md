@@ -106,7 +106,7 @@ JS and CSS chunks that are linked to from the `index.html` file are fingerprinte
 
 The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on Webpack configuration and the way that the assets are used, fingerprint all the images and other static assets. In Angular, static assets like images and custom fonts are placed in the `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
 
-The files from the `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
+Files from the `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
 
 1. Well, add fingerprinting to these files!
 2. Utilize the transfer protocol caching mechanism
