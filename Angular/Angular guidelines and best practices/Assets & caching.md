@@ -83,7 +83,7 @@ Notes:
 - `d808b08ce47c5d0c53cd` is an example of a hash, different values will appear in reality.
 - In certain cases, the logo image will be present two times in the final bundle:
   - `/dist/logo.d808b08ce47c5d0c53cd.png` and `/dist/assets/logo.png`
-- `assets/logo.png` + `<base href="/web/">` would work and it would load the image from `https://app.com/web/assets/logo.png` if SCSS transpiled, but it does not. If you set this URL manually in devtools, you will notice that it does indeed work and takes into account `base` `href` value.
+- `assets/logo.png` + `<base href="/web/">` would work and it would load the image from `https://app.com/web/assets/logo.png` if it is SCSS transpiled, but it does not. If you set this URL manually in devtools, you will notice that it does indeed work and takes into account the `base` `href` value.
 - The last two entries from the table do work, but require source code changes if `base` `href` is changed.
 
 Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For SCSS URLs we recommend using `^assets/…` in order to avoid assets file duplication and make it work for different `base` `href` values without the need to modify URLs in the source files. Keep in mind that this solution could easily stop working if there are some breaking changes in Webpack or the Angular CLI. Handbook will be updated with a better solution once and if it is found.
