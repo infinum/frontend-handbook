@@ -16,7 +16,7 @@ Application build files in `dist` directory include:
 
 Angular documentation about deploying applications contains [The base tag](https://angular.io/guide/deployment#the-base-tag) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the <base href>](https://angular.io/guide/router#html5-urls-and-the--base-href).
 
-To understand how `base` `href` affects assets loading, we will take a look at an example of image loading via `<img>` element.
+To understand how `base` `href` affects assets loading, we will take a look at an example of image loading via the `<img>` element.
 
 When developing locally, the application is hosted by the Webpack DevServer on `http://localhost:4200` and the base href is set to `/`. This means that when, for example, you load an image from the `assets` directory via `<img src="/assets/logo.svg">`, the image will be loaded from `http://localhost:4200/assets/logo.svg`.
 
