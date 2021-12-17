@@ -10,7 +10,7 @@ Application build files in `dist` directory include:
 - Copied assets directory
   - Individual assets files are _NOT_ fingerprinted
     - There are some edge cases where duplicate fingerprinted files could be generated, more on that in the following chapter
-- index.html file
+- index.html
 
 ## Paths to assets
 
