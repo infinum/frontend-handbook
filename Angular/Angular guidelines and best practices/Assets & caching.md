@@ -55,7 +55,7 @@ Same conclusions apply for defining relative path when using `fetch`, `XHR`, `sr
 
 ### Loading assets via SCSS
 
-Loading images from the `assets` directory via the `url()` function is a bit different because SCSS transpiler processes SCSS with `postcss-loader` and the loader will throw an error if it can not find the file if it is defined by a relative URL in the `url()` function.
+Loading images from the `assets` directory via the `url()` function is a bit different, because the SCSS transpiler processes SCSS with `postcss-loader` and the loader will throw an error if it can not find the file if it is defined by a relative URL in the `url()` function.
 
 The processing that the compiler does on images (and some other assets) also means that they will be fingerprinted and, unless extra precautions are made, there will be duplicates in the final bundle - 1 original copy in `dist/assets` (e.g. for use in templates with `img` `src`) and 1 fingerprinted copy in the `dist/` (e.g. for use in CSS with `url()`). This is [an issue](https://github.com/angular/angular-cli/issues/6599) with Angular CLI and it is not yet clear what the best solution is to avoid duplicate assets for both `/` and custom `base` `href` values. There are currently some hacky solutions, none of which are ideal, as described in [this StackOverflow thread](https://stackoverflow.com/a/62619147) ([+ another Angular issue on the topic](https://github.com/angular/angular-cli/issues/18013#issuecomment-649373940)).
 
