@@ -131,7 +131,7 @@ We will cover some of the common HTTP serving technologies, including static fil
 
 ### Static file serving
 
-If the application files are served statically, the static file server must be configured to serve and cache assets files correctly.
+If application files are served statically, the static file server must be configured to serve and cache assets files correctly.
 
 #### Nginx example
 
