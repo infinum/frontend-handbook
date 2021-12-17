@@ -80,7 +80,7 @@ If we wanted to set the `logo.png` image as `background-image` using `url()`, re
 Notes:
 
 - Same rules will apply to any asset loading via `url()` (e.g. fonts).
-- `d808b08ce47c5d0c53cd` is example of a hash, different values will appear in reality.
+- `d808b08ce47c5d0c53cd` is an example of a hash, different values will appear in reality.
 - In certain cases, the logo image will be present two times in the final bundle:
   - `/dist/logo.d808b08ce47c5d0c53cd.png` and `/dist/assets/logo.png`
 - `assets/logo.png` + `<base href="/web/">` would work and it would load the image from `https://app.com/web/assets/logo.png` if SCSS transpiled, but it does not. If you set this URL manually in devtools, you will notice that it does indeed work and takes into account `base` `href` value.
