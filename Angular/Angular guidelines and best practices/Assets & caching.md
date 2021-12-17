@@ -43,7 +43,7 @@ Here is a quick table with a summary of what works and what does not work for di
 
 Notes:
 
-- All the `<img>` `src` paths listed above are relative paths, but paths that start with `/` will ignore `base` `href` and resolve relative to the domain ([w3c docs](https://www.w3schools.com/tags/att_img_src.asp)). All other relative paths will take into account `base` `href` when resolving the path.
+- All `<img>` `src` paths listed above are relative paths, but paths that start with `/` will ignore `base` `href` and resolve relative to the domain ([w3c docs](https://www.w3schools.com/tags/att_img_src.asp)). All other relative paths will take into account `base` `href` when resolving the path.
 
 In summary, you must use `./assets/…` or `assets/…` when defining paths for assets loading in both HTML and CSS in order to make it work in all the cases. We recommend using `./assets/…`.
 
