@@ -8,7 +8,7 @@ Application build files in `dist` directory include:
 
 - Fingerprinted JS and CSS chunks
 - Copied assets directory
-  - Individual assets files are _NOT_ fingerprinted
+  - Individual asset files are _NOT_ fingerprinted
     - There are some edge cases where duplicate fingerprinted files could be generated, more on that in the following chapter
 - index.html
 
@@ -110,7 +110,7 @@ JS and CSS chunks that are linked to from the `index.html` file are fingerprinte
 
 ## Static assets
 
-The tricky part with serving Angular applications is caching the static assets files. Some frameworks, depending on the Webpack configuration and the way that assets are used, fingerprint all images and other static assets. In Angular, static assets, like images and custom fonts, are placed in the `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
+The tricky part with serving Angular applications is caching the static asset files. Some frameworks, depending on the Webpack configuration and the way that assets are used, fingerprint all images and other static assets. In Angular, static assets, like images and custom fonts, are placed in the `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
 
 Files from the `assets/` directory do not get fingerprinted. Because of this, it is important to set up the correct caching mechanism for serving these files or else the client might be using stale files. There are two solutions:
 
@@ -121,11 +121,11 @@ The first solution is actually a hack, just like fingerprinting JS and CSS chunk
 
 In the world of Web, application files are served via the HTTP protocol 99.99% of the time. It makes sense to use the built-in mechanisms offered by HTTP to handle caching of static assets. You can read more about the different caching mechanisms available in HTTP [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching).
 
-For our use case of static assets serving, we must adopt cache re-validation using ETags. The short description of this method is that the Web server calculates the hash of the file being served and sends that hash to the client together with the file itself. The client can cache this file and when fetching the same file in the future, the client sends that hash value of the cached file in the request headers as well. Depending on whether the hashes match or not, the server can return 200 with new version of the file or 304 without any payload.
+For our use case of static assets serving, we must adopt cache re-validation using ETags. The short description of this method is that the Web server calculates the hash of the file being served and sends that hash to the client together with the file itself. The client can cache this file and when fetching the same file in the future, the client sends that hash value of the cached file in the request headers as well. Depending on whether the hashes match or not, the server can return 200 with the new version of the file or 304 without any payload.
 
-This caching mechanism could also be applied to JS and CSS chunks in a way that would not require fingerprinting those files, but since Angular already fingerprints those files, we will leave it as-is.
+This caching mechanism could also be applied to JS and CSS chunks in a way that would not require fingerprinting those files, but since Angular already fingerprints those files by default, we will leave it as-is.
 
-_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file! Please check out [Loading assets via SCSS](#loading-assets-via-scss) sub-chapters that covers this topic.
+_One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get duplicated and fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file! Please check out [Loading assets via SCSS](#loading-assets-via-scss) sub-chapters that covers this topic and explains how to avoid duplicated files.
 
 **Caching Rule #3**: Implement cache re-validation using ETags for all static assets!
 
@@ -137,7 +137,7 @@ We will cover some of the common HTTP serving technologies, including static fil
 
 ### Static file serving
 
-If application files are served statically, the static file server must be configured to serve and cache assets files correctly.
+If application files are served statically, the static file server must be configured to serve and cache asset files correctly.
 
 #### Nginx example
 
