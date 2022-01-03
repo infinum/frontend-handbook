@@ -19,10 +19,10 @@ Application build files in `dist` directory include:
 Here is a quick summary of how you should define paths to assets in various use cases:
 
 | Use case | Example |
+| - | - |
 | HTML / images | `<img src="./assets/…">` |
 | XHR / fetch | `http.get('./assets/…")` |
 | CSS `url()` | `url("^assets/…")` |
-
 
 
 ### Base href
