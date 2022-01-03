@@ -45,13 +45,17 @@ Notes:
 
 - All `<img>` `src` paths listed above are relative paths, but paths that start with `/` will ignore `base` `href` and resolve relative to the domain ([w3c docs](https://www.w3schools.com/tags/att_img_src.asp)). All other relative paths will take into account `base` `href` when resolving the path.
 
+#### Conclusion
+
 In summary, you must use `./assets/…` or `assets/…` when defining paths for assets loading in both HTML and CSS in order to make it work in all the cases. We recommend using `./assets/…`.
 
 ### Loading assets via JS
 
 The same rules apply when fetching assets via `fetch` or `XHR` because both of these APIs respect the `base` `href` value when resolving relative paths. For example, when using `transloco` for fetching translation files, you must use ```http.get<Translation>(`./assets/i18n/${lang}.json`)```. `assets/…` will also work, but `/assets` will not - just like with images.
 
-Same conclusions apply for defining relative path when using `fetch`, `XHR`, `src`, and `href`.
+#### Conclusion
+
+Just as for images, the same conclusion applies for defining relative path when using `fetch`, `XHR`, `src`, and `href` - use `./assets/…`.
 
 ### Loading assets via SCSS
 
@@ -86,6 +90,8 @@ Notes:
 - `assets/logo.png` + `<base href="/web/">` would work and it would load the image from `https://app.com/web/assets/logo.png` if SCSS transpilation passed, but it does not. If you set this URL manually in devtools, you will notice that it does indeed work and takes into account the `base` `href` value.
 - The last two entries from the table do work, but require source code changes if `base` `href` is changed.
 
+#### Conclusion
+
 Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For SCSS URLs use `^assets/…` in order to avoid assets file duplication and make it work for different `base` `href` values without the need for modifying URLs in source files. Keep in mind that this solution could easily stop working if there are some breaking changes in Webpack or the Angular CLI. Handbook will be updated with a better solution once and if it is found.
 
 ## Index file
@@ -94,13 +100,13 @@ The entry-point into a Single Page Application (SPA), like Angular, is the `inde
 
 Fingerprinted links to JS and CSS chunks will be different for each build, and because of that the `index.html` file will be different as well. Because of this, it is important that the `index.html` file is not cached permanently on the client and that the client requests cache revalidation. If the client has a stale `index.html` file, it will try loading stale JS and CSS chunks as well. Those might or might not be in its cache, and depending on this the client might get a completely outdated app or a broken app that is missing some chunks.
 
-**Rule #1**: Do not cache the built `index.html` file. Revalidate it each time!
+**Caching Rule #1**: Do not cache the built `index.html` file. Revalidate it each time!
 
 ## JS and CSS chunks
 
 JS and CSS chunks that are linked to from the `index.html` file are fingerprinted and because of that they can be cached indefinitely. If we create a new application build, the `index.html` file will be re-validated and the client will load new chunks.
 
-**Rule #2**: Cache fingerprinted JS and CSS files with a long expiration time!
+**Caching Rule #2**: Cache fingerprinted JS and CSS files with a long expiration time!
 
 ## Static assets
 
@@ -121,7 +127,7 @@ This caching mechanism could also be applied to JS and CSS chunks in a way that 
 
 _One small note_: if you use relative paths in SCSS, for example for a background image, then that image will get fingerprinted. However, if you have an image element in your template, like `<img src="/assets/logo.png">`, the `logo.png` file will not be fingerprinted and you are at risk of the client using a stale version of the file! Please check out [Loading assets via SCSS](#loading-assets-via-scss) sub-chapters that covers this topic.
 
-**Rule #3**: Implement cache re-validation using ETags for all static assets!
+**Caching Rule #3**: Implement cache re-validation using ETags for all static assets!
 
 ## Cache re-validation implementation
 
