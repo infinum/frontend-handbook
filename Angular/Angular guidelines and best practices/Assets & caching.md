@@ -92,7 +92,7 @@ Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For
 
 The entry-point into a Single Page Application (SPA), like Angular, is the `index.html` file. During the build process, the source `src/index.html` is taken and updated with links to the generated JS and CSS chunks and placed into `dist/[project-name]/index.html`.
 
-Fingerprinted links to JS and CSS chunks will be different for each build, and the `index.html` file will be different as well. Because of this, it is important that the `index.html` file is not cached permanently on the client and that the client requests cache revalidation. If the client has a stale `index.html` file, it will try loading stale JS and CSS chunks as well. Those might or might not be in its cache, and depending on this the client might get a completely outdated app or a broken app that is missing some chunks.
+Fingerprinted links to JS and CSS chunks will be different for each build, and because of that the `index.html` file will be different as well. Because of this, it is important that the `index.html` file is not cached permanently on the client and that the client requests cache revalidation. If the client has a stale `index.html` file, it will try loading stale JS and CSS chunks as well. Those might or might not be in its cache, and depending on this the client might get a completely outdated app or a broken app that is missing some chunks.
 
 **Rule #1**: Do not cache the built `index.html` file. Revalidate it each time!
 
@@ -148,6 +148,10 @@ The Nginx configuration file for the site should be updated to enable cache re-v
     }
 ```
 
+Options for the `Cache-Control` header can be a bit confusing. The name of the option `no-cache` suggests that there will be no caching, but that is not true. For more details, please check out this article about [Demistifying HTTP Caching](https://codeburst.io/demystifying-http-caching-7457c1e4eded?gi=2174675eaf73). A quick quote from the article:
+
+>no-cache doesn’t mean “don’t cache”, it means it must revalidate with the server before using the cached resource.
+
 ### Server-side rendering
 
 If the application uses server-side rendering, then caching should be handled by the Node.js server.
@@ -156,8 +160,10 @@ When using Angular Universal, `server.ts` includes a piece of code in charge of 
 
 ```typescript
 server.get('*.*', express.static(distFolder, {
-  maxAge: '0',
   etag: true,
+  setHeaders: (res) => {
+    res.set('Cache-Control', 'no-cache');
+  }
 }));
 ```
 
