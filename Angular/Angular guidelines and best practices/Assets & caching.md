@@ -24,6 +24,7 @@ Here is a quick summary of how you should define paths to assets in various use 
 | XHR / fetch | `http.get('./assets/…")` |
 | CSS `url()` | `url("^assets/…")` |
 
+Keep reading for a detailed explanation of how to define paths to assets.
 
 ### Base href
 
