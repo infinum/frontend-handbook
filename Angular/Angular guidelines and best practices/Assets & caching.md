@@ -14,7 +14,22 @@ Application build files in `dist` directory include:
 
 ## Paths to assets
 
+### Too long, didn't read
+
+Here is a quick summary of how you should define paths to assets in various use cases:
+
+| Use case | Example |
+| HTML / images | `<img src="./assets/…">` |
+| XHR / fetch | `http.get('./assets/…")` |
+| CSS `url()` | `url("^assets/…")` |
+
+
+
+### Base href
+
 Angular documentation about deploying applications contains [The base tag](https://angular.io/guide/deployment#the-base-tag) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the `<base href>`](https://angular.io/guide/router#html5-urls-and-the--base-href).
+
+### Loading assets via HTML
 
 To understand how `base` `href` affects assets loading, we will take a look at an example of image loading via the `<img>` element.
 
@@ -47,7 +62,7 @@ Notes:
 
 #### Conclusion
 
-In summary, you must use `./assets/…` or `assets/…` when defining paths for assets loading in both HTML and CSS in order to make it work in all the cases. We recommend using `./assets/…`.
+In summary, you must use `./assets/…` or `assets/…` when defining paths for assets loading via HTML in order to make it work in all the cases. We recommend using `./assets/…`.
 
 ### Loading assets via JS
 
@@ -94,7 +109,9 @@ Notes:
 
 Conclusion here is a bit different than for `<img>` and `fetch`/`XHR` paths. For SCSS URLs use `^assets/…` in order to avoid assets file duplication and make it work for different `base` `href` values without the need for modifying URLs in source files. Keep in mind that this solution could easily stop working if there are some breaking changes in Webpack or the Angular CLI. Handbook will be updated with a better solution once and if it is found.
 
-## Index file
+## Caching
+
+### Index file
 
 The entry-point into a Single Page Application (SPA), like Angular, is the `index.html` file. During the build process, the source `src/index.html` is taken and updated with links to the generated JS and CSS chunks and placed into `dist/[project-name]/index.html`.
 
@@ -102,13 +119,13 @@ Fingerprinted links to JS and CSS chunks will be different for each build, and b
 
 **Caching Rule #1**: Do not cache the built `index.html` file. Revalidate it each time!
 
-## JS and CSS chunks
+### JS and CSS chunks
 
 JS and CSS chunks that are linked to from the `index.html` file are fingerprinted and because of that they can be cached indefinitely. If we create a new application build, the `index.html` file will be re-validated and the client will load new chunks.
 
 **Caching Rule #2**: Cache fingerprinted JS and CSS files with a long expiration time!
 
-## Static assets
+### Static assets
 
 The tricky part with serving Angular applications is caching the static asset files. Some frameworks, depending on the Webpack configuration and the way that assets are used, fingerprint all images and other static assets. In Angular, static assets, like images and custom fonts, are placed in the `src/assets/` directory. This directory gets copied without any modifications to the final application build directory - `dist/[project-name]/assets/`.
 
@@ -129,19 +146,15 @@ _One small note_: if you use relative paths in SCSS, for example for a backgroun
 
 **Caching Rule #3**: Implement cache re-validation using ETags for all static assets!
 
-## Cache re-validation implementation
+### Cache re-validation implementation
 
 Depending on how the application files are served, implementation details for setting up HTTP caching will be a bit different.
 
-We will cover some of the common HTTP serving technologies, including static file serving and Server-side rendering.
-
-### Static file serving
+#### Static file serving
 
 If application files are served statically, the static file server must be configured to serve and cache asset files correctly.
 
-#### Nginx example
-
-The Nginx configuration file for the site should be updated to enable cache re-validation for the `assets/` directory:
+Taking Nginx as an example of a static file server, the configuration file for the site should be updated to enable cache re-validation for the `assets/` directory:
 
 ```bash
     server {
@@ -158,7 +171,7 @@ Options for the `Cache-Control` header can be a bit confusing. The name of the o
 
 >no-cache doesn’t mean “don’t cache”, it means it must revalidate with the server before using the cached resource.
 
-### Server-side rendering
+#### Server-side rendering
 
 If the application uses server-side rendering, then caching should be handled by the Node.js server.
 
