@@ -232,6 +232,44 @@ Utility components usually does not have any visual representation on the screen
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
 Note: There _should_ be only one level of `components` folder inside the component folder.
+
+Example:
+
+In this example we have `MainTable` component that has a unique header component that should be places inside `/components` folder because it has some styles, translations and an icon.
+
+```jsx
+export const TableHeader: FC<FlexProps> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Flex align="center" p={20} {...props}>
+      <Heading size="md" colorScheme="secondary" as="h3">
+        {t("table.title")}
+      </Heading>
+      <Button
+        leftIcon={<ArrowForwardIcon />}
+        colorScheme="teal"
+        variant="solid"
+      >
+        {t("table.viewAll")}
+      </Button>
+    </Flex>
+  );
+};
+```
+
+Folder structure should look something like this:
+
+```
+src
+└── components
+    └── features
+        └── some-feature
+            └── MainTable
+                ├── components
+                │   └── TableHeader.tsx
+                └── MainTable.tsx
+```
+
 ## Elements
 
 If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
