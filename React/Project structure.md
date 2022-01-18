@@ -257,7 +257,7 @@ export const TableHeader: FC<FlexProps> = (props) => {
 };
 ```
 
-Folder structure should look something like this:
+The folder structure should look something like this:
 
 ```
 src
