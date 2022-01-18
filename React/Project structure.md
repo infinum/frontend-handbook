@@ -235,7 +235,7 @@ Note: There _should_ be only one level of `components` folder inside the compone
 
 Example:
 
-In this example we have `MainTable` component that has a unique header component that should be places inside `/components` folder because it has some styles, translations and an icon.
+In this example we have the `MainTable` component that has a unique header component that should be placed inside the `/components` folder because it has some styles, translations and an icon.
 
 ```jsx
 export const TableHeader: FC<FlexProps> = (props) => {
