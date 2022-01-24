@@ -198,20 +198,20 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 **Query priorities** ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
-  - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
-  - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
-  - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
-  - `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
-  - `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
+- `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
+- `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
+- `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
+- `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
+- `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
 
 2. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
 
-  - `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
-  - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
+- `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
+- `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
 3. Test IDs
 
-  - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+- `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 **Avoid unnecessary "is rendering" test**
 
@@ -634,6 +634,45 @@ Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to
         └── user.test.ts
 ```
 
+## Mocking API routes
+
+[Mock Service Worker](https://mswjs.io/docs/) is an API mocking library that uses Service Worker API to intercept actual requests.
+
+Example:
+
+```tsx
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+const apiEndpoint = "http://localhost:3000";
+
+const mockTodoData = [{ title: "Todo #1", todos: [] }];
+
+const server = setupServer(
+  // Describe the requests to mock.
+  rest.post(`${apiEndpoint}/api/todo-lists`, (req, res, ctx) => {
+    return res(ctx.json(mockTodoData));
+  })
+);
+
+beforeAll(() => {
+  // Establish requests interception layer before all tests.
+  server.listen();
+});
+
+afterAll(() => {
+  // Clean up after all tests are done
+  server.close();
+});
+
+test("TodoComponent renders correct number of rows", async () => {
+  render(<TodoList />);
+
+  const Rows = screen.getAllByRole("row");
+  expect(Rows.length).toBe(1);
+});
+```
+
 ### Using datx:
 
 When testing fetchers that use Datx, we create mocked store Datx store and instead of making API calls with `request` we need to mock `request` and test the functionality of the fetcher.
@@ -758,3 +797,41 @@ describe("useModal", () => {
   });
 });
 ```
+
+### Mock hooks
+
+Sometimes we want our custom hook to return a mock response while we test component consuming it.
+
+Example hook:
+
+```tsx
+// @/hooks/useTodos.ts
+export const useTodos = (config?: SWRConfiguration) => {
+  return useSWR(() => {
+    return "api/todo-lists";
+  }, config);
+};
+```
+
+Example mock and test:
+
+```tsx
+import * as hooks from "@/hooks/useTodos";
+
+const mockTodoData = [{ title: "Todo #1", todos: [] }];
+
+jest.spyOn(hooks, "useTodos").mockImplementation(() => {
+  return {
+    data: mockTodoData,
+  } as SWRResponse;
+});
+
+test("TodoComponent renders correct number of rows", async () => {
+  render(<TodoList />); // uses useTodos
+
+  const Rows = screen.getAllByRole("row");
+  expect(Rows.length).toBe(1);
+});
+```
+
+Spy will now redirect any hook calls to mock implementation.
