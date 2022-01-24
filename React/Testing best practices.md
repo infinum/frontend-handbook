@@ -176,9 +176,8 @@ useMock.i18n = {
 
 module.exports = {
   // this mock makes sure any components using the translate HoC receive the t function as a prop
-  withTranslation: () => (Component) => (props) => (
-    <Component t={(k) => k} {...props} />
-  ),
+  withTranslation: () => (Component) => (props) =>
+    <Component t={(k) => k} {...props} />,
   useTranslation: jest.fn(() => useMock),
 
   // mock if needed
@@ -198,6 +197,7 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 **Query priorities** ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
+
 - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
 - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
 - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
