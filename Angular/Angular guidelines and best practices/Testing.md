@@ -328,6 +328,83 @@ export class UserTestingService implements IUserService {
 }
 ```
 
+## Testing a interceptor
+If interceptor depends on some services we should mock and inject those services into `TestBed` as we did in example with regular service. 
+Let's say that this interceptor injects `AuthenticationService` which handles login logic and state. 
+Mock implementation of `AuthenticationTestingService` for our purpose could look something like:
+
+```ts
+export class AuthenticationTestingService implements ExtractPublic<AuthenticationService>{
+  public getAccessToken(): string{
+    return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTY0MzEwNTA2MywiZXhwIjoxNjQzMTA4NjYzfQ.6JOJdydKd-jzZMDWiqr2mUvC78DIwJNd0ye-OZOymGg' // JTW token generated via https://token.dev/
+  }
+}
+```
+
+As with regular services we create test double for `AuthenticationService`, and pass it to `TestBed` configuration, also we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token. 
+
+```ts
+describe('AuthorizationInterceptor', () => {
+  let httpClient: HttpClient;
+  let httpMock: HttpTestingController;
+  let authenticationService: AuthenticationService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        { provide: AuthenticationService,
+          useClass: AuthenticationTestingService // Provide mock dependency
+        }, 
+        {
+          provide: HTTP_INTERCEPTORS, // Register interceptor
+          useClass: AuthorizationInterceptor,
+          multi: true
+        }
+      ],
+    });
+
+      httpClient = TestBed.inject(HttpClient);
+      httpMock = TestBed.inject(HttpTestingController); 
+      authenticationService = TestBed.inject(AuthenticationService);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+  ```
+
+  When testing services that make http calls it is recommended that afterEach test we check wether there are any outstanding API calls which weren't resolved, we achieve this with calling `verify()` method on our testing instance of `HttpTestingController`. 
+
+  Below are relevant tests regarding interceptor functionality.
+
+  ```ts
+
+  it('should attach the interceptor', () => {
+    const interceptors: Array<HttpInterceptor> = TestBed.inject(HTTP_INTERCEPTORS);
+      expect(interceptors.some((i) => i instanceof AuthorizationInterceptor)).toBe(true);
+  });
+
+  it('should set authorization header to request', () => {
+      const url = 'https://my-api.com/api/some-route';
+    
+      httpClient.get(url).subscribe();
+
+      const mockRequest = httpMock.expectOne(url);
+
+      const authHeader = mockRequest.request.headers.get('Authorization');
+
+      expect(authHeader).toBeTruthy();
+      expect(authHeader).toBe(`Bearer ${authenticationService.getAccessToken()}`);
+
+      mockRequest.flush(null);
+  });
+})
+```
+
+To learn more about testing services that make http requests read official Angular documentation regarding [Testing HTTP requests](https://angular.io/guide/http#testing-http-requests)
+
+
 ## Testing a component
 
 When testing complex components that use multiple services and render other components, make sure to provide them with stub services and components.
