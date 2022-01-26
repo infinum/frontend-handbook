@@ -531,6 +531,94 @@ beforeEach(async(() => {
 }));
 ```
 
+This is, arguably, not the best solution, but it might be the simplest, and good enough for some cases.
+
+### Alternative approach with a host/wrapper component
+
+Changing the change detection strategy from OnPush to Default in tests is not ideal because that could theoretically make the component behave differently when comparing the application runtime, where it is using OnPush, and tests, where it is using the Default CD.
+
+An alternative approach is to wrap the component you want to test into another component that is declared only in the TestBed and is used only for interacting with the component you want to test via inputs and outputs.
+
+Fixture is created for the host component and `fixture.componentInstance` will not be an instance of the component you want to test, it will be an instance of the host component. If you need the instance of the component you want to test, you can get it after the fixture is initialized and the first CD cycle is done, via `ViewChild` in the host component.
+
+The host component pattern starts to shine when you need to change some input value and trigger CD - you can simply change the public property value on the host component and call `fixture.detectChanges()`. That will trigger `ngOnChanges` and re-render the child component, even if it is using the OnPush CD. If you didn't use the host component, you would have to manually assign property values and call `ngOnChanges` with the correct `changes` object. That can be tedious to write, and you could even forget to call `ngOnChanges` and then wonder why the tests are not working as expected.
+
+The downside of using a host component is that it is a bit boilerplate-y - you will potentially have to bind many inputs and outputs between the host and child components.
+
+We recommend creating a host component, especially for cases where you need to test input/output interaction.
+
+```typescript
+@Component({
+  selector: 'counter'
+  template: `
+  {{ value }}
+  <button class="counter-button" (click)="onCounterButtonClick()">Increase</button>
+  `
+})
+export class CounterComponent {
+  @Input() public value: number = 0;
+  @Output() public valueChange = new EventEmitter<number>();
+
+  public onCounterButtonClick(): void {
+    this.value++;
+    this.valueChange.emit(this.value);
+  }
+}
+```
+
+```typescript
+@Component({
+  selector: 'counter-host'
+  template: `
+  <counter
+    [value]="value"
+    (valueChange)="onValueChange()
+  >
+  </counter>
+  `
+})
+class CounterHostComponent {
+  @ViewChild(CounterComponent, { static: true }) public component: CounterComponent;
+
+  public value: number = 0; // Notice that this doesn't have to be an @Input
+
+  public onValueChange(newValue: number): void { }
+}
+
+describe('CounterComponent', () => {
+  let fixture: ComponentFixture<CounterHostComponent>;
+  let hostComponent: CounterHostComponent;
+  let component: CounterComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [CounterComponent, CounterHostComponent],
+      imports: [...],
+      providers: [...],
+    }).compileComponents();
+  })
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CounterHostComponent);
+    fixture.detectChanges();
+
+    hostComponent = fixture.componentInstance;
+    component = hostComponent.component;
+  });
+
+  it('should emit valueChange event on counter button click', () => {
+    const valueChangeHandlerSpy = spyOn(hostComponent, 'onValueChange');
+    const counterButton = fixture.debugElement.query(By.css('.counter-button')).nativeElement as HTMLButtonElement;
+
+    expect(valueChangeHandlerSpy).toHaveBeenCalledTimes(0);
+
+    counterButton.click();
+
+    expect(valueChangeHandlerSpy).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
 ## Testing components with content projection
 
 Components that use content projection cannot be tested in the same way as components that use only inputs for passing the data to the component. The problem is that, during TestBed configuration, you can only configure the testing module. You cannot define the template which would describe how the component is used inside another component's template.
@@ -778,6 +866,10 @@ describe('DadJokeService', () => {
     httpMock = TestBed.inject(HttpTestingController);
   });
 
+  afterEach(() => {
+    httpMock.verify();
+  });
+
   it('should return the joke if request succeeds', () => {
     const jokeResponse: IJoke = {
       id: '42',
@@ -797,6 +889,8 @@ describe('DadJokeService', () => {
 ```
 
 We added a `httpMock` variable to our `describe` block. We assign it to an instance of `HttpTestingController`, which is provided by `HttpClientTestingModule`.
+
+It is important to be explicit about which exact API calls are expected. For that purpose, we added `afterEach` with the `httpMock.verify()` call. This ensures that there are no unexpected requests hanging at the end of each test.
 
 We also defined a `jokeResponse` variable which is formatted in the same way as a real response JSON would be.
 
