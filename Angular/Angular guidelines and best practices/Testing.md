@@ -331,7 +331,7 @@ export class UserTestingService implements IUserService {
 ## Testing a interceptor
 If an interceptor depends on some services, we should mock and inject those services via `TestBed`, just like in the example with a regular service.
 As an example, let's say we have an interceptor that injects `AuthenticationService` which handles login logic and state.
-Mock implementation of `AuthenticationTestingService` for our purpose could look something like:
+Mock implementation of `AuthenticationTestingService` for our purpose could look something like this:
 
 ```ts
 export class AuthenticationTestingService implements ExtractPublic<AuthenticationService>{
