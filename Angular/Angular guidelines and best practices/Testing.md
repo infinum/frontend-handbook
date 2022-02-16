@@ -341,7 +341,7 @@ export class AuthenticationTestingService implements ExtractPublic<Authenticatio
 }
 ```
 
-As with regular services we create test double for `AuthenticationService`, and pass it to `TestBed` configuration, also we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token. 
+As with regular services, we create a test double for `AuthenticationService`, and pass it to the `TestBed` configuration. Additionally, we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token.
 
 ```ts
 describe('AuthorizationInterceptor', () => {
