@@ -376,7 +376,7 @@ describe('AuthorizationInterceptor', () => {
 
   When testing services that make http calls it is recommended that afterEach test we check wether there are any outstanding API calls which weren't resolved, we achieve this with calling `verify()` method on our testing instance of `HttpTestingController`. 
 
-  Below are relevant tests regarding interceptor functionality.
+Below are relevant tests regarding the interceptor's functionality.
 
   ```ts
 
