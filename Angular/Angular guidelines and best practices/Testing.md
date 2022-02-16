@@ -374,36 +374,30 @@ describe('AuthorizationInterceptor', () => {
   });
   ```
 
-  When testing services that make http calls it is recommended that afterEach test we check wether there are any outstanding API calls which weren't resolved, we achieve this with calling `verify()` method on our testing instance of `HttpTestingController`. 
-
   Below are relevant tests regarding interceptor functionality.
 
-  ```ts
+```ts
+it('should attach the interceptor', () => {
+  const interceptors: Array<HttpInterceptor> = TestBed.inject(HTTP_INTERCEPTORS);
+  expect(interceptors.some((i) => i instanceof AuthorizationInterceptor)).toBe(true);
+});
 
-  it('should attach the interceptor', () => {
-    const interceptors: Array<HttpInterceptor> = TestBed.inject(HTTP_INTERCEPTORS);
-      expect(interceptors.some((i) => i instanceof AuthorizationInterceptor)).toBe(true);
-  });
-
-  it('should set authorization header to request', () => {
-      const url = 'https://my-api.com/api/some-route';
+it('should set authorization header to request', () => {
+    const url = 'https://my-api.com/api/some-route';
     
-      httpClient.get(url).subscribe();
+    httpClient.get(url).subscribe();
 
-      const mockRequest = httpMock.expectOne(url);
+    const mockRequest = httpMock.expectOne(url);
 
-      const authHeader = mockRequest.request.headers.get('Authorization');
+    const authHeader = mockRequest.request.headers.get('Authorization');
 
-      expect(authHeader).toBeTruthy();
-      expect(authHeader).toBe(`Bearer ${authenticationService.getAccessToken()}`);
+    expect(authHeader).toBeTruthy();
+    expect(authHeader).toBe(`Bearer ${authenticationService.getAccessToken()}`);
 
-      mockRequest.flush(null);
+    mockRequest.flush(null);
   });
 })
 ```
-
-To learn more about testing services that make http requests read official Angular documentation regarding [Testing HTTP requests](https://angular.io/guide/http#testing-http-requests)
-
 
 ## Testing a component
 
@@ -998,6 +992,8 @@ mockRequest.error(new ErrorEvent('server_down'), { status: 500 });
 ```
 
 This allows us to test a more complex error handling, which usually includes some logic for displaying different error messages depending on error code. As shown, that is completely doable using the `error` method of the `TestRequest` object.
+
+To learn more, read the official Angular documentation chapter about[Testing HTTP requests](https://angular.io/guide/http#testing-http-requests)
 
 ## Testing helpers
 
