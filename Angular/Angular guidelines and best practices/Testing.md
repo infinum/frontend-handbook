@@ -329,7 +329,7 @@ export class UserTestingService implements IUserService {
 ```
 
 ## Testing a interceptor
-If interceptor depends on some services we should mock and inject those services into `TestBed` as we did in example with regular service. 
+If an interceptor depends on some services, we should mock and inject those services via `TestBed`, just like in the example with a regular service.
 Let's say that this interceptor injects `AuthenticationService` which handles login logic and state. 
 Mock implementation of `AuthenticationTestingService` for our purpose could look something like:
 
