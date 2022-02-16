@@ -374,7 +374,6 @@ describe('AuthorizationInterceptor', () => {
   });
 })
 ```
-
 Below are relevant tests regarding the interceptor's functionality.
 
 ```ts
