@@ -329,9 +329,9 @@ export class UserTestingService implements IUserService {
 ```
 
 ## Testing a interceptor
-If interceptor depends on some services we should mock and inject those services into `TestBed` as we did in example with regular service. 
-Let's say that this interceptor injects `AuthenticationService` which handles login logic and state. 
-Mock implementation of `AuthenticationTestingService` for our purpose could look something like:
+If an interceptor depends on some services, we should mock and inject those services via `TestBed`, just like in the example with a regular service.
+As an example, let's say we have an interceptor that injects `AuthenticationService` which handles login logic and state.
+Mock implementation of `AuthenticationTestingService` for our purpose could look something like this:
 
 ```ts
 export class AuthenticationTestingService implements ExtractPublic<AuthenticationService>{
@@ -341,7 +341,7 @@ export class AuthenticationTestingService implements ExtractPublic<Authenticatio
 }
 ```
 
-As with regular services we create test double for `AuthenticationService`, and pass it to `TestBed` configuration, also we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token. 
+As with regular services, we create a test double for `AuthenticationService`, and pass it to the `TestBed` configuration. Additionally, we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token.
 
 ```ts
 describe('AuthorizationInterceptor', () => {
@@ -372,9 +372,10 @@ describe('AuthorizationInterceptor', () => {
   afterEach(() => {
     httpMock.verify();
   });
-  ```
+})
+```
 
-  Below are relevant tests regarding interceptor functionality.
+Below are relevant tests regarding the interceptor's functionality.
 
 ```ts
 it('should attach the interceptor', () => {
