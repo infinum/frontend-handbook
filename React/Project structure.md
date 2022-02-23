@@ -332,10 +332,10 @@ Moving things to`.elements.tsx` should be the last step in the development proce
 Rules:
 
 - should only be used for organizational purposes
-- custom components are tightly coupled with the root component and they should not be reused in the outside scope
+- custom components are tightly coupled with the root component and they should not be used in the outside scope
 - mixture of `chakra factory` and `Function Components` is allowed
 - using hooks inside elements is not recommended
-- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access ral DOM element in the root component)
+- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access real DOM element in the root component)
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
