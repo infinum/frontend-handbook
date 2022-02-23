@@ -289,7 +289,7 @@ In this example `WelcomeCardOverlay` is a pure Functional component because chak
 ```tsx
 import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
 
-export const WelcomeCard = chakra(Grid, {
+export const WelcomeCardLayout = chakra(Grid, {
   baseStyle: {
     gridTemplateRows: '1fr min-content min-content',
     gridTemplateColumns: '1fr min-content',
@@ -297,7 +297,7 @@ export const WelcomeCard = chakra(Grid, {
   },
 });
 
-export const WelcomeCardContent = chakra(GridItem, {
+export const WelcomeCardLayoutContent = chakra(GridItem, {
   baseStyle: {
     position: 'relative',
     gridRowStart: '1',
@@ -307,11 +307,11 @@ export const WelcomeCardContent = chakra(GridItem, {
   },
 });
 
-export interface WelcomeCardOverlayProps extends TMLChakraProps<"div"> {
+export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
   isOpen?: boolean;
 };
 
-export const WelcomeCardOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
+export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
   const height = isOpen ? { base: '300px', md: '500px' } : null;
 
   return (
