@@ -327,7 +327,7 @@ export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div
 });
 ```
 
-Moving things to`.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
 
 Rules:
 
