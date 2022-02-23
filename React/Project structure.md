@@ -272,7 +272,7 @@ src
 
 ## Elements
 
-If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separated file `ComponentName.elements.ts` where you will store your custom components.
+If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separate file `ComponentName.elements.ts` where you will store your custom components.
 
 Example:
 
