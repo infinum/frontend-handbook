@@ -284,7 +284,7 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow custom `isOpen` prop.
+In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
 
 ```tsx
 import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
