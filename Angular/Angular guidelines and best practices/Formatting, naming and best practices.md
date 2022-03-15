@@ -675,6 +675,66 @@ Template:
 ></my-app-article-details>
 ```
 
+## Avoid concatenation of translation keys
+
+Usual requirement for applications could be that the application needs to be localized. Regardless of the library which is used for the fetching of localized values,
+we should avoid concatenation of keys used for fetching translations. One of the issues is keeping the file with translations clean, it could prove very tiresome and hard even, to keep that file in sync with translations that are used throughout the application when you have to search for partial strings instead of searching for the whole string. One of the most tempting cases for concatenation is when you iterate over some enum and match those values with the ones received from the backend service. 
+
+```ts
+enum ApprovalStatus{
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  NotApplicable = 'N/A',
+}
+```
+
+```html
+<mat-radio-button *ngFor="let approvalStatus of approvalStatusOptions">
+  {{'enums.approvalStatus.' + 'approvalStatus' | translate }}
+</mat-radio-button>
+```
+In the above example you also have to make sure that you create "approvalStatusOptions" structure which will be iterable to be able to be used in "ngFor" directive.
+In the cases where enum keys don't match their values there is also a question of how will you store translation keys in a way that will make the most sense. Should you use enum keys in the translations file, or should you use enum values corresponding to that key.
+
+Another case that emphasizes the issue with this approach is when you need to add some new keys, you have to verify that you've added them, in potentially multiple places and that everything will click together as intended.
+
+Approach i.e. pattern which proved to work for us is "Translatable enum" pattern which relies on using typescript Record utility type and for which we've implemented EnumPropertyPipe which is available in [ngx-nuts-and-bolts](https://infinum.github.io/ngx-nuts-and-bolts/docs/pipes/enum-property) library.
+
+```ts
+enum ITranslatableEnum{
+  translationKey: string;
+}
+
+export enum ApprovalStatus {
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  NotApplicable = 'N/A',
+}
+
+export const approvalStatusData: Record<ApprovalStatus, ITranslatableEnum> = {
+	[ApprovalStatus.Approved]: {
+		translationKey: 'enums.approvalStatus.approved',
+	},
+	[ApprovalStatus.Rejected]: {
+		translationKey: 'enums.approvalStatus.rejected',
+	},
+  [ApprovalStatus.NotApplicable]: {
+		translationKey: 'enums.approvalStatus.notApplicable',
+	},
+};
+
+@Component({
+  selector: 'demo-component',
+  template: `<mat-radio-button *ngFor="let approvalStatus of approvalStatusOptions">{{ approvalStatus | enumProperty: approvalStatusData | translate}}`
+})
+class DemoComponent{
+
+  public readonly ApprovalStatus = ApprovalStatus;
+  public readonly approvalStatusData = approvalStatusData;
+}
+```
+By using this approach, your translation keys are all in one place which eases refactoring and keeping the translation file clean and up to date. 
+
 ## Avoid unnecessary creation of multiple observables and avoid subscriptions
 
 Taking the learnings from all the previous examples and the fact that we can use services during initial assignment, we can greatly simplify initialization of observables and their usage in templates.
