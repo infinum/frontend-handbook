@@ -603,6 +603,38 @@ You can also write your own operators. If you do so, it is strongly recommended 
 
 Covering all the various operators is out of the scope of this handbook. Please refer to some of the learning resources mentioned earlier [[1](/books/frontend/angular/getting-started-with-angular/get-to-know-rxjs)] [[2](/books/frontend/angular/angular-guidelines-and-best-practices/core-libraries-configuration-and-tools#a-hrefhttpsgithubcomreactivexrxjs-target_blankrxjsa)].
 
+## tap() vs subscribe()
+When to use tap() operator in Rx flow? Per official documentation [tap()](https://rxjs.dev/api/operators/tap) operator should be used when performing "side-effects". It means the operator should be used when user wants to "affect outside state with a notification without altering the notification". Altough side-effects can be performed inside of the map operator we should strive to write pure functions wherever possible, this is one of the cases where tap comes in handy - it can be used to make other functions pure.
+Since tap() operator can receive same callbacks as subscribe nothing stops us from transfering logic from subscribe into the corresponding (next, complete, error) callbacks, well nothing besides semantics. When writing Rx flows it is good idea to keep in mind that we wan't to convey as much information as we can just through our code, which means - use tap() for performing side effects, and debugging/logging mostly, whereas subscribe represents end of the flow which means that we should have received data which can then be used in application, this makes subscribe correct place to do something with the data you've received through piped operators. This is also why empty subcribe is basically a code smell, of course there are exceptions when you cannot avoid using empty subcsribe() e.g. triggering POST api calls via http client. 
+
+```ts
+// Bad
+public readonly someData: Array<IData>;
+
+source$.pipe(
+  tap((value) => {
+    this.someData = value;
+  }),
+).subscribe();
+```
+In the example above, we are saving data before we've reached the end of the flow. If some mapping operator is added, tap operator has to be moved below that mapping operator this leads to less maintainable code.
+
+```ts
+// Better
+public readonly someData: Array<IData>;
+public loading = false;
+
+source$.pipe(
+  tap(() => {
+    this.loading = true;
+  })
+).subscribe(() => {
+  this.someData = value;
+})
+```
+
+Above example illustrated semantically more correct way of using tap operator. When we start some doing some async work side-effect could be that loading state has to be shown to user - ideal use case for tap.
+
 ## Observables and async/await
 
 You can use async/await to await for the completion of observables. Keep in mind that this probably does not make too much sense for observables that emit more than one value, but it might be OK for things like HTTP requests.
