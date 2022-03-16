@@ -626,7 +626,14 @@ public loading = false;
 
 source$.pipe(
   tap(() => {
+    console.log('Started mapping')
     this.loading = true;
+  }),
+  map((value) => {
+    console.log('Mapping...');
+  }),
+  finalize(() => {
+    this.loading = false;
   })
 ).subscribe(() => {
   this.someData = value;
