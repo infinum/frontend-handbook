@@ -615,7 +615,7 @@ source$.pipe(
   }),
 ).subscribe();
 ```
-In the example above, we are navigating to new location before we've reached the end of the flow which doesn't seem to have too much sense. 
+In the example above, we are navigating to a new location before we've reached the end of the flow which doesn't make too much sense. We could possibly add another operator in the flow which would make this approach even more wrong, especially if you forget to reorder operators so that the `tap` comes after all of the newly added mapping operators. 
 
 ```ts
 // Better
@@ -623,7 +623,7 @@ source$.subscribe(() => {
   this.router.navigate(['some-route']);
 })
 ```
-In the example above, it is semantically more correct to navigate to new location at the end of the Rx flow which is in subscribe's `next` callback.
+In the example above, it is semantically more correct to navigate to new location at the end of the Rx flow which is in the subscribe's `next` callback.
 
 ## Observables and async/await
 
