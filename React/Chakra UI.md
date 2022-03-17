@@ -43,7 +43,6 @@ For including `<CSSReset />` just add `resetCSS` prop to `<ChakraProvider>`
 ### Style props
 
 Style props are a way to alter the style of a component by simply passing props to it. It helps to save time by providing helpful shorthand ways to style components.
-Alternative to that is using chakra factory.
 
 Style props should be used for one-off styles (up to max 3 props):
 

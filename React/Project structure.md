@@ -272,7 +272,7 @@ src
 
 ## Elements
 
-If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
+If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separate file `ComponentName.elements.ts` where you will store your custom components.
 
 Example:
 
@@ -284,7 +284,60 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-> Moving things to`.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
+
+```tsx
+import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
+
+export const WelcomeCardLayout = chakra(Grid, {
+  baseStyle: {
+    gridTemplateRows: '1fr min-content min-content',
+    gridTemplateColumns: '1fr min-content',
+    rowGap: '16px',
+  },
+});
+
+export const WelcomeCardLayoutContent = chakra(GridItem, {
+  baseStyle: {
+    position: 'relative',
+    gridRowStart: '1',
+    gridRowEnd: 'auto',
+    gridColumnStart: '1',
+    gridColumnEnd: 'auto',
+  },
+});
+
+export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
+  isOpen?: boolean;
+};
+
+export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
+  const height = isOpen ? { base: '300px', md: '500px' } : null;
+
+  return (
+    <GridItem 
+      ref={ref} 
+      h={height} 
+      position="relative" 
+      column="1 / 3" 
+      row="1 / 2" 
+      {...rest} 
+    />
+  );
+});
+```
+
+Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+
+Rules:
+
+- should only be used for organizational purposes
+- custom components are tightly coupled with the root component and they should not be used in the outside scope
+- mixture of `chakra factory` and `Function Components` is allowed
+- using hooks inside elements is not recommended
+- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access real DOM element in the root component)
+
+> For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
 ## Different component layouts
 
