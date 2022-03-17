@@ -604,43 +604,26 @@ You can also write your own operators. If you do so, it is strongly recommended 
 Covering all the various operators is out of the scope of this handbook. Please refer to some of the learning resources mentioned earlier [[1](/books/frontend/angular/getting-started-with-angular/get-to-know-rxjs)] [[2](/books/frontend/angular/angular-guidelines-and-best-practices/core-libraries-configuration-and-tools#a-hrefhttpsgithubcomreactivexrxjs-target_blankrxjsa)].
 
 ## tap() vs subscribe()
-When to use tap() operator in Rx flow? Per official documentation [tap()](https://rxjs.dev/api/operators/tap) operator should be used when performing "side-effects". It means the operator should be used when user wants to "affect outside state with a notification without altering the notification". Altough side-effects can be performed inside of the map operator we should strive to write pure functions wherever possible, this is one of the cases where tap comes in handy - it can be used to make other functions pure.
-Since tap() operator can receive same callbacks as subscribe nothing stops us from transfering logic from subscribe into the corresponding (next, complete, error) callbacks, well nothing besides semantics. When writing Rx flows it is good idea to keep in mind that we wan't to convey as much information as we can just through our code, which means - use tap() for performing side effects, and debugging/logging mostly, whereas subscribe represents end of the flow which means that we should have received data which can then be used in application, this makes subscribe correct place to do something with the data you've received through piped operators. This is also why empty subcribe is basically a code smell, of course there are exceptions when you cannot avoid using empty subcsribe() e.g. triggering POST api calls via http client. 
+When to use the `tap` operator in Rx flow? As per the [official documentation for the `tap` operator](https://rxjs.dev/api/operators/tap), it should be used when performing "side-effects". This means that the operator should be used when the user wants to "affect outside state with a notification without altering the notification". Although side-effects can be performed inside of the map operator, we should strive to write pure functions wherever possible and have a clear separation of responsibilities. This is one of the cases where the `tap` operator comes in handy.
+Since the `tap` operator's callback is the same as the subscriber's `next` callback, nothing stops us from writing the same logic in either of those places. Well, nothing besides semantics. When writing Rx flows, we should convey as much information as we can just through our code, which means - use `tap` for performing side-effects and debugging/logging mostly, whereas subscribe represents the end of the flow which means that we have probably received some data which can then be used in application. This makes subscribe callback the correct place to do something with the data you've received through piped operators. This is also why an empty subscribe call is basically a code smell. Of course, there are exceptions when you cannot avoid using an empty subscribe(), but you should be mindful of it. 
 
 ```ts
 // Bad
-public readonly someData: Array<IData>;
-
 source$.pipe(
-  tap((value) => {
-    this.someData = value;
+  tap(() => {
+    this.router.navigate(['some-route']);
   }),
 ).subscribe();
 ```
-In the example above, we are saving data before we've reached the end of the flow. If some mapping operator is added, tap operator has to be moved below that mapping operator this leads to less maintainable code.
+In the example above, we are navigating to new location before we've reached the end of the flow which doesn't seem to have too much sense. 
 
 ```ts
 // Better
-public readonly someData: Array<IData>;
-public loading = false;
-
-source$.pipe(
-  tap(() => {
-    console.log('Started mapping')
-    this.loading = true;
-  }),
-  map((value) => {
-    console.log('Mapping...');
-  }),
-  finalize(() => {
-    this.loading = false;
-  })
-).subscribe(() => {
-  this.someData = value;
+source$.subscribe(() => {
+  this.router.navigate(['some-route']);
 })
 ```
-
-Above example illustrated semantically more correct way of using tap operator. When we start some doing some async work side-effect could be that loading state has to be shown to user - ideal use case for tap.
+In the example above, it is semantically more correct to navigate to new location at the end of the Rx flow which is in subscribe's `next` callback.
 
 ## Observables and async/await
 
