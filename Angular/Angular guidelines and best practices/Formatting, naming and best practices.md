@@ -33,15 +33,15 @@ In the following example, property binding is unnecessary because we are assigni
 ```html
 <!-- bad -->
 <my-app-component (somethingHappened)="somethingHappened($event)">
-  <!-- bad -->
-  <my-app-component (onSomethingHappened)="somethingHappened($event)">
-    <!-- bad -->
-    <my-app-component (onSomethingHappened)="onSomethingHappened($event)">
-      <!-- good -->
-      <my-app-component
-        (somethingHappened)="onSomethingHappened($event)"
-      ></my-app-component></my-app-component></my-app-component
-></my-app-component>
+
+<!-- bad -->
+<my-app-component (onSomethingHappened)="somethingHappened($event)">
+
+<!-- bad -->
+<my-app-component (onSomethingHappened)="onSomethingHappened($event)">
+
+<!-- good -->
+<my-app-component (somethingHappened)="onSomethingHappened($event)">
 ```
 
 ## Name click handlers in a short and descriptive manner
@@ -166,9 +166,7 @@ If you have to set just one class depending on some condition, `[class.class-nam
 If you need to set many classes, `[ngClass]="{ ... }"` is the way to go. Example:
 
 ```html
-<div
-  [ngClass]="{ 'active': isActive, 'main-item': isMainItem, 'accent': isAccent }"
-></div>
+<div [ngClass]="{ 'active': isActive, 'main-item': isMainItem, 'accent': isAccent }"></div>
 ```
 
 ## Prefix interfaces
@@ -177,14 +175,14 @@ Interfaces should be prefixed with `I`. This might be a polarizing decision, but
 
 ```typescript
 // bad
-interface UserService {}
+interface UserService { }
 
 // good
-interface IUserService {}
+interface IUserService { }
 
 // if we prefix we can do this:
-class UserService implements IUserService {}
-class UserServiceStub implements IUserService {}
+class UserService implements IUserService { }
+class UserServiceStub implements IUserService { }
 ```
 
 ## Prefer interface over type
@@ -577,7 +575,7 @@ You can subscribe to all classes derived from `Observable` in order to receive v
 
 There is a naming convention for `Observable` variables—postfixing with a dollar sign:
 
-```typescript
+``` typescript
 // bad
 const observable: Observable;
 
@@ -613,12 +611,12 @@ To convert an observable to a promise, just call `obs$.toPromise()` and then you
 
 One important thing to note is that you are waiting for the **completion**, not **emission** of values. Knowing that, what do you expect the result to be in the following example?
 
-```typescript
+``` typescript
 const source$: Subject<string> = new Subject();
 const sourcePromise: Promise<string> = source$.toPromise();
 
-source$.next("foo");
-source$.next("bar");
+source$.next('foo');
+source$.next('bar');
 source$.complete();
 
 const result = await sourcePromise;
@@ -683,10 +681,10 @@ A common requirement for applications is that the application must be localized.
 we should avoid concatenation of translation keys. Concatenating translation keys makes managing of translation keys harder. It could prove very tiresome to keep the translations file in sync with translations that are used throughout the application, if you have to search for partial strings instead of searching for the whole string. One of the most tempting cases for using concatenation is when you iterate over some enum and match those values with the ones received from the backend service.
 
 ```ts
-enum ApprovalStatus {
-  Approved = "Approved",
-  Rejected = "Rejected",
-  NotApplicable = "N/A",
+enum ApprovalStatus{
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  NotApplicable = 'N/A',
 }
 ```
 
@@ -695,7 +693,6 @@ enum ApprovalStatus {
   {{ 'enums.approvalStatus.' + approvalStatus | translate }}
 </mat-radio-button>
 ```
-
 In the example above, you also have to make sure that you create `approvalStatusOptions` structure which will be iterable and used in the `ngFor` directive.
 In cases where enum keys don't match their values, there is also the question of storing translation keys in a way that will make the most sense. Should you use enum keys in the translations file, or should you use enum values corresponding to that key?
 
@@ -704,7 +701,7 @@ Another case that emphasizes the issue with this approach is when you need to ad
 A pattern that proved to work well for us is the "translatable enum" pattern which relies on using TypeScript's `Record` utility type and for which we've implemented `EnumPropertyPipe` that is available in the [ngx-nuts-and-bolts](https://infinum.github.io/ngx-nuts-and-bolts/docs/pipes/enum-property) library.
 
 ```ts
-enum ITranslatableEnum{
+enum ITranslatableEnum {
   translationKey: string;
 }
 
@@ -728,7 +725,7 @@ export const approvalStatusData: Record<ApprovalStatus, ITranslatableEnum> = {
 
 @Component({
   selector: 'demo-component',
-  template:`
+  template: `
   <mat-radio-button *ngFor="let approvalStatus of approvalStatusOptions">
     {{ approvalStatus | enumProperty: approvalStatusData | translate}}
   </mat-radio-button>
@@ -740,8 +737,7 @@ class DemoComponent{
   public readonly approvalStatusData = approvalStatusData;
 }
 ```
-
-By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record.
+By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record. 
 You can further expand on this pattern by adding additional "metadata" about the enum to the record. For example, a `sortingIndex` property that is taken into account when the enum values are rendered as dropdown options.
 
 ## Avoid unnecessary creation of multiple observables and avoid subscriptions
@@ -884,7 +880,7 @@ interface IUser {
 
 ```typescript
 // bad
-const user$: Observable<IUser> = http.get("/account/me");
+const user$: Observable<IUser> = http.get('/account/me');
 
 user$.subscribe((response: IUser) => {
   console.log(response.user_name); // TheDude
@@ -893,9 +889,9 @@ user$.subscribe((response: IUser) => {
 
 ```typescript
 // good
-const userName$: Observable<string> = http
-  .get("/account/me")
-  .pipe(map((response: IUser) => response.user_name));
+const userName$: Observable<string> = http.get('/account/me').pipe(
+  map((response: IUser) => response.user_name)
+);
 
 userName$.subscribe(console.log); // TheDude
 ```
@@ -978,7 +974,7 @@ export class MyComponent implements OnChanges {
 ```
 
 ```typescript
-@Pipe({ name: "factorial" })
+@Pipe({ name: 'factorial' })
 export class FactorialPipe implements PipeTransform {
   public transform(value: number): number {
     return calculateFactorial(value);
@@ -994,9 +990,7 @@ You might ask a question "But what if I need to use the factorial value inside m
 <ng-container *ngIf="someNumber | factorial as someNumberFactorial">
   {{ someNumber }}! = {{ someNumberFactorial }}
 
-  <button (click)="saveFactorialValue(someNumberFactorial)">
-    Save the factorial value
-  </button>
+  <button (click)="saveFactorialValue(someNumberFactorial)">Save the factorial value</button>
 </ng-container>
 ```
 
@@ -1032,18 +1026,15 @@ class UserAuthorizedGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     const authStatus$ = new Subject();
 
-    this.authService.getUserData().subscribe(
-      (user: User) => {
-        authStatus$.next(true);
-        authStatus$.complete();
-      },
-      (error) => {
-        console.error("User not authorized!", error);
+    this.authService.getUserData().subscribe((user: User) => {
+      authStatus$.next(true);
+      authStatus$.complete();
+    }, (error) => {
+      console.error('User not authorized!', error);
 
-        authStatus$.next(false);
-        authStatus$.complete();
-      }
-    );
+      authStatus$.next(false);
+      authStatus$.complete();
+    })
 
     return authStatus$;
   }
@@ -1056,12 +1047,12 @@ class UserAuthorizedGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     return this.authService.getUserData().pipe(
       catchError((error) => {
-        console.error("User not authorized!", error);
+        console.error('User not authorized!', error);
 
         return observableOf(false);
       }),
-      map(Boolean) // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
-    );
+      map(Boolean), // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
+    )
   }
 }
 ```
@@ -1103,8 +1094,7 @@ Did you ever find yourself in the `ng-container` nesting hell? It might have loo
 <ng-container *ngIf="frameworkName1$ | async as frameworkName1">
   <ng-container *ngIf="frameworkName2$ | async as frameworkName2">
     <ng-container *ngIf="frameworkName3$ | async as frameworkName3">
-      {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not
-      even talk about {{ frameworkName3 }}.
+      {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not even talk about {{ frameworkName3 }}.
     </ng-container>
   </ng-container>
 </ng-container>
@@ -1141,9 +1131,7 @@ export class MyComponent {
 
 ```html
 <ng-container *ngIf="frameworkNames$ | async as frameworkNames">
-  {{ frameworkNames.frameworkName1 }} is way better than {{
-  frameworkNames.frameworkName2 }}. I will not even talk about {{
-  frameworkNames.frameworkName3 }}.
+  {{ frameworkNames.frameworkName1 }} is way better than {{ frameworkNames.frameworkName2 }}. I will not even talk about {{ frameworkNames.frameworkName3 }}.
 </ng-container>
 ```
 
@@ -1164,7 +1152,8 @@ One example of a black box component would be a tree component to which you pass
 Example how such a component would be used:
 
 ```html
-<my-app-tree-view [rootNode]="navigationRoot"> </my-app-tree-view>
+<my-app-tree-view [rootNode]="navigationRoot">
+</my-app-tree-view>
 ```
 
 ```typescript
@@ -1196,9 +1185,13 @@ Example of a glass box approach:
 <my-app-tree-node>
   <a routerLink="/">Homepage</a>
 
-  <my-app-tree-node> ... child 1 ... </my-app-tree-node>
+  <my-app-tree-node>
+    ... child 1 ...
+  </my-app-tree-node>
 
-  <my-app-tree-node> ... child 2 ... </my-app-tree-node>
+  <my-app-tree-node>
+    ... child 2 ...
+  </my-app-tree-node>
 </my-app-tree-node>
 ```
 
