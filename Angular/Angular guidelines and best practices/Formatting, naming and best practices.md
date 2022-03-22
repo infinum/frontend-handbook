@@ -623,7 +623,7 @@ source$.subscribe(() => {
   this.router.navigate(['some-route']);
 })
 ```
-In the example above, it is semantically more correct to navigate to new location at the end of the Rx flow which is in the subscribe's `next` callback.
+The example above is more correct. Navigation and other, similar actions should be executed at the end of the Rx flow, which is in the subscribe's `next` callback.
 
 ## Observables and async/await
 
