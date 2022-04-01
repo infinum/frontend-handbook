@@ -3,8 +3,9 @@
 
 When adding UI components, you should be able to group them in two root domains:
 
-1. `pages` - page scope based components
+1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
+3. `features` - root folder for components based on a specific feature (could be scoped by page or island)
    
 Folder naming rules:
 
@@ -14,7 +15,12 @@ Folder naming rules:
 ```
 src
 ├── components
-│   ├── pages
+│   ├── core
+│   │   ├── Section
+│   │   │   └── Section.tsx
+│   │   └── Card
+│   │       └── Card.tsx
+│   ├── features
 │   │   ├── home
 │   │   │   ├── HomeHeaderSection
 │   │   │   │   └── HomeHeaderSection.tsx
@@ -26,11 +32,6 @@ src
 │   │       └── TodoCreateFormSection
 │   │           └── TodoCreateFormSection.tsx
 │   └── shared
-│       ├── core
-│       │   ├── Section
-│       │   │   └── Section.tsx
-│       │   └── Card
-│       │       └── Card.tsx
 │       ├── fields
 │       │   └── TextField
 │       │       └── TextField.tsx
@@ -53,7 +54,7 @@ src
             └── index.tsx
 ```
 
-#### Shared *core* components
+### *Core* domain
 
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
 You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
@@ -109,12 +110,19 @@ Here are some examples of core components:
   </tr>
 </table>
 
-#### Shared *Feature* based domains
+### *Shared* domain
 
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
-They are shared components that encapsulate some specific feature of an app.  
+They could be shared between feature components and encapsulates some specific logic of an feature.  
 
-Component name is always composed out of two parts `Context` + `Domain`, for example `ArticlesPanel` where `Articles` is context and `Panel` is domain.
+We can split them into three domains:
+1. `UI` - higher order user interface components
+2. `Entity` - UI representation of a data models
+3. `Utility` - headless utility components
+
+#### Shared *UI* domain
+
+Component name is always composed out of two parts `Context` + `Domain`, for example `InputField` where `Input` is context and `Field` is domain.
 
 Here are some examples of feature domain names:
 <table>
@@ -170,7 +178,7 @@ Here are some examples of feature domain names:
   </tr>
 </table>
 
-#### Shared *Entity* based domain
+#### Shared *Entity* domain
 
 We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
 
@@ -224,9 +232,47 @@ Utility components usually does not have any visual representation on the screen
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
 Note: There _should_ be only one level of `components` folder inside the component folder.
+
+Example:
+
+In this example we have the `MainTable` component that has a unique header component that should be placed inside the `/components` folder because it has some styles, translations and an icon.
+
+```jsx
+export const TableHeader: FC<FlexProps> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Flex align="center" p={20} {...props}>
+      <Heading size="md" colorScheme="secondary" as="h3">
+        {t("table.title")}
+      </Heading>
+      <Button
+        leftIcon={<ArrowForwardIcon />}
+        colorScheme="teal"
+        variant="solid"
+      >
+        {t("table.viewAll")}
+      </Button>
+    </Flex>
+  );
+};
+```
+
+The folder structure should look something like this:
+
+```
+src
+└── components
+    └── features
+        └── some-feature
+            └── MainTable
+                ├── components
+                │   └── TableHeader.tsx
+                └── MainTable.tsx
+```
+
 ## Elements
 
-If you have a lot of style declarations inside you component file (enough to make the file difficult to read), you should create a separated file `elements.ts` where you will store you chakra factories.
+If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separate file `ComponentName.elements.ts` where you will store your custom components.
 
 Example:
 
@@ -238,7 +284,60 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-> Moving things to`.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
+
+```tsx
+import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
+
+export const WelcomeCardLayout = chakra(Grid, {
+  baseStyle: {
+    gridTemplateRows: '1fr min-content min-content',
+    gridTemplateColumns: '1fr min-content',
+    rowGap: '16px',
+  },
+});
+
+export const WelcomeCardLayoutContent = chakra(GridItem, {
+  baseStyle: {
+    position: 'relative',
+    gridRowStart: '1',
+    gridRowEnd: 'auto',
+    gridColumnStart: '1',
+    gridColumnEnd: 'auto',
+  },
+});
+
+export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
+  isOpen?: boolean;
+};
+
+export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
+  const height = isOpen ? { base: '300px', md: '500px' } : null;
+
+  return (
+    <GridItem 
+      ref={ref} 
+      h={height} 
+      position="relative" 
+      column="1 / 3" 
+      row="1 / 2" 
+      {...rest} 
+    />
+  );
+});
+```
+
+Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+
+Rules:
+
+- should only be used for organizational purposes
+- custom components are tightly coupled with the root component and they should not be used in the outside scope
+- mixture of `chakra factory` and `Function Components` is allowed
+- using hooks inside elements is not recommended
+- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access real DOM element in the root component)
+
+> For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
 ## Different component layouts
 
@@ -271,7 +370,7 @@ For this case, inside `index.tsx` we would have something like this:
   }
 ```
 
-This is the case **only** for layouts that would add too much complexity when using standard css queries.
+> This is the case **only** for layouts that would add too much complexity when using standard css media queries.
 
 
 ### Extracting utility functions and hooks
@@ -428,8 +527,8 @@ export default function Admin() {
 
 ### Utility components
 
-Utility components are basically components that don't have any impact on the UI itself.
-For example, Meta component for populating `<Head>`.
+Utility components are headless, which means that they don't have any impact on the UI itself.
+For example, Meta component for injecting meta tags inside document `<head>`.
 
 Example:
 

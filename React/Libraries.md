@@ -85,6 +85,7 @@
 - [@artsy/fresnel](https://github.com/artsy/fresnel) - An SSR compatible approach to CSS media query based responsive layouts for React
 - [slate](https://github.com/ianstormtaylor/slate) - A completely customizable framework for building rich text editors. (Currently in beta.)
 - [libphonenumber-js](https://gitlab.com/catamphetamine/libphonenumber-js#libphonenumber-js) - Validator/formatter for phone numbers (has seaparate validators for different countries)
+- [react-dropzone](https://react-dropzone.js.org/) - Simple React hook to create a HTML5-compliant drag'n'drop zone for files.
 
 ### Localization
 - [i18next](https://github.com/i18next/i18next) - i18next: learn once - translate everywhere
