@@ -831,3 +831,18 @@ This allows us to test a more complex error handling, which usually includes som
 ## Testing helpers
 
 If you have helper functions, testing them is basically the same as in any other application in any framework (even Vanilla JS). You do not need TestBed. You just need good old Jasmine, and you test your helpers as pure functions. If your helpers are not pure functions, you should really make them pure.
+
+## Coverage
+
+Make sure to configure either Karma (Angular's default test runner), or Jest to give more sensible coverage reports.
+
+By default, if some file is not imported anywhere in the testing scope (no .spec.ts file that has unit test for that specific file or it is not somehow transitively included in another .spec.ts file), it will not be taken into account when calculating test coverage.
+
+This means that there could be pieces of code that the coverage reporter is completely unaware of and can result in reported coverage that is not realistic at all.
+
+You can view examples of both naive and more sensible configurations at:
+
+- Karma with Jasmine - [js-karma-jasmine-coverage-examples](https://github.com/infinum/js-karma-jasmine-coverage-examples), using [karma-sabarivka-reporter](https://github.com/kopach/karma-sabarivka-reporter) and specific configuration in [karma.conf.js](https://github.com/infinum/js-karma-jasmine-coverage-examples/blob/master/karma.conf.js)
+- Jest - [js-jest-coverage-examples](https://github.com/infinum/js-jest-coverage-examples), using specific configuration in [jest.config.js](https://github.com/infinum/js-jest-coverage-examples/blob/master/jest.config.js)
+
+On the other hand, you will likely want to ignore any files that are either tests themselves, somehow related to tests such as mocks, test related functions or are not relevant for the application itself such as Storybook files.
