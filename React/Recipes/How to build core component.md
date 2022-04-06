@@ -7,8 +7,8 @@ To solve this component we need to shift our mindset from vertical (page based) 
 
 ![Vertical vs Horizontal Flow](/img/react-recipes/vertical_vs_horizontal.svg)
 
-To do this we need to focus more on Design System and reusability of components.
-If your design doesn't have any Design System you should as designer to make on.
+To do this we need to focus more on Design System and reusability of our components.
+If your design doesn't have any Design System you should ask designer to make on. Here is the example of [Chakra UI Design System](https://www.figma.com/community/file/971408767069651759) made in Figma.
 
 ### Card design
 
@@ -19,7 +19,7 @@ If your design doesn't have any Design System you should as designer to make on.
 First step is to bootstrap the layout with inline props.
 
 ```tsx
-// ./components/shared/user/UserCard/UserCard.tsx
+// ./src/components/shared/user/UserCard/UserCard.tsx
 
 import * as React from "react";
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
@@ -54,7 +54,7 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
 ```
 
 ```tsx
-// ./components/shared/user/JobCard/JobCard.tsx
+// ./src/components/shared/user/JobCard/JobCard.tsx
 
 import * as React from "react";
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
@@ -95,7 +95,7 @@ When that happens we need to find a way to fix this problem.
 Extending utility components into styled components and extracting them to `ComponentName.elements.tsx` file.
 
 ```tsx
-// ./components/shared/user/JobCard/UserCardV2.elements.tsx
+// ./src/components/shared/user/UserCard/UserCard.elements.tsx
 
 import { AspectRatio, chakra, Heading, Text } from "@chakra-ui/react";
 
@@ -145,7 +145,7 @@ export const CardDescription = chakra(Text, {
 ```
 
 ```tsx
-// ./components/shared/user/JobCard/UserCardV2.tsx
+// ./src/components/shared/user/UserCard/UserCard.tsx
 
 import * as React from "react";
 import { FC } from "react";
@@ -154,23 +154,23 @@ import { IUser } from "../../../../interfaces/IUser";
 
 import {
   Card,
-  CardDescription,
+  CardText,
   CardHeading,
   CardImage,
   CardImageAspectRatio
-} from "./uderCardV2.elements";
+} from "./UserCard.elements";
 
 export interface IUserCardProps {
   user: IUser;
 }
 
-export const UserCardV1: FC<IUserCardProps> = ({ user }) => (
+export const UserCard: FC<IUserCardProps> = ({ user }) => (
   <Card>
     <CardImageAspectRatio ratio={1 / 1}>
       <CardImage src={user.picture} />
     </CardImageAspectRatio>
     <CardHeading size="sm">{`${user.name} ${user.surname}`}</CardHeading>
-    <CardDescription noOfLines={3}>{user.bio}</CardDescription>
+    <CardText noOfLines={3}>{user.bio}</CardText>
   </Card>
 );
 ```
@@ -178,7 +178,7 @@ export const UserCardV1: FC<IUserCardProps> = ({ user }) => (
 > The same thing should be done with the JobCard component.
 
 <iframe 
-  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-v1-b2xv0?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/recipe-how-to-build-core-components-v1-l3ytyy?fontsize=14&hidenavigation=1&theme=dark"
   class="codesandbox"
   style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
   title="recipa-how-to-build-core-components-v1"
@@ -191,37 +191,38 @@ export const UserCardV1: FC<IUserCardProps> = ({ user }) => (
 Extracting styled props into `SystemStyleObject` objects and extracting them to `ComponentName.styles.tsx` file.
 
 ```tsx
-// ./components/shared/user/JobCard/UserCardV3.tsx
+// ./src/components/shared/user/UserCard/UserCard.tsx
 
-import { SystemStyleObject } from "@chakra-ui/react";
+import { SystemProps } from "@chakra-ui/react";
 
-export const cardStyles: SystemStyleObject = {
+export const cardStyles: SystemProps = {
   borderRadius: "md",
   border: "1px",
   borderColor: "gray.200",
   boxShadow: "xl"
 };
 
-export const cardAspectRationStyles: SystemStyleObject = {
+export const cardImageContainerStyles: SystemProps = {
   my: 2,
   mb: 4,
   mx: { base: 4, md: 10 }
 };
 
-export const cardImage = {
+export const cardImageStyles: SystemProps = {
   borderRadius: "full",
   w: "100%",
   h: "100%",
-  bg: "gray.200"
+  bg: "gray.200",
+  objectFit: "cover"
 };
 
-export const cardHeading = {
+export const cardHeadingStyles: SystemProps = {
   px: "5",
   mb: "4",
   textAlign: "center"
 };
 
-export const cardDescription = {
+export const cardTextStyles: SystemProps = {
   fontSize: "xs",
   px: "5",
   mb: "5",
@@ -230,41 +231,42 @@ export const cardDescription = {
 ```
 
 ```tsx
-// ./components/shared/user/JobCard/UserCardV3.tsx
+// ./components/shared/user/UserCard/UserCard.tsx
 
 import * as React from "react";
 import { AspectRatio, Box, Heading, Image, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { IUser } from "../../../../interfaces/IUser";
 import {
-  cardAspectRationStyles,
-  cardImage,
+  cardImageContainerStyles,
+  cardImageStyles,
   cardStyles,
-  cardHeading,
-  cardDescription
-} from "./UserCardV3.styles";
+  cardHeadingStyles,
+  cardTextStyles
+} from "./UserCard.styles";
 
 export interface IUserCardProps {
   user: IUser;
 }
 
-export const UserCardV2: FC<IUserCardProps> = ({ user }) => (
-  <Box sx={cardStyles}>
-    <AspectRatio ratio={1 / 1} sx={cardAspectRationStyles}>
-      <Image src={user.picture} fit="cover" sx={cardImage} />
+export const UserCard: FC<IUserCardProps> = ({ user }) => (
+  <Box {...cardStyles}>
+    <AspectRatio ratio={1 / 1} {...cardImageContainerStyles}>
+      <Image src={user.picture} {...cardImageStyles} />
     </AspectRatio>
-    <Heading as="h1" size="sm" sx={cardHeading}>
+    <Heading as="h1" size="sm" {...cardHeadingStyles}>
       {`${user.name} ${user.surname}`}
     </Heading>
-    <Text noOfLines={3} sx={cardDescription}>
+    <Text noOfLines={3} {...cardTextStyles}>
       {user.bio}
     </Text>
   </Box>
 );
+
 ```
 
 <iframe 
-  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-v2-pyokb?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/recipe-how-to-build-core-components-v2-pyokb?fontsize=14&hidenavigation=1&theme=dark"
   style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
   title="recipa-how-to-build-core-components-v2"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -273,13 +275,189 @@ export const UserCardV2: FC<IUserCardProps> = ({ user }) => (
 
 ### Solution #3
 
-Creating `core` card component with theme driven and reusable compound components.
+Creating a `core` card component by using a theme and make it reusable [compound components](https://kentcdodds.com/blog/compound-components-with-react-hooks).
+
+#### Create a theme
+
+- anatomy parts docs
+- useMultiStyleConfig https://chakra-ui.com/docs/styled-system/theming/component-style#usemultistyleconfig-api
+- https://chakra-ui.com/docs/styled-system/theming/component-style#styling-multipart-components
 
 ```tsx
+// ./src/styles/components/card.ts
+
+import {
+  MultiStyleConfig,
+  PartsStyleObject,
+  PartsStyleFunction,
+  anatomy,
+  Anatomy
+} from "@chakra-ui/theme-tools";
+
+const parts = anatomy("card").parts("card", "image", "title", "body");
+type CardAnatomy = Anatomy<typeof parts.__type>;
+
+const baseStyle: PartsStyleObject<CardAnatomy> = {
+  card: {
+    borderRadius: "md",
+    border: "1px",
+    borderColor: "gray.200",
+    boxShadow: "xl"
+  },
+  body: {
+    fontSize: "xs",
+    px: "5",
+    mb: "5"
+  }
+};
+
+const variantSolid: PartsStyleFunction<CardAnatomy> = (props) => {
+  return {
+    image: {
+      borderTopRadius: "md",
+      w: "100%",
+      h: "200px",
+      objectFit: "cover",
+      mb: "4"
+    },
+    title: {
+      px: "5",
+      mb: "4"
+    }
+  };
+};
+
+const variantRounded: PartsStyleFunction<CardAnatomy> = (props) => {
+  return {
+    image: {
+      borderRadius: "full",
+      w: "100%",
+      h: "100%",
+      objectFit: "cover",
+      bg: "gray.200"
+    },
+    title: {
+      px: "5",
+      mb: "4",
+      textAlign: "center"
+    },
+    body: {
+      textAlign: "center"
+    }
+  };
+};
+
+const variants: MultiStyleConfig<CardAnatomy>["variants"] = {
+  solid: variantSolid,
+  rounded: variantRounded
+};
+
+const defaultProps: MultiStyleConfig<CardAnatomy>["defaultProps"] = {
+  variant: "solid"
+};
+
+export default {
+  parts: parts.keys,
+  baseStyle,
+  defaultProps,
+  variants
+} as MultiStyleConfig<CardAnatomy>;
+```
+
+After a card theme is done we need to add it to the global chakra theme.
+
+```tsx
+import { extendTheme } from "@chakra-ui/react";
+
+import Card from "./components/card";
+
+export const theme = extendTheme({
+  components: {
+    Card
+  }
+});
+```
+
+#### Card component
+
+```tsx
+// ./src/components/core/Card/Card.tsx
+
+import {
+  chakra,
+  forwardRef,
+  Heading,
+  HeadingProps,
+  HTMLChakraProps,
+  Image,
+  ImageProps,
+  StylesProvider,
+  Text,
+  TextProps,
+  ThemingProps,
+  useMultiStyleConfig,
+  useStyles
+} from "@chakra-ui/react";
+import { __DEV__ } from "@chakra-ui/utils";
+
+export interface CardOptions {}
+
+export interface CardProps
+  extends HTMLChakraProps<"div">,
+    CardOptions,
+    ThemingProps {}
+
+export const Card = forwardRef<CardProps, "div">((props, ref) => {
+  const { children } = props;
+
+  const styles = useMultiStyleConfig("Menu", props);
+
+  return (
+    <StylesProvider value={styles}>
+      <chakra.div ref={ref} __css={styles.card} {...props}>
+        {children}
+      </chakra.div>
+    </StylesProvider>
+  );
+});
+
+if (__DEV__) {
+  Card.displayName = "Card";
+}
+
+export const CardImage = forwardRef<ImageProps, "img">((props, ref) => {
+  const { image } = useStyles();
+
+  return <Image ref={ref} __css={image} {...props} />;
+});
+
+if (__DEV__) {
+  CardImage.displayName = "CardImage";
+}
+
+export const CardTitle = forwardRef<HeadingProps, "h2">((props, ref) => {
+  const { title } = useStyles();
+
+  return <Heading ref={ref} __css={title} {...props} />;
+});
+
+if (__DEV__) {
+  CardTitle.displayName = "CardTitle";
+}
+
+export const CardBody = forwardRef<TextProps, "h2">((props, ref) => {
+  const { body } = useStyles();
+
+  return <Text ref={ref} __css={body} {...props} />;
+});
+
+if (__DEV__) {
+  CardTitle.displayName = "CardTitle";
+}
 ```
 
 <iframe 
-  src="https://codesandbox.io/embed/recipa-how-to-build-core-components-ko2g9?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/recipe-how-to-build-core-components-v3-ko2g9?fontsize=14&hidenavigation=1&theme=dark"
   class="codesandbox"
   style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
   title="recipa-how-to-build-core-components"
