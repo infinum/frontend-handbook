@@ -415,130 +415,13 @@ If you need a value to stay the same throughout re-renders, you might think of `
 
 > **You may rely on useMemo as a performance optimization, not as a semantic guarantee.** In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for off-screen components. Write your code so that it still works without useMemo — and then add it to optimize performance when it's necessary.
 
-```jsx
-// BAD
-export const MyComponent: FC = () => {
-  const id = useMemo(() => generateId(), []); // Not guaranteed to be a constant
-
-  // ...
-}
-```
-
-The best approach is to use lazy initialization:
-
-```jsx
-// GOOD
-export const MyComponent: FC = () => {
-  const [id, _] = useState(() => generateId()); // Initial value will stay the same throughout re-renders
-
-  // ...
-}
-```
-
-You can also store the value in a ref:
-
-```jsx
-type Result<T> = { v: T };
-
-function useConstant<T>(fn: () => T): T {
-  const ref = useRef<Result<T>>();
-
-  if (!ref.current) {
-    ref.current = { value: fn() };
-  }
-
-  return ref.current.value;
-}
-
-export const MyComponent: FC = () => {
-  const id = useConstant(() => generateId());
-
-  // ...
-}
-```
-
-_Note: updating ref values will not trigger a re-render._
-
-Storing a "constant" value in a ref might not work with Concurrent Mode. You can see an explanation in this [twitter thread](https://twitter.com/sstur_/status/1384934568285900806).
-
-Consider this case:
-
-1. Render starts
-2. You update the ref
-3. React concurrent mode has to throw away the work and doesn't commit
-
-You now have a ref that isn't the latest value, it's a value for a render that was never committed.
-
-## Imperative update
-
-When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger an update imperatively, you can use a custom `useUpdate` hook.
-
-_Note: This example demonstrates how `react-hook-form` works internally._
-
-```jsx
-const updateReducer = (num: number): number => (num + 1) % 1_000_000;
-
-const useUpdate = () => {
-  const [, update] = useReducer(updateReducer, 0);
-
-  return update;
-}
-
-// Large form
-// This is how react-hook-form works, in a nutshell
-const Form: FC = () => {
-  const formRef = useRef();
-
-  if (!formRef.current) {
-    formRef.current = {
-      name: "",
-      surname: "",
-      // ...many fields
-    };
-  }
-
-  const update = useUpdate();
-
-  const register = useCallback((input) => {
-    input?.addEventListener(
-      "input",
-      () => (formRef.current[input.name] = input.value)
-    );
-  }, []);
-
-  const submit = useCallback(
-    (event) => {
-      event.preventDefault();
-      // triggers update and renders the form data
-      update();
-    },
-    [update]
-  );
-
-  return (
-    <form onSubmit={submit}>
-      <div>Form Data: {JSON.stringify(formRef.current)}</div>
-      <input name="name" ref={register} />
-      <input name="surname" ref={register} />
-      // ...many fields
-      <input type="submit" />
-    </form>
-  )
-}
-```
-
-<iframe src="https://codesandbox.io/embed/large-form-update-uskuh?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
-  title="large-form-update"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+To see what the alternatives are, check out the [keeping consistent values trough rerenders](recipes/keeping-consistent-values-trough-rerenders) recipe.
 
 ## Two-pass rendering
 
-If you intentionally need to render something different on the server or on the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect`. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
+If you intentionally need to render something different on the server or on the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect` (since `useEffect` only runs on the client). This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
 
-Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the previous paragraph
+Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the [imperative update](recipes/imperative-update) recipe.
 
 ```jsx
 const useIsClient = () => {

@@ -1,4 +1,4 @@
-[![andreicek/next-passenger - GitHub](https://gh-card.dev/repos/andreicek/next-passenger.svg)](https://github.com/andreicek/next-passenger)
+[![infinum/next-passenger - GitHub](https://gh-card.dev/repos/infinum/next-passenger.svg)](https://github.com/infinum/next-passenger)
 
 ## The issue
 
@@ -76,4 +76,4 @@ require(nextPath);
 
 ## Proof of concept
 
-You'll find and example next.js app and nginx/passenger setup here: [andreicek/next-passenger](https://github.com/andreicek/next-passenger). You'll find a docker image there to test this out with your setup.
+You'll find and example next.js app and nginx/passenger setup here: [infinum/next-passenger](https://github.com/infinum/next-passenger). You'll find a docker image there to test this out with your setup.

@@ -2,7 +2,7 @@ If you're searching for the tutorial to kick off learning React, you could first
 
 ## Learn concepts
 
-In case you're a type of person which prefers to learn the concepts before typing any code, head to [main concepts](https://reactjs.org/docs/hello-world.html) which covers [basic principles](https://reactjs.org/docs/hello-world.html) of React, but also dives in [advanced topics](https://reactjs.org/docs/accessibility.html), [API](https://reactjs.org/docs/react-api.html), [hooks](https://reactjs.org/docs/hooks-intro.html) and [testing](https://reactjs.org/docs/testing.html).
+In case you're a type of person which prefers to learn the concepts before typing any code, head to [main concepts](https://reactjs.org/docs/hello-world.html) which covers basic principles of React, but also dives in [advanced topics](https://reactjs.org/docs/accessibility.html), [API](https://reactjs.org/docs/react-api.html), [hooks](https://reactjs.org/docs/hooks-intro.html) and [testing](https://reactjs.org/docs/testing.html).
 
 We recommend to check the basic principles first and have that settled in before exploring advanced features.
 
