@@ -18,17 +18,19 @@ Disclaimer:
 
 `To prepare for React 18, we recommend avoiding customizing getInitialProps and renderPage, if possible.`
 
-
 ## Implementation
 
 If you do not have the `_document` file in the `pages` folder, create a file with the default content 
-([copy all except gIP in _document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage)) and:
-- install the `html-entities` package (https://github.com/mdevils/html-entities)
-- add an import to the `html-entities` package
+([copy all except gIP in _document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage)) and:  
+- install the `html-entities` package (https://github.com/mdevils/html-entities)  
+- add an import to the `html-entities` package  
+
 ```javascript
 import { decode } from 'html-entities';
 ```
+
 - add the gIP implementation in the class
+
 ```jsx
 static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
@@ -42,13 +44,13 @@ static async getInitialProps(ctx) {
     };
 }
 ```
+
 - add or change regex properties to handle more cases
 
 The above code executes for all the pages in NextJS, searches and replaces all `href`, `src` and `srcSet` attributes in HTML with the
 decoded characters.
 
 ![Ampersand is now encoded correctly](/img/nextjs/nextjs_encoding_fixed.jpg)
-
 
 ## Conclusion
 
