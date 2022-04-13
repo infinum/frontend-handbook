@@ -12,6 +12,8 @@ If your design doesn't have any Design System you should ask designer to make on
 
 ### Card design
 
+Here is the simple example of two different card designs, `user` card in the first row and the `job` card.
+
 ![Cards](/img/react-recipes/cards.png)
 
 ### Multiple similar cards
@@ -85,7 +87,7 @@ export const JobCard: FC<IJobCardProps> = ({ job }) => (
 );
 ```
 
-Problem with inline styles is that they can easily clutter the code and decrease readability. 
+Problem with inline styles is that they can easily clutter the code and decrease readability.  
 When that happens we need to find a way to fix this problem.
 
 ## The Solution ✅
