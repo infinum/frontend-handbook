@@ -16,12 +16,12 @@ Disclaimer:
 - Check if need this fix
 - Always be cautious when changing default NextJS configurations for a custom document ([custom document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage))
 
-`To prepare for React 18, we recommend avoiding customizing getInitialProps and renderPage, if possible.`
+> To prepare for React 18, we recommend avoiding customizing getInitialProps and renderPage, if possible.
 
 ## Implementation
 
-If you do not have the `_document` file in the `pages` folder, create a file with the default content 
-([copy all except gIP in _document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage)) and:  
+If you do not have the `_document` file in the `pages` folder, create a file with the default content ([copy all except gIP in _document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage)) and:
+
 - install the `html-entities` package (https://github.com/mdevils/html-entities)  
 - add an import to the `html-entities` package  
 
