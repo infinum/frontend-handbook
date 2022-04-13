@@ -67,74 +67,7 @@ The example above shows a statically optimized page made by
 so to get a path you need to use `useRouter`.
 [Server Side Rendering (SSR)](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) and 
 [Static Site Generation (SSG)](https://nextjs.org/docs/basic-features/data-fetching/get-static-props) can also give you the information from `useRouter`,
-but they also propagate that info (and more) via context.
-
-In these two examples below for SSR and SSG you can see how the values for the query id (`articleId`) are available on the first render in both `context`
-and `useRouter` properties. Try to use the `context` prop over `useRouter` because it will be faster (no hook/function call).
-```tsx
-// SSR pages/article/[articleId].tsx
-
-import { useRouter } from 'next/router';
-
-const ArticlePage = ({ articleId }) => {
-    const { query } = useRouter()
-
-    if (!query.articleId) {
-        return <div>loading...</div>
-    }
-
-    return <>
-        <div>{query.articleId}</div>
-        <div>{articleId}</div>
-    </>;
-}
-
-export const getServerSideProps = async (context) => {
-    return {
-        props: {
-            articleId: context.query.articleId
-        }
-    };
-}
-
-export default ArticlePage;
-```
-
-```tsx
-// SSG pages/article/[articleId].tsx
-
-import { useRouter } from 'next/router';
-
-const ArticlePage = ({ articleId }) => {
-    const { query } = useRouter()
-
-    if (!query.articleId) {
-        return <div>loading...</div>
-    }
-
-    return <>
-        <div>{query.articleId}</div>
-        <div>{articleId}</div>
-    </>;
-}
-
-export const getStaticPaths = async () => {
-    return {
-        paths: [],
-        fallback: 'blocking'
-    }
-}
-
-export const getStaticProps = async (context) => {
-    return {
-        props: {
-            articleId: context.params.articleId
-        }
-    };
-}
-
-export default ArticlePage;
-```
+but they also propagate that info (and more) via context - this is the preferred way.
 
 ![SSR or SSG path from context](/img/nextjs/routing/NextJS_path_in_context.jpg)
 
