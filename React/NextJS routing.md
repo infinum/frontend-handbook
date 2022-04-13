@@ -69,6 +69,8 @@ so to get a path you need to use `useRouter`.
 [Static Site Generation (SSG)](https://nextjs.org/docs/basic-features/data-fetching/get-static-props) can also give you the information from `useRouter`,
 but they also propagate that info (and more) via context.
 
+In these two examples below for SSR and SSG you can see how the values for the query id (`articleId`) are available on the first render in both `context`
+and `useRouter` properties. Try to use the `context` prop over `useRouter` because it will be faster (no hook/function call).
 ```tsx
 // SSR pages/article/[articleId].tsx
 
@@ -397,7 +399,7 @@ To do that, change the `basePath` property in the `next.config.js` file.
 ## 404 pages
 
 Routing to non-existing pages is working out of the box. 
-Only if there is a `SSG` or a `SSR` then you need to handle it manually. To implement that, you should return: 
+Only if there is a `SSR` or a `SSG` then you need to handle it manually. To implement that, you should return: 
 ```
 notFound: true
 ```
@@ -407,6 +409,98 @@ It is also important to handle revalidation
 (for [`SSG`](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)) otherwise the routes 
 will always show the 404 page.
 
+```tsx
+// SSR pages/article/[articleId].tsx
+
+const ArticlePage = ({ article }) => {
+    return (
+        <>
+            <div>{article.id}</div>
+            <div>{article.title}</div>
+        </>
+    );
+};
+
+export const getServerSideProps = async (context) => {
+    const articleId = context.params.articleId;
+    let article = null;
+
+    try {
+        article = await fetch(`https://my.api.com/article/${articleId}`)
+            .then(response => response.json())
+            .then(data => data);
+    } catch (error) {
+        return {
+            notFound: true,
+        };
+    }
+
+    if (article.id !== articleId) {
+        return {
+            notFound: true,
+        };
+    }
+
+    return {
+        props: {
+            article,
+        },
+    };
+};
+
+export default ArticlePage;
+```
+
+```tsx
+// SSG pages/article/[articleId].tsx
+
+const ArticlePage = ({ article }) => {
+    return (
+        <>
+            <div>{article.id}</div>
+            <div>{article.title}</div>
+        </>
+    );
+};
+
+export const getStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking'
+    }
+};
+
+export const getStaticProps = async (context) => {
+    const articleId = context.params.articleId;
+    let article = null;
+
+    try {
+        article = await fetch(`https://my.api.com/article/${articleId}`)
+            .then(response => response.json())
+            .then(data => data);
+    } catch (error) {
+        return {
+            notFound: true,
+            revalidate: true, // boolean or a number in MS; only for SSG
+        };
+    }
+
+    if (article.id !== articleId) {
+        return {
+            notFound: true,
+            revalidate: true, // boolean or a number in MS; only for SSG
+        };
+    }
+
+    return {
+        props: {
+            article,
+        },
+    };
+};
+
+export default ArticlePage;
+```
 
 ## Internationalized Routing
 
