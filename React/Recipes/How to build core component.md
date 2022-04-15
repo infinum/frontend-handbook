@@ -5,8 +5,12 @@ In design file we get set of pages which consists of UI elements, and if we star
 
 To solve this component we need to shift our mindset from vertical (page based) "slicing" flow to horizontal flow.
 
-![Vertical vs Horizontal Flow](/img/react-recipes/vertical_vs_horizontal.svg)
-[Vertical vs Horizontal Flow](/img/react-recipes/vertical_vs_horizontal.svg)
+<figure>
+  <img src="/img/react-recipes/vertical_vs_horizontal.svg">
+  <figcaption>
+    <a href="/img/react-recipes/vertical_vs_horizontal.svg" >Vertical vs Horizontal Flow</a>
+  </figcaption>
+</figure>
 
 To do this we need to focus more on Design System and reusability of our components.
 If your design doesn't have any Design System you should ask designer to make on. Here is the example of [Chakra UI Design System](https://www.figma.com/community/file/971408767069651759) made in Figma.
