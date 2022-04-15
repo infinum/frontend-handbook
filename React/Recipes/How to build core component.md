@@ -366,7 +366,7 @@ export default {
 } as MultiStyleConfig<CardAnatomy>;
 ```
 
-After a card theme is done we need to add it to the global chakra theme.
+After a card theme is done it needs to be add it to the global chakra theme.
 
 ```tsx
 import { extendTheme } from "@chakra-ui/react";
