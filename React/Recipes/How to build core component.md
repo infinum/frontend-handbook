@@ -277,13 +277,99 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
 
 ### Solution #3
 
-Creating a `core` card component by using a theme and make it reusable [compound components](https://kentcdodds.com/blog/compound-components-with-react-hooks).
+Creating a `core` card component by using a theme and make it reusable [compound component](https://kentcdodds.com/blog/compound-components-with-react-hooks).
+
+> Compound Component is also called Multipart or Composite Component
 
 #### Create a theme
 
-- anatomy parts docs
-- useMultiStyleConfig https://chakra-ui.com/docs/styled-system/theming/component-style#usemultistyleconfig-api
-- https://chakra-ui.com/docs/styled-system/theming/component-style#styling-multipart-components
+To make highly reusable compound component we need to think about component anatomy.
+Component anatomy means that we have to break component into a multiple parts.
+
+In the case of our Card component we can break it in these four parts:
+1. card
+2. image
+3. title
+4. body
+
+#### Defining the anatomy
+
+```tsx
+import { anatomy, Anatomy } from "@chakra-ui/theme-tools";
+
+const parts = anatomy("card").parts("card", "image", "title", "body");
+
+type CardAnatomy = Anatomy<typeof parts.__type>;
+```
+
+#### baseStyles
+
+The base styles for each part
+
+```tsx
+const baseStyle: PartsStyleObject<CardAnatomy> = {
+  card: {
+    borderRadius: "md",
+    border: "1px",
+    borderColor: "gray.200",
+    boxShadow: "xl"
+  },
+  body: {
+    fontSize: "xs",
+    px: "5",
+    mb: "5"
+  }
+};
+```
+
+#### variants
+
+The variant styles for each part.
+
+```tsx
+const variantSolid: PartsStyleFunction<CardAnatomy> = (props) => {
+  return {
+    image: {
+      borderTopRadius: "md",
+      w: "100%",
+      h: "200px",
+      objectFit: "cover",
+      mb: "4"
+    },
+    title: {
+      px: "5",
+      mb: "4"
+    }
+  };
+};
+
+const variantRounded: PartsStyleFunction<CardAnatomy> = (props) => {
+  return {
+    image: {
+      borderRadius: "full",
+      w: "100%",
+      h: "100%",
+      objectFit: "cover",
+      bg: "gray.200"
+    },
+    title: {
+      px: "5",
+      mb: "4",
+      textAlign: "center"
+    },
+    body: {
+      textAlign: "center"
+    }
+  };
+};
+
+const variants: MultiStyleConfig<CardAnatomy>["variants"] = {
+  solid: variantSolid,
+  rounded: variantRounded
+};
+```
+
+#### Complete implementation of the card theme
 
 ```tsx
 // ./src/styles/components/card.ts
@@ -366,7 +452,7 @@ export default {
 } as MultiStyleConfig<CardAnatomy>;
 ```
 
-After a card theme is done it needs to be add it to the global chakra theme.
+After a card theme is done we'll update the theme to include the new Card component style.
 
 ```tsx
 import { extendTheme } from "@chakra-ui/react";
@@ -381,6 +467,58 @@ export const theme = extendTheme({
 ```
 
 #### Card component
+
+Now we can implement the actual Card component.
+
+#### Consuming style config
+
+Since the new Card component is not part of Chakra UI we need to create a new React component and consume the style we just created. We can do that using `useMultiStyleConfig` hook.
+
+#### useMultiStyleConfig API
+
+```tsx
+const styles = useMultiStyleConfig("Card", props);
+```
+
+> [API Docs](https://chakra-ui.com/docs/styled-system/theming/component-style#usemultistyleconfig-api)
+
+#### Using StylesProvider
+
+In the rood component we can access the whole style config and provide it to all the parts via `StylesProvider` context provider. This way we can for example set the variant only on the root element and all the parts will inherit that variant styles.
+
+```tsx
+import {
+  chakra,
+  forwardRef,
+  StylesProvider,
+  useStyles,
+  ThemingProps,
+  useMultiStyleConfig,
+} from "@chakra-ui/react";
+
+export const Card = forwardRef<CardProps, "div">((props, ref) => {
+  const { children } = props;
+
+  const styles = useMultiStyleConfig("Card", props);
+
+  return (
+    <StylesProvider value={styles}>
+      <chakra.div ref={ref} __css={styles.card} {...props}>
+        {children}
+      </chakra.div>
+    </StylesProvider>
+  );
+});
+
+export const CardImage = forwardRef<ImageProps, "img">((props, ref) => {
+  const { image } = useStyles();
+
+  return <Image ref={ref} {...image} {...props} />;
+});
+
+```
+
+#### Complete example
 
 ```tsx
 // ./src/components/core/Card/Card.tsx
@@ -412,7 +550,7 @@ export interface CardProps
 export const Card = forwardRef<CardProps, "div">((props, ref) => {
   const { children } = props;
 
-  const styles = useMultiStyleConfig("Menu", props);
+  const styles = useMultiStyleConfig("Card", props);
 
   return (
     <StylesProvider value={styles}>
@@ -440,7 +578,7 @@ if (__DEV__) {
 export const CardTitle = forwardRef<HeadingProps, "h2">((props, ref) => {
   const { title } = useStyles();
 
-  return <Heading ref={ref} __css={title} {...props} />;
+  return <Heading ref={ref} {...title} {...props} />;
 });
 
 if (__DEV__) {
@@ -450,11 +588,11 @@ if (__DEV__) {
 export const CardBody = forwardRef<TextProps, "h2">((props, ref) => {
   const { body } = useStyles();
 
-  return <Text ref={ref} __css={body} {...props} />;
+  return <Text ref={ref} {...body} {...props} />;
 });
 
 if (__DEV__) {
-  CardTitle.displayName = "CardTitle";
+  CardBody.displayName = "CardBody";
 }
 ```
 
