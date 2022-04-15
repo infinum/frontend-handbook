@@ -87,6 +87,13 @@ export const JobCard: FC<IJobCardProps> = ({ job }) => (
 );
 ```
 
+### When this is OK?
+
+When we are building a small one-off components which doesn't contain a lot of code and we are not sharing it across components.  
+
+### Why this approach can become a problem?
+
+This example is not so bad as it seems at firs, but as this component grows and things are added inline style will become a problem.
 Problem with inline styles is that they can easily clutter the code and decrease readability.  
 When that happens we need to find a way to fix this problem.
 
@@ -188,6 +195,12 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
+
+### When to use solution #1:
+
+1. when your component becomes cluttered and hard to read
+2. you don't have a clear design indications this component is designed in multipart manner
+
 ### Solution #2
 
 Extracting styled props into `SystemStyleObject` objects and extracting them to `ComponentName.styles.tsx` file.
@@ -274,6 +287,16 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
+
+### When to use solution #2:
+
+There is no significant difference between solution #1 except this way you can compose multiple styles together.
+
+For example:
+
+```tsx
+<chakra.div sx={{ ...cardImageStyles, ...cardHeadingStyles }} />
+```
 
 ### Solution #3
 
@@ -604,3 +627,8 @@ if (__DEV__) {
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
+
+### When to use solution #3:
+
+1. When you have clear design indications of multiple similar components with similar features but slightly different styles
+2. Designer prepared component variants and anatomy
