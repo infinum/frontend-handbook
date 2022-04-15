@@ -6,9 +6,9 @@ In design file we get set of pages which consists of UI elements, and if we star
 To solve this component we need to shift our mindset from vertical (page based) "slicing" flow to horizontal flow.
 
 <figure>
-  <img src="/img/react-recipes/vertical_vs_horizontal.svg">
+  <img src="/handbook/img/react-recipes/vertical_vs_horizontal.svg">
   <figcaption>
-    <a href="/img/react-recipes/vertical_vs_horizontal.svg" >Vertical vs Horizontal Flow</a>
+    <a href="/handbook/img/react-recipes/vertical_vs_horizontal.svg" >Vertical vs Horizontal Flow</a>
   </figcaption>
 </figure>
 
