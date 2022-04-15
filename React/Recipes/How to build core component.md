@@ -94,7 +94,7 @@ export const JobCard: FC<IJobCardProps> = ({ job }) => (
 
 ### When this is OK?
 
-When we are building a small one-off components which doesn't contain a lot of code and we are not sharing it across components.  
+When we are building a small one-off components which doesn't contain a lot of code and  are not shared across components.  
 
 ### Why this approach can become a problem?
 
