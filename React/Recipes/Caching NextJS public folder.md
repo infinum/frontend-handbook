@@ -17,7 +17,7 @@ Because of that we need to add a small configuration in the project.
 Next.js allows custom HTTP headers by adding the `headers` key in `next.config.js`.
 You can easily add `Cache-Control` HTTP header by writing the code below:
 ```javascript
-// An example of `next.config.js` file - your content can be different
+// An example of the `next.config.js` file - your content can be different
 
 module.exports = {
     headers: async () => [
