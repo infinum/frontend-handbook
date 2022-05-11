@@ -12,9 +12,9 @@ decoded correctly on the client, but this might be an issue for the crawlers for
 Because of this, there is a way to handle it by adding a custom decode in `_document` file.
 
 Disclaimer:
-- Check if this issue is still happening
-- Check if need this fix
-- Always be cautious when changing default NextJS configurations for a custom document ([custom document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage))
+* Check if this issue is still happening
+* Check if need this fix
+* Always be cautious when changing default NextJS configurations for a custom document ([custom document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage))
 
 > To prepare for React 18, we recommend avoiding customizing getInitialProps and renderPage, if possible.
 
@@ -22,15 +22,12 @@ Disclaimer:
 
 If you do not have the `_document` file in the `pages` folder, create a file with the default content ([copy all except gIP in _document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage)) and:
 
-- install the `html-entities` package (https://github.com/mdevils/html-entities)  
-- add an import to the `html-entities` package  
-
+* install the `html-entities` package (https://github.com/mdevils/html-entities)  
+* add an import to the `html-entities` package
 ```javascript
 import { decode } from 'html-entities';
 ```
-
-- add the gIP implementation in the class
-
+* add the gIP implementation in the class
 ```jsx
 static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
@@ -44,8 +41,7 @@ static async getInitialProps(ctx) {
     };
 }
 ```
-
-- add or change regex properties to handle more cases
+* add or change regex properties to handle more cases
 
 The above code executes for all the pages in NextJS, searches and replaces all `href`, `src` and `srcSet` attributes in HTML with the
 decoded characters.
