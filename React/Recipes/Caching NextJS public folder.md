@@ -67,7 +67,7 @@ module.exports = {
 module.exports = {
     headers: async () => [
         {
-            // the `fresh` folder in the `public` folder contains resources (`jpg`s) we want to cache for a short time
+            // the `fresh` folder in the `public` folder contains the resources (`jpg`s) we want to cache for a short time
             source: '/fresh/:all*(jpg)',
             locale: false,
             headers: [
