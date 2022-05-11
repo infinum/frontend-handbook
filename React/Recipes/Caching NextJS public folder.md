@@ -47,7 +47,7 @@ You can also mix different configurations such as:
 module.exports = {
     headers: async () => [
         {
-            // the `cached` folder in the `public` folder contains resources (`jpg`s) we want to cache
+            // the `cached` folder in the `public` folder contains the resources (`jpg`s) we want to cache
             source: '/cached/:all*(jpg)',
             locale: false,
             headers: [
