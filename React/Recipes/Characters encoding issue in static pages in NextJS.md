@@ -50,4 +50,4 @@ decoded characters.
 
 ## Conclusion
 
-Use the solution above only if you encounter the issues. Do not add this by default in a new or an existing NextJS application.
+Use a solution above only if you encounter the issues. Do not add this by default in a new or an existing NextJS application.
