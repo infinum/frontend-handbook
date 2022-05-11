@@ -21,7 +21,7 @@ You can easily add `Cache-Control` HTTP header by writing the code below:
 module.exports = {
     headers: async () => [
         {
-            // list more extensions if needed; these are all the resources in the `public` folder including the subfolders
+            // list more extensions here if needed; these are all the resources in the `public` folder including the subfolders
             source: '/:all*(svg|jpg|png)',
             locale: false,
             headers: [
