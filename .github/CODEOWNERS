@@ -4,7 +4,7 @@ Code\ Quality/** @fvoska
 Design/** @DarkoKukovec
 Node/** @DarkoKukovec
 React/** @isBatak
-"React Native/**" @veksi
+React\ Native/** @veksi
 SASS\ Styleguide/** @fvoska
 
 # individual files
@@ -13,7 +13,7 @@ Accessibility.md @kristian240
 Assets.md @kristian240
 Email\ Templates.md @DarkoKukovec
 How\ to\ CSS.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
-Predeployment checklist.md @DarkoKukovec
+Predeployment\ checklist.md @DarkoKukovec
 README.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
 Styleguide.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
 Vue.md @DarkoKukovec
