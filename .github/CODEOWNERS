@@ -1,22 +1,19 @@
 # directories
 Angular/** @fvoska
-"Code Quality/**" @fvoska
+Code\ Quality/** @fvoska
 Design/** @DarkoKukovec
 Node/** @DarkoKukovec
 React/** @isBatak
 "React Native/**" @veksi
-"SASS Styleguide/**" @fvoska
-
-# check this out, it doesn't seem to be rendered anywhere in the handbook
-Checklists/** @DarkoKukovec
+SASS\ Styleguide/** @fvoska
 
 # individual files
-'Useful links.md' @DarkoKukovec @fvoska
+Useful\ links.md @DarkoKukovec @fvoska
 Accessibility.md @kristian240
 Assets.md @kristian240
-'Email Templates.md' @DarkoKukovec
-'How to CSS.md' @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
-'Predeployment checklist.md' @DarkoKukovec
+Email\ Templates.md @DarkoKukovec
+How\ to\ CSS.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
+Predeployment checklist.md @DarkoKukovec
 README.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
 Styleguide.md @DarkoKukovec @safo6m @darrac @kristijanbambir @fvoska
 Vue.md @DarkoKukovec
