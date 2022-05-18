@@ -9,6 +9,7 @@ These HTML entities will not be encoded by default, which will result in incorre
 This can be fixed by adding a custom decode method in the `_document` file.
 
 Disclaimer:
+
 * Check if this issue is still happening
 * Check if the fix is needed
 * Always be cautious when changing default Next.js [custom document](https://nextjs.org/docs/advanced-features/custom-document#customizing-renderpage) configurations
@@ -21,10 +22,12 @@ If you do not have the `_document` file in the `pages` folder, create a file wit
 
 * install the `html-entities` package (https://github.com/mdevils/html-entities)  
 * import the `html-entities` package
+
 ```javascript
 import { decode } from 'html-entities';
 ```
 * add the gIP implementation in the class
+
 ```jsx
 static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
