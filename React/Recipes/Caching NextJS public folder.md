@@ -5,14 +5,14 @@ It is always a good practice to check if some resources can be cached, so the us
 
 More about `Cache-Control` can be read online (e.g. in [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control))
 
-Next.js (up to `v12.1.4`) does not cache the `resources` in the `public` folder by the default, and usually a lot of the resources or even all can benefit some sort of the caching mechanism.
+NextJS (at least up to `v12.1.4`; check newer versions) does not cache the `resources` in the `public` folder by the default, and usually a lot of the resources or even all can benefit some sort of the caching mechanism.
 Because of that we need to add a small configuration in the project.
 
 ![By default NextJS does not cache public resources](/img/nextjs/nextjs_logo_not_cached.jpeg)
 
 ## Implementation
 
-Next.js allows custom HTTP headers by adding the `headers` key in `next.config.js`.
+NextJS allows custom HTTP headers by adding the `headers` key in `next.config.js`.
 You can easily add `Cache-Control` HTTP header by writing the code below:
 
 ```javascript
