@@ -217,6 +217,11 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 
 Since we have no value in testing whether our component will correctly render, avoid writing these type of tests and focus on more valuable tests instead.
 
+**Avoid destructuring `render` result for querying/finding elements**
+
+It is recommended that you avoid destructuring the `render(...)` result and use `screen` object instead.
+To see more info about [why you should use screen](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-screen), and other common mistakes in RTL usage, please refer to the [Kents](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) blog post.
+
 ### Naming Convention
 
 Tests should have meaningful names and should be nested properly by following the next pattern:
