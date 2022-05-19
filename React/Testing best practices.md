@@ -26,7 +26,7 @@ Add a test script to `package.json`:
   }
 ```
 
-Create the `jest.config.js` file in project root and follow the instructions for [Rust compiler setup](https://nextjs.org/docs/testing#setting-up-jest-with-the-rust-compiler).
+Create the `jest.config.js` file in the project root and follow the instructions for the [Rust compiler setup](https://nextjs.org/docs/testing#setting-up-jest-with-the-rust-compiler).
 
 
 Next, install `react-test-library`:
@@ -215,14 +215,14 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 
 **Avoid unnecessary "is rendering" test**
 
-Since we have no value in testing wether our component will correctly render, avoid writing this type of tests and focus on more valuable tests instead.
+Since we have no value in testing whether our component will correctly render, avoid writing these type of tests and focus on more valuable tests instead.
 
 ### Naming Convention
 
 Tests should have meaningful names and should be nested properly by following the next pattern:
 
-1. Root `describe` must be named after component/page/hook/util we're testing
-2. Nested `describe`s must have `when` prefix (to indicate specific scenarios)
+1. Root `describe` must be the same as the component/page/hook/util we're testing
+2. Nested `describe`s must have the `when` prefix (to indicate specific scenarios)
 3. Description of `it` must be a use case sentence
 
 An example:
@@ -237,7 +237,7 @@ An example:
     });
 
     describe('when user exists', () => {
-      it('should user object', () => {
+      it('should return the user object', () => {
         // ...
       });
       it('should log out user', () => {
@@ -271,7 +271,7 @@ Test:
 ```tsx
 describe("Button", () => {
   // or something more meaningful
-  it("should call onClick handler", () => {
+  it("should handle click", () => {
     const buttonText = "click here";
     const testOnClick = jest.fn();
 
@@ -286,7 +286,7 @@ describe("Button", () => {
 });
 ```
 
-**Components that uses a base component test example**
+**Components that use a base component test example**
 
 Component:
 
@@ -303,7 +303,7 @@ const UserCard: FC<UserCardProps> = ({ title }) => (
 
 Test:
 
-Here, we mock our `Button` component implementation because we don't care about it here, we only care about the specifics of the `UserCard` component. This is especially useful when you don't want to generate a large tree inside your test for components that don't have any impact on the actual test.
+Here, the `Button` component is mocked since we only care about the specifics of the `UserCard` component. This is especially useful when you don't want to generate a large tree inside your tests for components that don't have any impact on the actual test.
 
 ```jsx
 import { screen } from '@testing-library/react';
@@ -317,7 +317,7 @@ describe("UserCard", () => {
 
     render(<UserCard title={username} />);
 
-    expect(screen.(username)).toBeDefined();
+    expect(screen.getByText(username)).toBeDefined();
   });
 });
 ```
@@ -381,11 +381,11 @@ An example:
 
 ## Testing user events
 
-If any part of your test is preforming the state update, that action needs to be wrapped into `waitFor`.
+If any part of your test is performing the state update, that action needs to be wrapped into `waitFor`.
 
 You would be also warned for the bad testing practices by the react-testing-library linter plugin.
 
-For simulating an event, we use `@testing-library/user-event` library.
+For simulating an event, we use the `@testing-library/user-event` library.
 
 An example:
 
@@ -446,7 +446,7 @@ const UserPage: NextPage = () => {
 export default UserPage;
 ```
 
-In this page example we should test all three states of the page component. To do that we should mock `<ErrorPage>`, `<LoadingPage>` and `<UserTemplate>` and check if it's rendered based on fetcher response.
+In this page example we should test all three states of the page component. To do that we should mock `<ErrorPage>`, `<LoadingPage>` and `<UserTemplate>` and check if it's rendered based on the fetcher response.
 
 Test example:
 
@@ -495,7 +495,7 @@ Because of testing `useSWR` behavior (which will re-render DOM after fetcher pro
 
 ### SWR testing
 
-To use swr in your tests, add `SWRConfig` to your `AllProviders` mock with following setup (note: your cases could require more customization):
+To use SWR in your tests, add `SWRConfig` to your `AllProviders` mock with the following setup (note: your cases could require more customization):
 
 
 ```tsx
@@ -506,7 +506,7 @@ const AllProviders = ({ children }) => (
 );
 ```
 
-With this setup, we are sure that each component we're testing will have it's own cache, so we don't have to manually clear cache before each test.
+With this setup, we are sure that each component we're testing will have its own cache, so we don't have to manually clear the cache before each test.
 
 Check out [this issue](https://github.com/vercel/swr/issues/781) and [this answer](https://github.com/vercel/swr/issues/781#issuecomment-952738214) that explains fixing the known problem.
 
