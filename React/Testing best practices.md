@@ -1,5 +1,9 @@
 Tools we use for testing are [React-Testing-Library](https://testing-library.com/docs/) and [Jest](https://jestjs.io/docs/en/getting-started)
 
+## Video guide
+
+If you want to see more practical usage, [here](https://www.youtube.com/watch?v=KfaFyB0uedk) is the recording form JS Standup about next.js testing presented by 🦌 . The project tested in the video is LearnReact project.
+
 ## Setup
 
 First of all, install Jest:
@@ -13,30 +17,17 @@ Add a test script to `package.json`:
 ```js
   "scripts": {
     "test": "jest",
-    ...
+
+    // optional?
+    "test:ci": "jest --ci --coverage",
+    "test:update": "npm run test -- --u",
+    "test:watch": "npm run test -- --watch",
+    // ...other scripts
   }
 ```
 
-Create the `jest.config.js` file in project root:
+Create the `jest.config.js` file in the project root and follow the instructions for the [Rust compiler setup](https://nextjs.org/docs/testing#setting-up-jest-with-the-rust-compiler).
 
-```js
-module.exports = {
-  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
-  moduleDirectories: ["node_modules", "src"],
-};
-```
-
-Add the `preset` property to `.babelrc`:
-
-```js
-{
-  "presets": [
-    [
-      "next/babel"
-    ]
-  ]
-}
-```
 
 Next, install `react-test-library`:
 
@@ -58,24 +49,6 @@ Use [react-hooks-testing-library](https://github.com/testing-library/react-hooks
 
 ```bash
 npm install --save-dev @testing-library/react-hooks
-```
-
-### Add svg support
-
-```bash
-npm install --save-dev jest-svg-transformer
-```
-
-Add the `transform` property to `jest.config.js`:
-
-```js
-module.exports = {
-  ...
-  transform: {
-    '^.+\\.tsx?$': 'babel-jest',
-    '^.+\\.svg$': 'jest-svg-transformer',
-  },
-}
 ```
 
 ## Utils
@@ -218,11 +191,11 @@ module.exports = {
 };
 ```
 
-## Basic component test
+## Introduction
 
 Based on [the Guiding Principles](https://testing-library.com/docs/guiding-principles/), your tests should resemble how users interact with your code (component, page, etc.) as much as possible. In this context, the user is not the end application user, but some parent component that would use the component that is being tested.
 
-Query priorities ([more info](https://testing-library.com/docs/guide-which-query/)):
+**Query priorities** ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
   - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
@@ -237,16 +210,64 @@ Query priorities ([more info](https://testing-library.com/docs/guide-which-query
   - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
 3. Test IDs
-
+   
   - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
-### Base components test example
+**Avoid unnecessary "is rendering" test**
 
-Component:
+Since we have no value in testing whether our component will correctly render, avoid writing these type of tests and focus on more valuable tests instead.
+
+**Avoid destructuring `render` result for querying/finding elements**
+
+It is recommended that you avoid destructuring the `render(...)` result and use `screen` object instead.
+To see more info about [why you should use screen](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-screen), and other common mistakes in RTL usage, please refer to the [Kents](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) blog post.
+
+### Naming Convention
+
+Tests should have meaningful names and should be nested properly by following the next pattern:
+
+1. Root `describe` must be the same as the component/page/hook/util we're testing
+2. Nested `describe`s must have the `when` prefix (to indicate specific scenarios)
+3. Description of `it` must be a use case sentence
+
+An example:
 
 ```tsx
-const Button: FC<ButtonProps> = ({ children, ...rest }) => (
-  <button {...rest}>{children}</button>
+  describe('useAuth', () => {
+    it('should throw context error', () => {
+      // ...
+    });
+    it('should toggle loading state', () => {
+      // ..
+    });
+
+    describe('when user exists', () => {
+      it('should return the user object', () => {
+        // ...
+      });
+      it('should log out user', () => {
+        // ...
+      });
+    });
+
+    describe('when user does not exist', () => {
+      it('should return guest user', () => {
+        // ...
+      });
+      it('should destroy session on window close', () => {
+        // ...
+      });
+    });
+  });
+```
+
+### Basic test example
+
+Base Component:
+
+```tsx
+const Button: FC<ButtonProps> = (props) => (
+  <button {...props} />
 );
 ```
 
@@ -254,39 +275,32 @@ Test:
 
 ```tsx
 describe("Button", () => {
-  it("Is rendering", () => {
-    const buttonText = "click here";
-
-    const { getByText } = render(<Button>{buttonText}</Button>);
-
-    expect(getByText(buttonText)).toBeDefined();
-  });
-
-  it("Is onClick called", () => {
+  // or something more meaningful
+  it("should handle click", () => {
     const buttonText = "click here";
     const testOnClick = jest.fn();
 
-    const { getByText } = render(
+    render(
       <Button onClick={testOnClick}>{buttonText}</Button>
     );
 
-    userEvent.click(getByText(buttonText));
+    user.click(screen.getByText(buttonText));
 
     expect(testOnClick).toBeCalledTimes(1);
   });
 });
 ```
 
-### Components that uses a base component test example
+**Components that use a base component test example**
 
 Component:
 
 ```tsx
 import { Button } from "components/Button";
 
-const UserCard: FC<UserCardProps> = ({ label }) => (
+const UserCard: FC<UserCardProps> = ({ title }) => (
   <Card>
-    <h3>{label}</h3>
+    <h3>{title}</h3>
     <Button>click</Button>
   </Card>
 );
@@ -294,20 +308,125 @@ const UserCard: FC<UserCardProps> = ({ label }) => (
 
 Test:
 
+Here, the `Button` component is mocked since we only care about the specifics of the `UserCard` component. This is especially useful when you don't want to generate a large tree inside your tests for components that don't have any impact on the actual test.
+
 ```jsx
+import { screen } from '@testing-library/react';
+
 jest.mock("components/button");
 (Button as jest.Mock).mockReturnValue(<button />);
 
 describe("UserCard", () => {
-  it("Is rendering", () => {
+  it("should display the correct title", () => {
     const username = "Test User";
 
-    const { getByText } = render(<UserCard label={username} />);
+    render(<UserCard title={username} />);
 
-    expect(getByText(username)).toBeDefined();
+    expect(screen.getByText(username)).toBeDefined();
   });
 });
 ```
+
+## Repeated component rendering
+Describe your rendering inside `beforeEach` so you could use `screen.{getBySomething}` in your tests later, to reduce number of unnecessary renders.
+
+An example:
+```tsx
+  describe('AlertButton', () => {
+    let title: string;
+    let confirmButtonText: string;
+    let onConfirm: () => void;
+
+    beforeEach(() => {
+      title = 'Bonjour';
+      confirmButtonText = 'Like, share, subscribe';
+      onConfirm = jest.fn();
+
+      render(
+        <AlertButton
+          title={title}
+          confirmButtonText={confirmButtonText}
+          onConfirm={onConfirm}
+        />
+      );
+    });
+
+    describe('when clicked', () => {
+      beforeEach(async () => {
+        await waitFor(() => {
+          user.click(screen.getByText(buttonText));
+        });
+      });
+      
+      it('should open alert dialog', () => {
+				expect(screen.queryByRole('alertdialog')).toBeNull();
+      });
+      it('should display correct title', () => {
+        expect(screen.queryByText(title)).not.toBeNull();
+      });
+    });
+
+    describe('when confirm is clicked', () => {
+      beforeEach(async () => {
+        await waitFor(() => {
+          user.click(screen.getByText(buttonText));
+        });
+      });
+      
+      it('should close the dialog', () => {
+				expect(screen.queryByRole('alertdialog')).toBeNull();
+      });
+
+      // ... more test cases
+    });
+  })
+```
+
+> **Note:** This is a shortened example of this concept, you can refer to the standup video section for more info:
+[Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
+
+
+## Testing user events
+
+If any part of your test is performing the state update, that action needs to be wrapped into `waitFor`.
+
+You would be also warned for the bad testing practices by the react-testing-library linter plugin.
+
+For simulating an event, we use the `@testing-library/user-event` library.
+
+An example:
+
+```tsx
+  import { waitFor, render } from '@test-utils';
+  import userEvent from '@testing-library/user-event';
+
+  // ...mocks
+
+  describe('ResetPasswordForm', () => {
+    it('should submit without validation errors', async () => {
+      const mockSuccess = jest.fn();
+      
+      render(
+        <ResetPasswordForm onSuccess={mockSuccess} />
+      );
+
+      userEvent.type(screen.getByRole('input'), '12345678');
+
+      // this event will trigger react-hook-form to rerender our component
+      // so we have to properly handle this state change before making further assertions
+      await waitFor(() => {
+        userEvent.click(screen.getByRole('button'));
+      });
+
+      expect(mockSuccess).toHaveBeenCalled();
+    });
+  })
+```
+
+Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
+
+> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out the [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
+
 
 ## Page component testing
 
@@ -336,7 +455,7 @@ const UserPage: NextPage = () => {
 export default UserPage;
 ```
 
-It this page example we should test all three states of the page component. To do that we should mock `<ErrorPage>`, `<LoadingPage>` and `<UserTemplate>` and check if it's rendered based on fetcher response.
+In this page example we should test all three states of the page component. To do that we should mock `<ErrorPage>`, `<LoadingPage>` and `<UserTemplate>` and check if it's rendered based on the fetcher response.
 
 Test example:
 
@@ -357,28 +476,26 @@ jest.mock("fetchers/users");
 );
 
 describe("User Page", () => {
-  it("Is error page rendered", () => {
+  it("should render error page", async () => {
     (fetchUsers as jest.Mock).mockResolvedValue(new Error("Error occurred!"));
 
-    const { findByTestId } = render(<UserPage />);
+    render(<UserPage />);
 
-    expect(findByTestId("error-page-testid")).toBeDefined();
+    expect(await screen.findByTestId("error-page-testid")).toBeDefined();
   });
-
-  it("Is loading page rendered", () => {
+  it("should render loading page", async () => {
     (fetchUsers as jest.Mock).mockResolvedValue(null);
 
-    const { findByTestId } = render(<UserPage />);
+    render(<UserPage />);
 
-    expect(findByTestId("loading-page-testid")).toBeDefined();
+    expect(await screen.findByTestId("loading-page-testid")).toBeDefined();
   });
-
-  it("Is loading page rendered", () => {
+  it("should render user page", async () => {
     (fetchUsers as jest.Mock).mockResolvedValue([{ username: "test user" }]);
 
-    const { findByTestId } = render(<UserPage />);
+    render(<UserPage />);
 
-    expect(findByTestId("user-template-page-testid")).toBeDefined();
+    expect(await screen.findByTestId("user-template-page-testid")).toBeDefined();
   });
 });
 ```
@@ -387,26 +504,20 @@ Because of testing `useSWR` behavior (which will re-render DOM after fetcher pro
 
 ### SWR testing
 
-Testing swr has a few known issues. One is cache persistency across tests. To fix that we need to add this:
+To use SWR in your tests, add `SWRConfig` to your `AllProviders` mock with the following setup (note: your cases could require more customization):
 
-```tsx
-afterEach(async () => {
-  await waitFor(() => cache.clear());
-});
-```
-
-Another issue is deduping. We can fix that by adding `SWRConfig` provider to our custom render.
 
 ```tsx
 const AllProviders = ({ children }) => (
-  <SWRConfig value={{ dedupingInterval: 0 }}>
+  <SWRConfig value={{ dedupingInterval: 0, provider: () => new Map() }}>
     <ChakraProvider theme={theme}>{children}</ChakraProvider>
   </SWRConfig>
 );
 ```
 
-More can be found in [this issue](https://github.com/vercel/swr/issues/781).
-[Additional info](https://medium.com/frontend-digest/using-testing-libary-with-useswr-f595919de2fd).
+With this setup, we are sure that each component we're testing will have its own cache, so we don't have to manually clear the cache before each test.
+
+Check out [this issue](https://github.com/vercel/swr/issues/781) and [this answer](https://github.com/vercel/swr/issues/781#issuecomment-952738214) that explains fixing the known problem.
 
 ### Server side rendering
 
@@ -435,7 +546,7 @@ Test example:
 
 ```tsx
 describe("User Page", () => {
-  it("User page is rendered", async () => {
+  it("displays user data", async () => {
     (fetchUsers as jest.Mock).mockResolvedValue([
       new User({
         id: "1",
@@ -450,7 +561,7 @@ describe("User Page", () => {
 
     render();
 
-    expect(screen.getByText("Buzz")).toBeDefined();
+    expect(screen.queryByText('Test user')).not.toBeNull();
   });
 });
 ```
@@ -458,6 +569,14 @@ describe("User Page", () => {
 ## Fetchers
 
 Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to the fetcher that is tested.
+
+```
+...
+└── fetchers
+    └── users
+        ├── user.ts
+        └── user.test.ts
+```
 
 ### Using datx:
 
@@ -491,8 +610,8 @@ export async function fetchUser(
 Test example:
 
 ```tsx
-describe("user fetchers", () => {
-  it("api returns success with only user", async () => {
+describe("fetchUser", () => {
+  it("should return success with only user", async () => {
     const mockStore = new AppCollection();
     const mockUser = mockStore.add({}, User);
 
@@ -505,7 +624,7 @@ describe("user fetchers", () => {
     expect(fetchResponse.role.name).toBe(RoleTypes.User);
   });
 
-  it("api returns success with user and role", async () => {
+  it("should return success with user and role", async () => {
     const mockStore = new AppCollection();
     const mockRole = mockStore.add({ name: RoleTypes.Superadmin }, Role);
     const mockUser = mockStore.add({ role: mockRole }, User);
@@ -519,7 +638,7 @@ describe("user fetchers", () => {
     expect(fetchResponse.role.name).toBe(RoleTypes.Superadmin);
   });
 
-  it("api returns error", async () => {
+  it("should return an error", async () => {
     const mockError = { description: "Error occurred!" };
     const mockStore = new AppCollection();
     mockStore.request = jest.fn().mockRejectedValue({ error: [mockError] });
@@ -562,20 +681,20 @@ function useModal(initialOpen = false) {
 
 ```tsx
 describe("useModal", () => {
-  it("isOpen should change to true when toggle", () => {
+  it("should toggle isOpen on toggle call", async () => {
     const { result } = renderHook(() => useModal());
 
-    act(() => {
+    await waitFor(() => {
       result.current.toggle();
     });
 
     expect(result.current.isOpen).toBe(true);
   });
 
-  it("isOpen should change to false when close", () => {
+  it("should change isOpen to false on close call", async () => {
     const { result } = renderHook(() => useModal(true));
 
-    act(() => {
+    await waitFor(() => {
       result.current.close();
     });
 
@@ -583,5 +702,3 @@ describe("useModal", () => {
   });
 });
 ```
-
-If any part of your test is preforming an update, that action needs to be wrapped into `act()`. More info about [act()](https://reactjs.org/docs/test-utils.html#act).
