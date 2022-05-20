@@ -158,7 +158,7 @@ export function useSession({
 }
 ```
 
-Since this there is a lot of code, so let's explain section by section.
+Since there is a lot of code, let's explain it section by section.
 
 `useDatx` hook is used to provide DatX collection to our session fetchers. How to set up DatX in an application, you can follow [DatX Store Provider](./datx-store-provider) chapter from this handbook.
 
