@@ -288,7 +288,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 };
 ```
 
-If we now implement this in our example, this now looks like this.
+If we now implement this in our example, it looks like this.
 
 ```tsx
 const SomePrivatePage = () => {
@@ -296,7 +296,7 @@ const SomePrivatePage = () => {
     <Layout>
       <Header />
 
-      <AuthRedirect to="/">
+      <AuthRedirect to="/" />
       <Content />
 
       <Footer />
@@ -321,7 +321,7 @@ In `AuthRedirect` props we have defined multiple properties:
 
 ```tsx
 // redirect if session exits
-<AuthRedirect to="/" ifFound>
+<AuthRedirect to="/" ifFound />
 ```
 
 _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
@@ -332,5 +332,5 @@ _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
 
 ```tsx
 // redirect if logged in user is not an admin
-<AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'}>
+<AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'} />
 ```
