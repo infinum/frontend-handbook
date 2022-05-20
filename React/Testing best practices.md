@@ -352,8 +352,10 @@ An example:
     });
 
     describe('when clicked', () => {
-      beforeEach(() => {
-        fireEvent.click(screen.getByText(buttonText));
+      beforeEach(async () => {
+        await waitFor(() => {
+          user.click(screen.getByText(buttonText));
+        });
       });
       
       it('should open alert dialog', () => {
@@ -367,7 +369,7 @@ An example:
     describe('when confirm is clicked', () => {
       beforeEach(async () => {
         await waitFor(() => {
-          fireEvent.click(screen.getByText(buttonText));
+          user.click(screen.getByText(buttonText));
         });
       });
       
@@ -408,10 +410,10 @@ An example:
         <ResetPasswordForm onSuccess={mockSuccess} />
       );
 
-      await waitFor(() => {
-        userEvent.type(screen.getByRole('input'), '12345678');
-      });
+      userEvent.type(screen.getByRole('input'), '12345678');
 
+      // this event will trigger react-hook-form to rerender our component
+      // so we have to properly handle this state change before making further assertions
       await waitFor(() => {
         userEvent.click(screen.getByRole('button'));
       });
@@ -422,6 +424,8 @@ An example:
 ```
 
 Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
+
+> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out the [Kents blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
 
 
 ## Page component testing
