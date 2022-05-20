@@ -40,7 +40,7 @@ import { SessionModel } from 'models/SessionModel';
   User model is included in the response.
 */
 export async function createSession(datx, loginData) {
-  const require = await fetch(SESSION_API_ENDPOINT, {
+  const res = await fetch(SESSION_API_ENDPOINT, {
     method: 'POST',
     body: loginData,
     // ...rest of the options
@@ -56,7 +56,7 @@ export async function createSession(datx, loginData) {
   User model is included in the response.
 */
 export async function readSession(datx) {
-  const require = await fetch(SESSION_API_ENDPOINT, {
+  const res = await fetch(SESSION_API_ENDPOINT, {
     method: 'GET',
     // ...rest of the options
   });
