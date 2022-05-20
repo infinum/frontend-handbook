@@ -600,7 +600,7 @@ const useInput = (initialState = '') => {
 }
 
 export const MyComponent: FC = () => {
-  const [count, { increment, decrement, reset }] = useCounter();
+  const [count, { increment, decrement, reset }] = useCount();
   const [inputState, { handleInputChange }] = useInput();
 
   return (
