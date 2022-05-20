@@ -425,7 +425,7 @@ An example:
 
 Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
 
-> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out the [Kents blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
+> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out the [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
 
 
 ## Page component testing
