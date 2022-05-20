@@ -269,7 +269,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 
     // `condition` has a priority over a `ifFound` property
     if (condition) {
-      if (condition(state.data)) {
+      if (condition(data)) {
         router.push(to);
       }
 
