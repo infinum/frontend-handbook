@@ -331,6 +331,7 @@ describe("UserCard", () => {
 Describe your rendering inside `beforeEach` so you could use `screen.{getBySomething}` in your tests later, to reduce number of unnecessary renders.
 
 An example:
+
 ```tsx
   describe('AlertButton', () => {
     let title: string;
@@ -359,7 +360,7 @@ An example:
       });
       
       it('should open alert dialog', () => {
-				expect(screen.queryByRole('alertdialog')).toBeNull();
+        expect(screen.queryByRole('alertdialog')).toBeNull();
       });
       it('should display correct title', () => {
         expect(screen.queryByText(title)).not.toBeNull();
@@ -374,13 +375,14 @@ An example:
       });
       
       it('should close the dialog', () => {
-				expect(screen.queryByRole('alertdialog')).toBeNull();
+        expect(screen.queryByRole('alertdialog')).toBeNull();
       });
 
       // ... more test cases
     });
-  })
+  });
 ```
+
 
 > **Note:** This is a shortened example of this concept, you can refer to the standup video section for more info:
 [Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
@@ -425,7 +427,7 @@ An example:
 
 Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
 
-> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out the [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
+> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
 
 
 ## Page component testing
