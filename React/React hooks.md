@@ -581,7 +581,7 @@ const useCount = (initialState = 0) => {
         setState(0)
       }
     }),
-    [initialState]
+    []
   );
 
   return [state, handlers];
@@ -594,7 +594,7 @@ const useInput = (initialState = '') => {
     handleInputChange: (event) => {
       setState(event.target.value);
     }
-  })), [initialState]);
+  })), []);
 
   return [state, handlers]
 }
