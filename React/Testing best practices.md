@@ -312,8 +312,9 @@ Here, the `Button` component is mocked since we only care about the specifics of
 
 ```jsx
 import { screen } from '@testing-library/react';
+import { Button } from "components/Button";
 
-jest.mock("components/button");
+jest.mock("components/Button");
 (Button as jest.Mock).mockReturnValue(<button />);
 
 describe("UserCard", () => {
