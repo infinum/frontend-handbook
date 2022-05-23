@@ -363,9 +363,9 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
   useEffect(() => {
     /**
-      On each render, `useEffect` is causing an additional re-render,
-      since it's dependency is an object with a new reference every time.
-    */
+     * On each render, `useEffect` is causing an additional re-render,
+     * since it's dependency is an object with a new reference every time.
+     */
     doSomeSideEffectsWithShape(shape);
   }, [shape])
 
@@ -478,9 +478,9 @@ React is good at optimizing, so if you prematurely decide to wrap a function ins
 ```jsx
 export const StepButton: FC = ({ onClick, stepSize }) => {
   /**
-  * You don't have to optimise (wrap in useCallback) because onClick and stepSize
-  * are the same on each render and React can optimise this by itself.
-  **/
+   * You don't have to optimise (wrap in useCallback) because onClick and stepSize
+   * are the same on each render and React can optimise this by itself.
+   */
   return <button onClick={() => onClick(stepSize)}>Increment for {stepSize}</button>;
 }
 
