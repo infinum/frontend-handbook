@@ -604,9 +604,7 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 ## Setting up theming and styles
 
-When creating styles for your core components, you will create `components` folder inside of styles folder. Styles folder will contain all core stylings and theme setup.
-
-Check out [styling guide(needs update)](styling-guide-section-link) for other styling related stuff.
+When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
 
 
 ```
