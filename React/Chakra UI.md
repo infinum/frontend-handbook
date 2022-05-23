@@ -270,7 +270,7 @@ Example:
 ```
 
 In the example above the `a` element will be rendered as a `Button` component.
-The `as` prop can be also be another React component:
+The `as` prop can also be another React component:
 
 ```tsx
 <Button as={Link} someLinkProp={value}>
