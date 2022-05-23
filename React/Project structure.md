@@ -627,7 +627,7 @@ src
 When organizing test files, here are couple of quick rules:
 
 - Components, utils, fetchers... should have a test file in the same folder where they are placed
-- When testing pages, create `__tests__/pages` folder because how next treats pages folder.
+- When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
 - All mocks should be placed in `__mocks__` folder
 
 For other in depth guides for testing take a look at the [testing guide(needs update)](link-to-testing-section).
