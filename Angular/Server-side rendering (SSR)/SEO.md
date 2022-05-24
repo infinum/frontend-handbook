@@ -52,3 +52,310 @@ Twitter will use Open Graph meta tags if twitter ones are not set. You don't nee
 ### Header Tags
 You can use header tags to change font sizes and signify information hierarchy on a page.
 The heading elements go from H1 to H6. H1 is the largest and most important level, and H6 is the smallest and least important.
+
+## SEO service
+In this example here we will cover service example for the SEO:
+
+```typescript
+export interface ISEOContent {
+	title: string;
+	description: string;
+	url: string;
+	siteName: string;
+	image?: string;
+	imageWidth?: string;
+	imageHeight?: string;
+	imageType?: string;
+	type?: string;
+	twitterCard?: string;
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class SeoService {
+	public readonly defaultDescriptionTranslationKey = 'seo.description';
+	public readonly siteNameTranslationKey = 'seo.siteName';
+	public readonly defaultImageUrl = urlJoin(
+		this.environmentVariablesService.get(EnvironmentVariable.APP_URL),
+		'assets',
+		'images',
+		'seo.jpg'
+	);
+	public readonly defaultImageWidth = '1200';
+	public readonly defaultImageHeight = '630';
+	public readonly defaultImageType = 'image/jpeg';
+	public readonly defaultType = 'website';
+	public readonly defaultTwitterCard = 'summary_large_image';
+
+	constructor(
+		private readonly titleService: Title,
+		private readonly metaService: Meta,
+		private readonly translocoService: TranslocoService,
+		private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>
+	) {}
+
+	public setSEO({
+		title,
+		description,
+		url,
+		siteName,
+		image,
+		imageWidth,
+		imageHeight,
+		imageType,
+		type,
+		twitterCard,
+	}: ISEOContent): void {
+		// First remove all meta tags to eliminate checking for exiting ones.
+		// Also benefit from deleting all is not to add meta tag when it is not provided for that page.
+		this.removeAllMetaTags();
+
+		// Set new meta tags
+		this.setTitle(title, siteName);
+		this.setDescription(description);
+		this.setUrl(url);
+		this.setSiteName(siteName);
+		this.setImage(image);
+		this.setImageWidth(imageWidth, image);
+		this.setImageHeight(imageHeight, image);
+		this.setImageType(imageType, image);
+		this.setType(type);
+		this.setLocale();
+		this.setTwitterCard(twitterCard);
+	}
+
+    public createTranslatedSeoContent(
+        title?: TranslateParams | undefined,
+        description?: TranslateParams | undefined
+    ): Observable<{ title: string; description: string; siteName: string }> {
+        const title$ = this.createTranslatedTitleObservable(title);
+        const description$ = this.createTranslatedDescriptionObservable(description);
+        const siteName$ = this.createTranslatedSiteNameObservable();
+
+        return combineLatest([title$, description$, siteName$]).pipe(
+            map(([title, description, siteName]) => ({ title, description, siteName }))
+        );
+    }
+
+    public createTranslatedTitleObservable(title?: TranslateParams | undefined): Observable<string> {
+        return this.translocoService.selectTranslate(title ?? '');
+    }
+
+    public createTranslatedDescriptionObservable(description?: TranslateParams | undefined): Observable<string> {
+        return this.translocoService.selectTranslate(description ?? this.defaultDescriptionTranslationKey);
+    }
+
+    public createTranslatedSiteNameObservable(): Observable<string> {
+        return this.translocoService.selectTranslate(this.siteNameTranslationKey);
+    }
+
+	private setTitle(title: string | undefined, siteName: string): void {
+		const titleContent = title ? `${title} | ${siteName}` : siteName;
+
+		this.titleService.setTitle(titleContent);
+		this.metaService.addTag({
+			property: 'og:title',
+			content: titleContent,
+		});
+	}
+
+	private setDescription(description: string): void {
+		this.metaService.addTag({
+			name: 'description',
+			content: description,
+		});
+		this.metaService.addTag({
+			property: 'og:description',
+			content: description,
+		});
+	}
+
+	private setUrl(url: string): void {
+		this.metaService.addTag({
+			property: 'og:url',
+			content: url,
+		});
+	}
+
+	private setSiteName(siteName: string): void {
+		this.metaService.addTag({
+			property: 'og:site_name',
+			content: siteName,
+		});
+	}
+
+	private setImage(image: string | undefined): void {
+		if (!image) {
+			this.setDefaultImage();
+			return;
+		}
+		this.metaService.addTag({ property: 'og:image', content: image });
+	}
+
+	private setImageWidth(imageWidth: string | undefined, image: string | undefined): void {
+		if (imageWidth && image) {
+			this.metaService.addTag({ property: 'og:image:width', content: imageWidth });
+		}
+	}
+
+	private setImageHeight(imageHeight: string | undefined, image: string | undefined): void {
+		if (imageHeight && image) {
+			this.metaService.addTag({ property: 'og:image:height', content: imageHeight });
+		}
+	}
+
+	private setImageType(imageType: string | undefined, image: string | undefined): void {
+		if (imageType && image) {
+			this.metaService.addTag({ property: 'og:image:type', content: imageType });
+		}
+	}
+
+	private setDefaultImage(): void {
+		this.metaService.addTag({ property: 'og:image', content: this.defaultImageUrl });
+		this.metaService.addTag({ property: 'og:image:width', content: this.defaultImageWidth });
+		this.metaService.addTag({ property: 'og:image:height', content: this.defaultImageHeight });
+		this.metaService.addTag({ property: 'og:image:type', content: this.defaultImageType });
+	}
+
+	private setType(type: string | undefined): void {
+		this.metaService.addTag({ property: 'og:type', content: type ?? this.defaultType });
+	}
+
+	private setLocale(): void {
+		this.metaService.addTag({
+			property: 'og:locale',
+			content: languageToLocale(this.translocoService.getActiveLang() as Language),
+		});
+	}
+
+	private setTwitterCard(type: string | undefined): void {
+		this.metaService.addTag({ name: 'twitter:card', content: type ?? this.defaultTwitterCard });
+	}
+
+	private removeAllMetaTags(): void {
+		this.metaService.removeTag('property="og:title"');
+		this.metaService.removeTag('name="description"');
+		this.metaService.removeTag('property="og:description"');
+		this.metaService.removeTag('property="og:url"');
+		this.metaService.removeTag('property="og:site_name"');
+		this.metaService.removeTag('property="og:image"');
+		this.metaService.removeTag('property="og:image:width"');
+		this.metaService.removeTag('property="og:image:height"');
+		this.metaService.removeTag('property="og:image:type"');
+		this.metaService.removeTag('property="og:type"');
+		this.metaService.removeTag('property="og:locale"');
+		this.metaService.removeTag('name="twitter:card"');
+	}
+}
+```
+
+For using this SEO service it is best to create `guard` which will call this service before accessing the page. You can define route data and read it in the `guard`:
+
+```angularjs
+{
+    path: 'homepage',
+    data: {
+        [RouteData.Title]: 'homepage.seo.title',
+        [RouteData.Description]: 'homepage.seo.description',
+    },
+    canActivate: [SeoContentGuard],
+    runGuardsAndResolvers: 'always',
+}
+```
+
+This is example if your application is using translation, so you will provide translation keys.
+
+`runGuardsAndResolvers: 'always'` is used to be sure that guard will be fired on navigation back.
+
+To be able to use translations there is function `createTranslatedSeoContent` in the service which is using the `TranslocoService` to get translations. In the last step lets crate the guard:
+
+```typescript
+@Injectable({
+	providedIn: 'root',
+})
+export class SeoContentGuard implements CanActivate {
+	constructor(
+		private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
+		private readonly seoService: SeoService
+	) {}
+
+	public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+		const titleTranslateKey = route.data[RouteData.Title];
+		const descriptionTranslateKey = route.data[RouteData.Description];
+		const url = `${this.environmentVariablesService.get(EnvironmentVariable.APP_URL)}${state.url}`;
+		const image = route.data[RouteData.Image];
+		const imageWidth = route.data[RouteData.ImageWidth];
+		const imageHeight = route.data[RouteData.ImageHeight];
+		const imageType = route.data[RouteData.ImageType];
+		const type = route.data[RouteData.Type];
+		const twitterCard = route.data[RouteData.TwitterCard];
+
+		const translatedSeoContent$ = this.seoService.createTranslatedSeoContent(
+			titleTranslateKey,
+			descriptionTranslateKey
+		);
+
+		return translatedSeoContent$.pipe(
+			take(1),
+			map(({ title, description, siteName }) => {
+				this.seoService.setSEO({
+					title,
+					description,
+					siteName,
+					url,
+					image,
+					imageWidth,
+					imageHeight,
+					imageType,
+					type,
+					twitterCard,
+				});
+
+				return true;
+			})
+		);
+	}
+}
+
+```
+
+If your application is not using translations just skip `createTranslatedSeoContent` function and provide content directly.
+
+## Canonical url service
+
+```typescript
+@Injectable({
+	providedIn: 'root',
+})
+export class CanonicalUrlService {
+	private readonly renderer: Renderer2;
+
+	constructor(
+		private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
+		private readonly rendererFactory: RendererFactory2,
+		@Inject(DOCUMENT) private readonly document: Document
+	) {
+		this.renderer = rendererFactory.createRenderer(null, null);
+	}
+
+	public createCanonicalUrl(url: string): void {
+		const link = this.renderer.createElement('link');
+
+		link.setAttribute('rel', 'canonical');
+
+		const existingLink = this.document.head.querySelectorAll('[rel="canonical"]')[0];
+
+		existingLink
+			? this.document.head.replaceChild(link, existingLink)
+			: this.renderer.appendChild(this.document.head, link);
+
+		link.setAttribute(
+			'href',
+			urlJoin(this.environmentVariablesService.get(EnvironmentVariable.APP_URL), cleanUrl(url)) // Provide url without params
+		);
+	}
+}
+```
+
+Use this service to set canonical url. Import and use it in SEO guard or some other guard.

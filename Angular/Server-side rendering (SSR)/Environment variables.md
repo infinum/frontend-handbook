@@ -1,4 +1,4 @@
-Because we are using SSR, the SSR server can read system environment variables at runtime and transfer them to the client with `TransferState`. For this we can use loader `EnvironmentVariablesSSRLoaderModule` from the library [ngx-nuts-and-bolts](https://github.com/infinum/ngx-nuts-and-bolts).
+Because we are using SSR, the SSR server can read system environment variables at runtime and transfer them to the client with `TransferState`. For this we can use loader `EnvironmentVariablesSSRLoader` from the library [ngx-nuts-and-bolts](https://github.com/infinum/ngx-nuts-and-bolts).
 You can read more details in the [official documentation](https://infinum.github.io/ngx-nuts-and-bolts/docs/services/environment-variables).
 
 ## Configuration
