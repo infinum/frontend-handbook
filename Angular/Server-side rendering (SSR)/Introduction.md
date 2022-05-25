@@ -14,7 +14,6 @@ There are 3 reasons for create angular application with server side rendering.
 Angular Universal is tool which allows server to pre-render Angular application.
 For detailed guide you can read it more [here](https://angular.io/guide/universal) in the Angular official documentation.
 
-
 To add Angular Universal run the following CLI command:
 
 ```
