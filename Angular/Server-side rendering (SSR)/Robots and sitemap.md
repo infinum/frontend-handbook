@@ -75,6 +75,7 @@ server.get('/robots.txt', (req, res) => {
 An XML sitemap is a file that lists a website’s important pages, making sure Google can find and crawl them all. It also helps search engines understand your website structure. You want Google to crawl every essential page of your website. But sometimes, pages end up without any internal links pointing to them, making them hard to find. A sitemap can help speed up content discovery.
 
 To return sitemap we will also use express for this and return custom content. For this to work we will need to install these libraries:
+
  * [apicache](https://www.npmjs.com/package/apicache) for caching the response
  * [sitemap](https://www.npmjs.com/package/sitemap) for generating sitemap.xml file
 
