@@ -5,9 +5,10 @@ Server-side rendering (SSR) is an application’s ability to convert HTML files 
 
 ## Why we use Server Side Rendering (SSR)?
 There are 3 reasons for create angular application with server side rendering.
-1. Search engine optimization (SEO).
-2. Improve performance on web and mobile.
-3. Load the page quickly.
+
+ 1. Search engine optimization (SEO).
+ 2. Improve performance on web and mobile.
+ 3. Load the page quickly.
 
 ## Angular Universal
 Angular Universal is tool which allows server to pre-render Angular application.
@@ -15,11 +16,14 @@ For detailed guide you can read it more [here](https://angular.io/guide/universa
 
 
 To add Angular Universal run the following CLI command:
+
 ```
 ng add @nguniversal/express-engine
 ```
+
 The command creates the following folder structure:
-```
+
+```text
 src
 |-- index.html                             // <-- app web page
 |-- main.ts                                // <-- bootstrapper for client app
@@ -33,10 +37,12 @@ src
 |-- tsconfig.server.json                   // <-- * TypeScript server application configuration
 |-- tsconfig.spec.json                     // <-- TypeScript tests configuration
 ```
+
 The files marked with `*` are new added files after running the command.
 
 ### Package.json file configuration
 In the package.json file update the following scripts:
+
 ```json
 {
   "start": "ng run APP_NAME:serve-ssr",
@@ -44,6 +50,7 @@ In the package.json file update the following scripts:
   "serve": "node dist/APP_NAME/server/main.js"
 }
 ```
+
 _APP_NAME is application name. For example `js-infinum-website`._
 
 This configuration uses SSR for development. This helps catch any SSR-specific errors during development. 

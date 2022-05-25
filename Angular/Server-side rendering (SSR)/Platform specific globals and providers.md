@@ -6,7 +6,8 @@ Angular provides some injectable abstractions over these objects, such as [Locat
 
 To fix this we can explicitly check for the platform and provide correct value.
 
-In the `app.module.ts` we can check for platform when providing injection token:
+In the module we can check for platform when providing injection token:
+
 ```typescript
 {
     provide: WINDOW,

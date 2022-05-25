@@ -24,7 +24,7 @@ import { exposedEnvironmentVariables } from './enums/environment-variable.enum';
 })
 ```
 
-We can create `environment-variable.enum.ts` file and declare environment variables and variables we want to expose:
+We can create `environment-variable.enum.ts` file and declare environment variables we want to expose:
 
 ```typescript
 export enum EnvironmentVariable {
