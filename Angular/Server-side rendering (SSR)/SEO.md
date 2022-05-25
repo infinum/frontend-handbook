@@ -24,10 +24,10 @@ The robots meta tag tells search engines to either index or non-index your web p
 
 The tag has four main values for the search engine crawlers:
 
-- `FOLLOW` –The search engine crawler will follow all the links in that webpage
-- `INDEX` –The search engine crawler will index the whole webpage
-- `NOFOLLOW` – The search engine crawler will NOT follow the page and any links in that webpage
-- `NOINDEX` – The search engine crawler will NOT index that webpage
+ * `FOLLOW` –The search engine crawler will follow all the links in that webpage
+ * `INDEX` –The search engine crawler will index the whole webpage
+ * `NOFOLLOW` – The search engine crawler will NOT follow the page and any links in that webpage
+ * `NOINDEX` – The search engine crawler will NOT index that webpage
 
 `<meta name=”robots” content=”noindex, nofollow”>` Means not to index or not to follow this webpage.
 
@@ -37,17 +37,18 @@ The tag has four main values for the search engine crawlers:
 These tags make social media syncing easier. Open graph meta tags promote integration between Facebook, LinkedIn, Google, and your website.
 
 Here is a list of important Open Graph tags:
-- `<meta property="og:title" content="TITLE">`
-- `<meta property="og:description" content="DESCRIPTION">`
-- `<meta property="og:url" content="URL">`
-- `<meta property="og:site_name" content="SITE_NAME">`
-- `<meta property="og:image" content="IMAGE_URL">`
-- `<meta property="og:type" content="TYPE">` (you can find [here](https://ogp.me/#types) list of all types)
-- `<meta property="og:locale" content="LOCALE">`
+
+ * `<meta property="og:title" content="TITLE">`
+ * `<meta property="og:description" content="DESCRIPTION">`
+ * `<meta property="og:url" content="URL">`
+ * `<meta property="og:site_name" content="SITE_NAME">`
+ * `<meta property="og:image" content="IMAGE_URL">`
+ * `<meta property="og:type" content="TYPE">` (you can find [here](https://ogp.me/#types) list of all types)
+ * `<meta property="og:locale" content="LOCALE">`
 
 Twitter will use Open Graph meta tags if twitter ones are not set. You don't need to set twitter meta tags except if you want a different contest for the twitter cards.
 
-- `<meta name="twitter:card" content="summary  | summary_large_image">`
+ * `<meta name="twitter:card" content="summary  | summary_large_image">`
 
 ### Header Tags
 You can use header tags to change font sizes and signify information hierarchy on a page.
