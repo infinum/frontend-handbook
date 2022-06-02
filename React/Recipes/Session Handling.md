@@ -1,6 +1,6 @@
 ## Motivation
 
-Most of the application we build have some kind of a login and protected pages. To make this possible, we use sessions. Using DatX, let's create a session model class.
+Most of the applications we build have some kind of a login and protected pages. To make this possible, we use sessions. Using DatX, let's create a session model class.
 
 ## Session model
 
@@ -40,7 +40,7 @@ import { SessionModel } from 'models/SessionModel';
   User model is included in the response.
 */
 export async function createSession(datx, loginData) {
-  const require = await fetch(SESSION_API_ENDPOINT, {
+  const res = await fetch(SESSION_API_ENDPOINT, {
     method: 'POST',
     body: loginData,
     // ...rest of the options
@@ -56,7 +56,7 @@ export async function createSession(datx, loginData) {
   User model is included in the response.
 */
 export async function readSession(datx) {
-  const require = await fetch(SESSION_API_ENDPOINT, {
+  const res = await fetch(SESSION_API_ENDPOINT, {
     method: 'GET',
     // ...rest of the options
   });
@@ -158,7 +158,7 @@ export function useSession({
 }
 ```
 
-Since this there is a lot of code, so let's explain section by section.
+Since there is a lot of code, let's explain it section by section.
 
 `useDatx` hook is used to provide DatX collection to our session fetchers. How to set up DatX in an application, you can follow [DatX Store Provider](./datx-store-provider) chapter from this handbook.
 
@@ -269,7 +269,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 
     // `condition` has a priority over a `ifFound` property
     if (condition) {
-      if (condition(state.data)) {
+      if (condition(data)) {
         router.push(to);
       }
 
@@ -288,7 +288,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 };
 ```
 
-If we now implement this in our example, this now looks like this.
+If we now implement this in our example, it looks like this.
 
 ```tsx
 const SomePrivatePage = () => {
@@ -296,7 +296,7 @@ const SomePrivatePage = () => {
     <Layout>
       <Header />
 
-      <AuthRedirect to="/">
+      <AuthRedirect to="/" />
       <Content />
 
       <Footer />
@@ -321,7 +321,7 @@ In `AuthRedirect` props we have defined multiple properties:
 
 ```tsx
 // redirect if session exits
-<AuthRedirect to="/" ifFound>
+<AuthRedirect to="/" ifFound />
 ```
 
 _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
@@ -332,5 +332,5 @@ _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
 
 ```tsx
 // redirect if logged in user is not an admin
-<AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'}>
+<AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'} />
 ```

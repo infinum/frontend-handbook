@@ -6,7 +6,7 @@ When adding UI components, you should be able to group them in two root domains:
 1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
 3. `features` - root folder for components based on a specific feature (could be scoped by page or island)
-   
+
 Folder naming rules:
 
  1. `kebab-case` folder name indicates domain name
@@ -113,7 +113,7 @@ Here are some examples of core components:
 ### *Shared* domain
 
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
-They could be shared between feature components and encapsulates some specific logic of an feature.  
+They could be shared between feature components and encapsulates some specific logic of an feature.
 
 We can split them into three domains:
 1. `UI` - higher order user interface components
@@ -194,7 +194,7 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
     <td><code>todo</code></td>
     <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
     <td rowspan="3">
-      They should accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>. 
+      They should accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
     </td>
   </tr>
   <tr>
@@ -315,13 +315,13 @@ export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div
   const height = isOpen ? { base: '300px', md: '500px' } : null;
 
   return (
-    <GridItem 
-      ref={ref} 
-      h={height} 
-      position="relative" 
-      column="1 / 3" 
-      row="1 / 2" 
-      {...rest} 
+    <GridItem
+      ref={ref}
+      h={height}
+      position="relative"
+      column="1 / 3"
+      row="1 / 2"
+      {...rest}
     />
   );
 });
@@ -559,7 +559,7 @@ src
     ...
 ```
 
-## Setting up store
+## Setting up the store
 
 Your datx store and models will be placed in the root of the `src` folder as follows:
 
@@ -604,9 +604,7 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 ## Setting up theming and styles
 
-When creating styles for your core components, you will create `components` folder inside of styles folder. Styles folder will contain all core stylings and theme setup.
-
-Check out [styling guide(needs update)](styling-guide-section-link) for other styling related stuff.
+When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
 
 
 ```
@@ -627,7 +625,7 @@ src
 When organizing test files, here are couple of quick rules:
 
 - Components, utils, fetchers... should have a test file in the same folder where they are placed
-- When testing pages, create `__tests__/pages` folder because how next treats pages folder.
+- When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
 - All mocks should be placed in `__mocks__` folder
 
 For other in depth guides for testing take a look at the [testing guide(needs update)](link-to-testing-section).
