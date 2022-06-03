@@ -571,7 +571,7 @@ src
 └── store
     ├── utlis
     │   ├── config.ts
-    │   └── initializeStore.ts
+    │   └── initialize-store.ts
     └── index.ts
 ```
 
@@ -614,7 +614,7 @@ src
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
         ├── foundations # colors, typography, sizes...
-        │   ├── fontSizes.ts
+        │   ├── font-sizes.ts
         │   └── colors.ts
         └── components # components styles
             └── button.ts
