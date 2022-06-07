@@ -367,7 +367,7 @@ src
         ├── index.ts # main theme endpoint
         ├── styles.ts # global styles
         ├── foundations # colors, typography, sizes...
-        │   ├── fontSizes.ts
+        │   ├── font-sizes.ts
         │   └── colors.ts
         └── components # components styles
             └── button.ts
@@ -659,7 +659,7 @@ In this example we will style [react-select](https://react-select.com) with Chak
 First we need to create custom style object in theme
 
 ```tsx
-// style/theme/components/reactSelect.ts
+// style/theme/components/react-select.ts
 const ReactSelect = {
   baseStyle: () => ({
     container: {
