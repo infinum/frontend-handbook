@@ -98,7 +98,7 @@ When we are building a small one-off components which doesn't contain a lot of c
 
 ### Why this approach can become a problem?
 
-This example is not so bad as it seems at firs because we don't have to name components (naming is hard), but as this component grows and new features are added, inline style will become a problem.
+This example is not as bad as it seems at first because we don't have to name components (naming is hard), but as this component grows and new features are added, the inline style will become a problem.
 Problem with inline styles is that they can easily clutter the code and decrease readability.  
 When that happens we need to find a way to fix this problem.
 
