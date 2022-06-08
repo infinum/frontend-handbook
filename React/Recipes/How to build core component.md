@@ -512,7 +512,7 @@ const styles = useMultiStyleConfig("Card", props);
 
 #### Using StylesProvider
 
-In the rood component we can access the whole style config and provide it to all the parts via `StylesProvider` context provider. This way we can for example set the variant only on the root element and all the parts will inherit that variant styles.
+In the root component, we can access the whole style config and provide it to all the parts via `StylesProvider` context provider. This way we can, for example, set the variant only on the root element and all the parts will inherit that variant styles.
 
 ```tsx
 import {
