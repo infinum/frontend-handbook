@@ -6,6 +6,7 @@ When adding UI components, you should be able to group them in two root domains:
 1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
 3. `features` - root folder for components based on a specific feature (could be scoped by page or island)
+3. `icons` - SVG icons used throughout the application
 
 Folder naming rules:
 
@@ -20,6 +21,11 @@ src
 │   │   │   └── Section.tsx
 │   │   └── Card
 │   │       └── Card.tsx
+│   ├── icons
+│   │   ├── PlusIcon
+│   │   │   └── PlusIcon.tsx
+│   │   └── TrashIcon
+│   │       └── TrashIcon.tsx
 │   ├── features
 │   │   ├── home
 │   │   │   ├── HomeHeaderSection
