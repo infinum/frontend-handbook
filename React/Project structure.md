@@ -176,6 +176,11 @@ Here are some examples of feature domain names:
     <td><code>ArticleMarkdown</code>, <code>AnnouncementMarkdown</code></td>
     <td>Components that handles parsing of the markdown and styling of the generated HTML</td>
   </tr>
+  <tr>
+    <td><code>icons</code></td>
+    <td><code>PlusIcon</code>, <code>TrashIcon</code></td>
+    <td>SVG icons used throughout the application. The icons should be named by what they are, not where they are used, e.g. <code>TrashIcon</code> instad of <code>DeleteIcon</code> or <code>ExclamationCircleIcon</code> instead of <code>ErrorIcon</code></td>
+  </tr>
 </table>
 
 #### Shared *Entity* domain
