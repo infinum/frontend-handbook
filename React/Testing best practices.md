@@ -569,6 +569,43 @@ describe("User Page", () => {
 });
 ```
 
+## Testing passed props
+
+When testing the user interactions or trying to see if a component is called with a certain property you can wrap a component in a jest function.
+
+In the example below, the component with a button and on click it will open a modal. We want to test if the `Modal` is open or not by checking if the `Modal` component got `isOpen={true}`
+
+```tsx
+import { Modal } from '@chakra-ui/react';
+
+jest.mock('@chakra-ui/react', () => {
+	const originalImplementation = jest.requireActual('@chakra-ui/react');
+
+	return {
+		...originalImplementation,
+		Modal: jest.fn((props) => {
+			const { Modal: OriginalModal } = jest.requireActual('@chakra-ui/react');
+
+			return <OriginalModal {...props} />;
+		}),
+	};
+});
+
+describe("MyModal", () => {
+	it("should open on click", () => {
+		render(<MyModal />);
+
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: false }), expect.anything());
+
+		const button = screen.queryByRole("button");
+		expect(button).toBeDefined();
+
+		userEvent.click(button);
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: true }), expect.anything());
+	})
+})
+```
+
 ## Fetchers
 
 Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to the fetcher that is tested.
