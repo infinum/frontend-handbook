@@ -571,11 +571,27 @@ describe("User Page", () => {
 
 ## Testing passed props
 
-When testing the user interactions or trying to see if a component is called with a certain property you can wrap a component in a jest function.
+A quick how to on using Jest to check if correct props are passed to a child component.
 
-In the example below, the component with a button and on click it will open a modal. We want to test if the `Modal` is open or not by checking if the `Modal` component got `isOpen={true}`
+This example is purely to show how to verify that a React components props are passed in a Jest unit test. There are two components, a `MyModal` and a `Modal` from Chakra UI library. The `MyModal` renders `Modal` and `Button`, and the 'open' state is handled with `useDisclosure` hook. The goal is to check if `Modal` component gets the `isOpen={true}` prop when the user clicks the button.
 
 ```tsx
+// MyModal.tsx
+export const MyModal: FC<ButtonProps> = (props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Button {...props} onClick={onOpen}>Open my modal</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        {/* Modal stuff */}
+      </Modal>
+    </>
+  );
+}
+
+// MyModal.test.tsx
 import { Modal } from '@chakra-ui/react';
 
 jest.mock('@chakra-ui/react', () => {
