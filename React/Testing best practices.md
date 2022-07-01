@@ -569,6 +569,59 @@ describe("User Page", () => {
 });
 ```
 
+## Testing passed props
+
+A quick how to on using Jest to check if correct props are passed to a child component.
+
+This example is purely to show how to verify that a React components props are passed in a Jest unit test. There are two components, a `MyModal` and a `Modal` from Chakra UI library. The `MyModal` renders `Modal` and `Button`, and the 'open' state is handled with `useDisclosure` hook. The goal is to check if `Modal` component gets the `isOpen={true}` prop when the user clicks the button.
+
+```tsx
+// MyModal.tsx
+export const MyModal: FC<ButtonProps> = (props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Button {...props} onClick={onOpen}>Open my modal</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        {/* Modal stuff */}
+      </Modal>
+    </>
+  );
+}
+
+// MyModal.test.tsx
+import { Modal } from '@chakra-ui/react';
+
+jest.mock('@chakra-ui/react', () => {
+	const originalImplementation = jest.requireActual('@chakra-ui/react');
+
+	return {
+		...originalImplementation,
+		Modal: jest.fn((props) => {
+			const { Modal: OriginalModal } = jest.requireActual('@chakra-ui/react');
+
+			return <OriginalModal {...props} />;
+		}),
+	};
+});
+
+describe("MyModal", () => {
+	it("should open on click", () => {
+		render(<MyModal />);
+
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: false }), expect.anything());
+
+		const button = screen.queryByRole("button");
+		expect(button).toBeDefined();
+
+		userEvent.click(button);
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: true }), expect.anything());
+	})
+})
+```
+
 ## Fetchers
 
 Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to the fetcher that is tested.
