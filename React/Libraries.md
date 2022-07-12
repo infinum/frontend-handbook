@@ -24,6 +24,7 @@
 - [react-datepicker](https://github.com/Hacker0x01/react-datepicker/) - A simple and reusable datepicker component for React
 - [react-virtualized](https://github.com/bvaughn/react-virtualized) - React components for efficiently rendering large lists and tabular data
 - [react-virtuoso](https://github.com/petyosi/react-virtuoso) - An elegant virtual list component for React
+- [@tanstack/react-virtual](https://tanstack.com/virtual/v3) - Headless UI for Virtualizing Large Element Lists
 - [@tippyjs/react](https://github.com/atomiks/tippyjs-react) - The complete tooltip, popover, dropdown, and menu solution for the web, powered by Popper
 - [downshift](https://github.com/downshift-js/downshift) - A set of primitives to build autocomplete, combobox or select dropdown React components
 - [react-collapse](https://github.com/nkbt/react-collapse) - Component-wrapper for collapse animation with react-motion for elements with variable (and dynamic) height
