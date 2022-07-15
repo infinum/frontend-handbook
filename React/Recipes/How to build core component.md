@@ -26,7 +26,7 @@ Here is the simple example of two different card designs, `user` card in the fir
 First step is to bootstrap the layout with inline props.
 
 ```tsx
-// ./src/components/shared/user/UserCard/UserCard.tsx
+// ./src/components/shared/user/UserCard/UserCard.styles.tsx
 
 import * as React from "react";
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
