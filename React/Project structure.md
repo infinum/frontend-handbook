@@ -346,7 +346,7 @@ Rules:
 
 ## Different component layouts
 
-Sometimes, you might want to create a component specific for mobile and desktop. You might use a tool like [fresnel](https://github.com/artsy/fresnel) for detecting media queries.
+Sometimes, you might want to create a component specific for mobile and desktop.
 
 In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on specific media query.
 
@@ -360,19 +360,21 @@ In this case, inside a specific component, we could add a subfolder `layouts` (n
         └── UserCard.tsx
 ```
 
-For this case, inside `index.tsx` we would have something like this:
+For this case, inside `index.tsx` we would have something like this (with help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide)):
 
 ```tsx
-  export const UserCard = () => {
-    return (
-      <Media at="sm">
-        <UserCardMobile />
-      </Media>
-      <Media at="md">
-        <UserCardDesktop />
-      </Media>
-    )
-  }
+import { Show, Hide } from '@chakra-ui/react';
+
+export const UserCard = () => {
+  return (
+    <Hide above="md">
+      <UserCardMobile />
+    </Hide>
+    <Show above="md">
+      <UserCardDesktop />
+    </Show>
+  )
+}
 ```
 
 > This is the case **only** for layouts that would add too much complexity when using standard css media queries.
