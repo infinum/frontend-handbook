@@ -83,7 +83,6 @@
 - [react-use-measure](https://github.com/pmndrs/react-use-measure) - Utility to measure view bounds
 - [googlemap-react](https://github.com/googlemap-react/googlemap-react) - Easier Google Map Integration for React projects
 - [react-merge-refs](https://github.com/gregberge/react-merge-refs) - React utility to merge refs
-- [@artsy/fresnel](https://github.com/artsy/fresnel) - An SSR compatible approach to CSS media query based responsive layouts for React
 - [slate](https://github.com/ianstormtaylor/slate) - A completely customizable framework for building rich text editors. (Currently in beta.)
 - [libphonenumber-js](https://gitlab.com/catamphetamine/libphonenumber-js#libphonenumber-js) - Validator/formatter for phone numbers (has seaparate validators for different countries)
 - [react-dropzone](https://react-dropzone.js.org/) - Simple React hook to create a HTML5-compliant drag'n'drop zone for files.
