@@ -160,9 +160,9 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 Infinum created various rulesets for ESLint and TSLint which you can check out [here](https://github.com/infinum/js-linters). We encourage you to use some of these presets, as per your needs:
 
--   [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
--   [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
--   [Angular TSLint config](https://github.com/infinum/js-linters/tree/master/tslint-config-angular)
+- [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
+- [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
+- [Angular ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-angular-ts)
 
 ### Stylelint
 
@@ -232,8 +232,8 @@ npm i -D concurrently husky lint-staged ng-lint-staged stylelint stylelint-prett
 
 Some notes:
 
--   it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
--   `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
--   `concurrently` speeds up things by running `tsc` checks in parallel
--   `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
--   `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
+- it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+- `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+- `concurrently` speeds up things by running `tsc` checks in parallel
+- `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
+- `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
