@@ -186,6 +186,26 @@ Infinum created various rulesets for ESLint and TSLint which you can check out [
 
 If you have no issues with prettier SCSS formatting and you decide to use Prettier, it is recommended to install [stylelint-prettier](https://github.com/prettier/stylelint-prettier) plugin and preset.
 
+```js
+{
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": true
+  }
+}
+```
+
+If you want to use stylelint, it is recommended to use [@infinumjs/stylelint-config](https://github.com/infinum/stylelint-config). In order to use it with prettier, please add [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier).
+
+```js
+{
+  "extends": [
+    "@infinumjs/stylelint-config",
+    "stylelint-config-prettier" // needed if you use prettier to format SCSS
+  ]
+}
+```
+
 ### Putting it all together
 
 Here is the complete example which runs TypeScript compilation check on all files, prettier, eslint and stylelint on an Angular (v10) project:
@@ -193,8 +213,7 @@ Here is the complete example which runs TypeScript compilation check on all file
 ```js
 {
   "scripts": {
-    "prepare": "husky install",
-		"lint": "ng lint"
+    "prepare": "husky install"
   }
 }
 ```
@@ -206,12 +225,13 @@ Here is the complete example which runs TypeScript compilation check on all file
     "prettier --write"
   ],
   "**/*.{js,ts}": [
-    "eslint",
-    "prettier --write"
+    "prettier --write",
+    "eslint"
   ],
+  "**/*.css": "stylelint",
   "**/*.scss": [
-    "stylelint --syntax=scss"
-    "prettier --write" // add or remove this line depending on whether you run stylelint on SCSS
+    "prettier --write" // add or remove this line depending on whether you run stylelint on SCSS,
+    "stylelint --customSyntax=post-scss"
   ]
 }
 ```
@@ -230,7 +250,17 @@ npx lint-staged --config .lintstagedrc.json && prettier --write
   "plugins": ["stylelint-prettier"],
   "rules": {
     "prettier/prettier": true
-  }
+  },
+  "extends": [
+    "@infinumjs/stylelint-config",
+    "stylelint-config-prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["*.scss", "**/*.scss"],
+      "customSyntax": "postcss-scss"
+    }
+  ]
 }
 ```
 
