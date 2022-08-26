@@ -8,9 +8,9 @@ Git hooks allow us to run scripts during various `git` commands. This verificati
 
 No matter which code quality tools we use, git hooks are a great way to run those tools. There are multiple ways to add git hooks. For JavaScript projects, we recommend using [husky](https://github.com/typicode/husky).
 
-Follow [usage](npm set-script prepare "husky install") guidelines for installing Husky and add hooks.
+Follow [usage](https://github.com/typicode/husky#usage) guidelines for installing Husky and add hooks.
 
-After running all commands described [usage](npm set-script prepare "husky install") chapter, you should have `.husky` folder with hooks folder inside. For example, if you created `pre-commit` hook which runs `npm test` command, you should have `pre-commit` file in `.husky` folder, with following content
+After running all commands described in [usage](https://github.com/typicode/husky#usage) chapter, you should have `.husky` folder with hooks folder inside. For example, if you created `pre-commit` hook which runs `npm test` command, you should have `pre-commit` file in `.husky` folder, with following content
 
 ```sh
 # .husky/pre-commit
@@ -43,17 +43,18 @@ For more use cases please check [Husky documentation](https://typicode.github.io
 
 `Lint-staged` uses `glob` patterns which allow you to run different scripts on different file types/patterns.
 
-Here is an example which runs `eslint` and `prettier` on all staged `.js` and `.ts` files, and `stylelint` on all staged `.scss` files via a pre-commit hook:
+Here is an example which runs `prettier` and `eslint` on all staged `.js` and `.ts` files, and `prettier` and `stylelint` on all staged `.scss` files via a pre-commit hook:
 
 ```js
 // .lintstagedrc
 {
   "**/*.{js,ts}": [
-      "eslint",
       "prettier --write"
+      "eslint"
   ]
   "**/*.scss": [
-      "stylelint --syntax=scss"
+      "prettier --write",
+      "stylelint --customSyntax=scss"
   ]
 }
 ```
@@ -213,7 +214,10 @@ Here is the complete example which runs TypeScript compilation check on all file
 ```js
 {
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tsc": "concurrently \"npm run tsc:app\" \"npm run tsc:spec\"",
+    "tsc:app": "tsc --noEmit -p ./src/tsconfig.app.json",
+    "tsc:spec": "tsc --noEmit -p ./src/tsconfig.spec.json"
   }
 }
 ```
@@ -241,7 +245,7 @@ Here is the complete example which runs TypeScript compilation check on all file
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged --config .lintstagedrc.json && prettier --write
+npm run tsc && npx lint-staged --config .lintstagedrc.json && prettier --write
 ```
 
 ```js
@@ -272,4 +276,7 @@ npm i -D concurrently husky lint-staged stylelint stylelint-prettier prettier ts
 
 Some notes:
 
+- it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+- `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+- `concurrently` speeds up things by running tsc checks in parallel
 - `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
