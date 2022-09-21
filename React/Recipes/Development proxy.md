@@ -68,6 +68,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<unknow
   if (process.env.NODE_ENV !== 'development') {
     return res.status(404).json({ message: 'Not found' });
   }
+  
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return proxy(req, res);
 }
