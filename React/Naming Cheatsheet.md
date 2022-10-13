@@ -1,8 +1,6 @@
-## Naming Cheatsheet
+## Naming Components
 
-### Naming Components
-
-#### HC/LC/b/p/s Pattern
+### HC/LC/b/p/s Pattern
 There is a useful pattern to follow when naming functions:
 
 ```
