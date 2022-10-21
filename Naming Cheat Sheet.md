@@ -1,3 +1,12 @@
+## Naming rules
+
+Naming things is hard. This sheet attempts to make it easier.
+
+Although these suggestions can be applied to any programming language, I will use JavaScript to illustrate them in practice.
+
+External link to community maintained cheatsheet:  
+[Naming cheatsheet](https://github.com/kettanaito/naming-cheatsheet/blob/main/README.md)
+
 ## Naming Components
 
 ### HC/LC/b/p/s Pattern
