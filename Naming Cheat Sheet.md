@@ -13,7 +13,7 @@ External link to community maintained cheatsheet:
 There is a useful pattern to follow when naming functions:
 
 ```
-high context (HC)? + low context? (LC)? + base + part? + suffix?
+high context (HC)? + low context (LC)? + base + part? + suffix?
 ```
 
 Take a look at how this pattern may be applied in the table below.
