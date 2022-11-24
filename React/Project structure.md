@@ -200,7 +200,7 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
     <td><code>todo</code></td>
     <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
     <td rowspan="3" style="max-width: 400px;">
-      Primarily they should accept entity prop like this <code><UserCard user={user} /></code> where <code>user</code> is resource form the API, or in the rare occasions they could accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
+      Primarily they should accept entity prop like this <code>&lt;UserCard user={user} /&gt;</code> where <code>user</code> is resource form the API, or in the rare occasions they could accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
     </td>
   </tr>
   <tr>
