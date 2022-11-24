@@ -115,10 +115,11 @@ Here are some examples of core components:
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
 They could be shared between feature components and encapsulates some specific logic of an feature.
 
-We can split them into three domains:
-1. `UI` - higher order user interface components
-2. `Entity` - UI representation of a data models
-3. `Utility` - headless utility components
+We can split them into three domains:  
+
+1. `UI` - higher order user interface components  
+2. `Entity` - UI representation of a data models  
+3. `Utility` - headless utility components  
 
 #### Shared *UI* domain
 
@@ -199,7 +200,7 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
     <td><code>todo</code></td>
     <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
     <td rowspan="3">
-      They should accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
+      Primarily they should accept entity prop like this `<UserCard user={user}>`, or in the rare occasions they could accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
     </td>
   </tr>
   <tr>
