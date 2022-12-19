@@ -2,11 +2,11 @@
 
 ### Node release schedule
 
-Node.js has defined and predictable release plan. Each node version goes through 3 phases: current, active(LTS) and maintenance. Be aware that odd-numbered versions will not go through active nad maintenance phases.
+Node.js has defined and predictable release plan. Each node version goes through 3 phases: current, active(LTS) and maintenance. Be aware that odd-numbered versions will not go through active and maintenance phases.
 
 #### Current phase
 
-Incorporates most non major changes that end up on `nodejs/node` main branch. New major releases are branched out every six months. Even-numbered versions are scheduled for release in April, while odd ones are scheduled for October.
+Incorporates most non-major changes that end up on `nodejs/node` main branch. New major releases are branched out every six months. Even-numbered versions are scheduled for release in April, while odd ones are scheduled for October.
 
 #### Active Long Term Support phase
 
@@ -18,32 +18,80 @@ Versions in this phase include new features, bug fixes and updates that have bee
 
 Versions in this phase will receive critical bug fixes and security updates for 18 months after it enters this phase.
 
+### Ensuring same version of Node is being used on all environments
+
+It is very important to keep the same versions of Node across the environments. When you update the version of Node in your project, you should take appropriate actions that the new version is also propagated/updated on build/production servers by notifying people responsible for those environments. By not running the same versions you could run into unexpected problems with failing builds, incorrect dependencies etc.
+
 ### Managing versions
 
-There are couple of ways for managing versions of Node. I will list couple of options and generally, all options are fine as long as you are proficient at installing, updating and switching Node versions using that method.
-
-(Discuss if any of the method should be default/preferred)
+There are couple of ways for managing versions of Node. I will list couple of options and generally, all options are fine as long as you are proficient at installing, updating and switching Node versions using that method. These probably aren't all available version managers on the internet, but are probably most popular.
 
 #### nvm - Node version manager
 
-.nvmrc file
+[Node version manager](https://github.com/nvm-sh/nvm) is both powerful and easy to use and should be preferred method for managing Node versions.
+You can create a `.nvmrc` file containing a Node version number. Running `use`, `install`, `which` etc. commands will use the version specified in the file if none was provided in the command line. When using `nvm` and installing global packages, those packages will only be global for that specific version. eg. You currently use Node 16 and install `polyglot-cli`, if you switch to v18, the package won't be available there until you install it.
+
+```bash
+#Install NVM by running script
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+
+#Install latest Node version
+nvm install node
+
+#Install specific version of Node by specifying version or use an alias
+nvm install <version>
+nvm install <alias>
+
+#Check Node version currently in use and available versions
+nvm ls
+
+#Set default version
+nvm alias default <version>
+
+#Switching between Node versions
+nvm use <version>
+nvm use default
+
+#Uninstall Node version
+nvm uninstall <version>
+```
 
 #### n
 
-.n file
+[n](https://github.com/tj/n) is a version manager similar to `nvm` and a good alternative
+You can create a `.n-node-version`, `.node-version` or `.nvmrc` file containing a Node version number. Running `n auto` will look for version specified in one of those files in that order and switch to it.
 
-#### avn - Automatic Version Switching
+```bash
+#Install n by running script
+npm install -g n
+
+#Install latest Node version
+n latest
+
+#Install specific version of Node by specifying version or use an alias
+n <version>
+n lts
+
+#Execute to check Node version currently in use and available versions
+n
+
+#Uninstall Node version(this does not affect cached versions)
+n uninstall <version>
+
+#Uninstall cached Node version
+n rm <version>
+```
 
 #### Using homebrew
 
-For this method you need to have `homebrew` installed on your Mac(which you probably do). There might be additional steps required when switching versions using `brew` as switching is not supported, so you might need to uninstall and unlink the old version, and install and link new one.
+For this method you need to have [homebrew](https://brew.sh/) installed on your Mac(which you probably do). There might be additional steps required when switching versions using `brew` as switching is not supported, so you might need to uninstall and unlink the old version, and install and link new one.
 
 ```bash
 #Install Node
 brew install node
 
 #Install specific version of node
-brew install node@14
+brew install node@<version>
 
 #Update Node
 brew upgrade node
@@ -54,19 +102,26 @@ brew uninstall node
 
 #### Using direct binary install
 
-advantages and disadvantages
+Considering previously mentioned options, there is no particular advantage why you would use binary installation. You can still opt in to do so if you wish.
 
-recommended setup
+#### avn - Automatic Version Switching
 
-where should you enter which node version should be used
-package.json -> engines
-.node-version file for avn
+[avn](https://github.com/wbyoung/avn) is a package for automatic version switching of Node using one of your Node version manager package. Currently supported are `nvm`, `n` and `nodebrew`. When you `cd` into a directory containing `.node-version` file, `avn` will automatically detect the change and use version manager of your choice to switch to the specified version.
 
-for each write down steps for installing, switching, removing, and using node versions
-writing down useful commands, like nvm ls
+```bash
+#Install the packages
+npm install -g avn avn-nvm avn-n
+avn setup
+```
 
-How to ensure that developer, build server and production server all use the same version of node
-^ not really sure what is the correct answer here, is this aimed at that server uses the same version by mentioning it somewhere in the code
+#### Specifying version in package.json
 
-and why is that important
-to avoid version mismatch, example locally you are using node 14 to install packages, but on server you are using node 16, and the installation might fail
+You can specify the version of node that your stuff works on by providing Node versions in package.json. If you don't specify this, it means any version will do.
+
+```json
+{
+  "engines": {
+    "node": ">= 18.12"
+  }
+}
+```
