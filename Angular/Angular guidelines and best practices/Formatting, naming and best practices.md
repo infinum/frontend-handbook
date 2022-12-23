@@ -586,7 +586,7 @@ const observable$: Observable;
 const mySubject$: Subject;
 ```
 
-The `$` suffix is here to indicate and let you know it is something you can subscribe to, but it does not let you know if you can change the observable in case it some type of a `Subject`, ie. `ReplaySubject` or `BehaviorSubject`. This naming convention goes along with the `no-exposed-subjects` RxJS ESLint rule. The aforementioned rule will cause an error in case you have publicly exposed` Subject`. The reasoning behind this is that subjects should never be publicly exposed unless converted to an observable using some pipeable operators or for an example, `asObservable` function.
+The `$` suffix is here to indicate and let you know it is something you can subscribe to, but it does not let you know if you can change the observable in case it is some type of a `Subject`, ie. `ReplaySubject` or `BehaviorSubject`. This naming convention goes along with the `no-exposed-subjects` RxJS ESLint rule. The aforementioned rule will cause an error in case you have publicly exposed` Subject`. The reasoning behind this is that subjects should never be publicly exposed unless converted to an observable using some pipeable operators or for example, `asObservable` function.
 
 ```typescript
 class ExampleComponent {
@@ -601,7 +601,6 @@ class ExampleComponent {
 ```
 
 The potential downside of this convention/pattern is the name separation, in case of a naming conflict, the private member name should be prefixed with the `_`.
-
 
 ## Get to know the RxJS operators
 
