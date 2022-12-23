@@ -81,35 +81,6 @@ nvm use default
 nvm uninstall <version>
 ```
 
-#### nvm - Node version manager
-
-[Node version manager](https://github.com/nvm-sh/nvm) is a version manager similar to `n` and a good alternative. You can create a `.nvmrc` file containing a Node version number. Running `use`, `install`, `which` etc. commands will use the version specified in the file if none was provided in the command line. When using `nvm` and installing global packages, those packages will only be global for that specific version. eg. You currently use Node 16 and install `polyglot-cli`, if you switch to v18, the package won't be available there until you install it.
-
-```bash
-#Install NVM by running script
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
-
-#Install latest Node version
-nvm install node
-
-#Install specific version of Node by specifying version or use an alias
-nvm install <version>
-nvm install <alias>
-
-#Check Node version currently in use and available versions
-nvm ls
-
-#Set default version
-nvm alias default <version>
-
-#Switching between Node versions
-nvm use <version>
-nvm use default
-
-#Uninstall Node version
-nvm uninstall <version>
-```
-
 #### Using homebrew
 
 For this method you need to have [homebrew](https://brew.sh/) installed on your Mac(which you probably do). There might be additional steps required when switching versions using `brew` as switching is not supported, so you might need to uninstall and unlink the old version, and install and link new one. Using this method for managing Node versions is discouraged as it is likely that issues will occur at some point if multiple versions are needed.
