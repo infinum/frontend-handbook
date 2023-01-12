@@ -7,7 +7,7 @@ In the next sections we will cover some topics related to React ecosystem used i
 - [Official documentation](https://nextjs.org/docs/getting-started)
 - [Learn next](https://nextjs.org/learn/basics/create-nextjs-app)
 - [Examples](https://github.com/vercel/next.js/tree/canary/examples)
-- [Handbook Introduction](/books/frontend/react/next/introduction)
+- [Handbook Introduction](/books/frontend/react/getting-started/nextjs)
 
 ### Typescript
 

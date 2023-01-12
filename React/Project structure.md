@@ -1,4 +1,5 @@
 ## Organizing components
+
 ### UI Components
 
 When adding UI components, you should be able to group them in two root domains:
@@ -9,8 +10,8 @@ When adding UI components, you should be able to group them in two root domains:
 
 Folder naming rules:
 
- 1. `kebab-case` folder name indicates domain name
- 2. `PascalCase` folders and filenames should be used for components naming
+1.  `kebab-case` folder name indicates domain name
+2.  `PascalCase` folders and filenames should be used for components naming
 
 ```
 src
@@ -54,12 +55,13 @@ src
             └── index.tsx
 ```
 
-### *Core* domain
+### _Core_ domain
 
 We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
 You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
 
 Here are some examples of core components:
+
 <table>
   <tr>
     <th>Components</th>
@@ -110,22 +112,23 @@ Here are some examples of core components:
   </tr>
 </table>
 
-### *Shared* domain
+### _Shared_ domain
 
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
 They could be shared between feature components and encapsulates some specific logic of an feature.
 
-We can split them into three domains:  
+We can split them into three domains:
 
-1. `UI` - higher order user interface components  
-2. `Entity` - UI representation of a data models  
-3. `Utility` - headless utility components  
+1. `UI` - higher order user interface components
+2. `Entity` - UI representation of a data models
+3. `Utility` - headless utility components
 
-#### Shared *UI* domain
+#### Shared _UI_ domain
 
 Component name is always composed out of two parts `Context` + `Domain`, for example `InputField` where `Input` is context and `Field` is domain.
 
 Here are some examples of feature domain names:
+
 <table>
   <tr>
     <th>Domains</th>
@@ -184,7 +187,7 @@ Here are some examples of feature domain names:
   </tr>
 </table>
 
-#### Shared *Entity* domain
+#### Shared _Entity_ domain
 
 We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
 
@@ -199,8 +202,8 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
   <tr>
     <td><code>todo</code></td>
     <td><code>TodoList</code>, <code>TodoCreateForm</code>, <code>TodoCard</code>, ...</td>
-    <td rowspan="3">
-      Primarily they should accept entity prop like this `<UserCard user={user}>` where `user` is resource form the API, or in the rare occasions they could accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
+    <td rowspan="3" style="max-width: 400px;">
+      Primarily they should accept entity prop like this <code>&lt;UserCard user={user} /&gt;</code> where <code>user</code> is resource form the API, or in the rare occasions they could accept primitive props like <code>resourceId</code> and do the resource fetching via <code>SWR</code>.
     </td>
   </tr>
   <tr>
@@ -214,7 +217,7 @@ Component name is always composed out of two parts `Entity` + `Context`, for exa
   </tr>
 </table>
 
-#### Shared *utility* domain
+#### Shared _utility_ domain
 
 Utility components usually does not have any visual representation on the screen, but they are still reusable declarative components.
 
@@ -247,16 +250,12 @@ In this example we have the `MainTable` component that has a unique header compo
 export const TableHeader: FC<FlexProps> = (props) => {
   const { t } = useTranslation();
   return (
-    <Flex align="center" p={20} {...props}>
-      <Heading size="md" colorScheme="secondary" as="h3">
-        {t("table.title")}
+    <Flex align='center' p={20} {...props}>
+      <Heading size='md' colorScheme='secondary' as='h3'>
+        {t('table.title')}
       </Heading>
-      <Button
-        leftIcon={<ArrowForwardIcon />}
-        colorScheme="teal"
-        variant="solid"
-      >
-        {t("table.viewAll")}
+      <Button leftIcon={<ArrowForwardIcon />} colorScheme='teal' variant='solid'>
+        {t('table.viewAll')}
       </Button>
     </Flex>
   );
@@ -313,24 +312,19 @@ export const WelcomeCardLayoutContent = chakra(GridItem, {
   },
 });
 
-export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
+export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<'div'> {
   isOpen?: boolean;
-};
+}
 
-export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
-  const height = isOpen ? { base: '300px', md: '500px' } : null;
+export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, 'div'>(
+  ({ isOpen, ...rest }, ref) => {
+    const height = isOpen ? { base: '300px', md: '500px' } : null;
 
-  return (
-    <GridItem
-      ref={ref}
-      h={height}
-      position="relative"
-      column="1 / 3"
-      row="1 / 2"
-      {...rest}
-    />
-  );
-});
+    return (
+      <GridItem ref={ref} h={height} position='relative' column='1 / 3' row='1 / 2' {...rest} />
+    );
+  }
+);
 ```
 
 Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
@@ -379,7 +373,6 @@ export const UserCard = () => {
 ```
 
 > This is the case **only** for layouts that would add too much complexity when using standard css media queries.
-
 
 ### Extracting utility functions and hooks
 
@@ -516,20 +509,12 @@ Then, when creating your routes (pages), you will wrap your page in the layout t
 // pages/index.tsx
 
 export default function Home() {
-  return (
-    <MainLayout>
-      ...
-    </MainLayout>
-  )
+  return <MainLayout>...</MainLayout>;
 }
 
 // pages/admin.tsx
 export default function Admin() {
-  return (
-    <AdminLayout>
-      ...
-    </AdminLayout>
-  )
+  return <AdminLayout>...</AdminLayout>;
 }
 ```
 
@@ -547,9 +532,9 @@ import Head from 'next/head';
 export const Meta: FC = () => {
   return (
     <Head>
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
+      <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
+      <link rel='shortcut icon' href='/favicon.ico' />
       <title>Infinum</title>
     </Head>
   );
@@ -596,24 +581,21 @@ import { User } from '../models/User';
 export async function fetchUser(store: AppCollection, id: string): Promise<User> {
   try {
     const response = await store.fetch(User, id, {
-      include: ['albums']
+      include: ['albums'],
     });
 
     return response.data as User;
-  } catch(response) {
+  } catch (response) {
     // handle response
   }
 }
-
 ```
 
 You will use your fetcher functions with `useSwr` hook inside of your components.
 
-
 ## Setting up theming and styles
 
 When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
-
 
 ```
 src
