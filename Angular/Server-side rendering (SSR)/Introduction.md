@@ -1,18 +1,29 @@
-A normal Angular application executes in the browser, rendering pages in the DOM in response to user actions. Angular Universal executes on the server, generating static application pages that later get bootstrapped on the client. This means that the application generally renders more quickly, giving users a chance to view the application layout before it becomes fully interactive.
+A normal Angular application executes in the browser, rendering pages in the DOM in response to user actions. Angular
+Universal executes on the server, generating static application pages that later get bootstrapped on the client. This
+means that the application generally renders more quickly, giving users a chance to view the application layout before
+it becomes fully interactive.
 
 ## What is Server Side Rendering (SSR)?
-Server-side rendering (SSR) is an application’s ability to convert HTML files on the server into a fully rendered HTML page for the client. The web browser submits a request for information from the server, which instantly responds by sending a fully rendered page to the client.
+
+Server-side rendering (SSR) is an application’s ability to render HTML content of a single-page-app on the server and
+serve it to the client. This is in contrast to how regular SPAs without SSR work, where all the HTML is rendered on the
+client after the JS application is started. With SSR, the web browser submits a request to the server, which responds by
+sending back a fully rendered page to the client.
 
 ## Why we use Server Side Rendering (SSR)?
-There are 3 reasons for create angular application with server side rendering.
 
- 1. Search engine optimization (SEO).
- 2. Improve performance on web and mobile.
- 3. Load the page quickly.
+There are 3 main reasons to add SSR to an Angular app:
+
+1. Search engine optimization (SEO)
+2. Social media link sharing
+3. Improving initial page load performance on all types of devices and networks
 
 ## Angular Universal
-Angular Universal is tool which allows server to pre-render Angular application.
-For detailed guide you can read it more [here](https://angular.io/guide/universal) in the Angular official documentation.
+
+Angular Universal is a tool which allows the server to render Angular application's HTML content.
+For a detailed guide, please check out
+the [official Angular Universal documentation](https://angular.io/guide/universal). We also recommend reading about some
+of the [gotchas](https://github.com/angular/universal/blob/main/docs/gotchas.md).
 
 To add Angular Universal run the following CLI command:
 
@@ -40,6 +51,7 @@ src
 The files marked with `*` are new added files after running the command.
 
 ### Package.json file configuration
+
 In the package.json file update the following scripts:
 
 ```json
@@ -52,7 +64,8 @@ In the package.json file update the following scripts:
 
 _APP_NAME is application name. For example `js-infinum-website`._
 
-This configuration uses SSR for development. This helps catch any SSR-specific errors during development. 
+This configuration uses SSR for development as well, not just for production. This helps catch any SSR-specific errors
+during development. A slight trade-off is that the development server build times are a bit longer.
 
 
 
