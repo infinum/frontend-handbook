@@ -55,7 +55,7 @@ npm install --save-dev @testing-library/react-hooks
 
 ### Mock providers and store
 
-While testing, we need to mock various providers like [`<ChakraProvider>`](https://chakra-ui.com/docs/getting-started#setup-provider/). To mock all providers, we can create `./__tests__/test-utils.tsx` file where we will export [custom render](https://testing-library.com/docs/react-testing-library/setup/#custom-render) method with all providers:
+While testing, we need to mock various providers like [`<ChakraProvider>`](https://chakra-ui.com/docs/getting-started#setup-provider/). To mock all providers, we can create a `./__tests__/test-utils.tsx` file where we will export the [custom render](https://testing-library.com/docs/react-testing-library/setup/#custom-render) method with all providers:
 
 ```tsx
 const AllProviders = ({ children }) => (
@@ -83,7 +83,7 @@ const withMockStore = (PageComponent: NextPage) => {
 };
 ```
 
-Now, while testing we can wrap the component in `<StoreMockContext.Consumer>` to get access to the store. The store is needed for mocking the datx model with relationships.
+While testing we can wrap the component in `<StoreMockContext.Consumer>` to get access to the store. The store is needed for mocking the datx model with relationships.
 
 After mocking all providers and the store, we export everything:
 
@@ -98,7 +98,7 @@ export * from "@testing-library/react";
 export { customRender as render };
 ```
 
-Now, when testing components we won't import `render` from `__tests__/test-utils.tsx` instead of `@testing-library/react`, like this:
+Now, when testing components we'll import `render` from `__tests__/test-utils.tsx` instead of `@testing-library/react`, like this:
 
 ```tsx
 import { render } from "__tests__/test-utils";
@@ -210,7 +210,7 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
   - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
 3. Test IDs
-   
+
   - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 **Avoid unnecessary "is rendering" test**
@@ -312,8 +312,9 @@ Here, the `Button` component is mocked since we only care about the specifics of
 
 ```jsx
 import { screen } from '@testing-library/react';
+import { Button } from "components/Button";
 
-jest.mock("components/button");
+jest.mock("components/Button");
 (Button as jest.Mock).mockReturnValue(<button />);
 
 describe("UserCard", () => {
@@ -358,7 +359,7 @@ An example:
           user.click(screen.getByText(buttonText));
         });
       });
-      
+
       it('should open alert dialog', () => {
         expect(screen.queryByRole('alertdialog')).toBeNull();
       });
@@ -373,7 +374,7 @@ An example:
           user.click(screen.getByText(buttonText));
         });
       });
-      
+
       it('should close the dialog', () => {
         expect(screen.queryByRole('alertdialog')).toBeNull();
       });
@@ -407,7 +408,7 @@ An example:
   describe('ResetPasswordForm', () => {
     it('should submit without validation errors', async () => {
       const mockSuccess = jest.fn();
-      
+
       render(
         <ResetPasswordForm onSuccess={mockSuccess} />
       );
@@ -566,6 +567,59 @@ describe("User Page", () => {
     expect(screen.queryByText('Test user')).not.toBeNull();
   });
 });
+```
+
+## Testing passed props
+
+A quick how to on using Jest to check if correct props are passed to a child component.
+
+This example is purely to show how to verify that a React components props are passed in a Jest unit test. There are two components, a `MyModal` and a `Modal` from Chakra UI library. The `MyModal` renders `Modal` and `Button`, and the 'open' state is handled with `useDisclosure` hook. The goal is to check if `Modal` component gets the `isOpen={true}` prop when the user clicks the button.
+
+```tsx
+// MyModal.tsx
+export const MyModal: FC<ButtonProps> = (props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Button {...props} onClick={onOpen}>Open my modal</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        {/* Modal stuff */}
+      </Modal>
+    </>
+  );
+}
+
+// MyModal.test.tsx
+import { Modal } from '@chakra-ui/react';
+
+jest.mock('@chakra-ui/react', () => {
+	const originalImplementation = jest.requireActual('@chakra-ui/react');
+
+	return {
+		...originalImplementation,
+		Modal: jest.fn((props) => {
+			const { Modal: OriginalModal } = jest.requireActual('@chakra-ui/react');
+
+			return <OriginalModal {...props} />;
+		}),
+	};
+});
+
+describe("MyModal", () => {
+	it("should open on click", () => {
+		render(<MyModal />);
+
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: false }), expect.anything());
+
+		const button = screen.queryByRole("button");
+		expect(button).toBeDefined();
+
+		userEvent.click(button);
+		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: true }), expect.anything());
+	})
+})
 ```
 
 ## Fetchers

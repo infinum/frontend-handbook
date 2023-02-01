@@ -17,7 +17,7 @@ Here is a code example that explains this flow:
 ```jsx
 export const MyComponent: FC = () => {
   // 1. Run Lazy initializers (i.e. () => 0)
-  const [state, setState] = useState(() => 0); 
+  const [state, setState] = useState(() => 0);
 
   const previousStateRef = useRef();
 
@@ -48,7 +48,7 @@ Current: 0
 
 This is because `useEffect` is called after the first render and because assigning a value to `ref` does not trigger a re-render - instead, the value is populated and waiting for the next update phase.
 
-When `button` is clicked, React will trigger the `update` phase and the result will be:  
+When `button` is clicked, React will trigger the `update` phase and the result will be:
 
 ```jsx
 Prev: 0
@@ -73,7 +73,7 @@ export const MyComponent: FC = ({ numberProp, stringProps }) => {
   useEffect(() => {
     // Runs only when `numberProps` or `stringProp` changes
   }, [numberProp, stringProp])
- 
+
   // ...
 }
 ```
@@ -97,10 +97,10 @@ const Parent: FC = () => {
   // here we could have some code unrelated to Child component that could trigger re-render of Parent
 
   return (
-    <Child 
-      objectProp={{ a: 'a' }} 
-      arrayProp={['a']} 
-      functionProp={() => 'a'} 
+    <Child
+      objectProp={{ a: 'a' }}
+      arrayProp={['a']}
+      functionProp={() => 'a'}
     />
     // some other components...
   );
@@ -116,10 +116,10 @@ const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
   return (
-    <Child 
-      objectProp={objectProp} 
-      arrayProp={arrayProp} 
-      functionProp={functionProp} 
+    <Child
+      objectProp={objectProp}
+      arrayProp={arrayProp}
+      functionProp={functionProp}
     />
     // some other components...
   );
@@ -130,10 +130,10 @@ const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
   return (
-    <Child 
-      objectProp={#{ a: 'a' }} 
-      arrayProp={#['a']} 
-      functionProp={functionProp} 
+    <Child
+      objectProp={#{ a: 'a' }}
+      arrayProp={#['a']}
+      functionProp={functionProp}
     />
   );
 }
@@ -156,7 +156,7 @@ For example, this could be used for storing previous values or sending events to
 
 ```jsx
 export const MyComponent: FC = () => {
-  const [state, setState] = useState(() => 0); 
+  const [state, setState] = useState(() => 0);
   const prevRef = useRef();
 
   useEffect(() => {
@@ -171,7 +171,7 @@ You may think to yourself: "Why can't we just do it without `useEffect`?. What's
 
 There is an upcoming React feature called [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html), so we can consider this approach as kind of a preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
 
-Useful links:  
+Useful links:
 1. [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect)
 
 ## Avoid misusing hook dependencies
@@ -363,9 +363,9 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
   useEffect(() => {
     /**
-      On each render, `useEffect` is causing an additional re-render,
-      since it's dependency is an object with a new reference every time.
-    */
+     * On each render, `useEffect` is causing an additional re-render,
+     * since it's dependency is an object with a new reference every time.
+     */
     doSomeSideEffectsWithShape(shape);
   }, [shape])
 
@@ -386,7 +386,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
     doSomeSideEffectsWithShape(shape);
   }, [propA, propB])
- 
+
   // ...
 }
 ```
@@ -477,10 +477,10 @@ React is good at optimizing, so if you prematurely decide to wrap a function ins
 
 ```jsx
 export const StepButton: FC = ({ onClick, stepSize }) => {
-  /** 
-  * You don't have to optimise (wrap in useCallback) because onClick and stepSize 
-  * are the same on each render and React can optimise this by itself.
-  **/
+  /**
+   * You don't have to optimise (wrap in useCallback) because onClick and stepSize
+   * are the same on each render and React can optimise this by itself.
+   */
   return <button onClick={() => onClick(stepSize)}>Increment for {stepSize}</button>;
 }
 
@@ -501,15 +501,15 @@ export const MyComponent: FC = () => {
 
 ## Hooks encapsulation
 
-A common problem with hooks is that the components using them can go out of control and become unreadable and messy. 
+A common problem with hooks is that the components using them can go out of control and become unreadable and messy.
 This happens if you have multiple invocations of `useEffect` and `useCallback` in your function component body, which happens often if you are building real world products. To overcome this problem we can do the same thing as we would do in class components - split things into smaller chunks of logic and extract them, i.e. private methods of class components or custom hooks in function components.
 
 The Problem:
 
-This is a continuation of the previous section, but we will expand on it with some additional requirements.  
+This is a continuation of the previous section, but we will expand on it with some additional requirements.
 We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
 
-This is the previous code:  
+This is the previous code:
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -526,7 +526,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-This is the updated code with additional features.  
+This is the updated code with additional features.
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -561,7 +561,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
+You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increases our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
 
 The Solution:
 
@@ -574,14 +574,14 @@ const useCount = (initialState = 0) => {
       increment: (stepSize = 1) => {
         setState(previousCount => previousCount + stepSize)
       },
-      decrement: (stepSize = -1) => { 
+      decrement: (stepSize = -1) => {
         setState((previousCount) =>  previousCount + stepSize)
       },
       reset: () => {
         setState(0)
       }
     }),
-    [initialState]
+    []
   );
 
   return [state, handlers];
@@ -594,13 +594,13 @@ const useInput = (initialState = '') => {
     handleInputChange: (event) => {
       setState(event.target.value);
     }
-  })), [initialState]);
+  })), []);
 
   return [state, handlers]
 }
 
 export const MyComponent: FC = () => {
-  const [count, { increment, decrement, reset }] = useCounter();
+  const [count, { increment, decrement, reset }] = useCount();
   const [inputState, { handleInputChange }] = useInput();
 
   return (
@@ -622,9 +622,9 @@ export const MyComponent: FC = () => {
   );
 ```
 
-Useful links:  
-1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)  
-2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)  
+Useful links:
+1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)
+2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)
 
 ## Before you use memoization
 
@@ -632,7 +632,7 @@ Have in mind that React is really good at optimizing re-renders by default.
 
 You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculations can be expensive and you could end up using more memory than you would without them and make your code more complicated to read and maintain.
 
-If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.  
+If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.
 
 [![React Devtools Profiler](/img/react-hooks/profiler.png)](https://github.com/facebook/react/tree/master/packages/react-devtools)
 [React Devtools Profiler](https://github.com/facebook/react/tree/master/packages/react-devtools)
@@ -648,8 +648,8 @@ If it's not obvious that memoization is needed, profile your app performance wit
 
 <br/>
 
-If you want to dive deeper here are some useful articles:  
-1. [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)  
-2. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)  
-3. [Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance)  
+If you want to dive deeper here are some useful articles:
+1. [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
+2. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)
+3. [Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance)
 4. [React Production Performance Monitoring](https://kentcdodds.com/blog/react-production-performance-monitoring)
