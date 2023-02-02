@@ -1050,7 +1050,7 @@ Some notes:
 
 ## Auto unwrap default exports when lazy loading
 
-With Angular v15 it is possible to leverage default exports to shorten the syntax when lazy loading module or a standalone component. Note the CLI still generates modules and components without the default export so you will need to add that by yourself.
+With Angular v15 it is possible to leverage default exports to shorten the syntax when lazy loading module or a standalone component. Note that the CLI still generates modules and components without the default export so you will need to add that by yourself.
 
 ```typescript
 @Component({...})
@@ -1071,7 +1071,7 @@ export default class LazyCmp { ... }
 
 ## Favouring canMatch guard
 
-The [canMatch](https://angular.io/api/router/CanMatch) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls whether we can use the route and as a side effect, where we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different than `canLoad` which won't load the chunk, but once the guard returned `true` it wouldn't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time but that also meant that chunk will be loaded in all cases.
+The [canMatch](https://angular.io/api/router/CanMatch) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls whether we can use the route and as a side effect, whether we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different than `canLoad` which won't load the chunk, but once the guard returned `true` it wouldn't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time but that also meant that chunk will be loaded in all cases.
 
 ## No subscriptions in guards
 
