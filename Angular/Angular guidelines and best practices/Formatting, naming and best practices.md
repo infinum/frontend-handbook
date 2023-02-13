@@ -586,6 +586,22 @@ const observable$: Observable;
 const mySubject$: Subject;
 ```
 
+The `$` suffix is here to indicate and let you know it is something you can subscribe to, but it does not let you know if you can change the observable in case it is some type of a `Subject`, e.g. `ReplaySubject` or `BehaviorSubject`. This naming convention goes along with the `no-exposed-subjects` RxJS ESLint rule. The aforementioned rule will cause an error in case you have a publicly exposed` Subject`. The reasoning behind this is that subjects should never be publicly exposed unless converted to an observable using some pipeable operators or, for example, `asObservable` function.
+
+```typescript
+class ExampleComponent {
+  private _isLoading$ = new BehaviorSubject(false); // for internal use for "state management"
+  public isLoading$ = this._isLoading$.pipe(debounceTime(250)); // for use in template
+
+  // to be called from some methods, for example during data fetching
+  private updateLoadingState(state) {
+    this._isLoading$.next(state);
+  }
+}
+```
+
+The potential downside of this convention/pattern is the name separation, in case of a naming conflict, the private member name should be prefixed with the `_`.
+
 ## Get to know the RxJS operators
 
 To make good use of RxJS and develop the application in a reactive way, it is important to utilize the operators. RxJS operators allow you to modify the stream of data in multiple ways. Some common operators are:
@@ -1031,6 +1047,33 @@ Some notes:
 
 - We wrapped everything in one `ng-container` to avoid calling the pipe twice
 - Be careful in case that your pipe can return a valid falsy value, as in that case the `*ngIf` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
+
+## Auto unwrap default exports when lazy loading
+
+With Angular v15 it is possible to leverage default exports to shorten the syntax when lazy loading a module or a standalone component. Note that the CLI still generates modules and components without the default export so you will need to add that by yourself.
+
+```ts
+@Component({
+  standalone: true,
+})
+export default class ExampleComponent { ... }
+
+// Without default export
+{
+  path: 'lazy',
+  loadComponent: () => import('./example-component').then(m => m.ExampleComponent),
+}
+
+// With default export
+{
+  path: 'lazy',
+  loadComponent: () => import('./example-component'),
+}
+```
+
+## Favouring canMatch guard
+
+The [canMatch](https://angular.io/api/router/CanMatch) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls when the route can be used and as a side effect, whether we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different from `canLoad`, which won't load the chunk, but once the guard returns `true`, it won't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time, but that also means that chunk will be loaded in all cases. You can read more in the following [blog post](https://netbasal.com/introducing-the-canmatch-router-guard-in-angular-84e398046c9a) or in the [Angular team's PR description](https://github.com/angular/angular/pull/48180).
 
 ## No subscriptions in guards
 

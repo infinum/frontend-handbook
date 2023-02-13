@@ -17,7 +17,7 @@ Here is a code example that explains this flow:
 ```jsx
 export const MyComponent: FC = () => {
   // 1. Run Lazy initializers (i.e. () => 0)
-  const [state, setState] = useState(() => 0); 
+  const [state, setState] = useState(() => 0);
 
   const previousStateRef = useRef();
 
@@ -48,7 +48,7 @@ Current: 0
 
 This is because `useEffect` is called after the first render and because assigning a value to `ref` does not trigger a re-render - instead, the value is populated and waiting for the next update phase.
 
-When `button` is clicked, React will trigger the `update` phase and the result will be:  
+When `button` is clicked, React will trigger the `update` phase and the result will be:
 
 ```jsx
 Prev: 0
@@ -73,7 +73,7 @@ export const MyComponent: FC = ({ numberProp, stringProps }) => {
   useEffect(() => {
     // Runs only when `numberProps` or `stringProp` changes
   }, [numberProp, stringProp])
- 
+
   // ...
 }
 ```
@@ -97,10 +97,10 @@ const Parent: FC = () => {
   // here we could have some code unrelated to Child component that could trigger re-render of Parent
 
   return (
-    <Child 
-      objectProp={{ a: 'a' }} 
-      arrayProp={['a']} 
-      functionProp={() => 'a'} 
+    <Child
+      objectProp={{ a: 'a' }}
+      arrayProp={['a']}
+      functionProp={() => 'a'}
     />
     // some other components...
   );
@@ -116,10 +116,10 @@ const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
   return (
-    <Child 
-      objectProp={objectProp} 
-      arrayProp={arrayProp} 
-      functionProp={functionProp} 
+    <Child
+      objectProp={objectProp}
+      arrayProp={arrayProp}
+      functionProp={functionProp}
     />
     // some other components...
   );
@@ -130,10 +130,10 @@ const Parent: FC = () => {
   const functionProp = useCallback(() => 'a', []);
 
   return (
-    <Child 
-      objectProp={#{ a: 'a' }} 
-      arrayProp={#['a']} 
-      functionProp={functionProp} 
+    <Child
+      objectProp={#{ a: 'a' }}
+      arrayProp={#['a']}
+      functionProp={functionProp}
     />
   );
 }
@@ -156,7 +156,7 @@ For example, this could be used for storing previous values or sending events to
 
 ```jsx
 export const MyComponent: FC = () => {
-  const [state, setState] = useState(() => 0); 
+  const [state, setState] = useState(() => 0);
   const prevRef = useRef();
 
   useEffect(() => {
@@ -171,7 +171,7 @@ You may think to yourself: "Why can't we just do it without `useEffect`?. What's
 
 There is an upcoming React feature called [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html), so we can consider this approach as kind of a preparation for that feature. So, we don't want to call a function directly because it could slow down or even prevent things from rendering. We want to offload the [Side Effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)#:~:text=In%20computer%20science%2C%20an%20operation,the%20invoker%20of%20the%20operation.) somewhere else and leave the "main thread" intact and ready to execute.
 
-Useful links:  
+Useful links:
 1. [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect)
 
 ## Avoid misusing hook dependencies
@@ -363,9 +363,9 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
   useEffect(() => {
     /**
-      On each render, `useEffect` is causing an additional re-render,
-      since it's dependency is an object with a new reference every time.
-    */
+     * On each render, `useEffect` is causing an additional re-render,
+     * since it's dependency is an object with a new reference every time.
+     */
     doSomeSideEffectsWithShape(shape);
   }, [shape])
 
@@ -386,7 +386,7 @@ export const MyComponent: FC = ({ propA, propB }) => {
 
     doSomeSideEffectsWithShape(shape);
   }, [propA, propB])
- 
+
   // ...
 }
 ```
@@ -415,130 +415,13 @@ If you need a value to stay the same throughout re-renders, you might think of `
 
 > **You may rely on useMemo as a performance optimization, not as a semantic guarantee.** In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for off-screen components. Write your code so that it still works without useMemo — and then add it to optimize performance when it's necessary.
 
-```jsx
-// BAD
-export const MyComponent: FC = () => {
-  const id = useMemo(() => generateId(), []); // Not guaranteed to be a constant
-
-  // ...
-}
-```
-
-The best approach is to use lazy initialization:
-
-```jsx
-// GOOD
-export const MyComponent: FC = () => {
-  const [id, _] = useState(() => generateId()); // Initial value will stay the same throughout re-renders
-
-  // ...
-}
-```
-
-You can also store the value in a ref:
-
-```jsx
-type Result<T> = { v: T };
-
-function useConstant<T>(fn: () => T): T {
-  const ref = useRef<Result<T>>();
-
-  if (!ref.current) {
-    ref.current = { value: fn() };
-  }
-
-  return ref.current.value;
-}
-
-export const MyComponent: FC = () => {
-  const id = useConstant(() => generateId());
-
-  // ...
-}
-```
-
-_Note: updating ref values will not trigger a re-render._
-
-Storing a "constant" value in a ref might not work with Concurrent Mode. You can see an explanation in this [twitter thread](https://twitter.com/sstur_/status/1384934568285900806).
-
-Consider this case:
-
-1. Render starts
-2. You update the ref
-3. React concurrent mode has to throw away the work and doesn't commit
-
-You now have a ref that isn't the latest value, it's a value for a render that was never committed.
-
-## Imperative update
-
-When you are working with refs you have control over the `update` phase but you don't have a way to trigger it imperatively. But, if you still need to trigger an update imperatively, you can use a custom `useUpdate` hook.
-
-_Note: This example demonstrates how `react-hook-form` works internally._
-
-```jsx
-const updateReducer = (num: number): number => (num + 1) % 1_000_000;
-
-const useUpdate = () => {
-  const [, update] = useReducer(updateReducer, 0);
-
-  return update;
-}
-
-// Large form
-// This is how react-hook-form works, in a nutshell
-const Form: FC = () => {
-  const formRef = useRef();
-
-  if (!formRef.current) {
-    formRef.current = {
-      name: "",
-      surname: "",
-      // ...many fields
-    };
-  }
-
-  const update = useUpdate();
-
-  const register = useCallback((input) => {
-    input?.addEventListener(
-      "input",
-      () => (formRef.current[input.name] = input.value)
-    );
-  }, []);
-
-  const submit = useCallback(
-    (event) => {
-      event.preventDefault();
-      // triggers update and renders the form data
-      update();
-    },
-    [update]
-  );
-
-  return (
-    <form onSubmit={submit}>
-      <div>Form Data: {JSON.stringify(formRef.current)}</div>
-      <input name="name" ref={register} />
-      <input name="surname" ref={register} />
-      // ...many fields
-      <input type="submit" />
-    </form>
-  )
-}
-```
-
-<iframe src="https://codesandbox.io/embed/large-form-update-uskuh?fontsize=14&hidenavigation=1&theme=dark"
-  style="width:100%; max-width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden; box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;"
-  title="large-form-update"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+To see what the alternatives are, check out the [keeping consistent values trough rerenders](recipes/keeping-consistent-values-trough-rerenders) recipe.
 
 ## Two-pass rendering
 
-If you intentionally need to render something different on the server or on the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect`. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
+If you intentionally need to render something different on the server or on the client, you can do a two-pass rendering. Components that render something different on the client can read a state variable like `isClient`, which you can set to true in `useEffect` (since `useEffect` only runs on the client). This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration. Note that this approach will make your components slower because they have to render twice, so use it with caution.
 
-Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the previous paragraph
+Remember to be mindful of user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so if you render something different in the client-only pass, the transition can be jarring. However, if executed well, it may be beneficial to render a “shell” of the application on the server, and only show some of the extra widgets on the client. To learn how to do this without getting the markup mismatch issues, refer to the explanation in the [imperative update](recipes/imperative-update) recipe.
 
 ```jsx
 const useIsClient = () => {
@@ -594,10 +477,10 @@ React is good at optimizing, so if you prematurely decide to wrap a function ins
 
 ```jsx
 export const StepButton: FC = ({ onClick, stepSize }) => {
-  /** 
-  * You don't have to optimise (wrap in useCallback) because onClick and stepSize 
-  * are the same on each render and React can optimise this by itself.
-  **/
+  /**
+   * You don't have to optimise (wrap in useCallback) because onClick and stepSize
+   * are the same on each render and React can optimise this by itself.
+   */
   return <button onClick={() => onClick(stepSize)}>Increment for {stepSize}</button>;
 }
 
@@ -618,15 +501,15 @@ export const MyComponent: FC = () => {
 
 ## Hooks encapsulation
 
-A common problem with hooks is that the components using them can go out of control and become unreadable and messy. 
+A common problem with hooks is that the components using them can go out of control and become unreadable and messy.
 This happens if you have multiple invocations of `useEffect` and `useCallback` in your function component body, which happens often if you are building real world products. To overcome this problem we can do the same thing as we would do in class components - split things into smaller chunks of logic and extract them, i.e. private methods of class components or custom hooks in function components.
 
 The Problem:
 
-This is a continuation of the previous section, but we will expand on it with some additional requirements.  
+This is a continuation of the previous section, but we will expand on it with some additional requirements.
 We need to add an input field for setting the description of the value that we are counting, with decrement and reset handlers for the counter.
 
-This is the previous code:  
+This is the previous code:
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -643,7 +526,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-This is the updated code with additional features.  
+This is the updated code with additional features.
 
 ```jsx
 export const MyComponent: FC = () => {
@@ -678,7 +561,7 @@ export const MyComponent: FC = () => {
 }
 ```
 
-You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increase our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
+You can see that our component becomes messy and hard to understand. There is a lot of code in the body of the function which increases our [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load). To fix this issue we can **encapsulate** our **elements of concern** into a separate _chunks of work_, i.e. custom hooks.
 
 The Solution:
 
@@ -691,14 +574,14 @@ const useCount = (initialState = 0) => {
       increment: (stepSize = 1) => {
         setState(previousCount => previousCount + stepSize)
       },
-      decrement: (stepSize = -1) => { 
+      decrement: (stepSize = -1) => {
         setState((previousCount) =>  previousCount + stepSize)
       },
       reset: () => {
         setState(0)
       }
     }),
-    [initialState]
+    []
   );
 
   return [state, handlers];
@@ -711,13 +594,13 @@ const useInput = (initialState = '') => {
     handleInputChange: (event) => {
       setState(event.target.value);
     }
-  })), [initialState]);
+  })), []);
 
   return [state, handlers]
 }
 
 export const MyComponent: FC = () => {
-  const [count, { increment, decrement, reset }] = useCounter();
+  const [count, { increment, decrement, reset }] = useCount();
   const [inputState, { handleInputChange }] = useInput();
 
   return (
@@ -739,9 +622,9 @@ export const MyComponent: FC = () => {
   );
 ```
 
-Useful links:  
-1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)  
-2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)  
+Useful links:
+1. [useEncapsulation or Why Your React Components Should Only Use Custom Hooks](https://kyleshevlin.com/use-encapsulation)
+2. [Encapsulation or the Primary Purpose of Functions](https://kyleshevlin.com/encapsulation)
 
 ## Before you use memoization
 
@@ -749,7 +632,7 @@ Have in mind that React is really good at optimizing re-renders by default.
 
 You might get tempted to wrap values and functions with `useMemo` and `useCallback` all the time, but in many of these cases, you don't really need it, and you might even make your app performance and file size worse. These calculations can be expensive and you could end up using more memory than you would without them and make your code more complicated to read and maintain.
 
-If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.  
+If it's not obvious that memoization is needed, profile your app performance without it first, using [React Devtools](https://github.com/facebook/react/tree/master/packages/react-devtools), and then optimize if necessary.
 
 [![React Devtools Profiler](/img/react-hooks/profiler.png)](https://github.com/facebook/react/tree/master/packages/react-devtools)
 [React Devtools Profiler](https://github.com/facebook/react/tree/master/packages/react-devtools)
@@ -765,8 +648,8 @@ If it's not obvious that memoization is needed, profile your app performance wit
 
 <br/>
 
-If you want to dive deeper here are some useful articles:  
-1. [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)  
-2. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)  
-3. [Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance)  
+If you want to dive deeper here are some useful articles:
+1. [When to useMemo and useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
+2. [One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)
+3. [Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance)
 4. [React Production Performance Monitoring](https://kentcdodds.com/blog/react-production-performance-monitoring)

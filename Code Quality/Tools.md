@@ -6,49 +6,65 @@ If you have already read this section of the Handbook and are here just for the 
 
 Git hooks allow us to run scripts during various `git` commands. This verification step can be used to run various tools which ensure that the code satisfies some conditions before it is added to the repository. If the verification fails, the git command will abort.
 
-No matter which code quality tools we use, git hooks are a great way to run those tools. There are multiple ways to add git hooks. For JavaScript projects, we recommend using [husky](https://github.com/typicode/husky). Husky scripts are configured in `package.json`. Here is a basic example which runs `test` before any code is pushed to the repository:
+No matter which code quality tools we use, git hooks are a great way to run those tools. There are multiple ways to add git hooks. For JavaScript projects, we recommend using [husky](https://github.com/typicode/husky).
 
-```js
-// package.json
-{
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
-  }
-}
+Follow [usage](https://github.com/typicode/husky#usage) guidelines for installing Husky and add hooks.
+
+After running all commands described in [usage](https://github.com/typicode/husky#usage) chapter, you should have `.husky` folder with hooks folder inside. For example, if you created `pre-commit` hook which runs `npm test` command, you should have `pre-commit` file in `.husky` folder, with following content
+
+```sh
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+npm test
 ```
 
 In this example, if you try pushing and the tests fail, code will not get pushed to the remote. We do not necessarily recommend running tests on push, it is just an example (there are better ways to run automated tests using a proper CI/CD set-up).
 
 Most of our code quality tools are run on either `pre-commit` or `pre-push` hooks, so using git hooks is kind of a prerequisite for the rest of the Code quality handbook section.
 
+Note: By design `husky install` must be run in the same directory as `.git`. You can change directory in your `prepare` script. Also, you will need to change directory in your hooks. For example, if you have `frontend` directory where you want to run `pre-commit` hook, your hook file might look like following
+
+```sh
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+cd frontend && npx lint-staged
+
+```
+
+For more use cases please check [Husky documentation](https://typicode.github.io/husky/#/).
+
 ### Lint-staged
 
 [Lint-staged](https://github.com/okonet/lint-staged) works hand-in-hand with commit hooks - pre-commit hook in particular. It allows us to run scripts only on those files which were staged for committing. This makes hooks run faster since they only need to run on a subset of project files instead of all of them. The assumption is that code quality tools have to be run only on modified code while the code that was untouched should already have been checked.
 
-Similarly to `husky`, `lint-staged` is also configured in `package.json`. It uses `glob` patterns which allow you to run different scripts on different file types/patterns.
+`Lint-staged` can be configured in [many ways](https://github.com/okonet/lint-staged#configuration). We prefer configuration in `.lintstagedrc` file in JSON format.
 
-Here is an example which runs `eslint` and `prettier` on all staged `.js` and `.ts` files, and `stylelint` on all staged `.scss` files via a pre-commit hook:
+`Lint-staged` uses `glob` patterns which allow you to run different scripts on different file types/patterns.
+
+Here is an example which runs `prettier` and `eslint` on all staged `.js` and `.ts` files, and `prettier` and `stylelint` on all staged `.scss` files via a pre-commit hook:
 
 ```js
-// package.json
+// .lintstagedrc
 {
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,ts}": [
-      "eslint",
+  "**/*.{js,ts}": [
       "prettier --write"
-    ]
-    "**/*.scss": [
-      "stylelint --syntax=scss"
-    ]
-  }
+      "eslint"
+  ]
+  "**/*.scss": [
+      "prettier --write",
+      "stylelint --customSyntax=scss"
+  ]
 }
+```
+
+```sh
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx lint-staged
 ```
 
 What `lint-staged` does is it matches files to `glob` patterns and passes the list of files as an argument to scripts. Tooling developers should ensure that their scripts can receive the list of files in the correct format. Most common tools like eslint, tslint, stylelint and others are compatible with the way `lint-staged` passes the list of files.
@@ -115,15 +131,18 @@ If you do not notice issues with Prettier and SCSS, we recommend keeping Prettie
 
 Developers should set up their code editors to run Prettier whenever they save a file. This is not a bullet-proof solution because some editors might not have support for this (either natively or via plug-ins). Going one step further, we recommend running Prettier via the pre-commit hook. This ensures that the committed code is formatted even if the developer who wrote it did not have his editor set up to format on file save.
 
-```js
-// package.json
-{
-  "husky": {
-    "hooks": {
-      "pre-commit": "prettier --write"
-    }
-  }
-}
+```bash
+npx husky add .husky/pre-commit "prettier --write"
+```
+
+Should generate
+
+```sh
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+prettier --write
 ```
 
 <a id="editor-files"></a>
@@ -160,62 +179,15 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 Infinum created various rulesets for ESLint and TSLint which you can check out [here](https://github.com/infinum/js-linters). We encourage you to use some of these presets, as per your needs:
 
--   [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
--   [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
--   [Angular TSLint config](https://github.com/infinum/js-linters/tree/master/tslint-config-angular)
+- [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
+- [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
+- [Angular ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-angular-ts)
 
 ### Stylelint
 
 If you have no issues with prettier SCSS formatting and you decide to use Prettier, it is recommended to install [stylelint-prettier](https://github.com/prettier/stylelint-prettier) plugin and preset.
 
-### Putting it all together
-
-Here is the complete example which runs TypeScript compilation check on all files, prettier, tslint and stylelint on an Angular (v10) project:
-
 ```js
-// package.json
-{
-  "scripts": {
-    "lint:ng": "ng lint",
-    "tsc": "concurrently \"npm run tsc:app\" \"npm run tsc:spec\"",
-    "tsc:app": "tsc --noEmit -p ./src/tsconfig.app.json",
-    "tsc:spec": "tsc --noEmit -p ./src/tsconfig.spec.json"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run tsc && lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{json,md,html}": [
-      "prettier --write"
-    ],
-    "**/*.ts": [
-      "prettier --write",
-      "ng-lint-staged lint:ng --tsConfig=./tsconfig.base.json --"
-    ],
-    "**/*.scss": [
-      "stylelint --syntax=scss"
-      "prettier --write" // add or remove this line depending on whether you run stylelint on SCSS
-    ]
-  }
-}
-```
-
-```js
-// tslint.json
-{
-  "extends": ["@infinumjs/tslint-config-angular", "tslint-config-prettier"],
-  "rules": {
-    // remember to replace `app` with your selector
-    "directive-selector": [true, "attribute", "app", "camelCase"],
-    "component-selector": [true, "element", "app", "kebab-case"]
-  }
-}
-```
-
-```js
-// .stylelintrc.json
 {
   "plugins": ["stylelint-prettier"],
   "rules": {
@@ -224,16 +196,87 @@ Here is the complete example which runs TypeScript compilation check on all file
 }
 ```
 
+If you want to use stylelint, it is recommended to use [@infinumjs/stylelint-config](https://github.com/infinum/stylelint-config). In order to use it with prettier, please add [stylelint-config-prettier](https://github.com/prettier/stylelint-config-prettier).
+
+```js
+{
+  "extends": [
+    "@infinumjs/stylelint-config",
+    "stylelint-config-prettier" // needed if you use prettier to format SCSS
+  ]
+}
+```
+
+### Putting it all together
+
+Here is the complete example which runs TypeScript compilation check on all files, prettier, eslint and stylelint on an Angular (v10) project:
+
+```js
+{
+  "scripts": {
+    "prepare": "husky install",
+    "tsc": "concurrently \"npm run tsc:app\" \"npm run tsc:spec\"",
+    "tsc:app": "tsc --noEmit -p ./src/tsconfig.app.json",
+    "tsc:spec": "tsc --noEmit -p ./src/tsconfig.spec.json"
+  }
+}
+```
+
+```js
+// .lintstagedrc.json
+{
+  "**/*.{json,md,html}": [
+    "prettier --write"
+  ],
+  "**/*.{js,ts}": [
+    "prettier --write",
+    "eslint"
+  ],
+  "**/*.css": "stylelint",
+  "**/*.scss": [
+    "prettier --write" // add or remove this line depending on whether you run stylelint on SCSS,
+    "stylelint --customSyntax=post-scss"
+  ]
+}
+```
+
+```sh
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run tsc && npx lint-staged --config .lintstagedrc.json && prettier --write
+```
+
+```js
+// .stylelintrc.json
+{
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": true
+  },
+  "extends": [
+    "@infinumjs/stylelint-config",
+    "stylelint-config-prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["*.scss", "**/*.scss"],
+      "customSyntax": "postcss-scss"
+    }
+  ]
+}
+```
+
 For this example, you will have to install the following `devDependencies`:
 
 ```bash
-npm i -D concurrently husky lint-staged ng-lint-staged stylelint stylelint-prettier prettier tslint-config-prettier @infinumjs/tslint-config-angular
+npm i -D concurrently husky lint-staged stylelint stylelint-prettier prettier tslint-config-prettier
 ```
 
 Some notes:
 
--   it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
--   `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
--   `concurrently` speeds up things by running `tsc` checks in parallel
--   `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
--   `ng-lint-staged` is required because `ng lint` does not accept the list of files as provided by `lint-staged`, so some transformations are necessary
+- it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+- `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+- `concurrently` speeds up things by running tsc checks in parallel
+- `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier

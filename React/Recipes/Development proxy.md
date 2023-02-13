@@ -1,3 +1,7 @@
+## TLDR
+
+Follow instructions on [`@infinum/nextjs-api-dev-proxy`](https://www.npmjs.com/package/@infinum/nextjs-api-dev-proxy). Everything else in this document is legacy and will no longer be updated.
+
 ## Motivation
 
 When developing applications, you sometimes want to test your local changes against data from a different environment. For example, creating a production hotfix requires you to locally connect to the production API. Maybe even testing the solution on a different device, e.g. a [phone connected to your machine](https://developers.google.com/web/tools/chrome-devtools/remote-debugging). That API could have http-only cookies that cannot be manipulated on the client and require a proxy that can intercept some requests and do some modifications to them.
@@ -28,8 +32,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 let apiUrl: string;
 
-switch (process.env.PROXY_ENV) { 
-  // pick API endpoint depending on the PROXY_ENV, assign to apiUrl 
+switch (process.env.PROXY_ENV) {
+  // pick API endpoint depending on the PROXY_ENV, assign to apiUrl
   case 'production':
     apiUrl = 'https://production.example.com';
     break;
@@ -45,7 +49,7 @@ const proxy = createProxyMiddleware({
   changeOrigin: true,
   logLevel: 'debug',
   cookieDomainRewrite: 'localhost',
-  onProxyRes: (proxyRes: IncomingMessage) => { 
+  onProxyRes: (proxyRes: IncomingMessage) => {
     // You can manipulate the cookie here
 
     if (!proxyRes.headers['set-cookie']) {
@@ -54,7 +58,7 @@ const proxy = createProxyMiddleware({
 
     // For example you can remove secure and SameSite security flags so browser can save the cookie in dev env
     const adaptCookiesForLocalhost = proxyRes.headers['set-cookie'].map((cookie) =>
-      cookie.replace(/; secure/gi, '').replace(/; SameSite=None/gi, ''),
+      cookie.replace(/; secure/gi, '').replace(/; SameSite=None/gi, '')
     );
 
     proxyRes.headers['set-cookie'] = adaptCookiesForLocalhost;
@@ -68,6 +72,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<unknow
   if (process.env.NODE_ENV !== 'development') {
     return res.status(404).json({ message: 'Not found' });
   }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return proxy(req, res);
 }

@@ -24,6 +24,7 @@
 - [react-datepicker](https://github.com/Hacker0x01/react-datepicker/) - A simple and reusable datepicker component for React
 - [react-virtualized](https://github.com/bvaughn/react-virtualized) - React components for efficiently rendering large lists and tabular data
 - [react-virtuoso](https://github.com/petyosi/react-virtuoso) - An elegant virtual list component for React
+- [@tanstack/react-virtual](https://tanstack.com/virtual/v3) - Headless UI for Virtualizing Large Element Lists
 - [@tippyjs/react](https://github.com/atomiks/tippyjs-react) - The complete tooltip, popover, dropdown, and menu solution for the web, powered by Popper
 - [downshift](https://github.com/downshift-js/downshift) - A set of primitives to build autocomplete, combobox or select dropdown React components
 - [react-collapse](https://github.com/nkbt/react-collapse) - Component-wrapper for collapse animation with react-motion for elements with variable (and dynamic) height
@@ -82,7 +83,6 @@
 - [react-use-measure](https://github.com/pmndrs/react-use-measure) - Utility to measure view bounds
 - [googlemap-react](https://github.com/googlemap-react/googlemap-react) - Easier Google Map Integration for React projects
 - [react-merge-refs](https://github.com/gregberge/react-merge-refs) - React utility to merge refs
-- [@artsy/fresnel](https://github.com/artsy/fresnel) - An SSR compatible approach to CSS media query based responsive layouts for React
 - [slate](https://github.com/ianstormtaylor/slate) - A completely customizable framework for building rich text editors. (Currently in beta.)
 - [libphonenumber-js](https://gitlab.com/catamphetamine/libphonenumber-js#libphonenumber-js) - Validator/formatter for phone numbers (has seaparate validators for different countries)
 - [react-dropzone](https://react-dropzone.js.org/) - Simple React hook to create a HTML5-compliant drag'n'drop zone for files.
