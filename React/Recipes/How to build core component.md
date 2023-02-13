@@ -94,19 +94,19 @@ export const JobCard: FC<IJobCardProps> = ({ job }) => (
 
 ### When this is OK?
 
-When we are building a small one-off components which doesn't contain a lot of code and  are not shared across components.  
+When we are building a small one-off components which doesn't contain a lot of code and are not shared across components.  
 
 ### Why this approach can become a problem?
 
-This example is not as bad as it seems at first because we don't have to name components (naming is hard), but as this component grows and new features are added, the inline style will become a problem.
+This example is not as bad as it seems on a first glance. It's actually a good solution because we don't have to name components, and we all know that naming is hard. But the problem would appear if this component grows in size and new features are added. Actually, the inline style may become a problem.
 Problem with inline styles is that they can easily clutter the code and decrease readability.  
-When that happens we need to find a way to fix this problem.
+When that happens we need to find a way to overcome this problem.
 
 ## The Solution ✅
 
 ### Solution #1
 
-Extending utility components into styled components and extracting them to `ComponentName.elements.tsx` file.
+Isolating smaller parts into styled components and extracting them to `ComponentName.elements.tsx` file.
 
 ```tsx
 // ./src/components/shared/user/UserCard/UserCard.elements.tsx
@@ -118,7 +118,8 @@ export const Card = chakra("div", {
     borderRadius: "md",
     border: "1px",
     borderColor: "gray.200",
-    boxShadow: "xl"
+    boxShadow: "xl",
+    minW: 0,
   }
 });
 
@@ -157,6 +158,8 @@ export const CardDescription = chakra(Text, {
   }
 });
 ```
+
+Then we can use it like this:
 
 ```tsx
 // ./src/components/shared/user/UserCard/UserCard.tsx
@@ -200,11 +203,10 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>
 
-
 ### When to use solution #1:
 
-1. when your component becomes cluttered and hard to read
-2. you don't have a clear design indications this component is designed in multipart manner
+1. When component becomes cluttered and hard to read.
+2. There is no clear indications that component is designed in multipart manner. 
 
 ### Solution #2
 
@@ -219,7 +221,8 @@ export const cardStyles: SystemProps = {
   borderRadius: "md",
   border: "1px",
   borderColor: "gray.200",
-  boxShadow: "xl"
+  boxShadow: "xl",
+  minW: 0,
 };
 
 export const cardImageContainerStyles: SystemProps = {
@@ -295,7 +298,8 @@ export const UserCard: FC<IUserCardProps> = ({ user }) => (
 
 ### When to use solution #2:
 
-There is no significant difference between solution #1 except this way you can compose multiple styles together.
+There is no significant difference between solution #1 and #2. 
+Benefits of #2 are that you can easily compose multiple styles together.
 
 For example:
 
@@ -315,6 +319,7 @@ To make highly reusable compound component we need to think about component anat
 Component anatomy means that we have to break component into a multiple parts.
 
 In the case of our Card component we can break it in these four parts:
+
 1. card
 2. image
 3. title
@@ -518,11 +523,12 @@ In the root component, we can access the whole style config and provide it to al
 import {
   chakra,
   forwardRef,
-  StylesProvider,
-  useStyles,
   ThemingProps,
   useMultiStyleConfig,
+  createStylesContext,
 } from "@chakra-ui/react";
+
+const [CardStylesProvider, useCardStyles] = createStylesContext("Card");
 
 export const Card = forwardRef<CardProps, "div">((props, ref) => {
   const { children } = props;
@@ -530,16 +536,16 @@ export const Card = forwardRef<CardProps, "div">((props, ref) => {
   const styles = useMultiStyleConfig("Card", props);
 
   return (
-    <StylesProvider value={styles}>
+    <CardStylesProvider value={styles}>
       <chakra.div ref={ref} __css={styles.card} {...props}>
         {children}
       </chakra.div>
-    </StylesProvider>
+    </CardStylesProvider>
   );
 });
 
 export const CardImage = forwardRef<ImageProps, "img">((props, ref) => {
-  const { image } = useStyles();
+  const { image } = useCardStyles();
 
   return <Image ref={ref} {...image} {...props} />;
 });
@@ -559,14 +565,15 @@ import {
   HTMLChakraProps,
   Image,
   ImageProps,
-  StylesProvider,
   Text,
   TextProps,
   ThemingProps,
   useMultiStyleConfig,
-  useStyles
+  createStylesContext
 } from "@chakra-ui/react";
 import { __DEV__ } from "@chakra-ui/utils";
+
+const [CardStylesProvider, useCardStyles] = createStylesContext("Card");
 
 export interface CardOptions {}
 
@@ -581,11 +588,11 @@ export const Card = forwardRef<CardProps, "div">((props, ref) => {
   const styles = useMultiStyleConfig("Card", props);
 
   return (
-    <StylesProvider value={styles}>
+    <CardStylesProvider value={styles}>
       <chakra.div ref={ref} __css={styles.card} {...props}>
         {children}
       </chakra.div>
-    </StylesProvider>
+    </CardStylesProvider>
   );
 });
 
@@ -594,9 +601,9 @@ if (__DEV__) {
 }
 
 export const CardImage = forwardRef<ImageProps, "img">((props, ref) => {
-  const { image } = useStyles();
+  const { image } = useCardStyles();
 
-  return <Image ref={ref} __css={image} {...props} />;
+  return <Image ref={ref} {...image} {...props} />;
 });
 
 if (__DEV__) {
@@ -604,7 +611,7 @@ if (__DEV__) {
 }
 
 export const CardTitle = forwardRef<HeadingProps, "h2">((props, ref) => {
-  const { title } = useStyles();
+  const { title } = useCardStyles();
 
   return <Heading ref={ref} {...title} {...props} />;
 });
@@ -614,7 +621,7 @@ if (__DEV__) {
 }
 
 export const CardBody = forwardRef<TextProps, "h2">((props, ref) => {
-  const { body } = useStyles();
+  const { body } = useCardStyles();
 
   return <Text ref={ref} {...body} {...props} />;
 });
@@ -637,3 +644,6 @@ if (__DEV__) {
 
 1. When you have clear design indications of multiple similar components with similar features but slightly different styles
 2. Designer prepared component variants and anatomy
+
+
+> Chakra UI already includes `Card` component form version v2.4
