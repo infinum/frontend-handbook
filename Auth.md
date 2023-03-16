@@ -44,7 +44,7 @@ When we're working on an app that might do API calls fro the server (e.g. fetchi
 2. The backend logic handles the redirect URL, gets the tokens based on the activation code
 3. The backend creates a session for the user and saves the tokens in the session
 4. The backend redirects the user to the client app
-5. Each time an authorized API call needs to be made, it needs to go trough our backend proxy, which will get the tokens, refresh them if necessary and then forward the API call with all th necessary auth headers. Those API calls should also include the CSRF tokens to prevent the CSRF attacks.
+5. Each time an authorized API call needs to be made, it needs to go trough our backend proxy, which will get the tokens, refresh them if necessary and then forward the API call with all the necessary auth headers. Those API calls should also include the CSRF tokens to prevent the CSRF attacks.
 
 #### With client-side rendering
 
