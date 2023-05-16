@@ -428,7 +428,7 @@ export const UserCard = () => {
 ### Extracting utility functions and hooks
 
 Sometimes, you will have complex functions or effects inside your component that will affect the readability of your component.
-In that case, you should extract them into separated files `utils.ts` and `hooks.ts`.
+In that case, you should extract them into separated files `*.utils.ts` and `*.hooks.ts`.
 
 Main goal of these files is to store functions and hooks that are **specific for that component**, so we could keep our root `hooks` and `utils` folders clean and for global usage purposes only.
 
