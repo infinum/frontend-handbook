@@ -345,11 +345,36 @@ Rules:
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
-## Different component layouts
+## Different component layouts for different screen sizes
 
-Sometimes, you might want to create a component specific for mobile and desktop.
+In most of the cases we should strive to create responsive components that consist of one DOM structure that is going to be rendered on all screen sizes by utilizing CSS only solutions. Work closely with your designer to achieve this.
+
+But, there are cases when we need to create different DOM structures for different screen sizes.
+
+## Collocating different layouts in one component
+
+With the help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
+
+```tsx
+export const UserCard = (props) => {
+  return (
+    <Box {...props}>
+      <Box hideFrom='md'>
+        // Mobile layout
+      </Box>
+      <Box hideBelow='md'>
+        // Desktop layout
+      </Box>
+    </Box>
+  )
+}
+```
+
+## Different component layouts for different screen sizes in separate `layout` components
 
 In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on specific media query.
+
+> We are discouraging this approach because it's inconvenient and results in a lot of code duplication, but we are keeping it here because it is still used in some of our projects. Please use collocation approach with new Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props instead.
 
 ```
 .
@@ -361,19 +386,38 @@ In this case, inside a specific component, we could add a subfolder `layouts` (n
         └── UserCard.tsx
 ```
 
-For this case, inside `index.tsx` we would have something like this (with help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide)):
+For this case, inside `UserCard.tsx` we would have something like this: 
+
+With help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
+
+```tsx
+export const UserCard = () => {
+  return (
+    <Fragment>
+      <UserCardMobile hideFrom='md' />
+      <UserCardDesktop hideBelow='md' />
+    </Fragment>
+  )
+}
+```
+
+With help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide):
+
+> We are discouraging usage of [Show/Hide](https://chakra-ui.com/docs/components/show-hide) because they are not working properly with Next.js and SSR.
 
 ```tsx
 import { Show, Hide } from '@chakra-ui/react';
 
 export const UserCard = () => {
   return (
-    <Hide above="md">
-      <UserCardMobile />
-    </Hide>
-    <Show above="md">
-      <UserCardDesktop />
-    </Show>
+    <Fragment>
+      <Hide above="md">
+        <UserCardMobile />
+      </Hide>
+      <Show above="md">
+        <UserCardDesktop />
+      </Show>
+    </Fragment>
   )
 }
 ```
