@@ -621,11 +621,8 @@ src
 ├── models
 │   ├── User.ts
 │   └── Session.ts
-└── store
-    ├── utlis
-    │   ├── config.ts
-    │   └── initialize-store.ts
-    └── index.ts
+└── datx
+    └── create-client.ts
 ```
 
 ## Fetchers
