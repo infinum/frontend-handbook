@@ -446,8 +446,6 @@ Example:
 **Cluttered component**
 
 ```tsx
-... imports ...
-
 export const AlbumsCarousel = (props) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [highlighted, setHighlighted] = useState(null);
@@ -498,6 +496,9 @@ export const AlbumsCarousel = (props) => {
 
   return (
     //...
+    <div>{formatReleaseDate(props.startDate, props.endDate)</div>
+    //...
+
   )
 }
 ```
@@ -505,7 +506,6 @@ export const AlbumsCarousel = (props) => {
 **Cleaned**
 
 ```tsx
-... other imports ...
 import { formatReleaseDate } from './utils';
 
 export const AlbumsCarousel = (props) => {
@@ -528,7 +528,8 @@ export const AlbumsCarousel = (props) => {
 
   return (
     //...
-    // formatReleaseDate used somewhere here
+    <div>{formatReleaseDate(props.startDate, props.endDate)</div>
+    //...
   )
 }
 ```
