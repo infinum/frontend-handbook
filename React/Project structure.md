@@ -237,7 +237,7 @@ Utility components usually does not have any visual representation on the screen
 
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
-Note: There _should_ be only one level of component nesting inside the `components` folder.  We are also planning to rename this folder from `components` to `elements` to avoid confusion with the project root `components` folder. But we are still not sure about this.
+Note: There _should_ be only one level of component nesting inside the `components` folder. We are also considering renaming this folder from `components` to `elements` to avoid confusion with the project root `components` folder. But we are still not sure about this.
 
 Example:
 
