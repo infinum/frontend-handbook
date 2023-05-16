@@ -372,9 +372,9 @@ export const UserCard = (props) => {
 
 ## Different component layouts for different screen sizes in separate `layout` components
 
-In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on specific media query.
+In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on a specific media query.
 
-> We are discouraging this approach because it's inconvenient and results in a lot of code duplication, but we are keeping it here because it is still used in some of our projects. Please use collocation approach with new Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props instead.
+> We are discouraging this approach because it's inconvenient and results in a lot of code duplication, but we are keeping it here because it is still used in some of our projects. Please use a collocation approach with new Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props instead.
 
 ```
 .
