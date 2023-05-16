@@ -627,6 +627,8 @@ src
 
 ## Fetchers
 
+> This section is considered deprecated. For the newer approach check the [@datx/swr](https://datx.dev/docs/jsonapi-swr/overview) documentation.
+
 In `src/fetchers` you will organize your (swr) fetchers, usually by the model on which you will make API calls.
 
 ```ts
@@ -678,7 +680,7 @@ When organizing test files, here are couple of quick rules:
 - When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
 - All mocks should be placed in `__mocks__` folder
 
-For other in depth guides for testing take a look at the [testing guide(needs update)](link-to-testing-section).
+For other in depth guides for testing take a look at the [testing guide](https://infinum.com/handbook/frontend/react/testing-best-practices).
 
 Folder structure would look something like this:
 
