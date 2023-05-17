@@ -290,7 +290,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
 };
 ```
 
-> **Note** we added `eslint-disable-next-line react-hooks/exhaustive-deps` to the `useEffect` hook. This is because we don't want to rerender the component if `condition` and `push` are changed. We are aware this is a dangerous thing to do, but in this case, it is a necessary evil. This issue will be resolved when React add finish `useEffectEvent` hook. More about this can be found [here](https://react.dev/learn/separating-events-from-effects#reading-latest-props-and-state-with-effect-events)
+> **Note** we added `eslint-disable-next-line react-hooks/exhaustive-deps` to the `useEffect` hook. This is because we don't want to rerender the component if `condition` and `push` are changed. We are aware this is a dangerous thing to do, but in this case, it is a necessary evil. This issue will be resolved when React finishes `useEffectEvent` hook. More about this can be found [here](https://react.dev/learn/separating-events-from-effects#reading-latest-props-and-state-with-effect-events)
 
 If we now implement this in our example, it looks like this.
 
