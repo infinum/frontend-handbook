@@ -253,7 +253,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
   const {
     state: { data, isValidating, error },
   } = useSession();
-  const router = useRouter();
+  const { push } = useRouter();
 
   useEffect(() => {
     // if state is validating, wait until request is done
@@ -270,7 +270,7 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
     // `condition` has a priority over a `ifFound` property
     if (condition) {
       if (condition(data)) {
-        router.push(to);
+        push(to);
       }
 
       return;
@@ -279,14 +279,18 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
     const shouldRedirect = (ifFound && data) || (!ifFound && !data);
 
     if (shouldRedirect) {
-      router.push(to);
+      push(to);
     }
-  }, [data, isValidating, error, to, condition, ifFound, router]);
+  }, 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [data, isValidating, error, to, ifFound]);
 
   // this component renders nothing since it is only used to redirect if needed.
   return null;
 };
 ```
+
+> **Note** we added `eslint-disable-next-line react-hooks/exhaustive-deps` to the `useEffect` hook. This is because we don't want to rerender the component if `condition` and `push` are changed. We are aware this is a dangerous thing to do, but in this case, it is a necessary evil. This issue will be resolved when React add finish `useEffectEvent` hook. More about this can be found [here](https://react.dev/learn/separating-events-from-effects#reading-latest-props-and-state-with-effect-events)
 
 If we now implement this in our example, it looks like this.
 
