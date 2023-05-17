@@ -546,13 +546,14 @@ You will define your different layouts inside `layouts` folder:
 .
 .
 └── components
-    └── layouts
-        ├── AdminLayout
-        │   └── AdminLayout.tsx
-        ├── MainLayout
-        │   └── MainLayout.tsx
-        └── BlogLayout
-            └── BlogLayout.tsx
+    └── shared
+        └── layouts
+            ├── AdminLayout
+            │   └── AdminLayout.tsx
+            ├── MainLayout
+            │   └── MainLayout.tsx
+            └── BlogLayout
+                └── BlogLayout.tsx
 ```
 
 Then, when creating your routes (pages), you will wrap your page in the layout that represents the current page:
@@ -658,7 +659,6 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
 
-
 ```
 src
 └── styles
@@ -700,9 +700,108 @@ src
 │       ├── users.ts
 │       └── users.test.ts
 └── components
-    └── shared
-        └── core
-            └── Button
-                ├── Button.test.tsx
-                └── Button.tsx
+    └── core
+        └── Button
+            ├── Button.test.tsx
+            └── Button.tsx
 ```
+
+## The complete structure
+
+```
+src
+├── __mocks__
+│   └── react-i18next.tsx
+├── __tests__
+│   ├── pages
+│   │   └── user.test.ts
+│   └── test-utils.tsx
+├── components
+│   ├── core
+│   │   ├── Button
+│   │   │   ├── Button.test.tsx
+│   │   │   └── Button.tsx
+│   │   ├── Section
+│   │   │   ├── Section.test.tsx
+│   │   │   └── Section.tsx
+│   │   └── Card
+│   │       ├── Card.test.tsx
+│   │       └── Card.tsx
+│   ├── features
+│   │   ├── home
+│   │   │   ├── HomeHeaderSection
+│   │   │   │   ├── HomeHeaderSection.test.tsx
+│   │   │   │   └── HomeHeaderSection.tsx
+│   │   │   └── HomeTodoListSection
+│   │   │       ├── HomeTodoListSection.test.tsx
+│   │   │       └── HomeTodoListSection.tsx
+│   │   ├── album
+│   │   │   └── AlbumsCarousel
+│   │   │       ├── AlbumsCarousel.tsx
+│   │   │       ├── AlbumsCarousel.test.ts
+│   │   │       ├── AlbumsCarousel.utils.ts
+│   │   │       └── AlbumsCarousel.hooks.ts
+│   │   └── todo
+│   │       ├── TodoHeaderSection
+│   │       │   ├── TodoHeaderSection.test.tsx
+│   │       │   └── TodoHeaderSection.tsx
+│   │       └── TodoCreateFormSection
+│   │           ├── TodoCreateFormSection.test.tsx
+│   │           └── TodoCreateFormSection.tsx
+│   └── shared
+│       ├── layouts
+│       │   ├── AdminLayout
+│       │   │   └── AdminLayout.tsx
+│       │   ├── MainLayout
+│       │   │   └── MainLayout.tsx
+│       │   └── BlogLayout
+│       │       └── BlogLayout.tsx
+│       ├── fields
+│       │   └── TextField
+│       │       ├── TextField.test.tsx
+│       │       └── TextField.tsx
+│       ├── cards
+│       │   ├── UserCard
+│       │   │   ├── layouts
+│       │   │   │   ├── UserCard.mobile.tsx
+│       │   │   │   └── UserCard.desktop.tsx
+│       │   │   ├── UserCard.test.tsx
+│       │   │   └── UserCard.tsx
+│       │   └── WelcomeCard
+│       │       ├── WelcomeCard.test.tsx
+│       │       ├── WelcomeCard.elements.ts
+│       │       └── WelcomeCard.tsx
+│       ├── todo
+│       │   ├── TodoCard
+│       │   │   ├── TodoCard.test.tsx
+│       │   │   └── TodoCard.tsx
+│       │   ├── TodoList
+│       │   │   ├── TodoList.test.tsx
+│       │   │   └── TodoList.tsx
+│       │   └── TodoCreateForm
+│       │       ├── TodoCreateForm.test.tsx
+│       │       └── TodoCreateForm.tsx
+│       └── utilities
+│             ├── BugsnagErrorBoundary
+│             │   └── BugsnagErrorBoundary.tsx
+│             └── Meta
+│                 └── Meta.tsx
+├── models
+│   ├── User.ts
+│   └── Session.ts
+├── datx
+│   └── create-client.ts
+├── styles
+│   └── theme
+│       ├── index.ts
+│       ├── styles.ts
+│       ├── foundations
+│       │   ├── font-sizes.ts
+│       │   └── colors.ts
+│       └── components
+│           └── button.ts
+└── pages
+    ├── index.tsx
+    └── todo
+        └── [id]
+            └── index.tsx
