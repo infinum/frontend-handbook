@@ -105,7 +105,7 @@ Here are some examples of core components:
       <code>./components/Control</code>, ...
     </td>
     <td>
-     The list of custom components can be find <a href="https://react-select.com/components">here</a>
+     The list of custom components can be found <a href="https://react-select.com/components">here</a>
     </td>
   </tr>
 </table>
