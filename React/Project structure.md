@@ -1,7 +1,7 @@
 ## Organizing components
 ### UI Components
 
-When adding UI components, you should be able to group them in two root domains:
+When adding UI components, you should be able to group them in three root domains:
 
 1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
@@ -290,7 +290,7 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
+In the following example `WelcomeCardLayoutOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
 
 ```tsx
 import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
