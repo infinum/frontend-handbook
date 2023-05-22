@@ -335,9 +335,9 @@ export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div
 
 Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
 
-Rules:
+Here are some rules that you should follow when creating elements:
 
-- should only be used for organizational purposes
+- `.elements.tsx` should only be used for organizational purposes
 - custom components are tightly coupled with the root component and they should not be used in the outside scope
 - mixture of `chakra factory` and `Function Components` is allowed
 - using hooks inside elements is not recommended
