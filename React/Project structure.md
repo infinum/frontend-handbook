@@ -372,9 +372,7 @@ export const UserCard = (props) => {
 
 ## Different component layouts for different screen sizes in separate `layout` components
 
-In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on a specific media query.
-
-> We are discouraging this approach because it's inconvenient and results in a lot of code duplication, but we are keeping it here because it is still used in some of our projects. Please use a collocation approach with new Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props instead.
+In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on a specific media query. We recommend using this approach only for layouts that would add too much complexity when using Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props. We realize that this approach usually results in a lot of code duplication, so use this approach only when necessary.
 
 ```
 .
@@ -391,19 +389,29 @@ For this case, inside `UserCard.tsx` we would have something like this:
 With help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
 
 ```tsx
+export const UserCardMobile = () => (
+  <Box hideFrom='md'>
+    // Mobile layout
+  </Box>
+)
+
+export const UserCardDesktop = () => (
+  <Box hideBelow='md'>
+    // Desktop layout
+  </Box>
+)
+
 export const UserCard = () => {
   return (
     <Fragment>
-      <UserCardMobile hideFrom='md' />
-      <UserCardDesktop hideBelow='md' />
+      <UserCardMobile />
+      <UserCardDesktop />
     </Fragment>
   )
 }
 ```
 
 With help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide):
-
-> We are discouraging usage of [Show/Hide](https://chakra-ui.com/docs/components/show-hide) because they are not working properly with Next.js and SSR.
 
 ```tsx
 import { Show, Hide } from '@chakra-ui/react';
@@ -422,8 +430,7 @@ export const UserCard = () => {
 }
 ```
 
-> This is the case **only** for layouts that would add too much complexity when using standard css media queries.
-
+> Use of [Show/Hide](https://chakra-ui.com/docs/components/show-hide) helpers is advisable to be used only for client side rendering. For server side rendering use [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props.
 
 ### Extracting utility functions and hooks
 
