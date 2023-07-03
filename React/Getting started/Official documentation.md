@@ -1,4 +1,4 @@
-If you're searching for the tutorial to kick off learning React, you could first check [the official docs](https://reactjs.org/docs).
+If you're searching for the tutorial to kick off learning React, you could first check [the official docs](https://react.dev/).
 
 ## Learn concepts
 
