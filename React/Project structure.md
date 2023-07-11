@@ -26,6 +26,11 @@ src
 │   │   │   │   └── HomeHeaderSection.tsx
 │   │   │   └── HomeTodoListSection
 │   │   │       └── HomeTodoListSection.tsx
+│   │   ├── auth
+│   │   │   ├── Login
+│   │   │   │   └── Login.tsx
+│   │   │   └── Register
+│   │   │       └── Register.tsx
 │   │   └── todo
 │   │       ├── TodoHeaderSection
 │   │       │   └── TodoHeaderSection.tsx
@@ -42,6 +47,11 @@ src
 │       │   │   └── TodoList.tsx
 │       │   └── TodoCreateForm
 │       │       └── TodoCreateForm.tsx
+│       ├── auth
+│       │   ├── LoginForm
+│       │   │   └── LoginForm.tsx
+│       │   └── RegisterForm
+│       │       └── RegisterForm.tsx
 │       └── utilities
 │             ├── BugsnagErrorBoundary
 │             │   └── BugsnagErrorBoundary.tsx
