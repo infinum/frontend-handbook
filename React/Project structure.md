@@ -1,7 +1,7 @@
 ## Organizing components
 ### UI Components
 
-When adding UI components, you should be able to group them in two root domains:
+When adding UI components, you should be able to group them in three root domains:
 
 1. `core` - primitives, low level components
 2. `shared` - components that are shared all across the app
@@ -105,7 +105,7 @@ Here are some examples of core components:
       <code>./components/Control</code>, ...
     </td>
     <td>
-     The list of custom components can be find <a href="https://react-select.com/components">here</a>
+     The list of custom components can be found <a href="https://react-select.com/components">here</a>
     </td>
   </tr>
 </table>
@@ -237,7 +237,7 @@ Utility components usually does not have any visual representation on the screen
 
 When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
 
-Note: There _should_ be only one level of `components` folder inside the component folder.
+Note: There _should_ be only one level of component nesting inside the `components` folder. We are also considering renaming this folder from `components` to `elements` to avoid confusion with the project root `components` folder. But we are still not sure about this.
 
 Example:
 
@@ -290,7 +290,7 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-In this example `WelcomeCardOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
+In the following example `WelcomeCardLayoutOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
 
 ```tsx
 import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
@@ -335,9 +335,9 @@ export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div
 
 Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
 
-Rules:
+Here are some rules that you should follow when creating elements:
 
-- should only be used for organizational purposes
+- `.elements.tsx` should only be used for organizational purposes
 - custom components are tightly coupled with the root component and they should not be used in the outside scope
 - mixture of `chakra factory` and `Function Components` is allowed
 - using hooks inside elements is not recommended
@@ -345,11 +345,34 @@ Rules:
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
-## Different component layouts
+## Different component layouts for different screen sizes
 
-Sometimes, you might want to create a component specific for mobile and desktop.
+In most of the cases we should strive to create responsive components that consist of one DOM structure that is going to be rendered on all screen sizes by utilizing CSS only solutions. Work closely with your designer to achieve this.
 
-In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on specific media query.
+But, there are cases when we need to create different DOM structures for different screen sizes.
+
+## Collocating different layouts in one component
+
+With the help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
+
+```tsx
+export const UserCard = (props) => {
+  return (
+    <Box {...props}>
+      <Box hideFrom='md'>
+        // Mobile layout
+      </Box>
+      <Box hideBelow='md'>
+        // Desktop layout
+      </Box>
+    </Box>
+  )
+}
+```
+
+## Different component layouts for different screen sizes in separate `layout` components
+
+In this case, inside a specific component, we could add a subfolder `layouts` (not to be confused with actual layout described below) to define how our component would look like on a specific media query. We recommend using this approach only for layouts that would add too much complexity when using Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props. We realize that this approach usually results in a lot of code duplication, so use this approach only when necessary.
 
 ```
 .
@@ -361,30 +384,58 @@ In this case, inside a specific component, we could add a subfolder `layouts` (n
         └── UserCard.tsx
 ```
 
-For this case, inside `index.tsx` we would have something like this (with help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide)):
+For this case, inside `UserCard.tsx` we would have something like this: 
+
+With help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
+
+```tsx
+export const UserCardMobile = () => (
+  <Box hideFrom='md'>
+    // Mobile layout
+  </Box>
+)
+
+export const UserCardDesktop = () => (
+  <Box hideBelow='md'>
+    // Desktop layout
+  </Box>
+)
+
+export const UserCard = () => {
+  return (
+    <Fragment>
+      <UserCardMobile />
+      <UserCardDesktop />
+    </Fragment>
+  )
+}
+```
+
+With help of Chakra UI [Show/Hide](https://chakra-ui.com/docs/components/show-hide):
 
 ```tsx
 import { Show, Hide } from '@chakra-ui/react';
 
 export const UserCard = () => {
   return (
-    <Hide above="md">
-      <UserCardMobile />
-    </Hide>
-    <Show above="md">
-      <UserCardDesktop />
-    </Show>
+    <Fragment>
+      <Hide above="md">
+        <UserCardMobile />
+      </Hide>
+      <Show above="md">
+        <UserCardDesktop />
+      </Show>
+    </Fragment>
   )
 }
 ```
 
-> This is the case **only** for layouts that would add too much complexity when using standard css media queries.
-
+> Use of [Show/Hide](https://chakra-ui.com/docs/components/show-hide) helpers is advisable to be used only for client side rendering. For server side rendering use [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props.
 
 ### Extracting utility functions and hooks
 
 Sometimes, you will have complex functions or effects inside your component that will affect the readability of your component.
-In that case, you should extract them into separated files `utils.ts` and `hooks.ts`.
+In that case, you should extract them into separated files `*.utils.ts` and `*.hooks.ts`.
 
 Main goal of these files is to store functions and hooks that are **specific for that component**, so we could keep our root `hooks` and `utils` folders clean and for global usage purposes only.
 
@@ -402,8 +453,6 @@ Example:
 **Cluttered component**
 
 ```tsx
-... imports ...
-
 export const AlbumsCarousel = (props) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [highlighted, setHighlighted] = useState(null);
@@ -454,6 +503,9 @@ export const AlbumsCarousel = (props) => {
 
   return (
     //...
+    <div>{formatReleaseDate(props.startDate, props.endDate)</div>
+    //...
+
   )
 }
 ```
@@ -461,7 +513,6 @@ export const AlbumsCarousel = (props) => {
 **Cleaned**
 
 ```tsx
-... other imports ...
 import { formatReleaseDate } from './utils';
 
 export const AlbumsCarousel = (props) => {
@@ -484,7 +535,8 @@ export const AlbumsCarousel = (props) => {
 
   return (
     //...
-    // formatReleaseDate used somewhere here
+    <div>{formatReleaseDate(props.startDate, props.endDate)</div>
+    //...
   )
 }
 ```
@@ -501,13 +553,14 @@ You will define your different layouts inside `layouts` folder:
 .
 .
 └── components
-    └── layouts
-        ├── AdminLayout
-        │   └── AdminLayout.tsx
-        ├── MainLayout
-        │   └── MainLayout.tsx
-        └── BlogLayout
-            └── BlogLayout.tsx
+    └── shared
+        └── layouts
+            ├── AdminLayout
+            │   └── AdminLayout.tsx
+            ├── MainLayout
+            │   └── MainLayout.tsx
+            └── BlogLayout
+                └── BlogLayout.tsx
 ```
 
 Then, when creating your routes (pages), you will wrap your page in the layout that represents the current page:
@@ -576,14 +629,13 @@ src
 ├── models
 │   ├── User.ts
 │   └── Session.ts
-└── store
-    ├── utlis
-    │   ├── config.ts
-    │   └── initialize-store.ts
-    └── index.ts
+└── datx
+    └── create-client.ts
 ```
 
 ## Fetchers
+
+> This section is considered deprecated. For the newer approach check the [@datx/swr](https://datx.dev/docs/jsonapi-swr/overview) documentation.
 
 In `src/fetchers` you will organize your (swr) fetchers, usually by the model on which you will make API calls.
 
@@ -614,7 +666,6 @@ You will use your fetcher functions with `useSwr` hook inside of your components
 
 When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
 
-
 ```
 src
 └── styles
@@ -636,7 +687,7 @@ When organizing test files, here are couple of quick rules:
 - When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
 - All mocks should be placed in `__mocks__` folder
 
-For other in depth guides for testing take a look at the [testing guide(needs update)](link-to-testing-section).
+For other in depth guides for testing take a look at the [testing guide](https://infinum.com/handbook/frontend/react/testing-best-practices).
 
 Folder structure would look something like this:
 
@@ -656,9 +707,108 @@ src
 │       ├── users.ts
 │       └── users.test.ts
 └── components
-    └── shared
-        └── core
-            └── Button
-                ├── Button.test.tsx
-                └── Button.tsx
+    └── core
+        └── Button
+            ├── Button.test.tsx
+            └── Button.tsx
 ```
+
+## The complete structure
+
+```
+src
+├── __mocks__
+│   └── react-i18next.tsx
+├── __tests__
+│   ├── pages
+│   │   └── user.test.ts
+│   └── test-utils.tsx
+├── components
+│   ├── core
+│   │   ├── Button
+│   │   │   ├── Button.test.tsx
+│   │   │   └── Button.tsx
+│   │   ├── Section
+│   │   │   ├── Section.test.tsx
+│   │   │   └── Section.tsx
+│   │   └── Card
+│   │       ├── Card.test.tsx
+│   │       └── Card.tsx
+│   ├── features
+│   │   ├── home
+│   │   │   ├── HomeHeaderSection
+│   │   │   │   ├── HomeHeaderSection.test.tsx
+│   │   │   │   └── HomeHeaderSection.tsx
+│   │   │   └── HomeTodoListSection
+│   │   │       ├── HomeTodoListSection.test.tsx
+│   │   │       └── HomeTodoListSection.tsx
+│   │   ├── album
+│   │   │   └── AlbumsCarousel
+│   │   │       ├── AlbumsCarousel.tsx
+│   │   │       ├── AlbumsCarousel.test.ts
+│   │   │       ├── AlbumsCarousel.utils.ts
+│   │   │       └── AlbumsCarousel.hooks.ts
+│   │   └── todo
+│   │       ├── TodoHeaderSection
+│   │       │   ├── TodoHeaderSection.test.tsx
+│   │       │   └── TodoHeaderSection.tsx
+│   │       └── TodoCreateFormSection
+│   │           ├── TodoCreateFormSection.test.tsx
+│   │           └── TodoCreateFormSection.tsx
+│   └── shared
+│       ├── layouts
+│       │   ├── AdminLayout
+│       │   │   └── AdminLayout.tsx
+│       │   ├── MainLayout
+│       │   │   └── MainLayout.tsx
+│       │   └── BlogLayout
+│       │       └── BlogLayout.tsx
+│       ├── fields
+│       │   └── TextField
+│       │       ├── TextField.test.tsx
+│       │       └── TextField.tsx
+│       ├── cards
+│       │   ├── UserCard
+│       │   │   ├── layouts
+│       │   │   │   ├── UserCard.mobile.tsx
+│       │   │   │   └── UserCard.desktop.tsx
+│       │   │   ├── UserCard.test.tsx
+│       │   │   └── UserCard.tsx
+│       │   └── WelcomeCard
+│       │       ├── WelcomeCard.test.tsx
+│       │       ├── WelcomeCard.elements.ts
+│       │       └── WelcomeCard.tsx
+│       ├── todo
+│       │   ├── TodoCard
+│       │   │   ├── TodoCard.test.tsx
+│       │   │   └── TodoCard.tsx
+│       │   ├── TodoList
+│       │   │   ├── TodoList.test.tsx
+│       │   │   └── TodoList.tsx
+│       │   └── TodoCreateForm
+│       │       ├── TodoCreateForm.test.tsx
+│       │       └── TodoCreateForm.tsx
+│       └── utilities
+│             ├── BugsnagErrorBoundary
+│             │   └── BugsnagErrorBoundary.tsx
+│             └── Meta
+│                 └── Meta.tsx
+├── models
+│   ├── User.ts
+│   └── Session.ts
+├── datx
+│   └── create-client.ts
+├── styles
+│   └── theme
+│       ├── index.ts
+│       ├── styles.ts
+│       ├── foundations
+│       │   ├── font-sizes.ts
+│       │   └── colors.ts
+│       └── components
+│           └── button.ts
+└── pages
+    ├── index.tsx
+    └── todo
+        └── [id]
+            └── index.tsx
