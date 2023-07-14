@@ -255,42 +255,44 @@ const AuthRedirect: FC<IAuthRedirectProps> = ({ to, ifFound, condition }) => {
   } = useSession();
   const { push } = useRouter();
 
-  useEffect(() => {
-    // if state is validating, wait until request is done
-    if (isValidating) {
-      return;
-    }
-
-    // https://swr.vercel.app/advanced/performance#dependency-collection
-    const hydration = data === undefined && error === undefined && isValidating === false;
-    if (hydration) {
-      return;
-    }
-
-    // `condition` has a priority over a `ifFound` property
-    if (condition) {
-      if (condition(data)) {
-        push(to);
+  useEffect(
+    () => {
+      // if state is validating, wait until request is done
+      if (isValidating) {
+        return;
       }
 
-      return;
-    }
+      // https://swr.vercel.app/advanced/performance#dependency-collection
+      const hydration = data === undefined && error === undefined && isValidating === false;
+      if (hydration) {
+        return;
+      }
 
-    const shouldRedirect = (ifFound && data) || (!ifFound && !data);
+      // `condition` has a priority over a `ifFound` property
+      if (condition) {
+        if (condition(data)) {
+          push(to);
+        }
 
-    if (shouldRedirect) {
-      push(to);
-    }
-  }, 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  [data, isValidating, error, to, ifFound]);
+        return;
+      }
+
+      const shouldRedirect = (ifFound && data) || (!ifFound && !data);
+
+      if (shouldRedirect) {
+        push(to);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, isValidating, error, to, ifFound]
+  );
 
   // this component renders nothing since it is only used to redirect if needed.
   return null;
 };
 ```
 
-> **Note** we added `eslint-disable-next-line react-hooks/exhaustive-deps` to the `useEffect` hook. This is because we don't want to rerender the component if `condition` and `push` are changed. We are aware this is a dangerous thing to do, but in this case, it is a necessary evil. This issue will be resolved when React add finish `useEffectEvent` hook. More about this can be found [here](https://react.dev/learn/separating-events-from-effects#reading-latest-props-and-state-with-effect-events)
+> **Note** we added `eslint-disable-next-line react-hooks/exhaustive-deps` to the `useEffect` hook. This is because we don't want to rerender the component if `condition` and `push` are changed. We are aware this is a dangerous thing to do, but in this case, it is a necessary evil. This issue will be resolved when React finishes `useEffectEvent` hook. More about this can be found [here](https://react.dev/learn/separating-events-from-effects#reading-latest-props-and-state-with-effect-events)
 
 If we now implement this in our example, it looks like this.
 
@@ -300,7 +302,7 @@ const SomePrivatePage = () => {
     <Layout>
       <Header />
 
-      <AuthRedirect to="/" />
+      <AuthRedirect to='/' />
       <Content />
 
       <Footer />
@@ -325,7 +327,7 @@ In `AuthRedirect` props we have defined multiple properties:
 
 ```tsx
 // redirect if session exits
-<AuthRedirect to="/" ifFound />
+<AuthRedirect to='/' ifFound />
 ```
 
 _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
@@ -336,5 +338,5 @@ _NOTE: if `condition` prop is defined, `isFound` prop will be ignored._
 
 ```tsx
 // redirect if logged in user is not an admin
-<AuthRedirect to="/" condition={(session) => session?.user.role !== 'admin'} />
+<AuthRedirect to='/' condition={(session) => session?.user.role !== 'admin'} />
 ```

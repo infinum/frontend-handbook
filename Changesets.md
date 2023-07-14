@@ -116,6 +116,60 @@ Once the PR is merged, the GitHub Action will create a new release, bump the ver
 
 When a release is ready, responsible person will merge the PR and the Github Action will publish the package to npm. It will also create a new tag and a Github release.
 
+## Pre-releases
+
+Changesets can be used to create pre-releases. It is not as easy as regular releases, but it is well documented in the [official documentation](https://github.com/changesets/changesets/blob/main/docs/prereleases.md).
+
+> Please proceed with caution when creating pre-releases.
+
+First thing you need to do is to enter the pre-release mode:
+
+```bash
+npx changeset pre <tag>
+```
+
+Most often for `<tag>` we will use `beta` but you can use any tag you want - e.g. `alpha`, `rc`, `next`, etc.
+
+As a result, a new file will be created in the `.changeset` folder. Next thing to do is to update the version of the package you want to release. You can do that by using the `changeset version` command:
+
+```bash
+npx changeset version
+```
+
+Now, we need to commit the version change and the changeset file:
+
+```bash
+git add .
+git commit -m "chore: release <tag>"
+```
+
+Once commited, we can publish the package:
+
+```bash
+npx changeset publish
+```
+
+> IMPORTANT: Make sure to use `changeset publish` command instead of `npm publish` because `npm` does not know that we are in prerelease mode.
+
+After publishing, we can push the tag to the origin and create a new release manually.
+
+```bash
+git push --follow-tags
+```
+
+Once you are done with the pre-release, you can exit the pre-release mode:
+
+```bash
+npx changeset exit pre
+```
+
+This will create changes in your code so make sure to also commit them.
+
+```bash
+git add .
+git commit -m "chore: exit pre-release mode"
+```
+
 ## See it in action
 
 Changesets are already implemented in a few repositories. Check them out to see how they work:
