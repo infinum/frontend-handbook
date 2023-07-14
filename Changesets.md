@@ -4,11 +4,11 @@
 
 [`changesets`](https://github.com/changesets/changesets) offer a solution to the problem of organizing package releases and grouping changes effectively. Here's why you should consider using changesets:
 
-- **Capture Changes at the Right Time:** Changesets allow contributors to document changes when submitting a pull request (PR), ensuring fresh and comprehensive information.
-- **Distinct Intent to Change:** Changesets represent an "intent to change" separate from changelogs and version bumps, providing clear versioning and changelog details.
-- **Efficient Versioning Process:** Add changesets in PRs, then combine them for version bumps, streamlining reviews and increasing confidence in versioning decisions.
-- **Streamlined Tooling:** Changesets come with tools for CLI-generated changesets, automated versioning, and surfacing changesets in PRs, reducing manual effort.
-- **Compatible with Mono-repos:** Designed for monorepos, changesets handle interdependencies and ensure compatibility, but also benefit single-package repositories.
+- **Capture Changes at the Right Time**: Changesets allow contributors to document changes during pull request (PR) submission, ensuring up-to-date and comprehensive information.
+- **Distinct Intent to Change**: Changesets separate the intent to change from changelogs and version bumps, providing clear versioning and changelog details.
+- **Efficient Versioning Process**: Add changesets in PRs, then combine them for version bumps, streamlining reviews and boosting confidence in versioning decisions.
+- **Streamlined Tooling**: Changesets come with CLI-generated tools, automated versioning, and surfaced changesets in PRs, reducing manual effort.
+- **Mono-repo Compatibility**: Designed for monorepos, changesets handle interdependencies and ensure compatibility, benefiting single-package repositories as well.
 
 Find more information about changesets in the [official documentation](http://github.com/changesets/changesets)
 
@@ -16,13 +16,13 @@ Find more information about changesets in the [official documentation](http://gi
 
 ### Install
 
-First, install the `@changesets/cli` package in the repository you want to use changesets in:
+First, install the @changesets/cli package in the repository where you want to use changesets:
 
 ```bash
 npm install -D @changesets/cli
 ```
 
-Once this is done, you need to initialize the repository to use changesets:
+Once installed, initialize the repository to use changesets:
 
 ```bash
 npx changeset init
@@ -30,9 +30,9 @@ npx changeset init
 
 ### Github Actions
 
-Even thought the changesets can be used without any CI, it is recommended to use it with a CI to automate the versioning and publishing process. To do so, you can use the [Github Action](https://github.com/changesets/action) provided by the changesets team.
+Although changesets can function without continuous integration (CI), it's recommended to use it with a CI system to automate versioning and publishing. You can utilize the [Github Action](https://github.com/changesets/action) provided by the changesets team.
 
-To use it, you need to create a `.github/workflows/release.yml` file. The action can be setup in few different ways, but the one that we use is the one explained under [With Publishing](https://github.com/changesets/action#with-publishing) section in the documentation with minor adjustments. This flow will update the version of the packages that have changed and publish them to npm.
+To use the action, create a `.github/workflows/release.yml` file. Follow the instructions under the [With Publishing](https://github.com/changesets/action#with-publishing) section in the documentation, with minor adjustments. This flow updates the versions of changed packages and publishes them to npm.
 
 ```yml
 name: Release
@@ -85,24 +85,24 @@ jobs:
         run: git push --follow-tags
 ```
 
-Before you can use the action, you need to create make sure that the checklist is completed:
+Before using the action, ensure the following checklist is complete:
 
-- Ask the your TL or TD or PE to add the NPM_TOKEN to the repository secrets
-- Make sure that the `package.json` file has the `publish` script: `"publish": "changeset publish"`
-- Make sure that the package is build before publishing it to npm (optional)
-- Make sure that the Node version is correct
-- Make sure that the branch name is correct
-- Make sure that the `package.json` file has the `main` field
-- Make sure that only relevant stuff will be published to npm (e.g. no `__tests__` folder) by adding [a `.npmignore` file or using a `files` field in the `package.json` file](https://docs.npmjs.com/cli/v9/using-npm/developers#testing-whether-your-npmignore-or-files-config-works)
-- Make sure that the `package.json` file has the `repository` field (with `directory` if monorepo)
+- Ask your TL, TD, or PE to add the NPM_TOKEN to the repository secrets.
+- Confirm that the `package.json` file has the `publish` script: `"publish": "changeset publish"`.
+- Ensure the package is built before publishing it to npm (optional).
+- Verify that the Node version is correct.
+- Confirm that the branch name is accurate.
+- Ensure the `package.json` file has the `main` field.
+- Verify that only relevant items will be published to npm (e.g., no `__tests__` folder) by adding [a `.npmignore` file or using a files field in the `package.json` file](https://docs.npmjs.com/cli/v9/using-npm/developers#testing-whether-your-npmignore-or-files-config-works).
+- Confirm that the `package.json` file has the `repository` field (with `directory` for monorepos).
 
 ### Changeset Bot
 
-[Changeset bot](https://github.com/changesets/bot) is a Github bot that will help you even more with the automation of the package publishing. It is recommended to use it to make sure that the changesets are added to the PRs. To use it, you need to install it in the repository you want to use it in. You can find more information about it in the [official documentation](https://github.com/apps/changeset-bot). You will need to ask your TL or TD or PE to install it.
+[Changeset bot](https://github.com/changesets/bot) is a GitHub bot that further automates package publishing. It's recommended to install it in the repository. Refer to the [official documentation](https://github.com/apps/changeset-bot) for more details. Ask your TL, TD, or PE to install it.
 
 ## Usage
 
-Once you are done with your changes, you will create a PR as usual. Once a PR is created bot will add a comment where a changeset can be added. This will be a link which will create new file in your PR. This action should be done by repo maintainer or someone who is responsible for the release. The changeset file will look like this:
+When you finish making changes, create a PR as usual. The bot will add a comment with a link to add a changeset file. This action should be performed by a repo maintainer or someone responsible for releases. The changeset file will look like this:
 
 ```md
 ---
@@ -112,13 +112,13 @@ Once you are done with your changes, you will create a PR as usual. Once a PR is
 This is a patch release because of a bug fix.
 ```
 
-Once a PR is merged, the PR will be created by the Github Action and the version will be bumped. The version will be bumped based on the changeset types. It will converge all changesets and bump the version based on the highest change type. The changeset types are following the semver versioning - major, minor, patch. It will also remove generated changesets so you have a clean slate for the next release.
+Once the PR is merged, the GitHub Action will create a new release, bump the version, and publish the package to npm. It removes the generated changesets, preparing for the next release.
 
 When a release is ready, responsible person will merge the PR and the Github Action will publish the package to npm. It will also create a new tag and a Github release.
 
 ## See it in action
 
-We already have the changesets implemented in few repositories. You can check them out to see how it works:
+Changesets are already implemented in a few repositories. Check them out to see how they work:
 
 - [js-linters](https://github.com/infinum/js-linters)
 - [polyglot-cli](https://github.com/infinum/js-polyglot-cli)
