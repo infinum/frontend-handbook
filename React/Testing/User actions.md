@@ -38,9 +38,7 @@ The library we will be using is `@testing-library/user-event`. Here's a brief di
 
 ### What is `userEvent`?
 
-`userEvent` is a library that simulates user actions like clicking, typing, tabbing, etc., in a way that closely mimics real user behavior. It builds upon the `fireEvent` utility, also from React Testing Library, but provides a more user-centric experience for firing events.
-
-[Why use `userEvent` over `fireEvent`?](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event)
+[userEvent](https://testing-library.com/docs/user-event/intro) is a library that simulates user actions like clicking, typing, tabbing, etc., in a way that closely mimics real user behavior. It builds upon the `fireEvent` utility, also from React Testing Library, but provides a more user-centric experience for firing events.
 
 ### Why Use `userEvent`?
 
@@ -51,6 +49,8 @@ The library we will be using is `@testing-library/user-event`. Here's a brief di
 3. **Focus on User Experience:** By simulating the full flow of events triggered by user interactions, `userEvent` helps you catch issues that simpler simulation methods might miss. This leads to a more robust application and better user experience.
 
 4. **Comprehensive Testing:** Using `userEvent`, you can cover various edge cases, like what happens if a user types too quickly, or if they click a button multiple times in rapid succession.
+
+Suggested reading: [Use @testing-library/user-event over fireEvent where possible.](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event)
 
 ### Commonly Used `userEvent` Methods
 
