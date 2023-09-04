@@ -1,4 +1,4 @@
-## Introduction to User Actions
+## Introduction to Testing User Actions
 
 > The more your tests resemble the way your software is used, the more confidence they can give you. - Kent D. Dodds, creator of React testing Library.
 
@@ -59,8 +59,10 @@ Suggested reading: [Use @testing-library/user-event over fireEvent where possibl
 - **`hover(element)`**: Simulates a hover event over a given element.
 - **`dblClick(element)`**: Simulates a double-click event on a given element.
 - **`clear(element)`**: Clears the content of an input field.
-  
-### Example Usage
+
+## Examples
+
+### Testing Button Click
 
 Here's a simple example using Jest and React Testing Library to test a button click:
 
@@ -80,7 +82,145 @@ test('Button click updates the text', () => {
 
 In this example, `userEvent.click()` simulates a real user clicking the button, making the test more reflective of actual user behavior.
 
-In summary, `userEvent` provides a more realistic and comprehensive approach to simulating user actions, making it an essential tool for anyone serious about testing React applications.
+### Testing Toggle Button
+
+```jsx
+it("should render toggle show more/less button", async () => {
+	const showLessButton = screen.queryByRole("button", { name: /showless/i });
+	const showMoreButton = screen.getByRole("button", { name: /showmore/i });
+
+	expect(showLessButton).toBeNull();
+	expect(showMoreButton).toBeInstanceOf(HTMLButtonElement);
+
+	await userEvent.click(showMoreButton);
+
+	const showMoreToggledButton = screen.queryByRole('button', { name: /showmore/i });
+	const showLessToggledButton = screen.getByRole('button', { name: /showless/i });
+	
+	expect(showMoreToggledButton).toBeNull();
+	expect(showLessToggledButton).toBeInstanceOf(HTMLButtonElement);
+});
+```
+
+### Testing User Navigation
+
+Here is a trickier scenario where we are testing the navigation of the user:
+
+First, we create a Router Mock. This can be done by creating a new file: `__mocks__/router.ts`, which looks something like this:
+```jsx
+import { NextRouter } from 'next/router';
+
+const createMockRouter = (router: Partial<NextRouter>): NextRouter => {
+	return {
+		basePath: '',
+		pathname: '/',
+		route: '/',
+		query: {},
+		asPath: '/',
+		forward: jest.fn(),
+		back: jest.fn(),
+		beforePopState: jest.fn(),
+		prefetch: jest.fn(() => Promise.resolve()),
+		push: jest.fn(),
+		reload: jest.fn(),
+		replace: jest.fn(),
+		events: {
+			on: jest.fn(),
+			off: jest.fn(),
+			emit: jest.fn(),
+		},
+		isFallback: false,
+		isLocaleDomain: false,
+		isReady: true,
+		defaultLocale: 'en',
+		domainLocales: [],
+		isPreview: false,
+		...router,
+	};
+};
+
+export default createMockRouter;
+```
+
+This allows us to use `Next Router` when testing for User Navigation. Look at the example code below:
+
+```jsx
+import { RouterContext } from 'next/dist/shared/lib/router-context';
+import createMockRouter from '__mocks__/router';
+
+const router = createMockRouter({});
+
+it('should navigate to register page', async () => {
+	const user = userEvent.setup();
+
+	render(
+		<RouterContext.Provider value={router}>
+			<LoginForm />
+		</RouterContext.Provider>
+	);
+
+	await user.click(screen.getByRole('link', { name: /Register/i }));
+
+	expect(router.push).toHaveBeenCalled();
+});
+```
+
+### Testing Form Submit
+
+Many times, we have complex forms that are very important to our business running smoothly, so we can't risk them not working. Here is how we can write a simple test for a form:
+
+First, we set up **MSW** (Mock Service Worker) to mock API requests made by the form. This will ensure we have more control over the responses, so we can test for different scenarios.
+
+```jsx
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
+const server = setupServer(
+	rest.post(testApiUrl('/api/login'), (req, res, ctx) => {
+		return res(ctx.status(200), ctx.json(true));
+	})
+);
+
+beforeAll(() => {
+	server.listen();
+});
+
+afterEach(() => {
+	server.resetHandlers();
+});
+
+afterAll(() => {
+	server.close();
+});
+```
+
+After, we can test the Login form that hits the `/api/login` endpoint:
+
+```jsx
+import { FormProvider, useForm } from 'react-hook-form';
+
+it('should submit form', async () => {
+	const user = userEvent.setup();
+    const methods = useForm();
+
+	return (
+		<FormProvider {...methods}>
+			<LoginForm />
+		</FormProvider>
+	);
+
+	const emailInput = screen.getByRole('textbox', { name: /Email Address/i });
+	const passwordInput = screen.getByPlaceholderText('Enter Password');
+
+	await user.type(emailInput, 'test@infinum.com');
+	await user.type(passwordInput, 'password');
+
+	await user.click(screen.getByRole('button', { name: /Submit/i }));
+
+	expect(screen.getByText('Login Successful.')).toBeInTheDocument();
+});
+```
+
 
 ## Best Practices
 
