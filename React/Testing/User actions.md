@@ -84,21 +84,20 @@ In this example, `userEvent.click()` simulates a real user clicking the button, 
 
 ### Testing Toggle Button
 
+When we are trying to assert elements that are not yet visible on the DOM, we can use the `queryBy*` method variants. Read more about this here: [Using query* variants](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#using-query-variants-for-anything-except-checking-for-non-existence)
+
 ```jsx
 it('should render toggle show more/less button', async () => {
-	let showLessButton = screen.queryByRole('button', { name: /showless/i });
-	let showMoreButton = screen.queryByRole('button', { name: /showmore/i });
+	const showMoreButton = screen.getByRole('button', { name: /showmore/i });
+	const showLessButton = screen.queryByRole('button', { name: /showless/i });
 
-	expect(showLessButton).toBeNull();
-	expect(showMoreButton).toBeInstanceOf(HTMLButtonElement);
+	expect(showMoreButton).toBeInTheDocument();
+	expect(showLessButton).not.toBeInTheDocument();
 
-	await userEvent.click(showMoreButton as HTMLButtonElement);
+	userEvent.click(showMoreButton as HTMLButtonElement);
 
-	showMoreButton = screen.queryByRole('button', { name: /showmore/i });
-	showLessButton = screen.queryByRole('button', { name: /showless/i });
-
-	expect(showMoreButton).toBeNull();
-	expect(showLessButton).toBeInstanceOf(HTMLButtonElement);
+	waitFor(() => expect(screen.getByRole('button', { name: /showless/i })).toBeInTheDocument());
+	waitFor(() => expect(screen.queryByRole('button', { name: /showmore/i })).not.toBeInTheDocument());
 });
 ```
 
