@@ -70,13 +70,13 @@ Here's a simple example using Jest and React Testing Library to test a button cl
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-test('Button click updates the text', () => {
-  render(<MyButtonComponent />);
+it('should update the text', () => {
+  	render(<MyButtonComponent />);
   
-  const button = screen.getByRole('button', { name: /click me/i });
-  userEvent.click(button);
+  	const button = screen.getByRole('button', { name: /click me/i });
+  	userEvent.click(button);
   
-  expect(screen.getByText('Button clicked')).toBeInTheDocument();
+  	expect(screen.getByText('Button clicked')).toBeInTheDocument();
 });
 ```
 
@@ -85,22 +85,24 @@ In this example, `userEvent.click()` simulates a real user clicking the button, 
 ### Testing Toggle Button
 
 ```jsx
-it("should render toggle show more/less button", async () => {
-	const showLessButton = screen.queryByRole("button", { name: /showless/i });
-	const showMoreButton = screen.getByRole("button", { name: /showmore/i });
+it('should render toggle show more/less button', async () => {
+	let showLessButton = screen.queryByRole('button', { name: /showless/i });
+	let showMoreButton = screen.queryByRole('button', { name: /showmore/i });
 
 	expect(showLessButton).toBeNull();
 	expect(showMoreButton).toBeInstanceOf(HTMLButtonElement);
 
-	await userEvent.click(showMoreButton);
+	await userEvent.click(showMoreButton as HTMLButtonElement);
 
-	const showMoreToggledButton = screen.queryByRole('button', { name: /showmore/i });
-	const showLessToggledButton = screen.getByRole('button', { name: /showless/i });
-	
-	expect(showMoreToggledButton).toBeNull();
-	expect(showLessToggledButton).toBeInstanceOf(HTMLButtonElement);
+	showMoreButton = screen.queryByRole('button', { name: /showmore/i });
+	showLessButton = screen.queryByRole('button', { name: /showless/i });
+
+	expect(showMoreButton).toBeNull();
+	expect(showLessButton).toBeInstanceOf(HTMLButtonElement);
 });
 ```
+
+Suggested reading: [Advice: wait for a specific assertion inside waitFor.](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#passing-an-empty-callback-to-waitfor)
 
 ### Testing User Navigation
 
@@ -159,9 +161,9 @@ it('should navigate to register page', async () => {
 		</RouterContext.Provider>
 	);
 
-	await user.click(screen.getByRole('link', { name: /Register/i }));
+	user.click(screen.getByRole('link', { name: /Register/i }));
 
-	expect(router.push).toHaveBeenCalled();
+	waitFor(() => expect(router.push).toHaveBeenCalled());
 });
 ```
 
@@ -212,12 +214,12 @@ it('should submit form', async () => {
 	const emailInput = screen.getByRole('textbox', { name: /Email Address/i });
 	const passwordInput = screen.getByPlaceholderText('Enter Password');
 
-	await user.type(emailInput, 'test@infinum.com');
-	await user.type(passwordInput, 'password');
+	user.type(emailInput, 'test@infinum.com');
+	user.type(passwordInput, 'password');
 
-	await user.click(screen.getByRole('button', { name: /Submit/i }));
+	user.click(screen.getByRole('button', { name: /Submit/i }));
 
-	expect(screen.getByText('Login Successful.')).toBeInTheDocument();
+	waitFor(() => expect(screen.getByText('Login Successful.')).toBeInTheDocument());
 });
 ```
 
