@@ -38,7 +38,7 @@ The library we will be using is `@testing-library/user-event`. Here's a brief di
 
 ### What is `userEvent`?
 
-[userEvent](https://testing-library.com/docs/user-event/intro) is a library that simulates user actions like clicking, typing, tabbing, etc., in a way that closely mimics real user behavior. It builds upon the `fireEvent` utility, also from React Testing Library, but provides a more user-centric experience for firing events.
+[userEvent](https://testing-library.com/docs/user-event/intro) is a library that simulates user actions like clicking, typing, tabbing, etc., in a way that closely mimics real user behavior. It builds upon the `fireEvent` utility, also from React Testing Library, but provides a more user-centric experience for simulating events.
 
 ### Why Use `userEvent`?
 
@@ -50,7 +50,7 @@ The library we will be using is `@testing-library/user-event`. Here's a brief di
 
 4. **Comprehensive Testing:** Using `userEvent`, you can cover various edge cases, like what happens if a user types too quickly, or if they click a button multiple times in rapid succession.
 
-Suggested reading: [Use @testing-library/user-event over fireEvent where possible.](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event)
+*Suggested reading: [Use @testing-library/user-event over fireEvent where possible.](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event)*
 
 ### Commonly Used `userEvent` Methods
 
@@ -59,6 +59,11 @@ Suggested reading: [Use @testing-library/user-event over fireEvent where possibl
 - **`hover(element)`**: Simulates a hover event over a given element.
 - **`dblClick(element)`**: Simulates a double-click event on a given element.
 - **`clear(element)`**: Clears the content of an input field.
+- *See all available methods [here](https://testing-library.com/docs/user-event/convenience)*
+
+### Await
+
+`userEvent` methods return a Promise. The use of `await` in conjunction with `userEvent` often has to do with asynchronous behavior and updates in React.
 
 ## Examples
 
@@ -74,7 +79,7 @@ it('should update the text', () => {
   	render(<MyButtonComponent />);
   
   	const button = screen.getByRole('button', { name: /click me/i });
-  	userEvent.click(button);
+  	await userEvent.click(button);
   
   	expect(screen.getByText('Button clicked')).toBeInTheDocument();
 });
@@ -84,24 +89,25 @@ In this example, `userEvent.click()` simulates a real user clicking the button, 
 
 ### Testing Toggle Button
 
-When we are trying to assert elements that are not yet visible on the DOM, we can use the `queryBy*` method variants. Read more about this here: [Using query* variants](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#using-query-variants-for-anything-except-checking-for-non-existence)
-
 ```jsx
 it('should render toggle show more/less button', async () => {
-	const showMoreButton = screen.getByRole('button', { name: /showmore/i });
-	const showLessButton = screen.queryByRole('button', { name: /showless/i });
+	let showMoreButton = screen.getByRole('button', { name: /showmore/i });
+	let showLessButton = screen.queryByRole('button', { name: /showless/i });
 
 	expect(showMoreButton).toBeInTheDocument();
 	expect(showLessButton).not.toBeInTheDocument();
 
-	userEvent.click(showMoreButton as HTMLButtonElement);
+	await userEvent.click(showMoreButton as HTMLButtonElement);
 
-	waitFor(() => expect(screen.getByRole('button', { name: /showless/i })).toBeInTheDocument());
-	waitFor(() => expect(screen.queryByRole('button', { name: /showmore/i })).not.toBeInTheDocument());
+	showMoreButton = screen.getByRole('button', { name: /showless/i });
+	showLessButton = screen.queryByRole('button', { name: /showmore/i });
+
+	expect(showMoreButton).toBeInTheDocument();
+	expect(showLessButton).not.toBeInTheDocument();
 });
 ```
 
-Suggested reading: [Advice: wait for a specific assertion inside waitFor.](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#passing-an-empty-callback-to-waitfor)
+*When we are trying to assert elements that are not yet visible on the DOM, we can use the `queryBy*` method variants. Read more about this here: [Using query* variants](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#using-query-variants-for-anything-except-checking-for-non-existence)*
 
 ### Testing User Navigation
 
@@ -160,9 +166,9 @@ it('should navigate to register page', async () => {
 		</RouterContext.Provider>
 	);
 
-	user.click(screen.getByRole('link', { name: /Register/i }));
+	await user.click(screen.getByRole('link', { name: /Register/i }));
 
-	waitFor(() => expect(router.push).toHaveBeenCalled());
+	expect(router.push).toHaveBeenCalled();
 });
 ```
 
@@ -170,7 +176,7 @@ it('should navigate to register page', async () => {
 
 Many times, we have complex forms that are very important to our business running smoothly, so we can't risk them not working. Here is how we can write a simple test for a form:
 
-First, we set up **MSW** (Mock Service Worker) to mock API requests made by the form. This will ensure we have more control over the responses, so we can test for different scenarios.
+First, we set up **MSW** (Mock Service Worker) to handle API requests made by the form. This will ensure we have more control over the responses, so we can test for different scenarios.
 
 ```jsx
 import { rest } from 'msw';
@@ -213,12 +219,12 @@ it('should submit form', async () => {
 	const emailInput = screen.getByRole('textbox', { name: /Email Address/i });
 	const passwordInput = screen.getByPlaceholderText('Enter Password');
 
-	user.type(emailInput, 'test@infinum.com');
-	user.type(passwordInput, 'password');
+	await user.type(emailInput, 'test@infinum.com');
+	await user.type(passwordInput, 'password');
 
-	user.click(screen.getByRole('button', { name: /Submit/i }));
+	await user.click(screen.getByRole('button', { name: /Submit/i }));
 
-	waitFor(() => expect(screen.getByText('Login Successful.')).toBeInTheDocument());
+	expect(screen.getByText('Login Successful.')).toBeInTheDocument();
 });
 ```
 
