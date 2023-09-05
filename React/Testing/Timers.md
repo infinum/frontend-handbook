@@ -113,4 +113,4 @@ it('should add item', async () => {
 
 - **Cover Branching Logic**: If timeouts lead to branching behaviors (like loading indicators, error messages, etc.), ensure your tests cover all these branches.
 
-*By making the most of the tools at your disposal and adhering to best practices, you can write reliable, fast, and comprehensive tests for asynchronous behavior in your React components.*
+*By making the most of the tools at your disposal and adhering to best practices, you can write reliable, fast, and comprehensive tests for asynchronous behavior in your components.*
