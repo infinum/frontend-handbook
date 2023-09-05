@@ -18,7 +18,6 @@ Using timeouts is a common practice, often driven by the need to manage or intro
 
 *Remember, these are just a few scenarios. While timeouts can be handy in managing these scenarios, it's essential to handle them correctly, ensuring they are cleared appropriately (using `clearTimeout`) to avoid unwanted side-effects or memory leaks, especially when components unmount.*
 
-
 ## The Challenges of Testing Components with Timeouts:
 
 Testing components with timeouts introduces specific challenges that can make the process trickier than testing synchronous operations or even other types of asynchronous behaviors. Let's delve into the challenges posed by timeouts:
@@ -34,7 +33,7 @@ Testing components with timeouts introduces specific challenges that can make th
 
 - **Over-reliance on Real Timers**: While using real timers (like JavaScript's `setTimeout`) might seem like a straightforward way to test, it's often unreliable. Tests might sometimes fail just because the operation took a millisecond longer than expected.
 
-*To navigate these challenges, developers are often advised to make use of testing tools and utilities specifically designed for asynchronous operations, like the `jest.useFakeTimers()` function in Jest, which lets you mock timers and control their progression. Properly mocking and controlling timeouts can lead to more consistent, faster, and reliable tests.*
+*Properly mocking and controlling timeouts can lead to more consistent, faster, and reliable tests.*
 
 ## Utilizing Testing Libraries and Tools
 
