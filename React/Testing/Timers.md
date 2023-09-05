@@ -51,8 +51,8 @@ Testing components with timeouts introduces specific challenges that can make th
 
 ## Examples
 
-### Waiting for API Response
-A simple example is waiting for our component to fetch an external resource from an API endpoint (*We are using **MSW** to mock the endpoint*). `waitForElementToBeRemove` function from React Testing Library, which `awaits` for the `queryByText` to return `true`.
+### Using waitForElementToBeRemoved()
+A simple example is waiting for our component to fetch an external resource from an API endpoint (*We are using **MSW** to mock the endpoint*). `waitForElementToBeRemoved` function from React Testing Library, which `awaits` for the `queryByText` to return `true`.
 
 ```jsx
 it('should show empty state', async () => {
@@ -70,80 +70,34 @@ it('should show empty state', async () => {
 });
 ```
 
-### Form Submit inside Modal
+### Waiting for setTimeout()
 
-Here we are testing a full flow of a modal which includes a form where users can create new To-do Lists.
-
-We are mocking the API response and return only 1 list item by using `res.once`. Later, we have the same `GET` request, but we are returning 2 list items. This makes sense, as if the `POST` request is successful, the next `GET` request will also return the list item we just created.
+Here we are testing a full flow of a User creating a new Todo Item. The component displays if the user has successfully submitted the form and renders a toast notification using the `setTimeout()` function and removes the notification from the DOM after 3 seconds.
 
 ```jsx
+jest.useFakeTimers();
+jest.spyOn(global, 'setTimeout');
+
 it('should add item', async () => {
-	const user = userEvent.setup();
+	const user = userEvent.setup({ delay: null }); // Important to include
 
-	server.use(
-	    rest.post('/api/lists', (req, res, ctx) => {
-			return res(
-				ctx.json(true)
-			);
-		}),
-		rest.get('/api/lists', (req, res, ctx) => {
-			return res.once(
-				ctx.json([
-					{
-						uuid: '6e09fb6d-dc49-402f-a237-2b6018291a4a',
-						title: 'List 1',
-						created: '2023-06-19T08:41:59.417Z',
-					},
-				])
-			);
-		}),
-		rest.get('/api/lists', (req, res, ctx) => {
-			return res.once(
-				ctx.json([
-					{
-						uuid: '6e09fb6d-dc49-402f-a237-2b6018291a4a',
-						title: 'List 1',
-						created: '2023-06-19T08:41:59.417Z',
-					},
-					{
-						uuid: '16919678-8f95-474c-9eb1-8eb0f6ec249c',
-						title: 'List 2',
-						created: '2023-06-19T08:41:11.529Z',
-					},
-				])
-			);
-		})
-	);
+	render(<NewItemForm />);
 
-	render(<TodoLists />);
-
-    // If we would not have waited for the Loader to be removed,
-    // the expect below would throw an error, as no row would be rendered.
 	await waitForElementToBeRemoved(() => screen.queryByText('Loading...'));
 
-    // We are expecting the List to include 1 item
-	expect(screen.getAllByRole('row')).toHaveLength(1);
+	await user.type(screen.getByPlaceholderText('Title'), 'List 1');
+	await user.type(screen.getByPlaceholderText('Task title'), 'Task 1');
 
-    // Here we are opening the Modal
-	await user.click(screen.getByRole('button', { name: /Add New List/i }));
-
-	const createModal = screen.getByRole('dialog', { name: /Create Todo list/i });
-
-	expect(createModal).toBeInTheDocument();
-
-	await user.type(screen.getByPlaceholderText('Title'), 'List 2');
-	await user.click(screen.getByRole('button', { name: /List item/i }));
-	await user.type(screen.getByPlaceholderText('Task 1'), 'Task 1');
-
-    // We are submitting the form and closing the modal
 	await user.click(within(createModal).getByRole('button', { name: /Create/i }));
-	await user.click(within(createModal).getByRole('button', { name: /Close/i }));
 	
-    // Now we expect to have 2 list items rendered
-	expect(screen.getAllByRole('row')).toHaveLength(2);
+	expect(screen.getByText('Successfully Created New List Item')).toBeInTheDocument();
+
+	// Fast-forward until all timers have been executed
+	act(() => jest.runAllTimers())
+
+	expect(screen.queryByText('Successfully Created New List Item')).not.toBeInTheDocument();
 });
 ```
-
 
 ## Best Practices
 
@@ -160,4 +114,3 @@ it('should add item', async () => {
 - **Cover Branching Logic**: If timeouts lead to branching behaviors (like loading indicators, error messages, etc.), ensure your tests cover all these branches.
 
 *By making the most of the tools at your disposal and adhering to best practices, you can write reliable, fast, and comprehensive tests for asynchronous behavior in your React components.*
-
