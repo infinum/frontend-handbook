@@ -171,6 +171,9 @@ indent_style = tab
 indent_size = 2 # GitHub uses this value for indentation size when showing code on the Web
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[*.{yml,yaml}]
+indent_style = space
 ```
 
 ### ESLint and TSLint
