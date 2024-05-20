@@ -207,8 +207,8 @@ With these rules, there is also something called RED-GREEN-REFACTOR phases.
 
 Red means you write a failing test. Imagine this as a request to add new functionality by your user. You do not have implementation at the moment, just criteria for what should it be. You should not think about implementation here. Just, how it should be used, at the moment, not later. Let's get back to the calculator function and the second test. Skipping the first since we removed it. This test is checking if we have 3 arguments. Here, we might consider a few options like maybe:
 
-- having 2 arguments - array of numbers, and operation type like [2, 3, 5], 'ADD'; so we can, for example, add multiple numbers and not just two
-- having also 2 arguments - array of arrays where each array is [[2, 3, 'ADD'], [7, 6, 'SUBTRACT']] and operation type to calculate them all
+- having 2 arguments - array of numbers, and operation type like `[2, 3, 5], 'ADD'` so we can, for example, add multiple numbers and not just two
+- having also 2 arguments - array of arrays where each array is `[[2, 3, 'ADD'], [7, 6, 'SUBTRACT']]` and operation type to calculate them all
 - or something else.
 
 Concentrate on current work, and not something in the future.
