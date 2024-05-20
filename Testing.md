@@ -46,7 +46,7 @@ We will mention some of them, but feel free to look on the Internet for more bec
 
 Common types you will find are:
 
-1. **Unit testing**
+**Unit testing**
 
    Unit testing is testing the smallest testable part like a function or method.
    You usually check if for specific input, to a function for example, you get specific output.
@@ -60,7 +60,7 @@ Common types you will find are:
    External libraries and code should already have their tests.
    This will be emphasized again later.
 
-2. **Integration testing**
+**Integration testing**
 
    Since we know what are unit tests, we can now describe what are integration tests and what is
    integration testing.
@@ -72,7 +72,7 @@ Common types you will find are:
    For example if you test that after some „add“ button click, your list will have one item more.
    These tests are usually done by the code authors as well.
 
-3. **System testing**
+**System testing**
 
    This kind of testing goes after implementation and in our domain it is tested in a browser.
 
