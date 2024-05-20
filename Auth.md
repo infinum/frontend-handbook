@@ -4,23 +4,23 @@ There are multiple ways of doing auth, but in this chapter, we'll focus on the S
 
 ## Single sign-on (SSO)
 
-Single Sign-On (SSO) is a method of authentication that allows users to access multiple systems and applications with a single set of login credentials. SSO process typically starts when a user attempts to access a protected resource. Instead of prompting the user to enter their login credentials, the application redirects the user to an SSO service, which authenticates the user by checking their login credentials against an identity provider, such as a directory service or a database. Once the user is authenticated, the SSO service will generate a token, which is used to represent the user's identity.
+Single Sign-On (SSO) is a method of authentication that allows users to access multiple systems and applications with a single set of login credentials. The SSO process typically starts when a user attempts to access a protected resource. Instead of prompting the user to enter their login credentials, the application redirects the user to an SSO service, which authenticates the user by checking their login credentials against an identity provider, such as a directory service or a database. Once the user is authenticated, the SSO service will generate a token, which is used to represent the user's identity.
 
-The token is usually a JSON Web Token (JWT) which contains claims that are encoded with the user's identity, as well as other information such as the expiration date of the token. The token is then sent back to the application, which uses it to grant the user access to the protected resource.
+The token is usually a JSON Web Token (JWT), which contains claims that are encoded with the user's identity, as well as other information such as the expiration date of the token. The token is then sent back to the application, which uses it to grant the user access to the protected resource.
 
-The tokens are usually signed by the SSO service using a private key, which ensures that the token has not been tampered with, and can be verified using a public key. The tokens can also be encrypted, to ensure that the claims inside the token are not visible to anyone other than the intended recipient.
+The tokens are usually signed by the SSO service using a private key, which ensures that the token has not been tampered with and can be verified using a public key. The tokens can also be encrypted to ensure that the claims inside the token are not visible to anyone other than the intended recipient.
 
-The SSO service also acts as a central location for managing and auditing access to all the systems and applications that use SSO. It allows IT administrators to manage and secure access, and with the use of token, it can also check for the token's expiration date, and the scopes and audiences it's intended for.
+The SSO service also acts as a central location for managing and auditing access to all the systems and applications that use SSO. It allows IT administrators to manage and secure access, and with the use of tokens, it can also check for the token's expiration date and the scopes and audiences it's intended for.
 
 ### Benefits
 
 There are several benefits to using Single Sign-On (SSO) for authentication:
 
--  Improved User Experience: SSO eliminates the need for users to remember and manage multiple sets of login credentials, making it easier and more convenient for them to access the systems and applications they need.
--  Increased Security: SSO reduces the risk of password reuse and sharing, which can lead to security breaches. Additionally, SSO can also improve security by requiring users to go through a stronger authentication process, such as multi-factor authentication, before granting access.
--  Increased Productivity: SSO can save users time by eliminating the need to constantly log in and out of different systems. This can also improve productivity by allowing users to quickly access the resources they need to do their jobs.
--  Reduced IT Costs: SSO can reduce the costs associated with managing multiple sets of login credentials and resetting forgotten passwords.
--  Better Compliance: SSO can help organizations meet compliance requirements by providing a centralized location for managing and auditing access to sensitive information.
+- **Improved User Experience**: SSO eliminates the need for users to remember and manage multiple sets of login credentials, making it easier and more convenient for them to access the systems and applications they need.
+- **Increased Security**: SSO reduces the risk of password reuse and sharing, which can lead to security breaches. Additionally, SSO can also improve security by requiring users to go through a stronger authentication process, such as multi-factor authentication, before granting access.
+- **Increased Productivity**: SSO can save users time by eliminating the need to constantly log in and out of different systems. This can also improve productivity by allowing users to quickly access the resources they need to do their jobs.
+- **Reduced IT Costs**: SSO can reduce the costs associated with managing multiple sets of login credentials and resetting forgotten passwords.
+- **Better Compliance**: SSO can help organizations meet compliance requirements by providing a centralized location for managing and auditing access to sensitive information.
 
 ### Concerns
 
