@@ -1,6 +1,8 @@
 ## Testing
 
-_Guidelines are not rules and should not be followed blindly. Use your head and think._
+> Guidelines are not rules and should not be followed blindly.
+>
+> Use your head and think.
 
 You might assume that testing should be exclusively conducted by specialized testers, but that's not the case. As a developer, you should also test applications. You may utilize different tools and principles, but ensuring that your applications are covered with tests is imperative.
 
