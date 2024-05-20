@@ -2,7 +2,7 @@ Tools we use for testing are [React-Testing-Library](https://testing-library.com
 
 ## Video guide
 
-If you want to see more practical usage, [here](https://www.youtube.com/watch?v=KfaFyB0uedk) is the recording form JS Standup about next.js testing presented by 🦌 . The project tested in the video is LearnReact project.
+If you want to see more practical usage, [here](https://www.youtube.com/watch?v=KfaFyB0uedk) is the recording form JS Standup about next.js testing presented by 🦌. The project tested in the video is LearnReact project.
 
 ## Setup
 
