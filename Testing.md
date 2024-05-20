@@ -48,55 +48,55 @@ Common types you will find are:
 
 **Unit testing**
 
-   Unit testing is testing the smallest testable part like a function or method.
-   You usually check if for specific input, to a function for example, you get specific output.
-   Or if function returns nothing, you might test if something else was done inside its body like other
-   function call or some variable being modified.
-   Unit testing is usually done by the same developers who wrote the code.
+Unit testing is testing the smallest testable part like a function or method.
+You usually check if for specific input, to a function for example, you get specific output.
+Or if function returns nothing, you might test if something else was done inside its body like other
+function call or some variable being modified.
+Unit testing is usually done by the same developers who wrote the code.
 
-   One thing to remember is that you do not test code that is not yours.
-   You do not test if React will call componentDidMount or not, or that JSX will be compiled correctly,
-   or that some external function will do whatever it should be doing.
-   External libraries and code should already have their tests.
-   This will be emphasized again later.
+One thing to remember is that you do not test code that is not yours.
+You do not test if React will call componentDidMount or not, or that JSX will be compiled correctly,
+or that some external function will do whatever it should be doing.
+External libraries and code should already have their tests.
+This will be emphasized again later.
 
 **Integration testing**
 
-   Since we know what are unit tests, we can now describe what are integration tests and what is
-   integration testing.
-   Basically, it is testing of units combined and tested as a group.
-   Purpose of these tests are checking if interaction between units is correct and that there are no
-   faults.
+Since we know what are unit tests, we can now describe what are integration tests and what is
+integration testing.
+Basically, it is testing of units combined and tested as a group.
+Purpose of these tests are checking if interaction between units is correct and that there are no
+faults.
 
-   It is more complex than unit testing, and sometimes you also need to have some configuration.
-   For example if you test that after some „add“ button click, your list will have one item more.
-   These tests are usually done by the code authors as well.
+It is more complex than unit testing, and sometimes you also need to have some configuration.
+For example if you test that after some „add“ button click, your list will have one item more.
+These tests are usually done by the code authors as well.
 
 **System testing**
 
-   This kind of testing goes after implementation and in our domain it is tested in a browser.
+This kind of testing goes after implementation and in our domain it is tested in a browser.
 
-   You run the application and check how it is behaving.
-   For example, you open application and click button that should open modal, and modal should
-   have some different button that should do something else and so on.
-   This part can be automatized by tests which does this for you: clicking on a UI, expecting components
-   to be shown with correct data, typing in fields etc.
-   This type of tests can be done by other testers.
+You run the application and check how it is behaving.
+For example, you open application and click button that should open modal, and modal should
+have some different button that should do something else and so on.
+This part can be automatized by tests which does this for you: clicking on a UI, expecting components
+to be shown with correct data, typing in fields etc.
+This type of tests can be done by other testers.
 
-   You can come across system testing being similar with end to end testing (often written as e2e).
-   We will give one point of view since this is quite debatable.
-   Let's say we have application that has list of items on homepage and next to each item there is add
-   to cart action.
-   After adding at least 1 item, going to cart is available.
-   In the cart there is summary of selected items and action to purchase it which goes to payment
-   service and after payment is done it should return to home page.
-   System testing will test if we can add items, go to cart, go to purchase and go back.
-   End to end testing will be testing same as system testing, but additionally, our balance should be
-   lowered for correct amount, and correct amount should be added to seller, correct items should be
-   ordered and so on.
-   So like a real world application usage.
-   As you can already see, end to end testing is really difficult to do with automatic tests.
-   This kind of tests is usually done by QA people, since it might require a separate database and backend from staging/development one.
+You can come across system testing being similar with end to end testing (often written as e2e).
+We will give one point of view since this is quite debatable.
+Let's say we have application that has list of items on homepage and next to each item there is add
+to cart action.
+After adding at least 1 item, going to cart is available.
+In the cart there is summary of selected items and action to purchase it which goes to payment
+service and after payment is done it should return to home page.
+System testing will test if we can add items, go to cart, go to purchase and go back.
+End to end testing will be testing same as system testing, but additionally, our balance should be
+lowered for correct amount, and correct amount should be added to seller, correct items should be
+ordered and so on.
+So like a real world application usage.
+As you can already see, end to end testing is really difficult to do with automatic tests.
+This kind of tests is usually done by QA people, since it might require a separate database and backend from staging/development one.
 
 Above list of testing types can be also called functional and there are more than these types.
 There are also non-functional testing types, like:
@@ -135,7 +135,7 @@ The specifics of utilizing tools within each stack should be covered within thei
 
 We need to note that we will simplify TDD concept since it cannot be explained in single page.
 
-So what is TDD?
+_So what is TDD?_
 
 TDD or _Test Driven Development_ is a technique of writing tests before code in a way that you write simple failing test and as smallest code possible to pass that test. After that you write another simple failing test and another smallest code to pass this second one. You continue to do that until you are finished with code and refactor in the middle.
 
@@ -145,13 +145,13 @@ We will not write code, just explain what is happening. Let's say we want to dev
 
 We will use TDD and start with simple failing test:
 
-- calculator should throw error if called empty
+> calculator should throw error if called empty
 
 Why is this test failing? Since we didn't write code to fulfill that test statement yet. We write some code to throw error if calculator called empty. Test passes.
 
 Next simple failing test will be:
 
-- calculator should throw error if called with less or more than 3 arguments
+> calculator should throw error if called with less or more than 3 arguments
 
 We could also have negation like: calculator should not throw error if there is exactly 3 arguments. Try to avoid negations since they can add confusion to code. Using clean code principles here. And negativity is not good.
 
@@ -161,33 +161,33 @@ We see an opportunity to refactor both in code and test. There is a check for em
 
 Let's remove the empty check to clean code. Next, we need to check if the first and second arguments are numbers, and the last one is a string.
 
-- calculator should throw error if invalid types passed for arguments
+> calculator should throw error if invalid types passed for arguments
 
 We write code to check for types. Test passes.
 
 Then
 
-- calculator should throw error if operation type is invalid
+> calculator should throw error if operation type is invalid
 
 We test that the string is the correct value which can be 'ADD', 'SUBTRACT', and so on - whatever our interface will provide. Code will be added and test passes.
 
 Then there is that HUGE check if dividing with 0.
 
-- calculator should not have 0 for 2nd number with 'DIV' operation type
+> calculator should not have 0 for 2nd number with 'DIV' operation type
 
 Code for that and test passes.
 
-You might be yelling 'Where is calculation implementation!'. We go step by step and here we first assure that usage is correct, and then functionality should be added.
+You might be yelling _"Where is calculation implementation!"_. We go step by step and here we first assure that usage is correct, and then functionality should be added.
 
 Can you see how these checks are describing usage similar to your requirements? This is very important. Imagine someone goes to your tests first. They can know what your code does, if we assume that tests pass, without going to source. This is something that is making tests cost-effective. If someone needs to know functionality or refactor, it will be easy to do. We can add a few more tests and continue to talk about TDD.
 
 Test for:
 
-- calculator should return 4 if 1 and 3 are passed for 'ADD' operation type
+> calculator should return 4 if 1 and 3 are passed for 'ADD' operation type
 
 Write code. Test passes.
 
-- calculator should return -4 if -1 and -3 are passed for 'ADD' operation type
+> calculator should return -4 if -1 and -3 are passed for 'ADD' operation type
 
 Again. Write code. Test passes. And so on.
 
@@ -196,9 +196,7 @@ Many developers find TDD annoying, not useful or time-consuming. This only means
 Most popular rules are:
 
 - You are not allowed to write any production code unless it is to make a failing unit test pass. This means you must not write code before test.
-
 - You are not allowed to write any more of a unit test than is sufficient to fail; and compilation failures are failures. This means you must write test as small as possible and failing one.
-
 - You are not allowed to write any more production code than is sufficient to pass the one failing unit test. This means you must not write more code than needed to pass the test.
 
 Every TDD should stick to these rules.
@@ -223,7 +221,7 @@ This is as we said a simplified version of TDD. TDD sounds easy but is hard to m
 
 Unit tests are okay, but not sufficient to be sure that the software is working properly so you also need to test it with different types of testing.
 
-Remember, 'Test it before you waste it', and we mean code.
+Remember, _Test it before you waste it_, and we mean code.
 
 ### Team Player
 
