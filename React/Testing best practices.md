@@ -28,7 +28,6 @@ Add a test script to `package.json`:
 
 Create the `jest.config.js` file in the project root and follow the instructions for the [Rust compiler setup](https://nextjs.org/docs/testing#setting-up-jest-with-the-rust-compiler).
 
-
 Next, install `react-test-library`:
 
 ```bash
@@ -211,7 +210,7 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 
 1. Test IDs
 
-    - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+   - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 **Avoid unnecessary "is rendering" test**
 
@@ -233,32 +232,32 @@ Tests should have meaningful names and should be nested properly by following th
 An example:
 
 ```tsx
-  describe('useAuth', () => {
-    it('should throw context error', () => {
+describe("useAuth", () => {
+  it("should throw context error", () => {
+    // ...
+  });
+  it("should toggle loading state", () => {
+    // ..
+  });
+
+  describe("when user exists", () => {
+    it("should return the user object", () => {
       // ...
     });
-    it('should toggle loading state', () => {
-      // ..
-    });
-
-    describe('when user exists', () => {
-      it('should return the user object', () => {
-        // ...
-      });
-      it('should log out user', () => {
-        // ...
-      });
-    });
-
-    describe('when user does not exist', () => {
-      it('should return guest user', () => {
-        // ...
-      });
-      it('should destroy session on window close', () => {
-        // ...
-      });
+    it("should log out user", () => {
+      // ...
     });
   });
+
+  describe("when user does not exist", () => {
+    it("should return guest user", () => {
+      // ...
+    });
+    it("should destroy session on window close", () => {
+      // ...
+    });
+  });
+});
 ```
 
 ### Basic test example
@@ -266,9 +265,7 @@ An example:
 Base Component:
 
 ```tsx
-const Button: FC<ButtonProps> = (props) => (
-  <button {...props} />
-);
+const Button: FC<ButtonProps> = (props) => <button {...props} />;
 ```
 
 Test:
@@ -280,9 +277,7 @@ describe("Button", () => {
     const buttonText = "click here";
     const testOnClick = jest.fn();
 
-    render(
-      <Button onClick={testOnClick}>{buttonText}</Button>
-    );
+    render(<Button onClick={testOnClick}>{buttonText}</Button>);
 
     user.click(screen.getByText(buttonText));
 
@@ -329,65 +324,64 @@ describe("UserCard", () => {
 ```
 
 ## Repeated component rendering
+
 Describe your rendering inside `beforeEach` so you could use `screen.{getBySomething}` in your tests later, to reduce number of unnecessary renders.
 
 An example:
 
 ```tsx
-  describe('AlertButton', () => {
-    let title: string;
-    let confirmButtonText: string;
-    let onConfirm: () => void;
+describe("AlertButton", () => {
+  let title: string;
+  let confirmButtonText: string;
+  let onConfirm: () => void;
 
-    beforeEach(() => {
-      title = 'Bonjour';
-      confirmButtonText = 'Like, share, subscribe';
-      onConfirm = jest.fn();
+  beforeEach(() => {
+    title = "Bonjour";
+    confirmButtonText = "Like, share, subscribe";
+    onConfirm = jest.fn();
 
-      render(
-        <AlertButton
-          title={title}
-          confirmButtonText={confirmButtonText}
-          onConfirm={onConfirm}
-        />
-      );
-    });
+    render(
+      <AlertButton
+        title={title}
+        confirmButtonText={confirmButtonText}
+        onConfirm={onConfirm}
+      />
+    );
+  });
 
-    describe('when clicked', () => {
-      beforeEach(async () => {
-        await waitFor(() => {
-          user.click(screen.getByText(buttonText));
-        });
-      });
-
-      it('should open alert dialog', () => {
-        expect(screen.queryByRole('alertdialog')).toBeNull();
-      });
-      it('should display correct title', () => {
-        expect(screen.queryByText(title)).not.toBeNull();
+  describe("when clicked", () => {
+    beforeEach(async () => {
+      await waitFor(() => {
+        user.click(screen.getByText(buttonText));
       });
     });
 
-    describe('when confirm is clicked', () => {
-      beforeEach(async () => {
-        await waitFor(() => {
-          user.click(screen.getByText(buttonText));
-        });
-      });
-
-      it('should close the dialog', () => {
-        expect(screen.queryByRole('alertdialog')).toBeNull();
-      });
-
-      // ... more test cases
+    it("should open alert dialog", () => {
+      expect(screen.queryByRole("alertdialog")).toBeNull();
+    });
+    it("should display correct title", () => {
+      expect(screen.queryByText(title)).not.toBeNull();
     });
   });
+
+  describe("when confirm is clicked", () => {
+    beforeEach(async () => {
+      await waitFor(() => {
+        user.click(screen.getByText(buttonText));
+      });
+    });
+
+    it("should close the dialog", () => {
+      expect(screen.queryByRole("alertdialog")).toBeNull();
+    });
+
+    // ... more test cases
+  });
+});
 ```
 
-
 > **Note:** This is a shortened example of this concept, you can refer to the standup video section for more info:
-[Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
-
+> [Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
 
 ## Testing user events
 
@@ -400,36 +394,33 @@ For simulating an event, we use the `@testing-library/user-event` library.
 An example:
 
 ```tsx
-  import { waitFor, render } from '@test-utils';
-  import userEvent from '@testing-library/user-event';
+import { waitFor, render } from "@test-utils";
+import userEvent from "@testing-library/user-event";
 
-  // ...mocks
+// ...mocks
 
-  describe('ResetPasswordForm', () => {
-    it('should submit without validation errors', async () => {
-      const mockSuccess = jest.fn();
+describe("ResetPasswordForm", () => {
+  it("should submit without validation errors", async () => {
+    const mockSuccess = jest.fn();
 
-      render(
-        <ResetPasswordForm onSuccess={mockSuccess} />
-      );
+    render(<ResetPasswordForm onSuccess={mockSuccess} />);
 
-      userEvent.type(screen.getByRole('input'), '12345678');
+    userEvent.type(screen.getByRole("input"), "12345678");
 
-      // this event will trigger react-hook-form to rerender our component
-      // so we have to properly handle this state change before making further assertions
-      await waitFor(() => {
-        userEvent.click(screen.getByRole('button'));
-      });
-
-      expect(mockSuccess).toHaveBeenCalled();
+    // this event will trigger react-hook-form to rerender our component
+    // so we have to properly handle this state change before making further assertions
+    await waitFor(() => {
+      userEvent.click(screen.getByRole("button"));
     });
-  })
+
+    expect(mockSuccess).toHaveBeenCalled();
+  });
+});
 ```
 
 Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
 
 > Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
-
 
 ## Page component testing
 
@@ -498,7 +489,9 @@ describe("User Page", () => {
 
     render(<UserPage />);
 
-    expect(await screen.findByTestId("user-template-page-testid")).toBeDefined();
+    expect(
+      await screen.findByTestId("user-template-page-testid")
+    ).toBeDefined();
   });
 });
 ```
@@ -508,7 +501,6 @@ Because of testing `useSWR` behavior (which will re-render DOM after fetcher pro
 ### SWR testing
 
 To use SWR in your tests, add `SWRConfig` to your `AllProviders` mock with the following setup (note: your cases could require more customization):
-
 
 ```tsx
 const AllProviders = ({ children }) => (
@@ -564,7 +556,7 @@ describe("User Page", () => {
 
     render();
 
-    expect(screen.queryByText('Test user')).not.toBeNull();
+    expect(screen.queryByText("Test user")).not.toBeNull();
   });
 });
 ```
@@ -582,44 +574,52 @@ export const MyModal: FC<ButtonProps> = (props) => {
 
   return (
     <>
-      <Button {...props} onClick={onOpen}>Open my modal</Button>
+      <Button {...props} onClick={onOpen}>
+        Open my modal
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         {/* Modal stuff */}
       </Modal>
     </>
   );
-}
+};
 
 // MyModal.test.tsx
-import { Modal } from '@chakra-ui/react';
+import { Modal } from "@chakra-ui/react";
 
-jest.mock('@chakra-ui/react', () => {
-	const originalImplementation = jest.requireActual('@chakra-ui/react');
+jest.mock("@chakra-ui/react", () => {
+  const originalImplementation = jest.requireActual("@chakra-ui/react");
 
-	return {
-		...originalImplementation,
-		Modal: jest.fn((props) => {
-			const { Modal: OriginalModal } = jest.requireActual('@chakra-ui/react');
+  return {
+    ...originalImplementation,
+    Modal: jest.fn((props) => {
+      const { Modal: OriginalModal } = jest.requireActual("@chakra-ui/react");
 
-			return <OriginalModal {...props} />;
-		}),
-	};
+      return <OriginalModal {...props} />;
+    }),
+  };
 });
 
 describe("MyModal", () => {
-	it("should open on click", () => {
-		render(<MyModal />);
+  it("should open on click", () => {
+    render(<MyModal />);
 
-		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: false }), expect.anything());
+    expect(Modal).toBeCalledWith(
+      expect.objectContaining({ isOpen: false }),
+      expect.anything()
+    );
 
-		const button = screen.queryByRole("button");
-		expect(button).toBeDefined();
+    const button = screen.queryByRole("button");
+    expect(button).toBeDefined();
 
-		userEvent.click(button);
-		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: true }), expect.anything());
-	})
-})
+    userEvent.click(button);
+    expect(Modal).toBeCalledWith(
+      expect.objectContaining({ isOpen: true }),
+      expect.anything()
+    );
+  });
+});
 ```
 
 ## Fetchers
@@ -632,45 +632,6 @@ Fetcher tests should be located in `/fetchers/{{ fetcher name }}` folder next to
     └── users
         ├── user.ts
         └── user.test.ts
-```
-
-## Mocking API routes
-
-[Mock Service Worker](https://mswjs.io/docs/) is an API mocking library that uses Service Worker API to intercept actual requests.
-
-Example:
-
-```tsx
-import { rest } from "msw";
-import { setupServer } from "msw/node";
-
-const apiEndpoint = "http://localhost:3000";
-
-const mockTodoData = [{ title: "Todo #1", todos: [] }];
-
-const server = setupServer(
-  // Describe the requests to mock.
-  rest.post(`${apiEndpoint}/api/todo-lists`, (req, res, ctx) => {
-    return res(ctx.json(mockTodoData));
-  })
-);
-
-beforeAll(() => {
-  // Establish requests interception layer before all tests.
-  server.listen();
-});
-
-afterAll(() => {
-  // Clean up after all tests are done
-  server.close();
-});
-
-test("TodoComponent renders correct number of rows", async () => {
-  render(<TodoList />);
-
-  const Rows = screen.getAllByRole("row");
-  expect(Rows.length).toBe(1);
-});
 ```
 
 ### Using datx:
@@ -749,6 +710,45 @@ describe("fetchUser", () => {
 ```
 
 For more info about testing asynchronous code read [docs](https://jestjs.io/docs/en/asynchronous).
+
+## Mocking API routes
+
+[Mock Service Worker](https://mswjs.io/docs/) is an API mocking library that uses Service Worker API to intercept actual requests.
+
+Example:
+
+```tsx
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+const apiEndpoint = "http://localhost:3000";
+
+const mockTodoData = [{ title: "Todo #1", todos: [] }];
+
+const server = setupServer(
+  // Describe the requests to mock.
+  rest.post(`${apiEndpoint}/api/todo-lists`, (req, res, ctx) => {
+    return res(ctx.json(mockTodoData));
+  })
+);
+
+beforeAll(() => {
+  // Establish requests interception layer before all tests.
+  server.listen();
+});
+
+afterAll(() => {
+  // Clean up after all tests are done
+  server.close();
+});
+
+test("TodoComponent renders correct number of rows", async () => {
+  render(<TodoList />);
+
+  const Rows = screen.getAllByRole("row");
+  expect(Rows.length).toBe(1);
+});
+```
 
 ## Hooks
 
