@@ -28,7 +28,6 @@ Add a test script to `package.json`:
 
 Create the `jest.config.js` file in the project root and follow the instructions for the [Rust compiler setup](https://nextjs.org/docs/testing#setting-up-jest-with-the-rust-compiler).
 
-
 Next, install `react-test-library`:
 
 ```bash
@@ -176,9 +175,8 @@ useMock.i18n = {
 
 module.exports = {
   // this mock makes sure any components using the translate HoC receive the t function as a prop
-  withTranslation: () => (Component) => (props) => (
-    <Component t={(k) => k} {...props} />
-  ),
+  withTranslation: () => (Component) => (props) =>
+    <Component t={(k) => k} {...props} />,
   useTranslation: jest.fn(() => useMock),
 
   // mock if needed
@@ -198,20 +196,21 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 **Query priorities** ([more info](https://testing-library.com/docs/guide-which-query/)):
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
-  - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
-  - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
-  - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
-  - `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
-  - `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
 
-2. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
+   - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
+   - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
+   - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
+   - `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
+   - `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
 
-  - `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
-  - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
+1. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
 
-3. Test IDs
+   - `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
+   - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
-  - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+1. Test IDs
+
+   - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 **Avoid unnecessary "is rendering" test**
 
@@ -233,32 +232,32 @@ Tests should have meaningful names and should be nested properly by following th
 An example:
 
 ```tsx
-  describe('useAuth', () => {
-    it('should throw context error', () => {
+describe("useAuth", () => {
+  it("should throw context error", () => {
+    // ...
+  });
+  it("should toggle loading state", () => {
+    // ..
+  });
+
+  describe("when user exists", () => {
+    it("should return the user object", () => {
       // ...
     });
-    it('should toggle loading state', () => {
-      // ..
-    });
-
-    describe('when user exists', () => {
-      it('should return the user object', () => {
-        // ...
-      });
-      it('should log out user', () => {
-        // ...
-      });
-    });
-
-    describe('when user does not exist', () => {
-      it('should return guest user', () => {
-        // ...
-      });
-      it('should destroy session on window close', () => {
-        // ...
-      });
+    it("should log out user", () => {
+      // ...
     });
   });
+
+  describe("when user does not exist", () => {
+    it("should return guest user", () => {
+      // ...
+    });
+    it("should destroy session on window close", () => {
+      // ...
+    });
+  });
+});
 ```
 
 ### Basic test example
@@ -266,9 +265,7 @@ An example:
 Base Component:
 
 ```tsx
-const Button: FC<ButtonProps> = (props) => (
-  <button {...props} />
-);
+const Button: FC<ButtonProps> = (props) => <button {...props} />;
 ```
 
 Test:
@@ -280,9 +277,7 @@ describe("Button", () => {
     const buttonText = "click here";
     const testOnClick = jest.fn();
 
-    render(
-      <Button onClick={testOnClick}>{buttonText}</Button>
-    );
+    render(<Button onClick={testOnClick}>{buttonText}</Button>);
 
     user.click(screen.getByText(buttonText));
 
@@ -329,65 +324,64 @@ describe("UserCard", () => {
 ```
 
 ## Repeated component rendering
+
 Describe your rendering inside `beforeEach` so you could use `screen.{getBySomething}` in your tests later, to reduce number of unnecessary renders.
 
 An example:
 
 ```tsx
-  describe('AlertButton', () => {
-    let title: string;
-    let confirmButtonText: string;
-    let onConfirm: () => void;
+describe("AlertButton", () => {
+  let title: string;
+  let confirmButtonText: string;
+  let onConfirm: () => void;
 
-    beforeEach(() => {
-      title = 'Bonjour';
-      confirmButtonText = 'Like, share, subscribe';
-      onConfirm = jest.fn();
+  beforeEach(() => {
+    title = "Bonjour";
+    confirmButtonText = "Like, share, subscribe";
+    onConfirm = jest.fn();
 
-      render(
-        <AlertButton
-          title={title}
-          confirmButtonText={confirmButtonText}
-          onConfirm={onConfirm}
-        />
-      );
-    });
+    render(
+      <AlertButton
+        title={title}
+        confirmButtonText={confirmButtonText}
+        onConfirm={onConfirm}
+      />
+    );
+  });
 
-    describe('when clicked', () => {
-      beforeEach(async () => {
-        await waitFor(() => {
-          user.click(screen.getByText(buttonText));
-        });
-      });
-
-      it('should open alert dialog', () => {
-        expect(screen.queryByRole('alertdialog')).toBeNull();
-      });
-      it('should display correct title', () => {
-        expect(screen.queryByText(title)).not.toBeNull();
+  describe("when clicked", () => {
+    beforeEach(async () => {
+      await waitFor(() => {
+        user.click(screen.getByText(buttonText));
       });
     });
 
-    describe('when confirm is clicked', () => {
-      beforeEach(async () => {
-        await waitFor(() => {
-          user.click(screen.getByText(buttonText));
-        });
-      });
-
-      it('should close the dialog', () => {
-        expect(screen.queryByRole('alertdialog')).toBeNull();
-      });
-
-      // ... more test cases
+    it("should open alert dialog", () => {
+      expect(screen.queryByRole("alertdialog")).toBeNull();
+    });
+    it("should display correct title", () => {
+      expect(screen.queryByText(title)).not.toBeNull();
     });
   });
+
+  describe("when confirm is clicked", () => {
+    beforeEach(async () => {
+      await waitFor(() => {
+        user.click(screen.getByText(buttonText));
+      });
+    });
+
+    it("should close the dialog", () => {
+      expect(screen.queryByRole("alertdialog")).toBeNull();
+    });
+
+    // ... more test cases
+  });
+});
 ```
 
-
 > **Note:** This is a shortened example of this concept, you can refer to the standup video section for more info:
-[Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
-
+> [Next.js testing - Testing shared components](https://youtu.be/KfaFyB0uedk?t=1005)
 
 ## Testing user events
 
@@ -400,36 +394,33 @@ For simulating an event, we use the `@testing-library/user-event` library.
 An example:
 
 ```tsx
-  import { waitFor, render } from '@test-utils';
-  import userEvent from '@testing-library/user-event';
+import { waitFor, render } from "@test-utils";
+import userEvent from "@testing-library/user-event";
 
-  // ...mocks
+// ...mocks
 
-  describe('ResetPasswordForm', () => {
-    it('should submit without validation errors', async () => {
-      const mockSuccess = jest.fn();
+describe("ResetPasswordForm", () => {
+  it("should submit without validation errors", async () => {
+    const mockSuccess = jest.fn();
 
-      render(
-        <ResetPasswordForm onSuccess={mockSuccess} />
-      );
+    render(<ResetPasswordForm onSuccess={mockSuccess} />);
 
-      userEvent.type(screen.getByRole('input'), '12345678');
+    userEvent.type(screen.getByRole("input"), "12345678");
 
-      // this event will trigger react-hook-form to rerender our component
-      // so we have to properly handle this state change before making further assertions
-      await waitFor(() => {
-        userEvent.click(screen.getByRole('button'));
-      });
-
-      expect(mockSuccess).toHaveBeenCalled();
+    // this event will trigger react-hook-form to rerender our component
+    // so we have to properly handle this state change before making further assertions
+    await waitFor(() => {
+      userEvent.click(screen.getByRole("button"));
     });
-  })
+
+    expect(mockSuccess).toHaveBeenCalled();
+  });
+});
 ```
 
 Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
 
 > Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
-
 
 ## Page component testing
 
@@ -498,7 +489,9 @@ describe("User Page", () => {
 
     render(<UserPage />);
 
-    expect(await screen.findByTestId("user-template-page-testid")).toBeDefined();
+    expect(
+      await screen.findByTestId("user-template-page-testid")
+    ).toBeDefined();
   });
 });
 ```
@@ -508,7 +501,6 @@ Because of testing `useSWR` behavior (which will re-render DOM after fetcher pro
 ### SWR testing
 
 To use SWR in your tests, add `SWRConfig` to your `AllProviders` mock with the following setup (note: your cases could require more customization):
-
 
 ```tsx
 const AllProviders = ({ children }) => (
@@ -564,7 +556,7 @@ describe("User Page", () => {
 
     render();
 
-    expect(screen.queryByText('Test user')).not.toBeNull();
+    expect(screen.queryByText("Test user")).not.toBeNull();
   });
 });
 ```
@@ -582,44 +574,52 @@ export const MyModal: FC<ButtonProps> = (props) => {
 
   return (
     <>
-      <Button {...props} onClick={onOpen}>Open my modal</Button>
+      <Button {...props} onClick={onOpen}>
+        Open my modal
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         {/* Modal stuff */}
       </Modal>
     </>
   );
-}
+};
 
 // MyModal.test.tsx
-import { Modal } from '@chakra-ui/react';
+import { Modal } from "@chakra-ui/react";
 
-jest.mock('@chakra-ui/react', () => {
-	const originalImplementation = jest.requireActual('@chakra-ui/react');
+jest.mock("@chakra-ui/react", () => {
+  const originalImplementation = jest.requireActual("@chakra-ui/react");
 
-	return {
-		...originalImplementation,
-		Modal: jest.fn((props) => {
-			const { Modal: OriginalModal } = jest.requireActual('@chakra-ui/react');
+  return {
+    ...originalImplementation,
+    Modal: jest.fn((props) => {
+      const { Modal: OriginalModal } = jest.requireActual("@chakra-ui/react");
 
-			return <OriginalModal {...props} />;
-		}),
-	};
+      return <OriginalModal {...props} />;
+    }),
+  };
 });
 
 describe("MyModal", () => {
-	it("should open on click", () => {
-		render(<MyModal />);
+  it("should open on click", () => {
+    render(<MyModal />);
 
-		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: false }), expect.anything());
+    expect(Modal).toBeCalledWith(
+      expect.objectContaining({ isOpen: false }),
+      expect.anything()
+    );
 
-		const button = screen.queryByRole("button");
-		expect(button).toBeDefined();
+    const button = screen.queryByRole("button");
+    expect(button).toBeDefined();
 
-		userEvent.click(button);
-		expect(Modal).toBeCalledWith(expect.objectContaining({ isOpen: true }), expect.anything());
-	})
-})
+    userEvent.click(button);
+    expect(Modal).toBeCalledWith(
+      expect.objectContaining({ isOpen: true }),
+      expect.anything()
+    );
+  });
+});
 ```
 
 ## Fetchers
@@ -711,6 +711,45 @@ describe("fetchUser", () => {
 
 For more info about testing asynchronous code read [docs](https://jestjs.io/docs/en/asynchronous).
 
+## Mocking API routes
+
+[Mock Service Worker](https://mswjs.io/docs/) is an API mocking library that uses Service Worker API to intercept actual requests.
+
+Example:
+
+```tsx
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+const apiEndpoint = "http://localhost:3000";
+
+const mockTodoData = [{ title: "Todo #1", todos: [] }];
+
+const server = setupServer(
+  // Describe the requests to mock.
+  rest.post(`${apiEndpoint}/api/todo-lists`, (req, res, ctx) => {
+    return res(ctx.json(mockTodoData));
+  })
+);
+
+beforeAll(() => {
+  // Establish requests interception layer before all tests.
+  server.listen();
+});
+
+afterAll(() => {
+  // Clean up after all tests are done
+  server.close();
+});
+
+test("TodoComponent renders correct number of rows", async () => {
+  render(<TodoList />);
+
+  const Rows = screen.getAllByRole("row");
+  expect(Rows.length).toBe(1);
+});
+```
+
 ## Hooks
 
 `react-hooks-testing-library` creates a simple test harness for React hooks that handles running them within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This library aims to provide a testing experience as close as possible to how your hook is used in a real component.
@@ -758,3 +797,41 @@ describe("useModal", () => {
   });
 });
 ```
+
+### Mock hooks
+
+Sometimes we want our custom hook to return a mock response while we test component consuming it.
+
+Example hook:
+
+```tsx
+// @/hooks/useTodos.ts
+export const useTodos = (config?: SWRConfiguration) => {
+  return useSWR(() => {
+    return "api/todo-lists";
+  }, config);
+};
+```
+
+Example mock and test:
+
+```tsx
+import * as hooks from "@/hooks/useTodos";
+
+const mockTodoData = [{ title: "Todo #1", todos: [] }];
+
+jest.spyOn(hooks, "useTodos").mockImplementation(() => {
+  return {
+    data: mockTodoData,
+  } as SWRResponse;
+});
+
+test("TodoComponent renders correct number of rows", async () => {
+  render(<TodoList />); // uses useTodos
+
+  const Rows = screen.getAllByRole("row");
+  expect(Rows.length).toBe(1);
+});
+```
+
+Spy will now redirect any hook calls to mock implementation.
