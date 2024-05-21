@@ -398,7 +398,7 @@ To test user actions, you'll usually:
 3. Check the outcome – this could be a changed state, a rendered element, or an API call.
 
 **Further Exploration:**
-We have added a more comprehensive chapter on **Testing User Actions**, providing real-world examples and a guide that will help you ensure your React applications respond correctly to user interactions. You can find it here: [Testing - User actions](/testing/user-actions)
+We have added a more comprehensive chapter on **Testing User Actions**, providing real-world examples and a guide that will help you ensure your React applications respond correctly to user interactions. You can find it here: [Testing - User actions](/frontend/react/testing/user-actions)
 
 ## Page component testing
 
