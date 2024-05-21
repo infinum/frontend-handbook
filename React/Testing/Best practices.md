@@ -2,7 +2,7 @@ Tools we use for testing are [React-Testing-Library](https://testing-library.com
 
 ## Video guide
 
-If you want to see more practical usage, [here](https://www.youtube.com/watch?v=KfaFyB0uedk) is the recording form JS Standup about next.js testing presented by 🦌 . The project tested in the video is LearnReact project.
+If you want to see more practical usage, [here](https://www.youtube.com/watch?v=KfaFyB0uedk) is the recording form JS Standup about next.js testing presented by 🦌. The project tested in the video is LearnReact project.
 
 ## Setup
 
@@ -385,42 +385,20 @@ describe("AlertButton", () => {
 
 ## Testing user events
 
-If any part of your test is performing the state update, that action needs to be wrapped into `waitFor`.
+User actions are the bread and butter of interactive web applications. Testing user actions means ensuring that when a user clicks, drags, types, or interacts with your application in any way, the app behaves correctly.
 
-You would be also warned for the bad testing practices by the react-testing-library linter plugin.
+**Why is it important?**  
+React components often encapsulate user interactions. Imagine a form where a user submits data or a button that toggles a specific state. If these don't work as expected, users can lose trust in our application. Or worse, our brand.
 
-For simulating an event, we use the `@testing-library/user-event` library.
+**Testing Flow:**  
+To test user actions, you'll usually:
 
-An example:
+1. Render the component under test.
+2. Simulate a user action (like a button click).
+3. Check the outcome – this could be a changed state, a rendered element, or an API call.
 
-```tsx
-import { waitFor, render } from "@test-utils";
-import userEvent from "@testing-library/user-event";
-
-// ...mocks
-
-describe("ResetPasswordForm", () => {
-  it("should submit without validation errors", async () => {
-    const mockSuccess = jest.fn();
-
-    render(<ResetPasswordForm onSuccess={mockSuccess} />);
-
-    userEvent.type(screen.getByRole("input"), "12345678");
-
-    // this event will trigger react-hook-form to rerender our component
-    // so we have to properly handle this state change before making further assertions
-    await waitFor(() => {
-      userEvent.click(screen.getByRole("button"));
-    });
-
-    expect(mockSuccess).toHaveBeenCalled();
-  });
-});
-```
-
-Check out the list of other [utils](https://testing-library.com/docs/user-event/utility) for using `userEvent`.
-
-> Important note: you should use the `userEvent` object over the `fireEvent` to properly simulate user interactions across the application. Check out [Kent's blog post](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event) for more info on this topic.
+**Further Exploration:**
+We have added a more comprehensive chapter on **Testing User Actions**, providing real-world examples and a guide that will help you ensure your React applications respond correctly to user interactions. You can find it here: [Testing - User actions](/frontend/react/testing/user-actions)
 
 ## Page component testing
 
