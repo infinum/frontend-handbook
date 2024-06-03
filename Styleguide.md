@@ -376,47 +376,52 @@ let index;
 let total;
 ```
 
-## [Commas](#commas)
+## [Trailing commas](#commas)
 
-Use an additional trailing comma. This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code, which means you don't have to worry about the trailing comma problem in legacy browsers.
+Using an additional trailing comma in objects, arrays, and function parameters can lead to cleaner git diffs and improve code maintenance. Here's why:
+
+1. Cleaner Git Diffs: Adding a trailing comma minimizes the number of lines changed when new elements are added, making it easier to review code changes.
+2. Consistency: Ensures a consistent style in your codebase, which can improve readability.
+3. Transpiler Support: Transpilers like Babel will remove trailing commas in the transpiled code, ensuring compatibility with older browsers.
+
+#### Example: Objects
 
 ```js
-// bad - git diff without trailing comma
+// Bad - without trailing comma
 const hero = {
-     firstName: 'Florence',
--    lastName: 'Nightingale'
-+    lastName: 'Nightingale',
-+    inventorOf: ['coxcomb graph', 'modern nursing']
+  firstName: "Florence",
+  lastName: "Nightingale"
 };
 
-// good - git diff with trailing comma
+// Good - with trailing comma
 const hero = {
-     firstName: 'Florence',
-     lastName: 'Nightingale',
-+    inventorOf: ['coxcomb chart', 'modern nursing'],
+  firstName: "Florence",
+  lastName: "Nightingale",
 };
+```
 
+#### Example: Arrays
+
+```js
 // bad
-const hero = {
-  firstName: 'Dana',
-  lastName: 'Scully'
-};
-
-const heroes = [
-  'Batman',
-  'Superman'
-];
+const heroes = ["Batman", "Superman"];
 
 // good
-const hero = {
-  firstName: 'Dana',
-  lastName: 'Scully',
-};
+const heroes = ["Batman", "Superman"];
+```
 
-const heroes = [
-  'Batman',
-  'Superman',
-];
+#### Example: Function Parameters
+
+```js
+// bad
+function createHero(firstName, lastName, isHero) {
+  // ...
+}
+
+// good
+function createHero(firstName, lastName, isHero) {
+  // ...
+}
 ```
 
 ## [Naming conventions](#naming-conventions)
