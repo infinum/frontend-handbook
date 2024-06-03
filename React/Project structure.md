@@ -282,70 +282,64 @@ src
 
 ## Elements
 
-If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separate file `ComponentName.elements.ts` where you will store your custom components.
+If you have many style declarations inside your component file, making it difficult to read, create a separate file named `ComponentName.elements.ts to store your custom styled components.
 
 Example:
 
 ```
-...
-.
 └── WelcomeCard
     ├── WelcomeCard.tsx
     └── WelcomeCard.elements.ts
 ```
 
-In the following example `WelcomeCardLayoutOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
 
-```tsx
-import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
+**WelcomeCard.tsx:**
+```js
+import { chakra } from '@chakra-ui/react';
 
-export const WelcomeCardLayout = chakra(Grid, {
+export const WelcomeCardLayout = chakra('div', {
   baseStyle: {
-    gridTemplateRows: '1fr min-content min-content',
-    gridTemplateColumns: '1fr min-content',
-    rowGap: '16px',
+    padding: '16px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 });
 
-export const WelcomeCardLayoutContent = chakra(GridItem, {
+export const WelcomeCardTitle = chakra('h1', {
   baseStyle: {
-    position: 'relative',
-    gridRowStart: '1',
-    gridRowEnd: 'auto',
-    gridColumnStart: '1',
-    gridColumnEnd: 'auto',
+    fontSize: '24px',
+    color: 'teal',
   },
-});
-
-export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
-  isOpen?: boolean;
-};
-
-export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
-  const height = isOpen ? { base: '300px', md: '500px' } : null;
-
-  return (
-    <GridItem
-      ref={ref}
-      h={height}
-      position="relative"
-      column="1 / 3"
-      row="1 / 2"
-      {...rest}
-    />
-  );
 });
 ```
 
-Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+**WelcomeCard.elements.ts:**
+```js
+import { chakra } from '@chakra-ui/react';
 
-Here are some rules that you should follow when creating elements:
+export const WelcomeCardLayout = chakra('div', {
+  baseStyle: {
+    padding: '16px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+});
 
-- `.elements.tsx` should only be used for organizational purposes
-- custom components are tightly coupled with the root component and they should not be used in the outside scope
-- mixture of `chakra factory` and `Function Components` is allowed
-- using hooks inside elements is not recommended
-- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access real DOM element in the root component)
+export const WelcomeCardTitle = chakra('h1', {
+  baseStyle: {
+    fontSize: '24px',
+    color: 'teal',
+  },
+});
+```
+
+Moving things to .elements.tsx should be the last step in the development process and it should only be used for organizational purposes, i.e., when the main component becomes cluttered and unreadable.
+
+**Rules for Creating Elements:**
+- Use `.elements.tsx` for organizational purposes only.
+- Custom components in `.elements.tsx` should not be reused outside their root component.
+- Combining chakra factory and functional components is allowed.
+- Avoid using hooks inside elements.
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
