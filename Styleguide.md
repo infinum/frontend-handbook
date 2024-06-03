@@ -376,42 +376,6 @@ let i;
 let length;
 ```
 
-Assign variables where you need them, but place them in a reasonable place.
-
-```js
-// bad - unnecessary function call
-function checkName(hasName) {
-  const name = getName();
-
-  if (hasName === "test") {
-    return false;
-  }
-
-  if (name === "test") {
-    this.setName("");
-    return false;
-  }
-
-  return name;
-}
-
-// good
-function checkName(hasName) {
-  if (hasName === "test") {
-    return false;
-  }
-
-  const name = getName();
-
-  if (name === "test") {
-    this.setName("");
-    return false;
-  }
-
-  return name;
-}
-```
-
 ## [Hoisting](#hoisting)
 
 `var` declarations get hoisted to the top of their scope; their assignment does not. `const` and `let` declarations have [Temporal Dead Zones (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). It's important to know why [typeof is no longer safe](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15).
