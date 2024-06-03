@@ -384,7 +384,7 @@ Using an additional trailing comma in objects, arrays, and function parameters c
 2. Consistency: Ensures a consistent style in your codebase, which can improve readability.
 3. Transpiler Support: Transpilers like Babel will remove trailing commas in the transpiled code, ensuring compatibility with older browsers.
 
-#### Example: Objects
+**Example: Objects**
 
 ```js
 // Bad - without trailing comma
@@ -400,7 +400,7 @@ const hero = {
 };
 ```
 
-#### Example: Arrays
+**Example: Arrays**
 
 ```js
 // bad
@@ -410,7 +410,7 @@ const heroes = ["Batman", "Superman"];
 const heroes = ["Batman", "Superman"];
 ```
 
-#### Example: Function Parameters
+**Example: Function Parameters**
 
 ```js
 // bad
@@ -430,7 +430,7 @@ Naming functions is a critical and often challenging aspect of programming. Clea
 
 ### Naming functions
 
-#### Descriptive and Specific:
+**Descriptive and Specific:**
 Function names should clearly describe what the function does. Use verbs to name functions that perform actions. Avoid vague names.
 
 ```js
@@ -445,7 +445,7 @@ function calculateTotalPrice() {
 }
 ```
 
-#### Avoid Abbreviations:
+**Avoid Abbreviations:**
 Use full words to avoid confusion.
 
 ```js
@@ -461,7 +461,7 @@ function calculateTotal() {
 
 ### Naming variables
 
-#### Use Clear and Descriptive Names:
+**Use Clear and Descriptive Names:**
 
 ```js
 // bad
@@ -473,7 +473,7 @@ let width = 10;
 let height = 20;
 ```
 
-#### Use Meaningful Context:
+**Use Meaningful Context:**
 
 Include context to avoid ambiguity.
 
@@ -485,7 +485,7 @@ let temp = 98;
 let bodyTemperature = 98;
 ```
 
-#### Combining Best Practices
+**Combining Best Practices**
 
 ```js
 // bad
