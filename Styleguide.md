@@ -426,7 +426,7 @@ function createHero(firstName, lastName, isHero) {
 
 ## [Naming conventions](#naming-conventions)
 
-Don't save references to `this`. Use arrow functions or Function#bind.
+Naming functions is a critical and often challenging aspect of programming. Clear and descriptive function names improve readability and maintainability of the code.
 
 ```js
 // bad
