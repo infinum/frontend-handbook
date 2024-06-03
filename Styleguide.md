@@ -355,25 +355,25 @@ Group all your `const`s and then group all your `let`s.
 
 ```js
 // bad
-let i,
-  len,
-  dragonball,
-  items = getItems(),
-  goSportsTeam = true;
+let index,
+  total,
+  projectName,
+  data = fetchData(),
+  isActive = true;
 
 // bad
-let i;
-const items = getItems();
-let dragonball;
-const goSportsTeam = true;
-let len;
+let index;
+const data = fetchData();
+let projectName;
+const isActive = true;
+let total;
 
 // good
-const goSportsTeam = true;
-const items = getItems();
-let dragonball;
-let i;
-let length;
+const isActive = true;
+const data = fetchData();
+let projectName;
+let index;
+let total;
 ```
 
 ## [Commas](#commas)
