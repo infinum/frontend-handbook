@@ -351,7 +351,7 @@ export default es6;
 
 ## [Variables](#variables)
 
-Group all your `const`s and then group all your `let`s.
+Group all your const declarations together and then group all your let declarations together for better readability.
 
 ```js
 // bad
