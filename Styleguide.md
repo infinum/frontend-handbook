@@ -2,7 +2,7 @@ Based on the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascrip
 
 ## [References](#references)
 
-Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases, use ``let``.
+Avoid using `var`. If you're working with values that don't change, use `const`. In other cases, use `let`.
 
 Note that both `let` and `const` are block-scoped.
 
@@ -29,6 +29,7 @@ Also, keep [temporal dead zones](http://jsrocks.org/2015/01/temporal-dead-zone-t
 ```
 
 ## [Objects](#objects)
+
 Use computed property names when creating objects with dynamic property names.
 
 ```js
@@ -39,15 +40,15 @@ function getKey(k) {
 // bad
 const obj = {
   id: 5,
-  name: 'San Francisco',
+  name: "San Francisco",
 };
-obj[getKey('enabled')] = true;
+obj[getKey("enabled")] = true;
 
 // good
 const obj = {
   id: 5,
-  name: 'San Francisco',
-  [getKey('enabled')]: true,
+  name: "San Francisco",
+  [getKey("enabled")]: true,
 };
 ```
 
@@ -76,8 +77,8 @@ const atom = {
 Use property value shorthand. Group your shorthand properties at the beginning of your object declaration.
 
 ```js
-const anakinSkywalker = 'Anakin Skywalker';
-const lukeSkywalker = 'Luke Skywalker';
+const anakinSkywalker = "Anakin Skywalker";
+const lukeSkywalker = "Luke Skywalker";
 
 // bad
 const obj = {
@@ -103,6 +104,7 @@ const obj = {
 Quote only properties that are invalid identifiers.
 
 ## [Arrays](#arrays)
+
 Use array spreads `...` to copy arrays.
 
 ```js
@@ -122,11 +124,12 @@ const itemsCopy = [...items];
 To convert an array-like object to an array, use Array#from.
 
 ```js
-const foo = document.querySelectorAll('.foo');
+const foo = document.querySelectorAll(".foo");
 const nodes = Array.from(foo);
 ```
 
 ## [Destructuring](#destructuring)
+
 Use object destructuring when accessing and using multiple properties of an object.
 
 ```js
@@ -190,17 +193,17 @@ When programmatically building up strings, use template strings instead of conca
 ```js
 // bad
 function sayHi(name) {
-  return 'How are you, ' + name + '?';
+  return "How are you, " + name + "?";
 }
 
 // bad
 function sayHi(name) {
-  return ['How are you, ', name, '?'].join();
+  return ["How are you, ", name, "?"].join();
 }
 
 // bad
 function sayHi(name) {
-  return `How are you, ${ name }?`;
+  return `How are you, ${name}?`;
 }
 
 // good
@@ -217,12 +220,12 @@ Never use `arguments`; opt to use rest syntax `...` instead.
 // bad
 function concatenateAll() {
   const args = Array.prototype.slice.call(arguments);
-  return args.join('');
+  return args.join("");
 }
 
 // good
 function concatenateAll(...args) {
-  return args.join('');
+  return args.join("");
 }
 ```
 
@@ -266,7 +269,7 @@ function handleThings(name, opts = {}) {
 
 ## [Arrow functions](#arrow-functions)
 
-When you must use function expressions (e.g., when passing an anonymous function), use arrow function notation.
+Use arrow functions for anonymous function expressions.
 
 ```js
 // bad
@@ -282,7 +285,7 @@ When you must use function expressions (e.g., when passing an anonymous function
 });
 ```
 
-If the function body consists of a single expression, omit the braces and use the implicit return. Otherwise, keep the braces and use a `return` statement.
+If the function body consists of a single expression, omit the braces and use implicit return.
 
 ```js
 // good
@@ -301,33 +304,31 @@ If the function body consists of a single expression, omit the braces and use th
 });
 ```
 
-In case the expression spans over multiple lines, wrap it in parentheses for better readability.
+For better readability, wrap multiline expressions in parentheses.
 
 ```js
-// bad
-[1, 2, 3].map((number) => 'As time went by, the string containing the ' +
-  `${number} became much longer. So we needed to break it over multiple ` +
-  'lines.'
+[1, 2, 3].map(
+  (number) =>
+    `As time went by, the string containing the ${number} became much ` +
+    "longer. So we needed to break it over multiple lines."
 );
-
-// good
-[1, 2, 3].map((number) => (
-  `As time went by, the string containing the ${number} became much ` +
-  'longer. So we needed to break it over multiple lines.'
-));
 ```
 
-Avoid confusing arrow function syntax (`=>`) with comparison operators (`<=`, `>=`).
+Ensure clarity between arrow functions and comparison operators.
 
 ```js
 // bad
-const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize;
+const itemHeight = (item) =>
+  item.height > 256 ? item.largeSize : item.smallSize;
 
 // bad
-const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize;
+const itemHeight = (item) =>
+  item.height > 256 ? item.largeSize : item.smallSize;
 
 // good
-const itemHeight = (item) => { return item.height > 256 ? item.largeSize : item.smallSize; }
+const itemHeight = (item) => {
+  return item.height > 256 ? item.largeSize : item.smallSize;
+};
 ```
 
 ## [Modules](#modules)
@@ -354,9 +355,11 @@ Group all your `const`s and then group all your `let`s.
 
 ```js
 // bad
-let i, len, dragonball,
-    items = getItems(),
-    goSportsTeam = true;
+let i,
+  len,
+  dragonball,
+  items = getItems(),
+  goSportsTeam = true;
 
 // bad
 let i;
@@ -380,12 +383,12 @@ Assign variables where you need them, but place them in a reasonable place.
 function checkName(hasName) {
   const name = getName();
 
-  if (hasName === 'test') {
+  if (hasName === "test") {
     return false;
   }
 
-  if (name === 'test') {
-    this.setName('');
+  if (name === "test") {
+    this.setName("");
     return false;
   }
 
@@ -394,14 +397,14 @@ function checkName(hasName) {
 
 // good
 function checkName(hasName) {
-  if (hasName === 'test') {
+  if (hasName === "test") {
     return false;
   }
 
   const name = getName();
 
-  if (name === 'test') {
-    this.setName('');
+  if (name === "test") {
+    this.setName("");
     return false;
   }
 
