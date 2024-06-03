@@ -426,29 +426,79 @@ function createHero(firstName, lastName, isHero) {
 
 ## [Naming conventions](#naming-conventions)
 
-Naming functions is a critical and often challenging aspect of programming. Clear and descriptive function names improve readability and maintainability of the code.
+Naming functions is a critical and often challenging aspect of programming. Clear and descriptive function names improve readability and maintainability of the code. Here are some best Practices for naming functions:
+
+### Naming functions
+
+#### Descriptive and Specific:
+Function names should clearly describe what the function does. Use verbs to name functions that perform actions. Avoid vague names.
 
 ```js
 // bad
-function foo() {
-  const self = this;
-  return function () {
-    console.log(self);
-  };
-}
-
-// bad
-function foo() {
-  const that = this;
-  return function () {
-    console.log(that);
-  };
+function process() {
+  // ...
 }
 
 // good
-function foo() {
-  return () => {
-    console.log(this);
-  };
+function calculateTotalPrice() {
+  // ...
+}
+```
+
+#### Avoid Abbreviations:
+Use full words to avoid confusion.
+
+```js
+// bad
+function calcTtl() {
+  // ...
+
+// good
+function calculateTotal() {
+  // ...
+}
+```
+
+### Naming variables
+
+#### Use Clear and Descriptive Names:
+
+```js
+// bad
+let x = 10;
+let y = 20;
+
+// good
+let width = 10;
+let height = 20;
+```
+
+#### Use Meaningful Context:
+
+Include context to avoid ambiguity.
+
+```js
+// bad
+let temp = 98;
+
+// good
+let bodyTemperature = 98;
+```
+
+#### Combining Best Practices
+
+```js
+// bad
+function calc() {
+  let w = 10;
+  let h = 20;
+  return w * h;
+}
+
+// good
+function calculateArea() {
+  const width = 10;
+  const height = 20;
+  return width * height;
 }
 ```
