@@ -26,6 +26,8 @@ Once your PR has been approved and you've tested it on the _Staging_ server, you
 
 We welcome all contributions from both the public and Infinum members. Feel free to open up the pull request with your ideas/articles/chapters, or what ever you want to see merged.
 
+In recommended extensions you can find `vscode-remark`, which is used to check (lint) and format markdown files from within your editor, you should install it before working with chapters.
+
 If you want to add a new chapter, you can do it in [frontend-handbook-private](https://github.com/infinum/frontend-handbook-private) repository `chapters.yml` file.
 
 ## Discussions
