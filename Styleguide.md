@@ -40,15 +40,15 @@ function getKey(k) {
 // bad
 const obj = {
   id: 5,
-  name: "San Francisco",
+  name: 'San Francisco',
 };
-obj[getKey("enabled")] = true;
+obj[getKey('enabled')] = true;
 
 // good
 const obj = {
   id: 5,
-  name: "San Francisco",
-  [getKey("enabled")]: true,
+  name: 'San Francisco',
+  [getKey('enabled')]: true,
 };
 ```
 
@@ -77,8 +77,8 @@ const atom = {
 Use property value shorthand. Group your shorthand properties at the beginning of your object declaration.
 
 ```js
-const anakinSkywalker = "Anakin Skywalker";
-const lukeSkywalker = "Luke Skywalker";
+const anakinSkywalker = 'Anakin Skywalker';
+const lukeSkywalker = 'Luke Skywalker';
 
 // bad
 const obj = {
@@ -124,7 +124,7 @@ const itemsCopy = [...items];
 To convert an array-like object to an array, use Array#from.
 
 ```js
-const foo = document.querySelectorAll(".foo");
+const foo = document.querySelectorAll('.foo');
 const nodes = Array.from(foo);
 ```
 
@@ -193,17 +193,12 @@ When programmatically building up strings, use template strings instead of conca
 ```js
 // bad
 function sayHi(name) {
-  return "How are you, " + name + "?";
+  return 'How are you, ' + name + '?';
 }
 
 // bad
 function sayHi(name) {
-  return ["How are you, ", name, "?"].join();
-}
-
-// bad
-function sayHi(name) {
-  return `How are you, ${name}?`;
+  return ['How are you, ', name, '?'].join();
 }
 
 // good
@@ -220,12 +215,12 @@ Never use `arguments`; opt to use rest syntax `...` instead.
 // bad
 function concatenateAll() {
   const args = Array.prototype.slice.call(arguments);
-  return args.join("");
+  return args.join('');
 }
 
 // good
 function concatenateAll(...args) {
-  return args.join("");
+  return args.join('');
 }
 ```
 
@@ -310,7 +305,7 @@ For better readability, wrap multiline expressions in parentheses.
 [1, 2, 3].map(
   (number) =>
     `As time went by, the string containing the ${number} became much ` +
-    "longer. So we needed to break it over multiple lines."
+    'longer. So we needed to break it over multiple lines.'
 );
 ```
 
@@ -389,14 +384,14 @@ Using an additional trailing comma in objects, arrays, and function parameters c
 ```js
 // Bad - without trailing comma
 const hero = {
-  firstName: "Florence",
-  lastName: "Nightingale"
+  firstName: 'Florence',
+  lastName: 'Nightingale'
 };
 
 // Good - with trailing comma
 const hero = {
-  firstName: "Florence",
-  lastName: "Nightingale",
+  firstName: 'Florence',
+  lastName: 'Nightingale',
 };
 ```
 
@@ -404,10 +399,10 @@ const hero = {
 
 ```js
 // bad
-const heroes = ["Batman", "Superman"];
+const heroes = ['Batman', 'Superman'];
 
 // good
-const heroes = ["Batman", "Superman"];
+const heroes = ['Batman', 'Superman'];
 ```
 
 **Example: Function Parameters**
