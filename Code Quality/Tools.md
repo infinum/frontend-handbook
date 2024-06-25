@@ -10,13 +10,10 @@ No matter which code quality tools we use, git hooks are a great way to run thos
 
 Follow [usage](https://github.com/typicode/husky#usage) guidelines for installing Husky and add hooks.
 
-After running all commands described in [usage](https://github.com/typicode/husky#usage) chapter, you should have `.husky` folder with hooks folder inside. For example, if you created `pre-commit` hook which runs `npm test` command, you should have `pre-commit` file in `.husky` folder, with following content
+After running all commands described in [usage](https://github.com/typicode/husky#usage) chapter, you should have `.husky` folder with hooks folder inside. For example, if you created `pre-commit` hook which runs `pnpm test` command, you should have `pre-commit` file in `.husky` folder, with following content
 
 ```sh
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-npm test
+pnpm test
 ```
 
 In this example, if you try pushing and the tests fail, code will not get pushed to the remote. We do not necessarily recommend running tests on push, it is just an example (there are better ways to run automated tests using a proper CI/CD set-up).
@@ -26,11 +23,7 @@ Most of our code quality tools are run on either `pre-commit` or `pre-push` hook
 Note: By design `husky install` must be run in the same directory as `.git`. You can change directory in your `prepare` script. Also, you will need to change directory in your hooks. For example, if you have `frontend` directory where you want to run `pre-commit` hook, your hook file might look like following
 
 ```sh
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-cd frontend && npx lint-staged
-
+cd frontend && pnpm lint-staged
 ```
 
 For more use cases please check [Husky documentation](https://typicode.github.io/husky/#/).
@@ -60,11 +53,7 @@ Here is an example which runs `prettier` and `eslint` on all staged `.js` and `.
 ```
 
 ```sh
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx lint-staged
+pnpm lint-staged
 ```
 
 What `lint-staged` does is it matches files to `glob` patterns and passes the list of files as an argument to scripts. Tooling developers should ensure that their scripts can receive the list of files in the correct format. Most common tools like eslint, tslint, stylelint and others are compatible with the way `lint-staged` passes the list of files.
@@ -77,7 +66,7 @@ Check the following chapters for specifics about Prettier, ESLint and Stylelint.
 
 ![Bikeshedding](/img/work.png)
 
-_Source: [XKCD](https://xkcd.com/1741/)_
+*Source: [XKCD](https://xkcd.com/1741/)*
 
 Many people are very passionate about the way they format their code. While we appreciate everyone's opinion, we believe it is best to leave this bikeshedding to automated tooling. It might not format the code in a way that is satisfying to everyone, but it will be consistent across projects and, more importantly, it will format the code written by different people in the same way. This also eliminates discussions around formatting.
 
@@ -182,9 +171,9 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 Infinum created various rulesets for ESLint and TSLint which you can check out [here](https://github.com/infinum/js-linters). We encourage you to use some of these presets, as per your needs:
 
-- [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
-- [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
-- [Angular ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-angular-ts)
+* [Base ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-core-ts)
+* [React ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-react-ts)
+* [Angular ESLint config](https://github.com/infinum/js-linters/tree/master/packages/eslint-config-angular-ts)
 
 ### Stylelint
 
@@ -218,7 +207,7 @@ Here is the complete example which runs TypeScript compilation check on all file
 {
   "scripts": {
     "prepare": "husky install",
-    "tsc": "concurrently \"npm run tsc:app\" \"npm run tsc:spec\"",
+    "tsc": "concurrently \"pnpm tsc:app\" \"pnpm tsc:spec\"",
     "tsc:app": "tsc --noEmit -p ./src/tsconfig.app.json",
     "tsc:spec": "tsc --noEmit -p ./src/tsconfig.spec.json"
   }
@@ -244,11 +233,7 @@ Here is the complete example which runs TypeScript compilation check on all file
 ```
 
 ```sh
-# .husky/pre-commit
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
-npm run tsc && npx lint-staged --config .lintstagedrc.json && prettier --write
+pnpm tsc && pnpm lint-staged --config .lintstagedrc.json
 ```
 
 ```js
@@ -274,12 +259,12 @@ npm run tsc && npx lint-staged --config .lintstagedrc.json && prettier --write
 For this example, you will have to install the following `devDependencies`:
 
 ```bash
-npm i -D concurrently husky lint-staged stylelint stylelint-prettier prettier tslint-config-prettier
+pnpm i -D -E concurrently husky lint-staged stylelint stylelint-prettier prettier tslint-config-prettier
 ```
 
 Some notes:
 
-- it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
-- `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
-- `concurrently` speeds up things by running tsc checks in parallel
-- `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
+* it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+* `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+* `concurrently` speeds up things by running tsc checks in parallel
+* `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier

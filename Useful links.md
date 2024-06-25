@@ -1,6 +1,7 @@
 Here are some links that might help you with your front end troubles.
 
 ## External links
+
 * [MDN](https://developer.mozilla.org/en-US/)
 * [SASS reference](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 * [Susy documentation](http://susydocs.oddbird.net/en/latest/)
@@ -14,10 +15,12 @@ Here are some links that might help you with your front end troubles.
 * [TypeScript](https://www.typescriptlang.org/)
 * [WebpackBin](https://www.webpackbin.com/)
 * [FrontendCookies](https://infinum.com/frontend-cookies) weekly newsletter
-* [Infinum on npm](https://www.npmjs.com/~infinumco)
+* [Infinum on npmjs](https://www.npmjs.com/~infinumco)
 
 ## Useful libs
+
 ### General
+
 * [Polyglot](https://www.npmjs.com/package/polyglot-cli)
 * [Action Chainer](https://www.npmjs.com/package/action-chainer)
 * [fetch polyfill](https://github.com/github/fetch)
@@ -26,23 +29,27 @@ Here are some links that might help you with your front end troubles.
 * [loglevel](https://github.com/pimterry/loglevel)
 
 ### Dates
+
 * [Moment.js](http://momentjs.com/)
 * [date-fns](https://date-fns.org/)
 * [fecha](https://github.com/taylorhakes/fecha)
 * [Pikaday](https://github.com/dbushell/Pikaday)
 
 ### Linters
+
 * [eslint](https://www.npmjs.com/package/@infinumjs/eslint-config)
 * [eslint react](https://www.npmjs.com/package/@infinumjs/eslint-config-react)
 * [tslint](https://www.npmjs.com/package/@infinumjs/tslint-config)
 * [stylelint](https://www.npmjs.com/package/@infinumjs/stylelint-config)
 
 ### Styles
+
 * [Media mixin](https://github.com/infinum/media-blender)
 * [emotion](https://github.com/emotion-js/emotion)
 * [classnames](https://github.com/JedWatson/classnames)
 
 ### React
+
 * [CRA starter](https://www.npmjs.com/package/@infinumjs/cra-starter)
 * [react-router](https://github.com/ReactTraining/react-router)
 * [next.js](https://github.com/zeit/next.js)
@@ -52,9 +59,11 @@ Here are some links that might help you with your front end troubles.
 * [Nuka Carousel](https://github.com/FormidableLabs/nuka-carousel)
 
 ### MobX
+
 * [mobx](https://github.com/mobxjs/mobx)
 * [mobx-react](https://github.com/mobxjs/mobx-react)
 * [datx](https://www.npmjs.com/package/datx)
 
 ### Angular
+
 * [ngx-form-object](https://www.npmjs.com/package/ngx-form-object)

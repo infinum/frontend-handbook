@@ -9,7 +9,7 @@ If you want to see more practical usage, [here](https://www.youtube.com/watch?v=
 First of all, install Jest:
 
 ```bash
-npm install --save-dev jest @types/jest
+pnpm install -D -E jest @types/jest
 ```
 
 Add a test script to `package.json`:
@@ -20,8 +20,8 @@ Add a test script to `package.json`:
 
     // optional?
     "test:ci": "jest --ci --coverage",
-    "test:update": "npm run test -- --u",
-    "test:watch": "npm run test -- --watch",
+    "test:update": "pnpm test -- --u",
+    "test:watch": "pnpm test -- --watch",
     // ...other scripts
   }
 ```
@@ -31,7 +31,7 @@ Create the `jest.config.js` file in the project root and follow the instructions
 Next, install `react-test-library`:
 
 ```bash
-npm i --save-dev @testing-library/react
+pnpm i -D -E @testing-library/react
 ```
 
 ### User events
@@ -39,7 +39,7 @@ npm i --save-dev @testing-library/react
 Use [testing-library/user-event](https://github.com/testing-library/user-event) for mocking events:
 
 ```bash
-npm install --save-dev @testing-library/user-event
+pnpm install -D -E @testing-library/user-event
 ```
 
 ### Testing hooks
@@ -47,7 +47,7 @@ npm install --save-dev @testing-library/user-event
 Use [react-hooks-testing-library](https://github.com/testing-library/react-hooks-testing-library) for testing hooks:
 
 ```bash
-npm install --save-dev @testing-library/react-hooks
+pnpm install -D -E @testing-library/react-hooks
 ```
 
 ## Utils
@@ -197,20 +197,20 @@ Based on [the Guiding Principles](https://testing-library.com/docs/guiding-princ
 
 1. Queries Accessible to Everyone queries that reflect the experience of visual/mouse users as well as those that use assistive technology
 
-   - `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
-   - `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
-   - `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
-   - `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
-   - `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
+   * `getByRole` - this can be used to query every element that is exposed in the accessibility tree. With the `name` option you can filter the returned elements by their accessible name. This should be your top preference for just about everything. There's not much you can't get with this (if you can't, it's possible your UI is inaccessible). Most often, this will be used with the name option like so: `getByRole('button', {name: /submit/i})`. Check the [list of roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques#roles).
+   * `getByLabelText` - only really good for form fields, but this is the number one method a user finds those elements, so it should be your top preference.
+   * `getByPlaceholderText` - a placeholder is not a substitute for a label. But if that's all you have, then it's better than alternatives.
+   * `getByText` - not useful for forms, but this is the number 1 method a user finds most non-interactive elements (like divs and spans).
+   * `getByDisplayValue` - the current value of a form element can be useful when navigating a page with filled-in values.
 
-1. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
+2. Semantic Queries HTML5 and ARIA compliant selectors. Note that the user experience of interacting with these attributes varies greatly across browsers and assistive technology.
 
-   - `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
-   - `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
+   * `getByAltText` - if your element is one which supports `alt` text (`img`, `area`, and `input`), then you can use this to find that element
+   * `getByTitle` - the title attribute is not consistently read by screenreaders, and is not visible by default for sighted users
 
-1. Test IDs
+3. Test IDs
 
-   - `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+   * `getByTestId` - The user cannot see (or hear) these, so this is only recommended for cases where you can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
 
 **Avoid unnecessary "is rendering" test**
 
@@ -387,10 +387,10 @@ describe("AlertButton", () => {
 
 User actions are the bread and butter of interactive web applications. Testing user actions means ensuring that when a user clicks, drags, types, or interacts with your application in any way, the app behaves correctly.
 
-**Why is it important?**  
+**Why is it important?**\
 React components often encapsulate user interactions. Imagine a form where a user submits data or a button that toggles a specific state. If these don't work as expected, users can lose trust in our application. Or worse, our brand.
 
-**Testing Flow:**  
+**Testing Flow:**\
 To test user actions, you'll usually:
 
 1. Render the component under test.

@@ -30,10 +30,10 @@ If you are working with a JSON:API, `datx` can handle that too - hello `datx-jso
 
 If you want to follow along completely, here is a list of all needed dependencies:
 
-- [datx](https://datx.dev/)
-- [dequal](https://github.com/lukeed/dequal)
-- [mobx](https://mobx.js.org/README.html)
-- [swr](https://swr.vercel.app/)
+* [datx](https://datx.dev/)
+* [dequal](https://github.com/lukeed/dequal)
+* [mobx](https://mobx.js.org/README.html)
+* [swr](https://swr.vercel.app/)
 
 After datx store is initialized, we will create a datx context that will enable us to use DatX in our web application. For the context, we will need a provider - `DatxProvider`and a hook - `useDatx`.
 
@@ -65,13 +65,13 @@ export const DatxProvider: FC<IDatxProviderProps> = ({ client, children }) => (
 
 Let's break things up into sections:
 
-- `DatxContext` is just a new context that will be used for our datx store
+* `DatxContext` is just a new context that will be used for our datx store
 
-- `Client` is our datx store
+* `Client` is our datx store
 
-- `DatxProvider` is a wrapper that will serve the context along with some default swr config
+* `DatxProvider` is a wrapper that will serve the context along with some default swr config
 
-- `SWRConfig` is a provider for swr config defaults. Currently, this is empty but if there is a config that should be used for every swr hook, this is a good place to change that.
+* `SWRConfig` is a provider for swr config defaults. Currently, this is empty but if there is a config that should be used for every swr hook, this is a good place to change that.
 
 Once the provider is created, wrap your whole application inside the created provider. In React application, you can do this in `index.ts` file and in Next.js application, you can do this in `_app.ts` file.
 
@@ -97,7 +97,7 @@ export function useDatx() {
 }
 ```
 
-This hook will throw an error if `useDatx` is called without `DatxProvider`. _If you followed the previous step, this will be already implemented in a `index` or `_app` file._
+This hook will throw an error if `useDatx` is called without `DatxProvider`. *If you followed the previous step, this will be already implemented in a `index` or `_app` file.*
 
 ## Usage
 
@@ -270,7 +270,7 @@ config.transformRequest = (opts: ICollectionFetchOpts) => {
 Mentioned methods `apify` and `deapify` are using `lodash` methods under the hood. For that you'll need to install `lodash` (or only the specific lodash methods) as well:
 
 ```bash
-npm install lodash
+pnpm install -E lodash
 ```
 
 ```ts

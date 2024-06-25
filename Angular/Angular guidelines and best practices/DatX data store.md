@@ -13,7 +13,7 @@ Apart from providing possible single source of truth for any shared data with a 
 Let's start by installing all DatX related dependencies we will need:
 
 ```
-npm i --save @datx/core @datx/jsonapi @datx/jsonapi-angular
+pnpm i -E @datx/core @datx/jsonapi @datx/jsonapi-angular
 ```
 
 Since we didn't include mobx (because it doesn't play nice with RxJS), we need to add a little boilerplate to work around that. First we need to instruct DatX not to use mobx, by adding `'@datx/core/disable-mobx'` before App bootstrap:
@@ -60,7 +60,7 @@ Lastly, we bypass `@datx/core/disable-mobx` related import warning by adding its
 
 ## Defining models and their relationships
 
-This topic is heavily described in the resources above, please refer to them. By convention, you can put all models in `src/app/models` directory and collections to `src/app/collections` of your Angular project. Once you are finished describing all _Resource Objects_ you can move to the next section, just remember that you will most likely want to use _jsonapiAngular_ so that you can work with observables when calling async methods on models.
+This topic is heavily described in the resources above, please refer to them. By convention, you can put all models in `src/app/models` directory and collections to `src/app/collections` of your Angular project. Once you are finished describing all *Resource Objects* you can move to the next section, just remember that you will most likely want to use *jsonapiAngular* so that you can work with observables when calling async methods on models.
 
 ## Store setup and injection
 
@@ -119,7 +119,7 @@ export class ExampleService {
 }
 ```
 
-When testing consumers of APP_COLLECTION, just inject the collection under the same token again, as with any other dependency:
+When testing consumers of APP\_COLLECTION, just inject the collection under the same token again, as with any other dependency:
 
 ```ts
 // example.service.spec.ts
