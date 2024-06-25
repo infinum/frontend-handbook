@@ -2,7 +2,7 @@
 
 The best way to create a new project is by using Angular CLI. It will hide a lot of configuration behind the scenes (you will not have a Webpack config exposed for editing), do some optimizations when compiling your code, and offer some handy scaffolding tools.
 
-Install Angular CLI globally with `npm install -g @angular/cli` and check out what you can do with `ng help`.
+Install Angular CLI globally with `pnpm install -g @angular/cli` and check out what you can do with `ng help`.
 
 ## Creating a new project
 
@@ -105,8 +105,8 @@ This handbook will not cover all `ng` commands; please check out [Angular CLI Do
 If you are using a JS library that is not written in TypeScript, you can usually install typings separately. Install typings as a dev-dependency, for example:
 
 ```bash
-npm install --save d3
-npm install --save-dev @types/d3
+pnpm install -E d3
+pnpm install -D -E @types/d3
 ```
 
 If there are no typings available, you can create your own `typings.d.ts` file and write some custom typings for your needs. They do not even have to be 100% complete; they can cover only the functionality which you use.
@@ -117,11 +117,11 @@ If there are no typings available, you can create your own `typings.d.ts` file a
 
 At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angular development, as it has a great integration with TypeScript and has some handy Angular plugins:
 
-- [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)—IntelliSense in templates
-- [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
-- [stylelint](https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint)
-- [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
-- [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+* [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)—IntelliSense in templates
+* [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
+* [stylelint](https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint)
+* [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+* [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 
 # [RxJS](https://github.com/ReactiveX/rxjs)
 
@@ -133,8 +133,8 @@ Please check out some RxJS tutorials if you are not familiar with Rx. Please not
 
 Here are some good introductory tutorials to get you started:
 
-- Academind—[Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) playlist
-- Interactive diagrams—[RxJS Marbles](https://rxmarbles.com/)
-  - this will help you a lot when trying to understand what specific operators do
-- Another tool to visualize the operators - [RxViz](https://rxviz.com/)
-- Angular documentation—[The RxJS Library](https://angular.io/guide/rx-library)
+* Academind—[Understanding RxJS](https://www.youtube.com/watch?v=T9wOu11uU6U\&list=PL55RiY5tL51pHpagYcrN9ubNLVXF8rGVi) playlist
+* Interactive diagrams—[RxJS Marbles](https://rxmarbles.com/)
+  * this will help you a lot when trying to understand what specific operators do
+* Another tool to visualize the operators - [RxViz](https://rxviz.com/)
+* Angular documentation—[The RxJS Library](https://angular.io/guide/rx-library)

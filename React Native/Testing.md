@@ -5,22 +5,22 @@ my video tutorial https://www.youtube.com/watch?v=AhH5xFPwNHg.
 
 By default - RN ships with Jest testing library that doesn’t require additional setup and works out of the box. To run tests - use:
 
-`npm run test`
+`pnpm test`
 
 But default test which can be found in **tests**/ folder is too simple and for more complicated and useful tests
 we will require another library - https://github.com/callstack/react-native-testing-library (which replaces Enzyme if you’re familiar with that)
 
-`npm install --save-dev @testing-library/react-native`
+`pnpm install -D -E @testing-library/react-native`
 
 To have more matchers we can also install https://github.com/testing-library/jest-native
 
-`npm install --save-dev @testing-library/jest-native`
+`pnpm install -D -E @testing-library/jest-native`
 
 ### Testing Styled components
 
 ***!! NOT WORKING in ("jest-styled-components": "7.0.3") !! https://github.com/styled-components/jest-styled-components/issues/294***
 
-As styled-components is our RN way of styling - we need to know how to test it. But not now :\
+As styled-components is our RN way of styling - we need to know how to test it. But not now :\\
 
 ### Mocking native modules
 

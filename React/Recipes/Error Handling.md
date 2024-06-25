@@ -60,4 +60,4 @@ const ErrorFallback = (error, info, clearError) => {
 
 1. [Bugsnag with Next.js example](https://github.com/bugsnag/bugsnag-js/tree/master/examples/js/nextjs)
 2. [Use react-error-boundary to handle errors in React](https://kentcdodds.com/blog/use-react-error-boundary-to-handle-errors-in-react)
-3. If you don't have Bugsnag you can use this npm module [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
+3. If you don't have Bugsnag you can use this dependency instead [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)

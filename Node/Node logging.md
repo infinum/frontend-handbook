@@ -4,9 +4,9 @@ Infinum uses [Graylog](https://www.graylog.org/) to log all requests that are pr
 
 ### Setup
 
-Install the gelf-pro package via npm/yarn:
+Install the gelf-pro package:
 
-```npm install -s gelf-pro```
+`pnpm install -E gelf-pro`
 
 ### Configuration
 
@@ -68,6 +68,7 @@ log.error('Something bad has happened')
 ### Documentation
 
 Read more about logging here:
+
 * [gelf-pro JS API](https://github.com/kkamkou/node-gelf-pro)
 * [Graylog & GELF](http://docs.graylog.org/en/latest/pages/gelf.html)
 * [loglevel](https://github.com/pimterry/loglevel)
