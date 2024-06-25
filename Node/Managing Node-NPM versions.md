@@ -24,39 +24,76 @@ It is very important to keep the same version of Node across the environments. W
 
 ### Managing versions
 
-There are couple of ways for managing versions of Node. This section lists couple of options and generally, all options are fine as long as you are proficient at installing, updating and switching Node versions using that method. These probably aren't all available version managers on the internet, but are probably most popular. Check the official documentation of each tool for installation and usage instructions as they differ between OSs and can change over time.
+There are a couple of ways to manage versions of `Node.js`. All options are fine as long as you are proficient in installing, updating, and switching Node versions using your chosen method. However, the recommended approach is to use `Corepack` and `n`.
 
-#### n
+#### Corepack
 
-[n](https://github.com/tj/n) is both powerful and easy to use version manager for Node and should be preferred method for managing Node versions.
-You can create a `.n-node-version`, `.node-version` or `.nvmrc` file containing a Node version number. Running `n auto` will look for version specified in one of those files in that order and switch to it.
+`Corepack` is a tool that comes bundled with Node.js starting from version `16.10.0`. It provides a way to manage package managers (such as `npm`, `yarn`, and `pnpm`) without needing to install them globally. `Corepack` ensures that the specific package manager version specified in your project is used, which helps maintain consistency across different development environments.
 
-#### nvm - Node version manager
+**How Corepack works**
 
-[Node version manager](https://github.com/nvm-sh/nvm) is a version manager similar to `n` and a good alternative. You can create a `.nvmrc` file containing a Node version number. Running `use`, `install`, `which` etc. commands will use the version specified in the file if none was provided in the command line. When using `nvm` and installing global packages, those packages will only be global for that specific version. eg. You currently use Node 16 and install `polyglot-cli`, if you switch to v18, the package won't be available there until you install it.
+* **Bundling**: Corepack is included with `Node.js` distributions. You can enable it using the command corepack enable.
+* **Specifying Package Managers**: In your project's package.json, you can specify which package manager and version your project should use.
+* **Automatic Installation**: Corepack will automatically download and install the specified version of the package manager when you run related commands like `pnpm install`.
 
-#### Using homebrew
+**Specifying package manager in package.json**
 
-For this method you need to have [homebrew](https://brew.sh/) installed on your Mac(which you probably do). There might be additional steps required when switching versions using `brew` as switching is not supported, so you might need to uninstall and unlink the old version, and install and link new one. Using this method for managing Node versions is discouraged as it is likely that issues will occur at some point if multiple versions are needed.
-
-#### Using direct binary install
-
-Considering previously mentioned options, there is no particular advantage why you would use binary installation. You can still opt in to do so if you wish.
-
-#### avn - Automatic Version Switching
-
-[avn](https://github.com/wbyoung/avn) is a package for automatic version switching of Node using one of your Node version manager package. Currently supported version managing packages are `n`, `nvm` and `nodebrew`. This package is not mandatory and will only work in conjunction with one of the version managing tools. When you `cd` into a directory containing `.node-version` file, `avn` will automatically detect the change and use version manager of your choice to switch to the specified version. Given the `.node-version` and `avn` support, it would be recommended to use `n` as version manager.
-
-#### Specifying version in package.json
-
-You can specify the version of node that your stuff works on by providing Node versions in package.json. If you don't specify this, it means any version will do. It is also possible to specify version of `pnpm` as it is possible that even the minor version updates cause breaking changes.
+To ensure your project uses specific version of and `pnpm`, you should provide the `packageManager` field in your `package.json` file.
 
 ```json
 {
-  "packageManager": "pnpm@9.0.6",
-  "engines": {
-    "node": ">= 18.12",
-    "pnpm": "pnpm@9.0.6"
-  }
+  "packageManager": "pnpm@9.4.0",
 }
 ```
+
+**How Corepack manages versions**
+
+By specifying the `packageManager` version in your `package.json`, `Corepack` will:
+
+* **Check the package.json**: When you run commands that involve the package manager (e.g., installing dependencies), `Corepack` reads the `packageManager` field in your `package.json`.
+* **Download and Install**: If the specified package manager version is not already installed, `Corepack` will automatically download and install it.
+* **Use the Specified Version**: Corepack ensures that the commands are executed using the specified version of the package manager, ensuring consistency across different environments.
+
+This process helps manage the appropriate versions of the package manager for your project, ensuring everyone working on the project uses the same versions.
+
+#### n
+
+[n](https://github.com/tj/n) is a powerful and easy-to-use version manager for `Node.js`. It is highly recommended for managing versions due to its simplicity and effectiveness.
+
+**How to Use n**
+
+1. Install n globally using npm:
+
+   ```bash
+   npm install -g n
+   ```
+
+2. Easily switch between different Node.js versions using:
+
+   ```bash
+   n <version>
+   ```
+
+   For example, to switch to Node.js version 14.17.0:
+
+   ```bash
+   n 14.17.0
+   ```
+
+3. Ensure your `package.json` specifies the `Node.js` version:
+
+   ```json
+   {
+     "engines": {
+       "node": ">= 20.15.0"
+     }
+   }
+   ```
+
+4. Automatic Version Switching: Use the `n auto` command to switch `Node.js` versions based on the engines field:
+
+   ```bash
+   n auto
+   ```
+
+Specifying `engines` field and using `n` ensures that the correct version of `Node.js` is always used for your project, helping to prevent compatibility issues.
