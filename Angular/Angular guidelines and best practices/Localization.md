@@ -1,14 +1,14 @@
-This chapter covers various best practices for localization and handling translations inside of your Angular application.
+This chapter covers various best practices for localization and handling translations in your Angular application.
 
 ## Localization library
-Currently, the preferred library of choice for handling localization is [Transloco](https://jsverse.github.io/transloco/).
-Transloco allows you to define translations for your content in different languages and switch between them easily in runtime. It exposes a rich API to manage translations efficiently and cleanly. It provides multiple plugins that will improve your development experience. The setup is quite easy and you can find it in the documentation so we won't go into details about it here.
+Currently, the preferred library of choice for handling localization in Angular is [Transloco](https://jsverse.github.io/transloco/).
+`Transloco` allows you to define translations for your content in different languages and switch between them easily at runtime. It exposes a rich API to manage translations efficiently and cleanly. It provides multiple plugins that will improve your development experience. The setup is quite easy, and you can find it in the documentation, so we won't discuss it here.
 
 
-# Usage
+## Usage
 
-## transloco pipe
-Arguably the easiest way to handle translation is through a pipe. To use it simply import `TranslocoModule` in your component and pass the translation key to the pipe in your component template.
+### transloco pipe
+The easiest way to handle translation is through a pipe. To use it, simply import `TranslocoModule` in your component and pass the translation key to the pipe in your component template.
 
 
 ```html
@@ -16,33 +16,32 @@ Arguably the easiest way to handle translation is through a pipe. To use it simp
 ```
 
 
-## translate function
-In some cases, we need to translate the keys in the component itself rather than in the template. Inject the service into your component and then use the `translate` function by passing in the key you wish to translate.
+### translate function
+In some cases, we need to translate the keys in the component itself rather than in the template. Inject the service into your component and then use the translate function by passing in the key you wish to translate.
 
 ```ts
 private translocoService = inject(TranslocoService)
 private exampleTranslatedKey = this.translocoService.translate('common.exampleKey')
 ```
 
-Note: Besides the ability to translate the keys, the transloco service also provides you with many more functionalities like changing the selected language, etc.
+Note: Besides the ability to translate keys, the `TranslocoService` also provides many more functionalities, such as changing the selected language.
 
 ## Pluralization support
-In some cases, besides just translating a single key, we need to handle singular and plural versions of a single word. While it might be simple for some languages like English, it can be quite complicated for languages like Croatian, German etc. Transloco does not support this out of the box, but a `@jsverse/transloco-messageformat` plugin allows you to handle pluralization with ease.
+Besides just translating a single key, sometimes we need to handle singular and plural versions of a single word. While it might be simple for some languages like English, it can be quite complicated for languages like Croatian, German, etc. `Transloco` does not support this out of the box, but the [@jsverse/transloco-messageformat](https://jsverse.github.io/transloco/docs/plugins/message-format) plugin allows you to handle pluralization with ease.
 
 ## Installation
 To enable the plugin, pass `provideTranslocoMessageformat()` to the `providers` array of either `appConfigFactory` or `TranslocoRootModule` if using modules.
 
 ## Language plural rules
 
-To be able to properly translate singular and plural forms, we need to first check the plural rules for the language we are writing our translation keys form. The standard table with the rules can be found [here](To be able to properly translate singular and plural forms, we need to first check). Basically what you need to do is check the needed categories for a specific language and create the translation keys accordingly. The following examples will be done for the English language, and it is also a small set of available features which will be enough to cover almost all cases. For additional functionalities feel free to check the official documentation.
+To properly translate singular and plural forms, we need to first check the plural rules for the language we are writing our translation keys. The standard table with the rules can be found [here](https://www.unicode.org/cldr/charts/45/supplemental/language_plural_rules.html). Essentially, you need to check the needed categories for a specific language and create the translation keys accordingly. The following examples will be done for the English language, and they represent a small set of available features that will cover almost all cases. For additional functionalities, refer to the official plugin documentation.
 
-## Usage
-The categories for English are `one` for singular, and `other` for any value higher than one.
-To define the pluralization key we must provide the following:
+### Usage
+The categories for English are `one` for singular, and `other` for any value higher than one. To define the pluralization key, we must provide the following:
 
-* a value variable, which is `minutes` in the following example
-* whether the translations are cardinal or ordinal
-* a translation for each of the required categories, if any category is missing, the `other` category is used as a fallback
+- A value variable, which is `minutes` in the following example.
+- Whether the translations are plural or ordinal.
+- A translation for each of the required categories. If any category is missing, the `other` category is used as a fallback.
 
 
 ### Plural
@@ -93,7 +92,7 @@ For ordinals, we need to set the type to `selectordinal`
 
 ```
 ### Interpolation
-In order to reuse the value passed to pipe which is used to determine the translation used, we can use the `#` character which will be substituted with the passed-in value in the runtime
+To reuse the value passed to the pipe to determine the translation used, we can use the `#` character, which will be substituted with the passed-in value at runtime.
 
 ```json
 {
@@ -107,7 +106,7 @@ In order to reuse the value passed to pipe which is used to determine the transl
 ```
 
 ### Interpolation in a sentence
-In some cases, we are not just translating a single word, but rather a longer string and only a part of it needs to be dynamically interpolated.
+In some cases, we are not just translating a single word, but rather a longer string, and only a part of it needs to be dynamically interpolated.
 
 ```json
 {
