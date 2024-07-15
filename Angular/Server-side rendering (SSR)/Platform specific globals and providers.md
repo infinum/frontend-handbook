@@ -25,7 +25,7 @@ Here is an example of how to provide the `Window` object only on client-side:
 We can then inject `WINDOW` anywhere where we would like to use it. Note that the reference will be `undefined` on server-side.
 
 ```typescript
-constructor(@Inject(WINDOW) @Optional() private readonly window?: Window) {}
+private readonly window = inject(WINDOW, {optional: true});
 ```
 
 ## Platform Service
@@ -36,7 +36,7 @@ constructor(@Inject(WINDOW) @Optional() private readonly window?: Window) {}
 	providedIn: 'root',
 })
 export class PlatformService {
-	constructor(@Inject(PLATFORM_ID) private readonly platformId: Record<string, any>) {}
+    private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
 
 	public get isBrowser(): boolean {
 		return isPlatformBrowser(this.platformId);

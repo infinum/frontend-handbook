@@ -102,6 +102,11 @@ export interface ISEOContent {
     providedIn: 'root',
 })
 export class SeoService {
+    private readonly titleService =  inject(Title);
+    private readonly metaService =  inject(Meta);
+    private readonly translocoService =  inject(TranslocoService);
+    private readonly environmentVariablesService =  inject(EnvironmentVariablesService<EnvironmentVariable>);
+
     public readonly defaultDescriptionTranslationKey = 'seo.description';
     public readonly siteNameTranslationKey = 'seo.siteName';
     public readonly defaultImageUrl = urlJoin(
@@ -115,14 +120,6 @@ export class SeoService {
     public readonly defaultImageType = 'image/jpeg';
     public readonly defaultType = 'website';
     public readonly defaultTwitterCard = 'summary_large_image';
-
-    constructor(
-        private readonly titleService: Title,
-        private readonly metaService: Meta,
-        private readonly translocoService: TranslocoService,
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>
-    ) {
-    }
 
     public setSEO({
                       title,
@@ -306,11 +303,9 @@ guard:
     providedIn: 'root',
 })
 export class SeoContentGuard implements CanActivate {
-    constructor(
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
-        private readonly seoService: SeoService
-    ) {
-    }
+    private readonly environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
+    private readonly seoService = inject(SeoService);
+
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const titleTranslateKey = route.data[RouteData.Title];
@@ -362,13 +357,13 @@ directly.
     providedIn: 'root',
 })
 export class CanonicalUrlService {
+    private readonly environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
+    private readonly rendererFactory = inject(RendererFactory2);
+    private readonly document = inject(DOCUMENT);
+
     private readonly renderer: Renderer2;
 
-    constructor(
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
-        private readonly rendererFactory: RendererFactory2,
-        @Inject(DOCUMENT) private readonly document: Document
-    ) {
+    constructor() {
         this.renderer = rendererFactory.createRenderer(null, null);
     }
 

@@ -63,7 +63,7 @@ Consider this example with a header component and user service which is used for
 ```typescript
 @Component({ ... })
 export class HeaderComponent {
-  constructor(private userService: UserService)
+  private userService = inject(UserService);
 
   onLogInClick() {
     this.userService.logIn();
@@ -280,7 +280,7 @@ We will test `SomeService` which injects `UserService`:
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class SomeService {
-  constructor(private userService: UserService) { }
+  private userService = inject(UserService);
 
   // ...rest of functionality
 }
@@ -417,7 +417,7 @@ In this example, we will test the `ComponentToBeTested` component that renders `
   `
 })
 export class ComponentToBeTested {
-  constructor(public userService: UserService) { }
+   private userService = inject(UserService);
 }
 ```
 
@@ -826,10 +826,10 @@ The service looks like this:
   providedIn: 'root'
 })
 export class DadJokeService {
+  private http = inject(HttpClient);
+
   static I_CAN_HAZ_DAD_JOKE_URL = 'https://icanhazdadjoke.com';
   static DEFAULT_JOKE = 'No joke for you!';
-
-  constructor(private http: HttpClient) { }
 
   getJoke(): Observable<string> {
     const options = {
