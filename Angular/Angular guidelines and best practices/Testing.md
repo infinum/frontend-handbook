@@ -4,7 +4,7 @@ There are many tips and tricks that go into testing Angular applications. This s
 
 ## The official documentation
 
-[The official documentation](https://angular.io/guide/testing) covers testing quite extensively. Some of the topics are reiterated and expanded on in this handbook while also explaining some concepts that are not covered in the official documentation.
+[The official documentation](https://angular.dev/guide/testing) covers testing quite extensively. Some of the topics are reiterated and expanded on in this handbook while also explaining some concepts that are not covered in the official documentation.
 
 ## Unit vs. integration vs. end-to-end testing
 
@@ -37,7 +37,7 @@ End-to-end testing is quite different when compared to unit/integration testing 
 
 When you start E2E tests, your application will be built, and a programmatically controlled instance of a web browser will be opened. The tests will then click on various elements of the webpage without any human input (via [WebDriver](https://www.seleniumhq.org/projects/webdriver/)). This allows us to create a quick smoke-testing type of tests which goes through the main flows of our application in an automated way.
 
-Covering E2E testing in detail is out of the scope of this handbook. Please check out the [official documentation](https://angular.io/cli/e2e) if you would like to know more. However, we do have some quick tips and tricks:
+Covering E2E testing in detail is out of the scope of this handbook. Please check out the [official documentation](https://angular.dev/cli/e2e) if you would like to know more. However, we do have some quick tips and tricks:
 
 - the `ng e2e` command builds your app and starts a local DevServer just like `ng serve`, and then it runs Protractor on that local instance of your app. If you want to run e2e tests on some specific environment instead of a local environment, you can run Protractor directly instead of via Angular CLI, simply by executing `protractor` (make sure to install it globally, use binary from node_modules, or create a script in package.json). In `protractor.conf.js`, you can configure `baseUrl` to point to the URL of your app on the desired environment.
 - You can use environment variables in Protractor tests. For example, if you have a login functionality test, you can do something like this: `$('input[data-e2e-test="login-email"]').sendKeys(process.env.E2E_LOGIN_EMAIL);`.
@@ -355,7 +355,7 @@ describe('AuthorizationInterceptor', () => {
       providers: [
         { provide: AuthenticationService,
           useClass: AuthenticationTestingService // Provide mock dependency
-        }, 
+        },
         {
           provide: HTTP_INTERCEPTORS, // Register interceptor
           useClass: AuthorizationInterceptor,
@@ -365,7 +365,7 @@ describe('AuthorizationInterceptor', () => {
     });
 
       httpClient = TestBed.inject(HttpClient);
-      httpMock = TestBed.inject(HttpTestingController); 
+      httpMock = TestBed.inject(HttpTestingController);
       authenticationService = TestBed.inject(AuthenticationService);
   });
 
@@ -384,7 +384,7 @@ it('should attach the interceptor', () => {
 
 it('should set authorization header to request', () => {
     const url = 'https://my-api.com/api/some-route';
-    
+
     httpClient.get(url).subscribe();
 
     const mockRequest = httpMock.expectOne(url);
@@ -993,7 +993,7 @@ mockRequest.error(new ErrorEvent('server_down'), { status: 500 });
 
 This allows us to test a more complex error handling, which usually includes some logic for displaying different error messages depending on error code. As shown, that is completely doable using the `error` method of the `TestRequest` object.
 
-To learn more, read the official Angular documentation chapter about[Testing HTTP requests](https://angular.io/guide/http#testing-http-requests)
+To learn more, read the official Angular documentation chapter about[Testing HTTP requests](https://angular.dev/guide/http/testing)
 
 ## Testing helpers
 

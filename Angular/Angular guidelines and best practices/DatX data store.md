@@ -64,7 +64,7 @@ This topic is heavily described in the resources above, please refer to them. By
 
 ## Store setup and injection
 
-To create and provide a single instance of Collection accross entire Angular app, you can create custom DI token eg. `APP_COLLECTION`, see [InjectionToken docs](https://angular.io/api/core/InjectionToken) and then provide said token in root module, like so:
+To create and provide a single instance of Collection accross entire Angular app, you can create custom DI token eg. `APP_COLLECTION`, see [InjectionToken docs](https://angular.dev/api/core/InjectionToken) and then provide said token in root module, like so:
 
 ```ts
 // injection-tokens.ts

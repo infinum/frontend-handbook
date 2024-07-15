@@ -1,5 +1,5 @@
 When using SSR, the node server can read system environment variables at runtime and transfer them to the client using
-the [`TransferState` API](https://angular.io/api/platform-browser/TransferState). This is just one of the use cases for
+the [`TransferState` API](https://angular.dev/api/core/TransferState). This is just one of the use cases for
 the `TransferState` API.
 
 To make working with environment variables in an SSR application easier, we have created `EnvironmentVariablesSSRLoader`

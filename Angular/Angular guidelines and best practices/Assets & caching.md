@@ -28,7 +28,7 @@ Keep reading for a detailed explanation of how to define paths to assets.
 
 ### Base href
 
-Angular documentation about deploying applications contains [The base tag](https://angular.io/guide/deployment#the-base-tag) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the `<base href>`](https://angular.io/guide/router#html5-urls-and-the--base-href).
+Angular documentation about deploying applications contains [The base tag](https://angular.dev/tools/cli/deployment#--deploy-url) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the `<base href>`](https://angular.dev/tools/cli/deployment#--deploy-url).
 
 ### Loading assets via HTML
 
