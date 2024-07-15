@@ -1,7 +1,7 @@
 As you might already know, there are two approaches when working with forms in Angular—template-driven and reactive forms. There is a lot of great documentation on both:
 
-- [Reactive Forms](https://angular.io/guide/reactive-forms)
-- [Template-driven Forms](https://angular.io/guide/forms)
+- [Reactive Forms](https://angular.dev/guide/forms/reactive-forms)
+- [Template-driven Forms](https://angular.dev/guide/forms)
 
 The real question is which approach should you use? General reasoning is that template-driven forms should suffice if the form is simple enough (one or two elements). If the form is complex and has a lot of elements and validations, the reactive approach is easier to manage.
 
@@ -11,7 +11,7 @@ Reactive forms are also a bit easier to hook into RxJS pipelines.
 
 ## NgxFormObject - our own library for working with forms!
 
-Since we mostly use reactive forms, we've created a library, which makes things a bit easier. The library in question is [ngx-form-object](https://github.com/infinum/ngx-form-object). Check out the project's README on GitHub to find out how to use it.
+Since we mostly use reactive forms, we've created a library, which makes things a bit easier. The library in question is [ngx-form-object](https://github.com/infinum/ngx-form-object). Check out the official [docs](https://infinum.github.io/ngx-form-object/docs) to find out how to use it.
 
 Some of the benefits of using it:
 
@@ -24,7 +24,7 @@ We definitely recommend trying out `ngx-form-object` (*shameful self-promotion*)
 
 ## Making your components work with forms transparently
 
-Another topic that should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use the `input` element, you will have to implement [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but luckily, there are some great articles which we recommend reading:
+Another topic that should be covered when talking about forms is using your own components with both reactive and template-driven forms. To use your component with forms just like you would use the `input` element, you will have to implement [ControlValueAccessor](https://angular.dev/api/forms/ControlValueAccessor) in your component. It isn't too straight-forward and might seem complex at first glance (what is `forwardRef` anyway, right?), but luckily, there are some great articles which we recommend reading:
 
 - [Angular Custom Form Controls Made Easy](https://netbasal.com/angular-custom-form-controls-made-easy-4f963341c8e2)—quick introduction
 - [Never Again be Confused when Implementing ControlValueAccessor in Angular Forms](https://blog.angularindepth.com/never-again-be-confused-when-implementing-controlvalueaccessor-in-angular-forms-93b9eee9ee83)—more in-depth, great article, recommend reading; but uses jQuery in the example—so démodé

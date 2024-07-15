@@ -17,7 +17,7 @@ respond to the same `HttpClient` requests on the client.
 
 Any requests other than GET will prevent any further requests so be aware of this if you have some initial request on
 the page which is not GET request you will need to handle that case manually. You may alternatively
-use `BrowserTransferStateModule` to write your own behaviour for caching information.
+use `BrowserTransferStateModule` to write your own behavior for caching information.
 
 ### Usage
 
