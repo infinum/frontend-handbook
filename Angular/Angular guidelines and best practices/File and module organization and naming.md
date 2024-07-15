@@ -39,10 +39,10 @@ Directory structure for such an app should look like this:
 
 ```
 src/app/
-├── components/ # these components are used in both posts and users feature modules
+components/ # these components are used in both posts and users feature pages
 │   ├── post-overview/ # renders basic info about a post (without full content)
 │   └── user-avatar/ # renders username and profile image
-├── services/ # these services are used in both posts and users feature modules
+services/ # these services are used in both posts and users feature pages
 │   ├── auth/ # session management, not important for this example
 │   ├── user/
 │   │   ├── user.service.ts # has methods for data fetching
@@ -51,53 +51,35 @@ src/app/
 │   │   ├── user.interface.ts
 │   │   └── user.model.ts
 │   └── post/ # basically the same as user.service
-├── pages/
+pages/
 │   ├── users/
 │   │   ├── pages/
 │   │   │   ├── users-index/
 │   │   │   │   ├── components/
 │   │   │   │   │   └── users-list/ # renders a list of user-avatar components
 │   │   │   │   ├── users-index.component.ts # renders some header/footer and users-list component
-│   │   │   │   ├── users-index-routing.module.ts # eagerly-loads users-index.component on /
-│   │   │   │   └── users-index.module.ts # imports users-index-routing.module
 │   │   │   └── user-index/
 │   │   │       ├── components/
 │   │   │       │   └── user-details/ # renders user-avatar component, additional user info and a list of user's posts (post-overview)
 │   │   │       ├── user-index.component.ts # renders some header/footer and users-details component
-│   │   │       ├── user-index-routing.module.ts # eagerly-loads user-index.component on /
-│   │   │       └── user-index.module.ts # imports user-index-routing.module
-│   │   ├── users-routing.module.ts # lazy-loads users-list.module on /, user-details.module on /:id
-│   │   └── users.module.ts # imports users-routing.module
 │   └── posts/
-│       ├── components/ # these components are used only in posts feature/domain module
+│       ├── components/ # these components are used only in posts feature/domain page
 │       │   └── post-form/ # form used for both editing and creation
 │       ├── services/
-│       │   └── social-sharing/ # service that is used only inside posts module
+│       │   └── social-sharing/ # service that is used only inside posts page
 │       ├── pages/
 │       │   ├── posts-index/
 │       │   │   ├── components/
 │       │   │   │   └── posts-list/ # renders post-overview and user-avatar component for each post
 │       │   │   ├── posts-index.component.ts # renders some header/footer and posts-list component
-│       │   │   ├── posts-index-routing.module.ts # eagerly-loads posts-index.component on /
-│       │   │   └── posts-index.module.ts # imports posts-index-routing.module
 │       │   ├── post-index/
 │       │   │   ├── components/
 │       │   │   │   └── post-details/ # renders post-overview and user-avatar components and renders the post content
 │       │   │   ├── post-index.component.ts # renders some header/footer and posts-details component
-│       │   │   ├── post-index-routing.module.ts # eagerly-loads post-index.component on /
-│       │   │   └── post-index.module.ts # imports post-index-routing.module
 │       │   ├── new-post/
 │       │   │   ├── new-post.component.ts # renders some header/footer and post-form component
-│       │   │   ├── new-post-routing.module.ts # eagerly-loads new-post.component on /
-│       │   │   └── new-post.module.ts # imports new-post-routing.module
 │       │   └── edit-post/
 │       │       ├── edit-post.component.ts # renders some header/footer and post-form component
-│       │       ├── edit-post-routing.module.ts # eagerly-loads edit-post.component on /
-│       │       └── edit-post.module.ts # imports edit-post-routing.module
-│       ├── posts-routing.module.ts # lazy-loads posts-index.module on /, new-post.module on /new, edit-post.module on /:id/edit, post-index.module on /:id
-│       └── posts.module.ts # imports posts-routing.module
-├── app-routing.module.ts # lazy-loads users.module on /users, posts.module on /posts
-└── app.module.ts # imports app-routing.module
 ```
 
 ## Animations
@@ -164,7 +146,7 @@ If you need some generic helper functions (like a rounding function which actual
 
 ## Pipes
 
-If you have some custom generic pipes for use in templates, create their own dirs in `src/app/pipes`. Each pipe should have its own module that declares and exports the pipe.
+If you have some custom generic pipes for use in templates, create their own dirs in `src/app/pipes`.
 
 If a pipe is very specific and tied to a particular component, create it alongside that component instead of in the global pipes directory.
 
@@ -184,4 +166,4 @@ Global styles should be placed in the `src/app/styles` dir. The styles dir has a
 
 ## NgxFormObject
 
-If you are using `ngx-form-object`, place `FormObject`s, `FromStore`s, and validators in `src/app/forms`. If you have form components that are reused throughout the app, put them in `src/app/components/forms`.
+If you are using [ngx-form-object](https://infinum.github.io/ngx-form-object/), place `FormObject`s, `FromStore`s, and validators in `src/app/forms`. If you have form components that are reused throughout the app, put them in `src/app/components/forms`.
