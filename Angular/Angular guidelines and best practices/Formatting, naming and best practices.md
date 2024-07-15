@@ -277,13 +277,13 @@ class MyComponent implements OnInit, OnChanges {
   @Input() public i1: string;
   @Input() public i2: string;
   @Output() public o2: EventEmitter<string> = new EventEmitter();
-  public attr1: number;
+  protected attr1: number;
   protected attr2: string;
   private attr3: Date;
 
   constructor(...) { ... }
 
-  public get computedProp(): string { ... }
+  protected get computedProp(): string { ... }
 
   private get secretComputedProp(): number { ... }
 
@@ -291,7 +291,7 @@ class MyComponent implements OnInit, OnChanges {
 
   public ngOnChanges(): void { ... }
 
-  public onSomeButtonClick(event: MouseEvent): void { ... }
+  protected onSomeButtonClick(event: MouseEvent): void { ... }
 
   private someInternalAction(): void { ... }
 }
@@ -340,9 +340,10 @@ If `ngOnChanges` contains some logic, it is often a good idea to separate that l
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder)
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -360,9 +361,10 @@ class MyComponent {
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -386,9 +388,10 @@ We can even go one step further and make things _pure_:
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -512,7 +515,7 @@ However, there are some cases where you will have to use `ngOnInit` or `ngOnChan
 @Component(...)
 class PersonDetailsComponent {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   constructor() {
     this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
@@ -528,7 +531,7 @@ If you try this, you will get an exception because `birthDate` will be undefined
 @Component(...)
 class PersonDetailsComponent implements OnInit {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   ngOnInit() {
     this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
@@ -545,7 +548,7 @@ We still have one problem with this solution. If input binding changes again (af
 @Component(...)
 class PersonDetailsComponent implements OnChanges {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.birthDate) {
@@ -567,7 +570,7 @@ Since this check is simple and returns a primitive value, using a getter here is
 class PersonDetailsComponent {
   @Input() public birthDate: Date;
 
-  public get isLegalAge(): boolean {
+  protected get isLegalAge(): boolean {
     return new Date().getYear() - this.birthDate.getYear() > 18;
   }
 }
@@ -605,7 +608,7 @@ The `$` suffix is here to indicate and let you know it is something you can subs
 ```typescript
 class ExampleComponent {
   private _isLoading$ = new BehaviorSubject(false); // for internal use for "state management"
-  public isLoading$ = this._isLoading$.pipe(debounceTime(250)); // for use in template
+  protected isLoading$ = this._isLoading$.pipe(debounceTime(250)); // for use in template
 
   // to be called from some methods, for example during data fetching
   private updateLoadingState(state) {
@@ -693,7 +696,7 @@ Component:
 // bad
 @Component(...)
 export class ArticlesList {
-  public articles: Array<Article>;
+  protected articles: Array<Article>;
 
   constructor(...) {
     this.articleService.fetchArticles().subscribe((articles) => { // manual subscription
@@ -705,7 +708,7 @@ export class ArticlesList {
 // good
 @Component(...)
 export class ArticlesList {
-  public readonly articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
+  protected readonly articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
 
   constructor(...) { }
 }
@@ -790,9 +793,8 @@ export const approvalStatusData: Record<ApprovalStatus, ITranslatableEnum> = {
   `
 })
 class DemoComponent{
-
-  public readonly ApprovalStatus = ApprovalStatus;
-  public readonly approvalStatusData = approvalStatusData;
+  protected readonly ApprovalStatus = ApprovalStatus;
+  protected readonly approvalStatusData = approvalStatusData;
 }
 ```
 By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record. 
@@ -817,14 +819,15 @@ In this example, we have to fetch the user by ID. The ID is read from route para
   ...
 })
 class MyComponent {
-  public user: UserModel;
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
+
+  protected user: UserModel;
   private userSubscription: Subscription;
 
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {
-    this.userSubscription = this.route.params.pipe(switchMap((params: Params) => {
+
+  constructor() {
+    this.userSubscription = this.activatedRoute.params.pipe(switchMap((params: Params) => {
       return this.usersService.fetchById(params.userId);
     })).subscribe((user) => {
       this.user = user;
@@ -852,13 +855,11 @@ This is bad because it will not work correctly with OnPush change detection and 
   ...
 })
 class MyComponent {
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
 
-  public get user$(): Observable<UserModel> {
-    return this.route.params.pipe(switchMap((params: Params) => {
+  protected get user$(): Observable<UserModel> {
+    return this.activatedRoute.params.pipe(switchMap((params: Params) => {
       return this.usersService.fetchById(params.userId);
     }));
   }
@@ -880,14 +881,12 @@ Here we no longer have to take care of unsubscribing, but the issue now is that 
   ...
 })
 class MyComponent {
-  public user$: Observable<UserModel> = this.route.params.pipe(switchMap((params: Params) => {
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
+
+  protected user$: Observable<UserModel> = this.route.params.pipe(switchMap((params: Params) => {
     return this.usersService.fetchById(params.userId);
   }));
-
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
 }
 ```
 
@@ -899,12 +898,10 @@ If the observable creation pipeline gets larger, you can move it to a private me
 // good
 @Component(...)
 class MyComponent {
-  public user$: Observable<UserModel> = this.createUserObservable();
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
+  protected user$: Observable<UserModel> = this.createUserObservable();
 
   private createUserObservable(): Observable<UserModel> {
     return this.route.params.pipe(switchMap((params: Params) => {
@@ -984,7 +981,7 @@ Here is an example where an observable is unnecessary:
 @Component(...)
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
-  public readonly factorialOfTheNumber$ = new BehaviorSubject<number>(1);
+  protected readonly factorialOfTheNumber$ = new BehaviorSubject<number>(1);
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.someNumber) {
@@ -1004,7 +1001,7 @@ export class MyComponent implements OnChanges {
 @Component(...)
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
-  public readonly factorialOfTheNumber = 1;
+  protected readonly factorialOfTheNumber = 1;
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.someNumber) {
@@ -1063,7 +1060,7 @@ if(someNumber | factorial; as someNumberFactorial) {
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
 
-  public saveFactorialValue(someNumberFactorial): void {
+  protected saveFactorialValue(someNumberFactorial): void {
     // do something with someNumberFactorial
   }
 }
@@ -1112,7 +1109,7 @@ We would like to implement a guard which allows only authenticated users to navi
 ```typescript
 // bad
 class UserAuthorizedGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  private authService = inject(AuthService)
 
   canActivate(): Observable<boolean> {
     const authStatus$ = new Subject();
@@ -1133,7 +1130,7 @@ class UserAuthorizedGuard implements CanActivate {
 
 // good
 class UserAuthorizedGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  private authService = inject(AuthService)
 
   canActivate(): Observable<boolean> {
     return this.authService.getUserData().pipe(
@@ -1202,7 +1199,7 @@ export class MyComponent {
   private readonly frameworkName2$ = ...;
   private readonly frameworkName3$ = ...;
 
-  public readonly frameworkNames$ = combineLatest([
+  protected readonly frameworkNames$ = combineLatest([
     frameworkName1$,
     frameworkName2$,
     frameworkName3$,
@@ -1255,7 +1252,7 @@ interface ITreeNode {
 
 @Component(...)
 export class ParentComponent {
-  public navigationRoot: ITreeNode = {
+  protected navigationRoot: ITreeNode = {
     title: 'Homepage',
     link: '/',
     children: [...]
