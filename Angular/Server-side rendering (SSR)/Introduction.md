@@ -22,7 +22,7 @@ There are 3 main reasons to add SSR to an Angular app:
 
 Angular Universal is a tool which allows the server to render Angular application's HTML content.
 For a detailed guide, please check out
-the [official Angular Universal documentation](https://angular.io/guide/universal). We also recommend reading about some
+the [official Angular Universal documentation](https://angular.dev/guide/ssr). We also recommend reading about some
 of the [gotchas](https://github.com/angular/universal/blob/main/docs/gotchas.md).
 
 To add Angular Universal run the following CLI command:

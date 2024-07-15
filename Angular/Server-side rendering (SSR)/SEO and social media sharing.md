@@ -306,7 +306,6 @@ export class SeoContentGuard implements CanActivate {
     private readonly environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
     private readonly seoService = inject(SeoService);
 
-
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const titleTranslateKey = route.data[RouteData.Title];
         const descriptionTranslateKey = route.data[RouteData.Description];
