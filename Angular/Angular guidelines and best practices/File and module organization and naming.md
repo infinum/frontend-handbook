@@ -152,7 +152,9 @@ If a pipe is very specific and tied to a particular component, create it alongsi
 
 ## Shared modules
 
-If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`. Keep in mind that having large shared modules is usually unwanted because it makes dependency management hard in the case where shared modules import many other modules.
+If you have `NgModule`s which are not components (e.g., a module which imports all specific material modules that you need), put them in `src/app/shared-modules`. Keep in mind that having large shared modules is usually unwanted because it makes dependency management hard in the case where shared modules import many other modules, avoid it if possible.
+
+One of the remaining use cases for modules is when you have a group of components that are meant to be used together. In such cases, you can create a module to export them. This way, to use those components, you only need one import instead of multiple.
 
 ## Custom types
 
