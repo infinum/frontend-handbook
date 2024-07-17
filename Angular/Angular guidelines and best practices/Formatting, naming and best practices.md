@@ -732,6 +732,41 @@ Template:
 }
 ```
 
+However if you really need to do it, be sure to unsubscribe manually:
+
+# unsubscribe method
+Create `subscriptions` variable in your component and store all of your manual subscriptions. Then, call `unsubscribe` on it in the `ngOnDestroy`.
+
+```ts
+private readonly subscriptions = new Subscription();
+
+constructor() {
+	this.subscriptions.add(
+		this.exampleObservable().subscribe()
+	);
+}
+
+public ngOnDestroy() {
+	this.subscriptions.unsubscribe();
+}
+
+```
+# takeUntil
+[takeUntil](https://rxjs.dev/api/operators/takeUntil) operator is another way of handling unsubscribing. It accepts another observable and will unsubscribe as soon as the passed observable emits. In most cases it will be used in a `subject`/`ngOnDestroy` combination. If using this approach don't forget to complete the `subject` as well, as the `takeUntil` creates a subscription which you need to handle too.
+
+```ts
+private readonly destroy$ = new Subject<void>();
+
+constructor() {
+	this.exampleObservable().pipe(takeUntil(this.destroy$)).subscribe()
+}
+
+public ngOnDestroy() {
+	this.destroy$.next();
+	this.destroy$.complete();
+}
+```
+
 ## Avoid concatenation of translation keys
 
 A common requirement for applications is that the application must be localized. Regardless of the library which is used for fetching the translations,,
@@ -797,7 +832,7 @@ class DemoComponent{
   protected readonly approvalStatusData = approvalStatusData;
 }
 ```
-By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record. 
+By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record.
 You can further expand on this pattern by adding additional "metadata" about the enum to the record. For example, a `sortingIndex` property that is taken into account when the enum values are rendered as dropdown options.
 
 ## Avoid unnecessary creation of multiple observables and avoid subscriptions
