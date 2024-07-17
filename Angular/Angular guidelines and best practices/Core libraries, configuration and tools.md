@@ -24,7 +24,7 @@ There are also some 3rd party schematics you can use or you can even create your
 
 ## Creating new modules
 
-Use `ng g m MyModule` to create a new module. Note that there are almost no use cases for modules anymore, and all your components should be standalone if you are using Angular version 15 or higher. One of the remaining use cases for modules is when you have a group of components that are meant to be used together. In such cases, you can create a module to export them. This way, to use those components, you only need one import instead of multiple.
+Use `ng g m MyModule` to create a new module. Note that there are almost no use cases for modules anymore, and all your components should be standalone if you are using Angular version 15 or higher.
 
 ## Creating new components
 
