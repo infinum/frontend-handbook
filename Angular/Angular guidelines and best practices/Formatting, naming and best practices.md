@@ -732,7 +732,7 @@ Template:
 }
 ```
 
-However if you really need to do it, be sure to unsubscribe manually:
+However if you really need to subscribe manually, be sure to unsubscribe using some of the available approaches:
 
 # unsubscribe method
 Create `subscriptions` variable in your component and store all of your manual subscriptions. Then, call `unsubscribe` on it in the `ngOnDestroy`.
@@ -752,7 +752,7 @@ public ngOnDestroy() {
 
 ```
 # takeUntil
-[takeUntil](https://rxjs.dev/api/operators/takeUntil) operator is another way of handling unsubscribing. It accepts another observable and will unsubscribe as soon as the passed observable emits. In most cases it will be used in a `subject`/`ngOnDestroy` combination. If using this approach don't forget to complete the `subject` as well, as the `takeUntil` creates a subscription which you need to handle too.
+[takeUntil](https://rxjs.dev/api/operators/takeUntil) operator is another way of unsubscribing. It accepts another observable and will unsubscribe as soon as the passed observable emits. In most cases it will be used in a `subject`/`ngOnDestroy` combination. If using this approach don't forget to complete the `subject` as well, as the `takeUntil` creates a subscription which you need to handle too.
 
 ```ts
 private readonly destroy$ = new Subject<void>();
@@ -1104,7 +1104,12 @@ export class MyComponent implements OnChanges {
 Some notes:
 
 - We wrapped everything in one `@if` to avoid calling the pipe twice
-- Be careful in case that your pipe can return a valid falsy value, as in that case the `@if` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
+- Be careful in case that your pipe can return a valid falsy value, as in that case the `@if` will not render the content; in such case you might consider using a new [`@let`](https://blog.angular.dev/introducing-let-in-angular-686f9f383f0f) template variable syntax.
+
+```html
+@let count = count$ | async;
+<p>The count is {{count}}</p>
+```
 
 ## Auto unwrap default exports when lazy loading
 
