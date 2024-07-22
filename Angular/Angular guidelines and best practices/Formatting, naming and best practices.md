@@ -109,6 +109,22 @@ In the following example, property binding is unnecessary because we are assigni
 }
 ```
 
+## Prefer self-closing syntax
+Self-closing syntax was introduced in the Angular v15.1 and is basically just a syntactic sugar, but it often does reduce template code and increases readability. While there is nothing we wrong with regular syntax, prefer to use self-closing one whenever possible. Note that this will work with all Angular components, not just your own, Angular Material components are often overlooked. It can also be beneficial to add linter rule to help enforce the syntax.
+
+
+```html
+<!-- not preferred - we have extra tags bloating the template -->
+<my-component></my-component>
+<my-other-component></my-other-component>
+<my--component></my--component>
+
+<!-- preferred more concise and readable -->
+<my-component />
+<my-other-component />
+<my--component />
+```
+
 ## Use attributes for transclusion selectors
 
 When implementing transclusion with manual content selection via the `select` attribute of the `ng-content` element, we recommend using attribute selectors.
