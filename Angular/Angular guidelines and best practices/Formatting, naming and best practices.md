@@ -1127,6 +1127,17 @@ Some notes:
 <p>The count is {{count}}</p>
 ```
 
+## Input transforms
+
+Often, you find yourself in a position to manipulate the value you pass to a component using inputs. You would often achieve this by either manipulating the data at the source, writing a custom pipe and send manipulated data to a child component or more rarely, use getters and setters in a child component to achieve desired result. You can avoid this code bloating by using [input transformation function](https://angular.dev/guide/components/inputs#input-transforms). You can basically do whatever you like, but some of the use cases include boolean transformations, string manipulations, working with dates etc.
+
+```ts
+@Component({...})
+export class ExampleComponent {
+  @Input({transform: (value: string) => value.toUpperCase()}) label = '';
+}
+```
+
 ## Auto unwrap default exports when lazy loading
 
 With Angular v15 it is possible to leverage default exports to shorten the syntax when lazy loading a module or a standalone component. Note that the CLI still generates modules and components without the default export so you will need to add that by yourself.
