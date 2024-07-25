@@ -1161,6 +1161,43 @@ export default class ExampleComponent { ... }
 }
 ```
 
+## Prefer functional over class guards and interceptors
+
+Since Angular v15, class based guards and interceptors are deprecated and you should prefer functional ones if you are using v15 or higher. If you are generating a guard using CLI on those versions, functional versions will be generated. The class based versions still work, however they will probably be removed at some point so if you have some in your project, it might be wise to refactor as it requires minimal amount of work in most cases.
+
+```ts
+// Old - class based
+class UserAuthorizedGuard implements CanActivate {
+  private authService = inject(AuthService)
+
+  canActivate(): Observable<boolean> {
+    return this.authService.isLoggedIn$
+  }
+}
+
+// New - functional
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+  const authService = inject(AuthService)
+
+  return authService.isLoggedIn$
+};
+```
+
+Note that with a function-based approach, it is possible to write functions directly in, for example, the route array without the need to create new separate files. While this can be helpful in some simpler cases, we do not recommend it for several reasons, such as:
+- Reusability: If you need this logic on several different routes, you will have to write it over and over again.
+- Maintainability: In case of a change, you will need to find all instances and refactor them in multiple places instead of just one.
+- Testability: You won't be able to unit test your guard easily.
+
+```ts
+const ROUTES: Routes = [
+	{
+		path: '',
+		component: ExampleComponent,
+		canActivate: [() => inject(UserService).isLoggedIn$],
+	},
+];
+```
+
 ## Favouring canMatch guard
 
 The [canMatch](https://angular.dev/api/router/CanMatchFn) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls when the route can be used and as a side effect, whether we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different from `canLoad`, which won't load the chunk, but once the guard returns `true`, it won't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time, but that also means that chunk will be loaded in all cases. You can read more in the following [blog post](https://netbasal.com/introducing-the-canmatch-router-guard-in-angular-84e398046c9a) or in the [Angular team's PR description](https://github.com/angular/angular/pull/48180).
@@ -1175,41 +1212,38 @@ We would like to implement a guard which allows only authenticated users to navi
 
 ```typescript
 // bad
-class UserAuthorizedGuard implements CanActivate {
-  private authService = inject(AuthService)
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+  const authService = inject(AuthService)
 
-  canActivate(): Observable<boolean> {
-    const authStatus$ = new Subject();
+  const authStatus$ = new Subject();
 
-    this.authService.getUserData().subscribe((user: User) => {
-      authStatus$.next(true);
-      authStatus$.complete();
-    }, (error) => {
-      console.error('User not authorized!', error);
+  authService.getUserData().subscribe((user: User) => {
+    authStatus$.next(true);
+    authStatus$.complete();
+  }, (error) => {
+    console.error('User not authorized!', error);
 
-      authStatus$.next(false);
-      authStatus$.complete();
-    })
+    authStatus$.next(false);
+    authStatus$.complete();
+  })
 
-    return authStatus$;
-  }
-}
+  return authStatus$;
+};
 
 // good
-class UserAuthorizedGuard implements CanActivate {
-  private authService = inject(AuthService)
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+	const authService = inject(AuthService);
 
-  canActivate(): Observable<boolean> {
-    return this.authService.getUserData().pipe(
-      catchError((error) => {
-        console.error('User not authorized!', error);
+	return authService.getUserData().pipe(
+		catchError((error) => {
+			console.error('User not authorized!', error);
 
-        return observableOf(false);
-      }),
-      map(Boolean), // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
-    )
-  }
-}
+			return observableOf(false);
+		}),
+		map(Boolean) // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
+	);
+};
+
 ```
 
 ## Be mindful of how and when the data is fetched

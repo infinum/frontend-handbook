@@ -299,51 +299,42 @@ To translate the content, we use `createTranslatedSeoContent` and `TranslocoServ
 guard:
 
 ```typescript
-@Injectable({
-    providedIn: 'root',
-})
-export class SeoContentGuard implements CanActivate {
-    private readonly environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
-    private readonly seoService = inject(SeoService);
+export const seoContentGuardGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
+	const environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
+	const seoService = inject(SeoService);
 
-    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        const titleTranslateKey = route.data[RouteData.Title];
-        const descriptionTranslateKey = route.data[RouteData.Description];
-        const url = `${this.environmentVariablesService.get(EnvironmentVariable.APP_URL)}${state.url}`;
-        const image = route.data[RouteData.Image];
-        const imageWidth = route.data[RouteData.ImageWidth];
-        const imageHeight = route.data[RouteData.ImageHeight];
-        const imageType = route.data[RouteData.ImageType];
-        const type = route.data[RouteData.Type];
-        const twitterCard = route.data[RouteData.TwitterCard];
+	const titleTranslateKey = route.data[RouteData.Title];
+	const descriptionTranslateKey = route.data[RouteData.Description];
+	const url = `${environmentVariablesService.get(EnvironmentVariable.APP_URL)}${state.url}`;
+	const image = route.data[RouteData.Image];
+	const imageWidth = route.data[RouteData.ImageWidth];
+	const imageHeight = route.data[RouteData.ImageHeight];
+	const imageType = route.data[RouteData.ImageType];
+	const type = route.data[RouteData.Type];
+	const twitterCard = route.data[RouteData.TwitterCard];
 
-        const translatedSeoContent$ = this.seoService.createTranslatedSeoContent(
-            titleTranslateKey,
-            descriptionTranslateKey
-        );
+	const translatedSeoContent$ = seoService.createTranslatedSeoContent(titleTranslateKey, descriptionTranslateKey);
 
-        return translatedSeoContent$.pipe(
-            take(1),
-            map(({title, description, siteName}) => {
-                this.seoService.setSEO({
-                    title,
-                    description,
-                    siteName,
-                    url,
-                    image,
-                    imageWidth,
-                    imageHeight,
-                    imageType,
-                    type,
-                    twitterCard,
-                });
+	return translatedSeoContent$.pipe(
+		take(1),
+		map(({ title, description, siteName }) => {
+			seoService.setSEO({
+				title,
+				description,
+				siteName,
+				url,
+				image,
+				imageWidth,
+				imageHeight,
+				imageType,
+				type,
+				twitterCard,
+			});
 
-                return true;
-            })
-        );
-    }
-}
-
+			return true;
+		})
+	);
+};
 ```
 
 If your application is not using translations just skip `createTranslatedSeoContent` function and provide content
