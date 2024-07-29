@@ -9,6 +9,53 @@ Going by that general reasoning, you might end up having a mix of reactive and t
 
 Reactive forms are also a bit easier to hook into RxJS pipelines.
 
+## Typed forms
+Typed forms help catch errors early in development, enhance code readability and maintainability, and support useful features like auto-completion. You do not have to do anything special to create your first typed `FormControl`, form controls are typed by default since Angular v15.
+
+In majority of the cases Angular will correctly infer the type from the initial value. Only use explicit typings by using generics when the form control can accept more than one type.
+
+```ts
+private exampleControlTwo = new FormControl('');
+// FormTestComponent.exampleControlTwo: FormControl<string | null>
+
+private exampleControlTwo = new FormControl<string | number>('');
+ // FormTestComponent.exampleControlTwo: <string | number | null>
+```
+
+In the above example `null` shows up as a possible type. This is because if we reset the `FormControl`, it will be reset to `null`. If we want to reset the control to its initial value, we must pass `nonNullable` flag.
+
+```ts
+private exampleControlTwo = new FormControl('', {nonNullable: true});
+// FormTestComponent.exampleControlTwo: FormControl<string>
+```
+
+If both initial and generic types are not supplied, Angular won't be able to infer the type and the type will be set to `any`. Avoid doing this.
+
+### Form value and raw value types
+Angular does not come with built-in utility type for inferring the type of value property nor getRawValue method. Thanks to the talented individuals in our company, we have created a utility type that you can use. The helpers are part of the ngx-nuts-and-bolts package on the NPM. Take a look at official [documentation](https://infinum.github.io/ngx-nuts-and-bolts/docs/form-utils) to learn more.
+
+### Form control bindings
+Aim to bind form controls directly in the template using `formControl` instead of `formControlName` to catch errors as early as possible or not making one in the first place. Using this approach will throw an error if you try to access a control that does not exist, but you will also get auto-complete which further reduces the chance of making an error. You also protect yourself when making changes in the future, because renaming or deleting a FormControl will result in an error in the template. The same goes for accessing form controls in the components. Avoid using ‘get’ to catch errors earlier in the development process.
+
+```ts
+// Component
+    private readonly exampleFormGroup = new FormGroup({
+        exampleControlOne: new FormControl('exampleOne'),
+        exampleControlTwo: new FormControl('exampleTwo', { nonNullable: true }),
+    });
+
+// Template
+    <form [formGroup]="exampleFormGroup">
+        <input formControlName="exampleControlThree" />
+    </form>
+    // Won't throw an error
+
+    <form [formGroup]="exampleFormGroup">
+        <input [formControl]="exampleFormGroup.controls.exampleControlThree" />
+    </form>
+    // Will throw an error in compile time
+```
+
 ## NgxFormObject - our own library for working with forms!
 
 Since we mostly use reactive forms, we've created a library, which makes things a bit easier. The library in question is [ngx-form-object](https://github.com/infinum/ngx-form-object). Check out the official [docs](https://infinum.github.io/ngx-form-object/docs) to find out how to use it.
