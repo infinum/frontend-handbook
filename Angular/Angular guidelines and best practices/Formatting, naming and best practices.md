@@ -217,62 +217,40 @@ class UserServiceStub implements IUserService { }
 
 ## Prefer interface over type
 
-When defining data structures, prefer using interfaces over types. Use types only for those things for which interfaces cannot be used—unions of different types.
+When defining data structures, prefer using types over interfaces. Use interfaces only for things you want to extend or implement, particularly when working with classes.
 
 ```typescript
 // bad
-export type User = {
-  name: string;
-};
+  export interface IUser {
+    name: string;
+  }
 
 // good
-export interface IUser {
-  name: string;
-}
+  export type User = {
+    name: string;
+  };
 
 // good
-export type CSSPropertyValue = number | string;
+  export type CSSPropertyValue = number | string;
+
+// good
+  export class LoadingDialogTestingService implements ExtractPublic<LoadingDialogService> {
+	...
+  }
+
+// good
+  export abstract class User {
+    public id: string;
+  }
+
+  export class AdminModel extends User {
+    public permissions: Array<Permission>;
+  }
+
+  export class AuthorModel extends User {
+    public posts: Array<Post>;
+  }
 ```
-
-You might be tempted to use a type for a union of models. For example, in some CMS solutions you might have `AdminModel` and `AuthorModel`. The user can log in using either admin or author credentials.
-
-```typescript
-export class AdminModel {
-  public id: string;
-  public permissions: Array<Permission>;
-}
-
-export class AuthorModel {
-  public id: string;
-  public posts: Array<Post>;
-}
-
-export type User = AdminModel | AuthorModel;
-
-// in some component
-@Input() public user: User;
-
-// in template
-User id: {{ user.id }}
-```
-
-This might seem fine at first, but it is actually an anti-pattern. What you should actually do in a case like this is create an abstraction above `AdminModel` and `AuthorModel`:
-
-```typescript
-export abstract class User {
-  public id: string;
-}
-
-export class AdminModel extends User {
-  public permissions: Array<Permission>;
-}
-
-export class AuthorModel extends User {
-  public posts: Array<Post>;
-}
-```
-
-**TL;DR:** Prefer interfaces and abstractions over types. Use types only when you need union types.
 
 ## Ordering the class members (including getters and lifecycle hooks)
 
