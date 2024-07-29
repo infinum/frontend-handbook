@@ -1116,6 +1116,49 @@ export class ExampleComponent {
 }
 ```
 
+## Consider binding route params to component inputs
+
+For a long time the go-to way for accessing route params was to inject the `activatedRoute` into our component and subscribe to the `paramMap` observable. Angular v16 introduced a way to bind the route parameters directly to the components inputs which then allows us to react to the changes same as with all other inputs. In order to to enable this feature we must pass and call [withComponentInputBinding](https://angular.dev/guide/routing/common-router-tasks#add-withcomponentinputbinding) function into the `provideRouter`. This can be useful as it removes some boilerplate from the components and we avoid having separate observable for handling param changes.
+
+```ts
+// How we use it now
+const exampleRoutes: Routes = [
+	{
+		path: ':exampleParameter',
+		loadComponent: () => import('<path-to-component>'),
+	},
+];
+
+@Component(...)
+export class MyComponent {
+  private readonly activatedRoute = inject(ActivatedRoute);
+
+  constructor() {
+		this.activatedRoute.paramMap.pipe(map((paramMap) => paramMap.get('exampleParameter'))).subscribe(...);
+	}
+}
+
+// With input binding
+// main.ts
+bootstrapApplication(AppComponent, {
+	providers: [provideRouter(rootRoutes, withComponentInputBinding())],
+});
+
+// Input decorator version
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() exampleParameter?: string;
+  // Behaves like regular input
+}
+
+// Signal input version
+@Component(...)
+export class MyComponent implements OnChanges {
+  public exampleParameter = input<string>();
+}
+```
+
+
 ## Auto unwrap default exports when lazy loading
 
 With Angular v15 it is possible to leverage default exports to shorten the syntax when lazy loading a module or a standalone component. Note that the CLI still generates modules and components without the default export so you will need to add that by yourself.
