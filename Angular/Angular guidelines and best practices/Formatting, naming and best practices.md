@@ -116,8 +116,8 @@ Prefer to use the new template built-in [control flow](https://angular.dev/guide
 - `*ngIf` has a small amount of overhead, which means the new syntax is at least a bit more performant.
 - Using if/else in the template no longer requires the usage of `ng-template`
 
-```ts
-// directives approach
+```html
+<!-- directives approach -->
 <div *ngIf="condition; else otherTemplate">
   <component-1 />
 </div>
@@ -126,7 +126,7 @@ Prefer to use the new template built-in [control flow](https://angular.dev/guide
   <component-2 />
 </ng-template>
 
-// built-in template syntax
+<!-- built-in template syntax -->
 @if (condition) {
   <component-1 />
 } @else {
@@ -134,6 +134,13 @@ Prefer to use the new template built-in [control flow](https://angular.dev/guide
 }
 ```
 
+## Deferrable views
+[Deferrable views](https://angular.dev/guide/defer) were added in the Angular v17 along with the new built-in control flow syntax. They consist of different blocks and triggers, please refer to the official documentation for the whole list. Arguably the most important block is the `@defer` which allows us to defer loading of the component until conditions are met. With deferrable views we increase performance by reducing the initial bundle size and defer components which may never be loaded. Since the syntax is quite new, the use cases and different powerful block/trigger combinations are yet to be discovered and put to a good use, but some of the obvious usages would be:
+
+- Component which are not visible by default, for example, behind `@if`. Often there are cases where a bigger page is split into sections which are expanded on user's action. If the page has many of those, `@defer` block will yield faster load times.
+- Heavy component which are not visible in the viewport when the page loads. For example if the heavy component is the last one on the bigger page, we can utilize `viewport` trigger to load it when the component enters the viewport. Perhaps, the user won't even scroll to the end of the page, so the component won't even be loaded.
+
+While you might be tempted to wrap everything into deferrable blocks, there is absolutely no need for such actions, use it where it makes sense. Analyze your code, check for potential bottlenecks and then defer loading of the component where necessary.
 
 ## Prefer self-closing syntax
 Self-closing syntax was introduced in the Angular v15.1 and is basically just a syntactic sugar, but it often does reduce template code and increases readability. While there is nothing we wrong with regular syntax, prefer to use self-closing one whenever possible. Note that this will work with all Angular components, not just your own, Angular Material components are often overlooked. It can also be beneficial to add linter rule to help enforce the syntax.
@@ -143,12 +150,10 @@ Self-closing syntax was introduced in the Angular v15.1 and is basically just a 
 <!-- not preferred - we have extra tags bloating the template -->
 <my-component></my-component>
 <my-other-component></my-other-component>
-<my--component></my--component>
 
 <!-- preferred more concise and readable -->
 <my-component />
 <my-other-component />
-<my--component />
 ```
 
 ## Use attributes for transclusion selectors
