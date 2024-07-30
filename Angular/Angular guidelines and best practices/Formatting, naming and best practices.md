@@ -109,6 +109,32 @@ In the following example, property binding is unnecessary because we are assigni
 }
 ```
 
+## Built-in control flow
+Prefer to use the new template built-in [control flow](https://angular.dev/guide/templates/control-flow) instead of structural directives on Angular v17 or higher. While the `*ngIf` and other directives are not deprecated and will remain as one of the core features even in the future, the new template syntax brings some developer experience improvements.
+
+- `*ngIf` is a part of the `CommonModule` which we almost always imported in our components. With the new syntax, this is no longer necessary. Components generated using the Angular CLI will no longer import this module by default.
+- `*ngIf` has a small amount of overhead, which means the new syntax is at least a bit more performant.
+- Using if/else in the template no longer requires the usage of `ng-template`
+
+```ts
+// directives approach
+<div *ngIf="condition; else otherTemplate">
+  <component-1 />
+</div>
+
+<ng-template #otherTemplate>
+  <component-2 />
+</ng-template>
+
+// built-in template syntax
+@if (condition) {
+  <component-1 />
+} @else {
+  <component-2 />
+}
+```
+
+
 ## Prefer self-closing syntax
 Self-closing syntax was introduced in the Angular v15.1 and is basically just a syntactic sugar, but it often does reduce template code and increases readability. While there is nothing we wrong with regular syntax, prefer to use self-closing one whenever possible. Note that this will work with all Angular components, not just your own, Angular Material components are often overlooked. It can also be beneficial to add linter rule to help enforce the syntax.
 
