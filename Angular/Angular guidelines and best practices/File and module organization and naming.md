@@ -23,7 +23,7 @@ src/app/services/post/
 
 ## Pages and shared components
 
-Components that are loaded directly via routing (by either `component` or `loadChildren`) should be placed in the `src/app/pages` directory. If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. If there are multiple levels of routing, the main `src/app` directory structure can be mirrored under some specific page directory. In other words, you can have components, services, pages, etc. directories inside some specific page directory. This helps separate the codebase on a feature/domain-basis.
+Components that are loaded directly via routing (by either `loadComponent` or `loadChildren`) should be placed in the `src/app/pages` directory. If a component is used in multiple places, it should be extracted to the nearest common ancestor's components directory. If there are multiple levels of routing, the main `src/app` directory structure can be mirrored under some specific page directory. In other words, you can have components, services, pages, etc. directories inside some specific page directory. This helps separate the codebase on a feature/domain-basis.
 
 As an example, please consider the following routing setup:
 
@@ -80,6 +80,40 @@ pages/
 │       │   │   ├── new-post.component.ts # renders some header/footer and post-form component
 │       │   └── edit-post/
 │       │       ├── edit-post.component.ts # renders some header/footer and post-form component
+```
+
+## Standalone component routing
+Avoid using routing module pattern on v15 or higher and prefer separate route files when using `loadChildren`. This pattern reduces amount of files, code bloating and the required boilerplate.
+
+```ts
+//root-routes.ts
+const rootRoutes: Routes = [
+	{
+		path: '',
+		redirectTo: 'home',
+		pathMatch: 'full',
+	},
+	{
+		path: 'home',
+		loadComponent: () => import('<path-to-component>'),
+	},
+	{
+		path: 'users',
+		loadChildren: () => import('./pages/users/users-routes'),
+	},
+];
+
+export default rootRoutes;
+
+//users-routes.ts
+const usersRoutes: Routes = [
+	{
+		path: 'login',
+		loadComponent: () => import('<path-to-component>'),
+	},
+];
+
+export default usersRoutes;
 ```
 
 ## Animations
