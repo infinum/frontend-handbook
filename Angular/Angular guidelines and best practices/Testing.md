@@ -119,7 +119,7 @@ There are multiple types of testing doubles and some wording that goes along wit
 - [What do you mean by Test Doubles?](https://medium.com/@kashwin95kumar/what-do-you-mean-by-test-doubles-b57a2a792973)
 - [Test Doubles — Fakes, Mocks and Stubs](https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da)
 
-The "final form" of testing and test doubles is having two implementations that implement the same functionality. One implementation is used in production codebase, while the other implementation is used in testing for verification that both implementations show the same behaviour in all the cases. This is rarely done as it is very time-consuming, but it could be a good idea for testing some critical code.
+The "final form" of testing and test doubles is having two implementations that implement the same functionality. One implementation is used in production codebase, while the other implementation is used in testing for verification that both implementations show the same behavior in all the cases. This is rarely done as it is very time-consuming, but it could be a good idea for testing some critical code.
 
 ### Typing test doubles
 
@@ -129,7 +129,7 @@ When writing a test double for some service, component or some other `class`, yo
 2. Create an interface that defines all the public members
 3. Utilize typescript to extract the public interface
 
-The simplest approach, approach 1. is obviously flawed as it can lead to omissions due to human forgetfulness.Creating an interface is much better but it increases friction. If some component's input changes, you have to update three files - original component, mock component, and interface.
+The simplest approach, approach 1. is obviously flawed as it can lead to omissions due to human forgetfulness. Creating an interface is much better but it increases friction. If some component's input changes, you have to update three files - original component, mock component, and interface.
 
 Surely there must be a way to do this by utilizing some TypeScript magic?
 
@@ -141,13 +141,9 @@ export class UserTestingService implements UserService {}
 
 That seems reasonable, right? Well, TypeScript behaves a bit strange in this regard, as it will require you to implement not only the public members of `UserService`, but also private and protected members. You can read about why that is [here](https://github.com/microsoft/TypeScript/issues/18499).
 
-Luckily, there is a way to extract only the public members of a class with this custom type:
+Luckily, there is a way to extract only the public members of a class with the [ExtractPublic](https://infinum.github.io/ngx-nuts-and-bolts/docs/testing-utils/extract-public) custom type, which is a part of `ngx-nuts-and-bolts`.
 
 ```typescript
-export type ExtractPublic<T extends object> = {
-  [K in keyof T]: T[K];
-};
-
 export class UserTestingService implements ExtractPublic<UserService> {}
 ```
 
@@ -336,12 +332,12 @@ Mock implementation of `AuthenticationTestingService` for our purpose could look
 ```ts
 export class AuthenticationTestingService implements ExtractPublic<AuthenticationService>{
   public getAccessToken(): string{
-    return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTY0MzEwNTA2MywiZXhwIjoxNjQzMTA4NjYzfQ.6JOJdydKd-jzZMDWiqr2mUvC78DIwJNd0ye-OZOymGg' // JTW token generated via https://token.dev/
+    return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTY0MzEwNTA2MywiZXhwIjoxNjQzMTA4NjYzfQ.6JOJdydKd-jzZMDWiqr2mUvC78DIwJNd0ye-OZOymGg' // JWT token generated via https://token.dev/
   }
 }
 ```
 
-As with regular services, we create a test double for `AuthenticationService`, and pass it to the `TestBed` configuration. Additionally, we need to register our interceptor via the `HTTP_INTERCETPORS` multi provider token.
+As with regular services, we create a test double for `AuthenticationService`, and pass it to the `TestBed` configuration. Additionally, we need to register our interceptor via the `HTTP_INTERCEPTORS` multi provider token.
 
 ```ts
 describe('AuthorizationInterceptor', () => {
