@@ -95,30 +95,30 @@ You don't need to specify the package manager in Dockerfile if you've provided `
 
 2. Easily switch between different Node.js versions using:
 
-   ```bash
-   n <version>
-   ```
+```bash
+n <version>
+```
 
-   For example, to switch to Node.js version 14.17.0:
+For example, to switch to Node.js version 14.17.0:
 
-   ```bash
-   n 14.17.0
-   ```
+```bash
+n 14.17.0
+```
 
 3. Ensure your `package.json` specifies the `Node.js` version:
 
-   ```json
-   {
-     "engines": {
-       "node": "20.15.1"
-     }
+```json
+{
+   "engines": {
+      "node": "20.15.1"
    }
-   ```
+}
+```
 
 4. Automatic Version Switching: Use the `n auto` command to switch `Node.js` versions based on the engines field:
 
-   ```bash
-   n auto
-   ```
+```bash
+n auto
+```
 
 Specifying `engines` field and using `n` ensures that the correct version of `Node.js` is always used for your project, helping to prevent compatibility issues.
