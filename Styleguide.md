@@ -2,7 +2,7 @@ Based on the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascrip
 
 ## [References](#references)
 
-Avoid using ``var``. If you're working with values that don't change, use ``const``. In other cases, use ``let``.
+Avoid using `var`. If you're working with values that don't change, use `const`. In other cases, use `let`.
 
 Note that both `let` and `const` are block-scoped.
 
@@ -29,6 +29,7 @@ Also, keep [temporal dead zones](http://jsrocks.org/2015/01/temporal-dead-zone-t
 ```
 
 ## [Objects](#objects)
+
 Use computed property names when creating objects with dynamic property names.
 
 ```js
@@ -103,6 +104,7 @@ const obj = {
 Quote only properties that are invalid identifiers.
 
 ## [Arrays](#arrays)
+
 Use array spreads `...` to copy arrays.
 
 ```js
@@ -127,6 +129,7 @@ const nodes = Array.from(foo);
 ```
 
 ## [Destructuring](#destructuring)
+
 Use object destructuring when accessing and using multiple properties of an object.
 
 ```js
@@ -168,7 +171,7 @@ Use object destructuring for multiple return values, not array destructuring.
 ```js
 // bad
 function processInput(input) {
-  // then a miracle occurs
+  // process the input and return necessary properties
   return [left, right, top, bottom];
 }
 
@@ -177,7 +180,7 @@ const [left, __, top] = processInput(input);
 
 // good
 function processInput(input) {
-  // then a miracle occurs
+  // process the input and return necessary properties
   return { left, right, top, bottom };
 }
 
@@ -196,11 +199,6 @@ function sayHi(name) {
 // bad
 function sayHi(name) {
   return ['How are you, ', name, '?'].join();
-}
-
-// bad
-function sayHi(name) {
-  return `How are you, ${ name }?`;
 }
 
 // good
@@ -266,7 +264,7 @@ function handleThings(name, opts = {}) {
 
 ## [Arrow functions](#arrow-functions)
 
-When you must use function expressions (e.g., when passing an anonymous function), use arrow function notation.
+Use arrow functions for anonymous function expressions.
 
 ```js
 // bad
@@ -282,7 +280,7 @@ When you must use function expressions (e.g., when passing an anonymous function
 });
 ```
 
-If the function body consists of a single expression, omit the braces and use the implicit return. Otherwise, keep the braces and use a `return` statement.
+If the function body consists of a single expression, omit the braces and use implicit return.
 
 ```js
 // good
@@ -290,8 +288,7 @@ If the function body consists of a single expression, omit the braces and use th
 
 // bad
 [1, 2, 3].map((number) => {
-  const nextNumber = number + 1;
-  `A string containing the ${nextNumber}.`;
+  return `A string containing the ${number}.`;
 });
 
 // good
@@ -301,33 +298,21 @@ If the function body consists of a single expression, omit the braces and use th
 });
 ```
 
-In case the expression spans over multiple lines, wrap it in parentheses for better readability.
+Ensure clarity between arrow functions and comparison operators.
 
 ```js
 // bad
-[1, 2, 3].map((number) => 'As time went by, the string containing the ' +
-  `${number} became much longer. So we needed to break it over multiple ` +
-  'lines.'
-);
-
-// good
-[1, 2, 3].map((number) => (
-  `As time went by, the string containing the ${number} became much ` +
-  'longer. So we needed to break it over multiple lines.'
-));
-```
-
-Avoid confusing arrow function syntax (`=>`) with comparison operators (`<=`, `>=`).
-
-```js
-// bad
-const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize;
+const itemHeight = (item) =>
+  item.height > 256 ? item.largeSize : item.smallSize;
 
 // bad
-const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize;
+const itemHeight = (item) =>
+  item.height > 256 ? item.largeSize : item.smallSize;
 
 // good
-const itemHeight = (item) => { return item.height > 256 ? item.largeSize : item.smallSize; }
+const itemHeight = (item) => {
+  return item.height > 256 ? item.largeSize : item.smallSize;
+};
 ```
 
 ## [Modules](#modules)
@@ -350,170 +335,169 @@ export default es6;
 
 ## [Variables](#variables)
 
-Group all your `const`s and then group all your `let`s.
+Group all your const declarations together and then group all your let declarations together for better readability.
 
 ```js
 // bad
-let i, len, dragonball,
-    items = getItems(),
-    goSportsTeam = true;
+let index,
+  total,
+  projectName,
+  data = fetchData(),
+  isActive = true;
 
 // bad
-let i;
-const items = getItems();
-let dragonball;
-const goSportsTeam = true;
-let len;
+let index;
+const data = fetchData();
+let projectName;
+const isActive = true;
+let total;
 
 // good
-const goSportsTeam = true;
-const items = getItems();
-let dragonball;
-let i;
-let length;
+const isActive = true;
+const data = fetchData();
+let projectName;
+let index;
+let total;
 ```
 
-Assign variables where you need them, but place them in a reasonable place.
+## [Trailing commas](#commas)
+
+Using an additional trailing comma in objects, arrays, and function parameters can lead to cleaner git diffs and improve code maintenance. Here's why:
+
+1. Cleaner Git Diffs: Adding a trailing comma minimizes the number of lines changed when new elements are added, making it easier to review code changes.
+2. Consistency: Ensures a consistent style in your codebase, which can improve readability.
+3. Transpiler Support: Transpilers like Babel will remove trailing commas in the transpiled code, ensuring compatibility with older browsers.
+
+**Example: Objects**
 
 ```js
-// bad - unnecessary function call
-function checkName(hasName) {
-  const name = getName();
-
-  if (hasName === 'test') {
-    return false;
-  }
-
-  if (name === 'test') {
-    this.setName('');
-    return false;
-  }
-
-  return name;
-}
-
-// good
-function checkName(hasName) {
-  if (hasName === 'test') {
-    return false;
-  }
-
-  const name = getName();
-
-  if (name === 'test') {
-    this.setName('');
-    return false;
-  }
-
-  return name;
-}
-```
-
-## [Hoisting](#hoisting)
-
-`var` declarations get hoisted to the top of their scope; their assignment does not. `const` and `let` declarations have [Temporal Dead Zones (TDZ)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let). It's important to know why [typeof is no longer safe](http://es-discourse.com/t/why-typeof-is-no-longer-safe/15).
-
-```js
-// we know this wouldn't work (assuming there
-// is no notDefined global variable)
-function example() {
-  console.log(notDefined); // => throws a ReferenceError
-}
-
-// creating a variable declaration after you
-// reference the variable will work due to
-// variable hoisting. Note: the assignment
-// value of `true` is not hoisted.
-function example() {
-  console.log(declaredButNotAssigned); // => undefined
-  var declaredButNotAssigned = true;
-}
-
-// the interpreter is hoisting the variable
-// declaration to the top of the scope,
-// which means our example could be rewritten as:
-function example() {
-  let declaredButNotAssigned;
-  console.log(declaredButNotAssigned); // => undefined
-  declaredButNotAssigned = true;
-}
-
-// using const and let
-function example() {
-  console.log(declaredButNotAssigned); // => throws a ReferenceError
-  console.log(typeof declaredButNotAssigned); // => throws a ReferenceError
-  const declaredButNotAssigned = true;
-}
-```
-
-## [Commas](#commas)
-
-Use an additional trailing comma. This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code, which means you don't have to worry about the trailing comma problem in legacy browsers.
-
-```js
-// bad - git diff without trailing comma
+// Bad - without trailing comma
 const hero = {
-     firstName: 'Florence',
--    lastName: 'Nightingale'
-+    lastName: 'Nightingale',
-+    inventorOf: ['coxcomb graph', 'modern nursing']
+  firstName: 'Florence',
+  lastName: 'Nightingale'
 };
 
-// good - git diff with trailing comma
+// Good - with trailing comma
 const hero = {
-     firstName: 'Florence',
-     lastName: 'Nightingale',
-+    inventorOf: ['coxcomb chart', 'modern nursing'],
+  firstName: 'Florence',
+  lastName: 'Nightingale',
 };
+```
 
+**Example: Arrays**
+
+```js
 // bad
-const hero = {
-  firstName: 'Dana',
-  lastName: 'Scully'
-};
-
 const heroes = [
   'Batman',
   'Superman'
 ];
 
 // good
-const hero = {
-  firstName: 'Dana',
-  lastName: 'Scully',
-};
-
 const heroes = [
   'Batman',
   'Superman',
 ];
 ```
 
-## [Naming conventions](#naming-conventions)
-
-Don't save references to `this`. Use arrow functions or Function#bind.
+**Example: Function Parameters**
 
 ```js
 // bad
-function foo() {
-  const self = this;
-  return function () {
-    console.log(self);
-  };
-}
-
-// bad
-function foo() {
-  const that = this;
-  return function () {
-    console.log(that);
-  };
+function createHero(
+  firstName,
+  lastName,
+  isHero
+) {
+  // ...
 }
 
 // good
-function foo() {
-  return () => {
-    console.log(this);
-  };
+function createHero(
+  firstName,
+  lastName,
+  isHero,
+) {
+  // ...
+}
+```
+
+## [Naming conventions](#naming-conventions)
+
+Naming functions is a critical and often challenging aspect of programming. Clear and descriptive function names improve readability and maintainability of the code. Here are some best Practices for naming functions:
+
+### Naming functions
+
+**Descriptive and Specific:**
+Function names should clearly describe what the function does. Use verbs to name functions that perform actions. Avoid vague names.
+
+```js
+// bad
+function process() {
+  // ...
+}
+
+// good
+function calculateTotalPrice() {
+  // ...
+}
+```
+
+**Avoid Abbreviations:**
+Use full words to avoid confusion.
+
+```js
+// bad
+function calcTtl() {
+  // ...
+}
+
+// good
+function calculateTotal() {
+  // ...
+}
+```
+
+### Naming variables
+
+**Use Clear and Descriptive Names:**
+
+```js
+// bad
+let x = 10;
+let y = 20;
+
+// good
+let width = 10;
+let height = 20;
+```
+
+**Use Meaningful Context:**
+
+Include context to avoid ambiguity.
+
+```js
+// bad
+let temp = 98;
+
+// good
+let bodyTemperature = 98;
+```
+
+**Combining Best Practices**
+
+```js
+// bad
+function calc() {
+  let w = 10;
+  let h = 20;
+  return w * h;
+}
+
+// good
+function calculateArea() {
+  const width = 10;
+  const height = 20;
+  return width * height;
 }
 ```
