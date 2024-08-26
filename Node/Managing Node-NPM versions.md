@@ -28,7 +28,7 @@ There are a couple of ways to manage versions of `Node.js`. All options are fine
 
 #### Corepack
 
-`Corepack` is a tool that comes bundled with Node.js starting from version `16.10.0`. It provides a way to manage package managers (such as `npm`, `yarn`, and `pnpm`) without needing to install them globally. `Corepack` ensures that the specific package manager version specified in your project is used, which helps maintain consistency across different development environments.
+`Corepack` is a tool that comes bundled with Node.js starting from version `16.10.0`. It provides a way to manage package managers (such as `npm`, `yarn`, and `pnpm`) without needing to install them globally. Corepack ensures that the specific package manager version specified in your project is used, which helps maintain consistency across different development environments.
 
 **How Corepack works**
 
@@ -48,13 +48,38 @@ To ensure your project uses specific version of and `pnpm`, you should provide t
 
 **How Corepack manages versions**
 
-By specifying the `packageManager` version in your `package.json`, `Corepack` will:
+By specifying the `packageManager` version in your `package.json`, Corepack will:
 
-* **Check the package.json**: When you run commands that involve the package manager (e.g., installing dependencies), `Corepack` reads the `packageManager` field in your `package.json`.
-* **Download and Install**: If the specified package manager version is not already installed, `Corepack` will automatically download and install it.
+* **Check the package.json**: When you run commands that involve the package manager (e.g., installing dependencies), Corepack reads the `packageManager` field in your `package.json`.
+* **Download and Install**: If the specified package manager version is not already installed, Corepack will automatically download and install it.
 * **Use the Specified Version**: Corepack ensures that the commands are executed using the specified version of the package manager, ensuring consistency across different environments.
 
 This process helps manage the appropriate versions of the package manager for your project, ensuring everyone working on the project uses the same versions.
+
+**Using Corepack in Docker**
+
+Using Corepack in your Docker environment ensures consistency between development and production environments. By leveraging Corepack:
+
+* You avoid potential version mismatches by locking down the exact version of pnpm used across environments.
+* You gain the benefits of pnpm's strict dependency management and efficient disk usage within your containerized application.
+
+To use Corepack in a Dockerfile, you need to ensure that Corepack is enabled and properly configured for your project within the container environment. Here’s a step-by-step guide on how to set up Corepack with pnpm in a Dockerfile:
+
+```dockerfile
+# Use an official Node.js image as a base image
+FROM node:22-alpine
+
+# Enable Corepack, which is included by default in Node.js versions >= 16.10.0
+RUN corepack enable
+
+# Optional: Ensure the specific package manager version you want is installed
+RUN corepack prepare pnpm@7.15.0 --activate
+
+# Set the working directory in the container
+WORKDIR /app
+```
+
+You don't need to specify the package manager in Dockerfile if you've provided `packageManager` field in your `package.json` file.
 
 #### n
 
@@ -85,7 +110,7 @@ This process helps manage the appropriate versions of the package manager for yo
    ```json
    {
      "engines": {
-       "node": ">= 20.15.0"
+       "node": "20.15.1"
      }
    }
    ```
