@@ -3,9 +3,14 @@
 
 When adding UI components, you should be able to group them in three root domains:
 
-1. `core` - primitives, low level components
-2. `shared` - components that are shared all across the app
-3. `features` - root folder for components based on a specific feature (could be scoped by page or island)
+**1. Core Domain**
+Core components are the smallest building blocks, highly reusable and composable. Examples include Card and Section.
+
+**2. Shared Domain**
+Shared components are built out of core components and shared between feature components. Examples include InputField and MainLayout.
+
+**3. Features Domain**
+Feature components are specific to a particular feature or section of the app. Note that the structure of the features folder may vary from project to project. Developers should evaluate if this pattern is suitable for their specific project requirements.
 
 Folder naming rules:
 
@@ -115,11 +120,11 @@ Here are some examples of core components:
 We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
 They could be shared between feature components and encapsulates some specific logic of an feature.
 
-We can split them into three domains:  
+We can split them into three domains:
 
-1. `UI` - higher order user interface components  
-2. `Entity` - UI representation of a data models  
-3. `Utility` - headless utility components  
+1. `UI` - higher order user interface components
+2. `Entity` - UI representation of a data models
+3. `Utility` - headless utility components
 
 #### Shared *UI* domain
 
@@ -235,15 +240,19 @@ Utility components usually does not have any visual representation on the screen
 
 #### `components` folder
 
-When adding `components` folder, you basically extracting smaller chunks of your main component that are not going to be used anywhere else, only in that component.
+When adding a components folder, you are essentially breaking down larger main components into smaller, reusable chunks that are only relevant within that specific component.
 
-Note: There _should_ be only one level of component nesting inside the `components` folder. We are also considering renaming this folder from `components` to `elements` to avoid confusion with the project root `components` folder. But we are still not sure about this.
+Guidelines:
+
+1. **Single Level Nesting**: Only one level of component nesting should be used inside the components folder to keep the structure simple and maintainable.
+2. **Component Purpose**: These smaller components should not be reused outside their parent component.
+3. **Naming Consideration**: To avoid confusion with the root components folder, consider renaming this folder to elements. This renaming helps differentiate between global components and component-specific elements.
 
 Example:
-
-In this example we have the `MainTable` component that has a unique header component that should be placed inside the `/components` folder because it has some styles, translations and an icon.
+For a MainTable component with a unique TableHeader, the structure should look like this:
 
 ```jsx
+// src/components/features/MainTable/components/TableHeader.tsx
 export const TableHeader: FC<FlexProps> = (props) => {
   const { t } = useTranslation();
   return (
@@ -251,11 +260,7 @@ export const TableHeader: FC<FlexProps> = (props) => {
       <Heading size="md" colorScheme="secondary" as="h3">
         {t("table.title")}
       </Heading>
-      <Button
-        leftIcon={<ArrowForwardIcon />}
-        colorScheme="teal"
-        variant="solid"
-      >
+      <Button leftIcon={<ArrowForwardIcon />} colorScheme="teal" variant="solid">
         {t("table.viewAll")}
       </Button>
     </Flex>
@@ -263,85 +268,78 @@ export const TableHeader: FC<FlexProps> = (props) => {
 };
 ```
 
-The folder structure should look something like this:
+Folder structure for this feature:
 
 ```
 src
 └── components
     └── features
-        └── some-feature
-            └── MainTable
-                ├── components
-                │   └── TableHeader.tsx
-                └── MainTable.tsx
+        └── MainTable
+            ├── components
+            │   └── TableHeader.tsx
+            └── MainTable.tsx
 ```
 
 ## Elements
 
-If you have a lot of style declarations inside your component file, enough to make the file difficult to read, you should create a separate file `ComponentName.elements.ts` where you will store your custom components.
+If you have many style declarations inside your component file, making it difficult to read, create a separate file named `ComponentName.elements.ts to store your custom styled components.
 
 Example:
 
 ```
-...
-.
 └── WelcomeCard
     ├── WelcomeCard.tsx
     └── WelcomeCard.elements.ts
 ```
 
-In the following example `WelcomeCardLayoutOverlay` is a pure Functional component because chakra factory doesn't allow the custom `isOpen` prop.
 
-```tsx
-import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
+**WelcomeCard.tsx:**
+```js
+import { chakra } from '@chakra-ui/react';
 
-export const WelcomeCardLayout = chakra(Grid, {
+export const WelcomeCardLayout = chakra('div', {
   baseStyle: {
-    gridTemplateRows: '1fr min-content min-content',
-    gridTemplateColumns: '1fr min-content',
-    rowGap: '16px',
+    padding: '16px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 });
 
-export const WelcomeCardLayoutContent = chakra(GridItem, {
+export const WelcomeCardTitle = chakra('h1', {
   baseStyle: {
-    position: 'relative',
-    gridRowStart: '1',
-    gridRowEnd: 'auto',
-    gridColumnStart: '1',
-    gridColumnEnd: 'auto',
+    fontSize: '24px',
+    color: 'teal',
   },
-});
-
-export interface WelcomeCardLayoutOverlayProps extends TMLChakraProps<"div"> {
-  isOpen?: boolean;
-};
-
-export const WelcomeCardLayoutOverlay = forwardRef<WelcomeCardOverlayProps, "div">(({ isOpen, ...rest }, ref) => {
-  const height = isOpen ? { base: '300px', md: '500px' } : null;
-
-  return (
-    <GridItem
-      ref={ref}
-      h={height}
-      position="relative"
-      column="1 / 3"
-      row="1 / 2"
-      {...rest}
-    />
-  );
 });
 ```
 
-Moving things to `.elements.tsx` should be the last step in the development process and it should only be used for organizational purposes, i.e. when the main component becomes cluttered and unreadable.
+**WelcomeCard.elements.ts:**
+```js
+import { chakra } from '@chakra-ui/react';
 
-Here are some rules that you should follow when creating elements:
+export const WelcomeCardLayout = chakra('div', {
+  baseStyle: {
+    padding: '16px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+});
 
-- `.elements.tsx` should only be used for organizational purposes
-- custom components are tightly coupled with the root component and they should not be used in the outside scope
-- mixture of `chakra factory` and `Function Components` is allowed
-- using hooks inside elements is not recommended
-- wrapping in forwardRef is recommended but not mandatory (you need this in case you want to access real DOM element in the root component)
+export const WelcomeCardTitle = chakra('h1', {
+  baseStyle: {
+    fontSize: '24px',
+    color: 'teal',
+  },
+});
+```
+
+Moving things to .elements.tsx should be the last step in the development process and it should only be used for organizational purposes, i.e., when the main component becomes cluttered and unreadable.
+
+**Rules for Creating Elements:**
+- Use `.elements.tsx` for organizational purposes only.
+- Custom components in `.elements.tsx` should not be reused outside their root component.
+- Combining chakra factory and functional components is allowed.
+- Avoid using hooks inside elements.
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
@@ -384,7 +382,7 @@ In this case, inside a specific component, we could add a subfolder `layouts` (n
         └── UserCard.tsx
 ```
 
-For this case, inside `UserCard.tsx` we would have something like this: 
+For this case, inside `UserCard.tsx` we would have something like this:
 
 With help of Chakra UI [Display](https://chakra-ui.com/docs/styled-system/style-props#display) helper props:
 

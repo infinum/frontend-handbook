@@ -5,62 +5,68 @@ By splitting components into smaller reusable ones, you're also potentially lowe
 
 ```jsx
 // BAD
-export const SocialButton = ({ type, ...rest }) => {
-  if (type === 'google') {
-    return (
-      <Button onClick={() => window.open('googleAuthLink')} {...rest}>
-        <GoogleIcon />
-        Login with Google
-      </Button>
-    );
-  }
-
-  if (type === 'facebook') {
-    return (
-      <Button onClick={() => window.open('facebookAuthLink')} {...rest}>
-        <FacebookIcon />
-        Login with Facebook
-      </Button>
-    );
-  }
-
-  if (type === 'linkedIn') {
-    return (
-      <Button onClick={() => window.open('linkedAuthLink')} {...rest}>
-        <LinkedInIcon />
-        Login with LinkedIn
-      </Button>
-    );
-  }
-};
-
-<SocialButton type="google" />
+const UserProfile = ({ user }) => (
+  <div>
+    <div>
+      <img src={avatar} alt="User Avatar" />
+      <h1>{name}</h1>
+      <p>{bio}</p>
+    </div>
+    {user.posts.map(post => <p key={post.id}>{post.content}</p>)}
+  </div>
+);
 ```
 
 ```jsx
 // GOOD
-export const SocialButton = ({ href, icon, children, ...rest }) => {
-  return (
-    <Button onClick={() => window.open(href)} {...rest}>
-      {icon && <span css={{ marginRight: '5px' }}>{icon}</span>}
-      {children}
-    </Button>
-  );
-};
+const UserProfileHeader = ({ avatar, name, bio }) => (
+  <div>
+    <img src={avatar} alt="User Avatar" />
+    <h1>{name}</h1>
+    <p>{bio}</p>
+  </div>
+);
 
-export const GoogleSocialButton = (props) => {
-  return (
-    <SocialButton href={googleAuthLink} icon={<GoogleIcon />} {...props}>
-      {t('googleSocialLogin')}
-    </SocialButton>
-  );
-};
+const UserPosts = ({ posts }) => posts.map(post => <p key={post.id}>{post.content}</p>);
 
-export const FacebookSocialButton = (props) => {
-  return (
-    <SocialButton href={FacebookAuthLink} icon={<FacebookIcon />} {...props}>
-      {t('facebookSocialLogin')}
-    </SocialButton>
-  );
+const UserProfile = ({ user }) => (
+  <div>
+    <UserProfileHeader
+      avatar={user.avatar}
+      name={user.name}
+      bio={user.bio}
+    />
+    <UserPosts posts={user.posts} />
+  </div>
+);
+```
+
+### Avoid Inline Functions and Objects
+Avoid defining functions and objects inside the component render methods to prevent unnecessary re-renders.
+
+```jsx
+// BAD
+const MyComponent = () => {
+  const handleClick = () => {
+    console.log('Clicked');
+  };
+
+  return <button onClick={handleClick}>Click me</button>;
 };
 ```
+
+```jsx
+// GOOD
+const handleClick = () => {
+  console.log('Clicked');
+};
+
+const MyComponent = () => (
+  <button onClick={handleClick}>Click me</button>
+);
+```
+
+
+### Memoize Expensive Calculations
+Use useMemo and useCallback to memoize expensive calculations and functions, but only for truly expensive calculations to avoid unnecessary complexity.
+
