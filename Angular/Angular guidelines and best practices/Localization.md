@@ -48,10 +48,11 @@ The categories for English are `one` for singular, and `other` for any value hig
 
 ### Plural
 
-````json
+```json
 {
  "minutes": "{minutes, plural, one {minute} other {minutes}}"
 }
+```
 
 ```html
 <p>{{ "minutes" | transloco : { minutes: 1 } }}</p>
@@ -60,17 +61,17 @@ The categories for English are `one` for singular, and `other` for any value hig
 
 <p>{{ "minutes" | transloco : { minutes: 5 } }}</p>
 // minutes
-````
+```
 
 ### Ordinal
 
 For ordinals, we need to set the type to `selectordinal`
 
-````json
+```json
 {
  "minutesOrdinal": "{minutes, selectordinal, one {st} two {nd} few {rd} other {th}}",
 }
-
+```
 
 ```html
 <p>1{{ "minutes" | transloco : { minutes: 1 } }}</p>
@@ -92,8 +93,7 @@ For ordinals, we need to set the type to `selectordinal`
 <p>21{{ "minutes" | transloco : { minutes: 21 } }}</p>
 // 21st
 
-
-````
+```
 
 ### Interpolation
 
