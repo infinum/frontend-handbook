@@ -53,7 +53,7 @@ const page = StyleSheet.create({
 
 More on the `Stylesheet API` can be found on:
 
-[https://reactnative.dev/docs/stylesheet](https://reactnative.dev/docs/stylesheet)
+<https://reactnative.dev/docs/stylesheet>
 
 Important thing to recognize here is that all measurement values are written as numbers, not pixels like we are used to in web development. That is because all dimensions in React Native are unitless, and represent density-independent pixels. Setting dimensions this way is common for components that should always render at exactly the same size, regardless of screen dimensions.
 
@@ -62,7 +62,7 @@ Important thing to recognize here is that all measurement values are written as 
 RN uses Flexbox algorithm for defining the component layout. Flexbox properties on RN are practicly identical to web with one difference and that is `flexDirection`. Default value for `flexDirection` property in RN is `column`, where on web it is `row`.
 
 More on Flexbox layout can be found on:
-[https://reactnative.dev/docs/flexbox](https://reactnative.dev/docs/flexbox)
+<https://reactnative.dev/docs/flexbox>
 
 ## Styled-components
 
@@ -83,7 +83,7 @@ Next paragraphs inside the section are related to configuration & usage of `styl
 
 #### Installation
 
-`npm install --save styled-components` or `yarn add styled-components`
+`pnpm install -E styled-components`
 
 #### Usage
 
@@ -219,6 +219,4 @@ export const Circle: React.FunctionComponent = () => {
 #### Theming
 
 Theming in RN with `styled-components` is identical to React.
-More on theming can be found on:
-[link to React guide] // TODO
-[https://styled-components.com/docs/advanced#theming](https://styled-components.com/docs/advanced#theming)
+<https://styled-components.com/docs/advanced#theming>
