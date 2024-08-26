@@ -171,7 +171,7 @@ Use object destructuring for multiple return values, not array destructuring.
 ```js
 // bad
 function processInput(input) {
-  // then a miracle occurs
+  // process the input and return necessary properties
   return [left, right, top, bottom];
 }
 
@@ -180,7 +180,7 @@ const [left, __, top] = processInput(input);
 
 // good
 function processInput(input) {
-  // then a miracle occurs
+  // process the input and return necessary properties
   return { left, right, top, bottom };
 }
 
@@ -288,8 +288,7 @@ If the function body consists of a single expression, omit the braces and use im
 
 // bad
 [1, 2, 3].map((number) => {
-  const nextNumber = number + 1;
-  `A string containing the ${nextNumber}.`;
+  return `A string containing the ${number}.`;
 });
 
 // good
@@ -297,16 +296,6 @@ If the function body consists of a single expression, omit the braces and use im
   const nextNumber = number + 1;
   return `A string containing the ${nextNumber}.`;
 });
-```
-
-For better readability, wrap multiline expressions in parentheses.
-
-```js
-[1, 2, 3].map(
-  (number) =>
-    `As time went by, the string containing the ${number} became much ` +
-    'longer. So we needed to break it over multiple lines.'
-);
 ```
 
 Ensure clarity between arrow functions and comparison operators.
@@ -399,22 +388,36 @@ const hero = {
 
 ```js
 // bad
-const heroes = ['Batman', 'Superman'];
+const heroes = [
+  'Batman',
+  'Superman'
+];
 
 // good
-const heroes = ['Batman', 'Superman'];
+const heroes = [
+  'Batman',
+  'Superman',
+];
 ```
 
 **Example: Function Parameters**
 
 ```js
 // bad
-function createHero(firstName, lastName, isHero) {
+function createHero(
+  firstName,
+  lastName,
+  isHero
+) {
   // ...
 }
 
 // good
-function createHero(firstName, lastName, isHero) {
+function createHero(
+  firstName,
+  lastName,
+  isHero,
+) {
   // ...
 }
 ```
@@ -447,6 +450,7 @@ Use full words to avoid confusion.
 // bad
 function calcTtl() {
   // ...
+}
 
 // good
 function calculateTotal() {
