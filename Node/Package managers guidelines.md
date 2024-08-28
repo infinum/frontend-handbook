@@ -128,7 +128,7 @@ To install all dependencies listed in your package.json, run:
 pnpm install
 ```
 
-#### Adding a New Package
+#### Adding new dependencies
 
 To add a new package as a dependency, use:
 
@@ -152,6 +152,76 @@ To add dependency with exact latest version instead of one with caret:
 
 ```bash
 pnpm add -E storybook
+```
+
+#### Installing dependencies
+
+To install all dependencies listed in package.json:
+
+```bash
+pnpm install
+```
+
+To install only the production dependencies (i.e., those listed under dependencies in package.json):
+
+```bash
+pnpm install --prod
+```
+
+To ensure that the pnpm-lock.yaml file is up to date and installation doesn't regenerate it, which is useful in CI environments to ensure that the lockfile is consistent with what's committed:
+
+```bash
+pnpm install --frozen-lockfile
+```
+
+To install packages from the local cache only, without trying to reach the internet:
+
+```bash
+pnpm install --offline
+```
+
+You can also combine multiple flags together, which is useful in CI/CD, for example:
+
+```bash
+pnpm install --prod --offline --frozen-lockfile
+```
+
+To remove unnecessary files from the local store to save space:
+
+```bash
+pnpm store prune
+```
+
+#### Updating and removing dependencies
+
+To list all installed packages and their versions:
+
+```bash
+pnpm list
+```
+
+To list all outdated dependencies in the project:
+
+```bash
+pnpm outdated
+```
+
+To check for known security vulnerabilities in your dependencies:
+
+```bash
+pnpm audit
+```
+
+To update all dependencies to their latest versions according to the semver range specified in package.json:
+
+```bash
+pnpm update
+```
+
+To remove a package from package.json and update lockfile:
+
+```bash
+pnpm remove <package-name>
 ```
 
 #### Running scripts
@@ -184,6 +254,18 @@ packages:
 ```
 
 This setup allows you to run commands across all packages and share dependencies efficiently.
+
+To run a script in all packages, use:
+
+```bash
+pnpm -r run <script-name>
+```
+
+To run a command only in specified packages, use:
+
+```bash
+pnpm --filter <package-name> <command>
+```
 
 #### Checking Dependency Health
 
