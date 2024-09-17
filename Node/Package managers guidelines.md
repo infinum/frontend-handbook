@@ -180,10 +180,16 @@ To install packages from the local cache only, without trying to reach the inter
 pnpm install --offline
 ```
 
+To install packages from the local cache if they exist there, and download from the internet if they're not cached:
+
+```bash
+pnpm install --prefer-offline
+```
+
 You can also combine multiple flags together, which is useful in CI/CD, for example:
 
 ```bash
-pnpm install --prod --offline --frozen-lockfile
+pnpm install --prod --prefer-offline --frozen-lockfile
 ```
 
 To remove unnecessary files from the local store to save space:
