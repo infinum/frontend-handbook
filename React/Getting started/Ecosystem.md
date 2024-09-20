@@ -13,13 +13,11 @@ In the next sections we will cover some topics related to React ecosystem used i
 
 Next.js supports TypeScript by default and has built-in types for pages and the API.
 
-- [Get started with TypeScript in Next.js](https://nextjs.org/docs/basic-features/typescript).
+- [Get started with TypeScript in Next.js](https://nextjs.org/docs/app/building-your-application/configuring/typescript).
 
 If you are unfamiliar with Typescript you can go through [documentation](https://www.typescriptlang.org/docs/home.html) or play with it in a [playground](https://www.typescriptlang.org/play/index.html).
 
-Next.js uses `'@babel/preset-typescript'` instead of `tsc` so some features are not supported
-
-> Does not support `namespaces` or `const enums` because those require type information to transpile. Also does not support `export =` and `import =`, because those cannot be transpiled to ES.next.
+> Next.js uses `SWC`, and it does not support features that require type information since it focuses on syntax transformation without checking types. Because of that `namespaces` or `const enums` will not work because those require type information to transpile, and `export =` or `import =` cannot be cleanly transpiled to ES module syntax (ESM).
 
 ### Prettier
 
@@ -71,6 +69,6 @@ Automated testing is very important in software development. It gives us the ass
 
 ### Internationalization
 
-We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react.i18next](https://react.i18next.com/) for implementing internationalization in React applications.
+We use [polyglot-cli](https://www.npmjs.com/package/polyglot-cli) for managing translations and [react-i18next](https://react.i18next.com/) with [next-i18next](https://www.npmjs.com/package/next-i18next) for implementing internationalization in React applications.
 
 Now that you have everything set and ready, you can start with the tutorials and official documentation explained in the [next chapter](/books/frontend/react/official-documentation).
