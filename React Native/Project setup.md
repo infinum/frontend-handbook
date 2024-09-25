@@ -1,8 +1,7 @@
 When starting a new React Native project there are two possible options / tools which can be used to set up your project.
 
- 1. [Expo](https://expo.io/), which is generally used if you need quick & easy solution. Even though it can speed up the whole process of setup and development of RN app, it comes with set of options and [limitations](https://docs.expo.io/introduction/why-not-expo/) which can be a dealbreaker for your project needs.
- 2. [React Native CLI](https://github.com/react-native-community/cli) represents official RN community tool for building and managing RN projects.
-
+1. [Expo](https://expo.io/), which is generally used if you need quick & easy solution. Even though it can speed up the whole process of setup and development of RN app, it comes with set of options and [limitations](https://docs.expo.io/introduction/why-not-expo/) which can be a dealbreaker for your project needs.
+2. [React Native CLI](https://github.com/react-native-community/cli) represents official RN community tool for building and managing RN projects.
 
 ## Setting up the development environment ( React Native CLI)
 
@@ -10,42 +9,41 @@ When starting a new React Native project there are two possible options / tools 
 
 When creating a new RN project check CLI [commands](https://github.com/react-native-community/cli/blob/master/docs/commands.md) to get familiar with all options.
 
-Generally, most of our projects use `typescript` and `npm` as package manager. This means that for creation & initialization of a new project you need to use command:
+Generally, most of our projects use `typescript` and `pnpm` as package manager. This means that for creation & initialization of a new project you need to use command:
 
-````sh
-npx react-native init AwesomeProjectName --template react-native-template-typescript --npm
-````
-
-***Note:*** If previous command fails, it's possible that `react-native-template-typescript` is deprecated or there are some major changes to CLI. In that case, please contact someone from Javascript team to update the chapter.
+```sh
+pnpx create-expo-app@latest AwesomeProjectName
+```
 
 ### Github repository
+
 Since the creation of github repositories is limited to admins only, contact one of the Javascript team leads to create a repository for you.
 Once you've got your repository make sure to update your `.gitignore`.
 Don't forget to add `README.md` which should consist of:
 
- 1. Application name and logo
- 2. **Toc** (Table of Content)
- 3. **Setup** - add basic description of how to initialize project and install dependencies
- 4. **Development** - description of all commands and configurations needed to start developing and running the application on real device / simulator
- 5. **Versioning manifest** - notes on semver versioning
- 6. **Building** - how to build the app for both platforms
- 7. **Notes** - project specifics (gotchas, known bugs in used libraries, todos etc.)
+1. Application name and logo
+2. **Toc** (Table of Content)
+3. **Setup** - add basic description of how to initialize project and install dependencies
+4. **Development** - description of all commands and configurations needed to start developing and running the application on real device / simulator
+5. **Versioning manifest** - notes on semver versioning
+6. **Building** - how to build the app for both platforms
+7. **Notes** - project specifics (gotchas, known bugs in used libraries, todos etc.)
 
 ### Project structure
 
 To get started with project structure please check our official [React handbook](https://infinum.com/handbook/books/frontend/javascript/react).
 Since there are some semantic differences and domain specifics between React and React Native application some of the naming is different.
 For example, in RN we don't have concept of pages. RN uses screens as it's top level views (building elements), therefore we will have `screens` directory instead of `pages`.
-Also, navigation in RN represents more than a mere routing system. It makes the applications base and holds informations on the structure and it's configuration. Therefore, we use define `navigation` directory inside project root. Check [navigation chapter](todo) for detailed informations on this.
+Also, navigation in RN represents more than a mere routing system. It makes the applications base and holds informations on the structure and it's configuration. Therefore, we use define `navigation` directory inside project root. Check [navigation chapter](./navigation) for detailed informations on this.
 
 ### Dependencies
 
 Since RN uses the React ecosystem, we can reuse most of it's development dependencies like linters, prettier configurations etc.
 
-
 ## Platform specifics
 
 ### Android
+
 Android uses Gradle as a build and dependency management system. For that reason all android specifics configurations, like application version, minimal supported SDK, flavors etc. are configured inside application gradle file.
 To get familiar with android (gradle) configuration please check our official [android handbook chapter](https://infinum.com/handbook/books/android/project-structure/gradle-build-system).
 

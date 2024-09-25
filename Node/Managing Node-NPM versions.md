@@ -49,13 +49,14 @@ Considering previously mentioned options, there is no particular advantage why y
 
 #### Specifying version in package.json
 
-You can specify the version of node that your stuff works on by providing Node versions in package.json. If you don't specify this, it means any version will do. It is also possible to specify version of `npm` as it is possible that even the minor version updates cause breaking changes.
+You can specify the version of node that your stuff works on by providing Node versions in package.json. If you don't specify this, it means any version will do. It is also possible to specify version of `pnpm` as it is possible that even the minor version updates cause breaking changes.
 
 ```json
 {
+  "packageManager": "pnpm@9.0.6",
   "engines": {
     "node": ">= 18.12",
-    "npm": "8.19.3"
+    "pnpm": "pnpm@9.0.6"
   }
 }
 ```

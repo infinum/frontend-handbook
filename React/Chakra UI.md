@@ -5,7 +5,7 @@ Chakra UI is a simple, modular and accessible component library that gives you t
 ### Installation:
 
 ```
-npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
+pnpm i -E @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
 
 For more about setup read [docs](https://chakra-ui.com/docs/getting-started)
@@ -33,8 +33,8 @@ export default App;
 
 Note:
 
-- For Next.js, you need to set this up in `pages/_app.tsx`
-- For Create React App, you need to set this up in `index.tsx`
+* For Next.js, you need to set this up in `pages/_app.tsx`
+* For Create React App, you need to set this up in `index.tsx`
 
 For including `<CSSReset />` just add `resetCSS` prop to `<ChakraProvider>`
 
@@ -87,9 +87,9 @@ Example:
 
 ### The `__css` prop
 
-`__css` prop is similar to `sx` but it is designed __ONLY__ for internal use (hence the private prefix `__`).
+`__css` prop is similar to `sx` but it is designed **ONLY** for internal use (hence the private prefix `__`).
 The main difference is that `__css` prop will be merged before `sx` prop ([github](https://github.com/chakra-ui/chakra-ui/blob/085891be806b855af90b86367f5b26e8151c3ff5/packages/system/src/system.ts#L106)).
-We should __ONLY__ use it for building primitive `core` components.
+We should **ONLY** use it for building primitive `core` components.
 
 ```jsx
 import { chakra, HTMLChakraProps, ThemingProps, useStyleConfig } from '@chakra-ui/react';
@@ -155,7 +155,7 @@ const Button = chakra("button", {
 });
 ```
 
-__Update (14.05.2021.)__
+**Update (14.05.2021.)**
 
 Previously we had this example:
 
@@ -256,8 +256,8 @@ The `as` prop is a feature that all Chakra UI components have and it allows you 
 
 `as` prop (`polymorphic prop`) is a feature of emotion borrowed from styled-components
 
-- [emotion as prop](https://emotion.sh/docs/styled#as-prop)
-- [styled-components polymorphic prop](https://styled-components.com/docs/api#as-polymorphic-prop)
+* [emotion as prop](https://emotion.sh/docs/styled#as-prop)
+* [styled-components polymorphic prop](https://styled-components.com/docs/api#as-polymorphic-prop)
 
 It allows us to use all of the `Button` props and all of the `a` props without having to wrap the `Button` in an `a` component.
 
@@ -278,9 +278,9 @@ The `as` prop can also be another React component:
 </Button>
 ```
 
-- `Button` will be rendered as `Link` component
-- `Link` props will become available on `Button`
-- `Link` and `Button` styles will be combined
+* `Button` will be rendered as `Link` component
+* `Link` props will become available on `Button`
+* `Link` and `Button` styles will be combined
 
 For more info about `as` prop read [docs](https://chakra-ui.com/docs/features/style-props#the-as-prop)
 
@@ -351,10 +351,10 @@ Then in `props` we have access button props, `theme` object and `colorMode`.
 
 Chakra has a whole pallet of useful helpers:
 
-- `mode(lightMode, darkMode)(props)` function is the same as `colorMode === "dark" ? darkMode : lightMode`.
-- `orient` define `vertical` and `horizontal` style for component: `<Divider orientation="horizontal | vertical" />`
-- `transparentize` helper to make a color transparent `transparentize('blue.100', 0.3)`
-- `darken` darken a specified color `darken('blue.100', 0.5)` (there is also `lighten`, `blacken`, `whiten`)
+* `mode(lightMode, darkMode)(props)` function is the same as `colorMode === "dark" ? darkMode : lightMode`.
+* `orient` define `vertical` and `horizontal` style for component: `<Divider orientation="horizontal | vertical" />`
+* `transparentize` helper to make a color transparent `transparentize('blue.100', 0.3)`
+* `darken` darken a specified color `darken('blue.100', 0.5)` (there is also `lighten`, `blacken`, `whiten`)
 
 For more about `theme-tools` check out [github](https://github.com/chakra-ui/chakra-ui/tree/develop/packages/theme-tools/src)
 
@@ -489,10 +489,10 @@ export const breakpoints = {
 
 Here's how to interpret this syntax:
 
-- `base`: From `0em` upwards
-- `md`: From `48em` upwards
-- `lg`: From `62em` upwards
-- `xl`: From `80em` upwards
+* `base`: From `0em` upwards
+* `md`: From `48em` upwards
+* `lg`: From `62em` upwards
+* `xl`: From `80em` upwards
 
 For responsive styles, array or object syntax can be used.
 
@@ -522,8 +522,8 @@ Array and Object syntax work for every style prop in the theme specification, wh
 
 To create custom breakpoints read [docs](https://chakra-ui.com/docs/features/responsive-styles#customizing-breakpoints).
 
-_NOTE: there is an issue with having `strict: false` in tsconfig when using `createBreakpoints`.
-Error that breaks the build: `Type '(() => string) & (() => string)' is not assignable to type 'string'`. Current workaround is to add `strictNullChecks: true` to tsconfig. ([github issue](https://github.com/chakra-ui/chakra-ui/issues/3372))_
+*NOTE: there is an issue with having `strict: false` in tsconfig when using `createBreakpoints`.
+Error that breaks the build: `Type '(() => string) & (() => string)' is not assignable to type 'string'`. Current workaround is to add `strictNullChecks: true` to tsconfig. ([github issue](https://github.com/chakra-ui/chakra-ui/issues/3372))*
 
 For more about responsive styles read [styled-system responsive styles docs](https://styled-system.com/responsive-styles/)
 
@@ -534,10 +534,10 @@ Chakra UI has a specific API for styling components. Most components have defaul
 Components styles are defined in `theme/components/<component-name>.ts`
 Each component style will export these objects:
 
-- `baseStyles`
-- `sizes`
-- `variants`
-- `defaultProps`
+* `baseStyles`
+* `sizes`
+* `variants`
+* `defaultProps`
 
 `baseStyle` are styles that all button types share.
 
@@ -605,10 +605,10 @@ const sizes: { [size: string]: StyleObjectOrFn } = {
 
 Naming used for sizes:
 
-- `lg`
-- `md`
-- `sm`
-- `xs`
+* `lg`
+* `md`
+* `sm`
+* `xs`
 
 `defaultProps` are default values for `size` and `variant`
 
@@ -677,28 +677,28 @@ const ReactSelect = {
 
 Keys in `baseStyle` can be one of:
 
-- clearIndicator
-- container
-- control
-- dropdownIndicator
-- group
-- groupHeading
-- indicatorsContainer
-- indicatorSeparator
-- input
-- loadingIndicator
-- loadingMessage
-- menu
-- menuList
-- menuPortal
-- multiValue
-- multiValueLabel
-- multiValueRemove
-- noOptionsMessage
-- option
-- placeholder
-- singleValue
-- valueContainer
+* clearIndicator
+* container
+* control
+* dropdownIndicator
+* group
+* groupHeading
+* indicatorsContainer
+* indicatorSeparator
+* input
+* loadingIndicator
+* loadingMessage
+* menu
+* menuList
+* menuPortal
+* multiValue
+* multiValueLabel
+* multiValueRemove
+* noOptionsMessage
+* option
+* placeholder
+* singleValue
+* valueContainer
 
 Reade more about react-select style objects in [docs](https://react-select.com/styles#style-object).
 
