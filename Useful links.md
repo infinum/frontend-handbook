@@ -13,7 +13,7 @@ Here are some links that might help you with your front end troubles.
 * [React](https://reactjs.org/)
 * [Webpack](https://webpack.js.org/)
 * [TypeScript](https://www.typescriptlang.org/)
-* [WebpackBin](https://www.webpackbin.com/)
+* [CodeSandbox](http://codesandbox.io/)
 * [FrontendCookies](https://infinum.com/frontend-cookies) weekly newsletter
 * [Infinum on npmjs](https://www.npmjs.com/~infinumco)
 
@@ -30,16 +30,12 @@ Here are some links that might help you with your front end troubles.
 
 ### Dates
 
-* [Moment.js](http://momentjs.com/)
 * [date-fns](https://date-fns.org/)
-* [fecha](https://github.com/taylorhakes/fecha)
-* [Pikaday](https://github.com/dbushell/Pikaday)
 
 ### Linters
 
 * [eslint](https://www.npmjs.com/package/@infinumjs/eslint-config)
 * [eslint react](https://www.npmjs.com/package/@infinumjs/eslint-config-react)
-* [tslint](https://www.npmjs.com/package/@infinumjs/tslint-config)
 * [stylelint](https://www.npmjs.com/package/@infinumjs/stylelint-config)
 
 ### Styles
@@ -50,7 +46,7 @@ Here are some links that might help you with your front end troubles.
 
 ### React
 
-* [CRA starter](https://www.npmjs.com/package/@infinumjs/cra-starter)
+* [Vite](https://vite.dev/)
 * [react-router](https://github.com/ReactTraining/react-router)
 * [next.js](https://github.com/zeit/next.js)
 * [enzyme](https://github.com/airbnb/enzyme)

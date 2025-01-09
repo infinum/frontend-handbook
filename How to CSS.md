@@ -8,28 +8,28 @@ It consists of games, videos and articles split into 4 categories:
 
 ## 1. Basics:
 
-* [CSS in 5 minutes](https://www.youtube.com/watch?v=Z4pCqK-V_Wo&feature=youtu.be&ab_channel=CodeDripbyAaronJack) (video) - really concise and basic overview of CSS
-* [The CSS podcast](https://thecsspodcast.libsyn.com/) - follow Una Kravets and Adam Argyle, Developer Advocates from Google, who gleefully breakdown complex aspects of CSS into digestible episodes covering everything
+* [CSS in 5 minutes](https://www.youtube.com/watch?v=Z4pCqK-V_Wo\&feature=youtu.be\&ab_channel=CodeDripbyAaronJack) (video) - really concise and basic overview of CSS.
+* [The CSS podcast](https://thecsspodcast.libsyn.com/) - follow Una Kravets and Adam Argyle, Developer Advocates from Google, who gleefully breakdown complex aspects of CSS into digestible episodes covering everything.
 * [How To Learn CSS](https://www.smashingmagazine.com/2019/01/how-to-learn-css/) - You don’t need to commit to memorizing every CSS Property and Value, as there are good places to look them up. There are some fundamental things, however, which will make CSS much easier for you to use. This article aims to guide you along your path of learning CSS.
 * Selectors:
   * [CSS Diner](https://flukeout.github.io/) - a little game about all kinds of CSS selectors.
   * [Beginner Concepts: How CSS Selectors Work](https://css-tricks.com/how-css-selectors-work/)
-* [The CSS cascade](https://wattenberger.com/blog/css-cascade) - Or, How browsers resolve competing CSS styles (also touches on selectors and covers specificity)
-* [CSS positioning](https://ishadeed.com/article/learn-css-positioning/) - an interactive article about CSS positioning
+* [The CSS cascade](https://2019.wattenberger.com/blog/css-cascade) - Or, How browsers resolve competing CSS styles (also touches on selectors and covers specificity).
+* [CSS positioning](https://ishadeed.com/article/learn-css-positioning/) - an interactive article about CSS positioning.
 * Flex:
-	* [CSS Layout from Smashing Magazine](https://www.smashingmagazine.com/guides/css-layout/) - useful Flex resources
-	* [Flexbox froggy](https://flexboxfroggy.com/) - a game where you help Froggy and friends by writing CSS code
-	* [Flexbox30](https://www.samanthaming.com/flexbox30/) - learn Flexbox with 30 Code Tidbits
-	* [A Complete Guide to Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-	* [CSS Flexbox: 5 Real World Use Cases](https://ishadeed.com/article/flexbox-real-world-use-cases/)
+  * [CSS Layout from Smashing Magazine](https://www.smashingmagazine.com/guides/css-layout/) - useful Flex resources.
+  * [Flexbox froggy](https://flexboxfroggy.com/) - a game where you help Froggy and friends by writing CSS code.
+  * [Flexbox30](https://www.samanthaming.com/flexbox30/) - learn Flexbox with 30 Code Tidbits.
+  * [A Complete Guide to Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+  * [CSS Flexbox: 5 Real World Use Cases](https://ishadeed.com/article/flexbox-real-world-use-cases/)
 * Grid:
-	* [CSS Layout from Smashing Magazine](https://www.smashingmagazine.com/guides/css-layout/) - useful Grid resources
-	* [Grid Garden](https://cssgridgarden.com/) - a game where you write CSS code to grow your carrot garden
-	* [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+  * [CSS Layout from Smashing Magazine](https://www.smashingmagazine.com/guides/css-layout/) - useful Grid resources.
+  * [Grid Garden](https://cssgridgarden.com/) - a game where you write CSS code to grow your carrot garden.
+  * [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
 
 ## 2. Additional Concepts:
 
-* [What does 100% mean in CSS?](https://wattenberger.com/blog/css-percents)
+* [What does 100% mean in CSS?](https://2019.wattenberger.com/blog/css-percents)
 * [Spacing in CSS](https://ishadeed.com/article/spacing-in-css/)
 * [Overflow in CSS](https://ishadeed.com/article/overflow-css/)
 * [Colors in CSS](https://ishadeed.com/article/css-color/)
@@ -45,11 +45,11 @@ It consists of games, videos and articles split into 4 categories:
 
 ## 3. Other useful resources:
 
-* [Can I use...](https://caniuse.com/)
+* [Can I use...](https://caniuse.com/) - provides up-to-date browser support tables for support of front-end web technologies on desktop and mobile web browsers.
 * Blogs
-	* [CSS Tricks](https://css-tricks.com/)
-	* [Ahmad Shadeed's personal blog](https://ishadeed.com/)
-	* [Modern CSS solutions for old CSS problems](https://moderncss.dev/) from [Stephanie Eckles](https://thinkdobecreate.com/)
+  * [CSS Tricks](https://css-tricks.com/)
+  * [Ahmad Shadeed's personal blog](https://ishadeed.com/)
+  * [Modern CSS solutions for old CSS problems](https://moderncss.dev/) from [Stephanie Eckles](https://thinkdobecreate.com/)
 * [A Complete Guide to CSS Concepts and Fundamentals](https://www.taniarascia.com/overview-of-css-concepts/)
 * [CSS tips for new devs](https://amberwilson.co.uk/blog/css-tips-for-new-devs/)
 * [Web Design in 4 minutes](https://jgthms.com/web-design-in-4-minutes/)
@@ -59,9 +59,9 @@ It consists of games, videos and articles split into 4 categories:
 
 ## 4. Tools helpful in the learning process:
 
-* [CSS specificity calculator](https://specificity.keegan.st/) * A visual way to understand CSS specificity.
-* [CSS selectors explained](https://hugogiraudel.github.io/selectors-explained/) * Translate CSS selectors into plain English.
-* [:nth-tester](https://css-tricks.com/examples/nth-child-tester/) - visual tool that helps better understanding nth-\* css pseudoselectors
-* [Layoutit](https://grid.layoutit.com/) - an interactive grid generator
+* [CSS specificity calculator](https://specificity.keegan.st/) - A visual way to understand CSS specificity.
+* [CSS selectors explained](https://kittygiraudel.github.io/selectors-explained/) - Translate CSS selectors into plain English.
+* [:nth-tester](https://css-tricks.com/examples/nth-child-tester/) - visual tool that helps better understanding nth-\* css pseudoselectors.
+* [Layoutit](https://grid.layoutit.com/) - an interactive grid generator.
 * [Easing functions cheatsheet](https://easings.net/en)
 * [CSS Selectors cheatsheet](https://www.dropbox.com/s/h2hni9o1m1di989/CSS%20selectors%20cheatsheet.pdf) (or [Medium Source](https://medium.com/design-code-repository/css-selectors-cheatsheet-details-9593bc204e3f))
