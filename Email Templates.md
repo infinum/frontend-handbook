@@ -183,4 +183,4 @@ To apply global styles, use `<mj-style>` in the `<mj-head>`:
 | Email looks broken in Outlook | Use `mj-wrapper` to ensure proper rendering.               |
 | Gmail clips email             | Keep HTML size under 102KB.                              |
 | Custom fonts not loading      | Use Web-safe fonts (Arial, Helvetica, sans-serif).       |
-| Images not showing            | Use absolute URLs (e.g., https://example.com/image.png). |
+| Images not showing            | Use absolute URLs (e.g., `https://example.com/image.png`). |
