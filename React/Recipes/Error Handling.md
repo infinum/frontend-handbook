@@ -1,7 +1,7 @@
 # Motivation
 
 Handling errors is really important for any production ready app. By proper handling of error we can prevent degradation of user experience in production.
-Luckily,  React gave use the right tool for this job, and it's called [Error Boundary](https://reactjs.org/docs/error-boundaries.html)
+Luckily,  React gave use the right tool for this job, and it's called [Error Boundary](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary).
 
 ## Used modules
 
@@ -15,7 +15,7 @@ const Announcements = ({ eventId }) => {
   const { data, error } = useSWR(`/api/v1/announcements?filter[event_id]=${eventId}`);
 
   if (error) {
-    // Error is handled outside in BugsnagErrorBoundary
+    // Error is handled outside, in BugsnagErrorBoundary
     throw error;
   }
 
@@ -56,8 +56,17 @@ const ErrorFallback = (error, info, clearError) => {
 4. Only this part of the app will stop working, not the whole App
 5. Bugsnag reports
 
+## NextJS App Router
+
+Using an `error.tsx` file in your app’s directory structure is recommended for handling global and route-level errors, however, it’s not mandatory if you want more fine-grained control over error handling at the component level using custom error boundaries (like the Bugsnag example).
+
+For a robust error-handling strategy, it’s often best to combine both approaches:
+
+* Global Fallback with `error.tsx`: Fallback for unhandled errors across routes and layouts. This ensures users always see a helpful message rather than a blank screen if an error goes uncaught by component-level boundaries.
+* Component-Level Error Boundaries: Use them around specific components or sections that might fail due to network issues, user input, or other isolated factors. This allows you to manage errors locally without impacting the whole route and offers a better experience for users.
+
 ## Useful links
 
-1. [Bugsnag with Next.js example](https://github.com/bugsnag/bugsnag-js/tree/master/examples/js/nextjs)
+1. [Bugsnag with Next.js pages router example](https://github.com/bugsnag/bugsnag-js/tree/master/examples/js/nextjs)
 2. [Use react-error-boundary to handle errors in React](https://kentcdodds.com/blog/use-react-error-boundary-to-handle-errors-in-react)
 3. If you don't have Bugsnag you can use this dependency instead [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
