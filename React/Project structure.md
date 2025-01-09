@@ -831,16 +831,8 @@ With the release of Next.js 13, the App Router introduces several new concepts t
    * Allows colocation of files like `layout.tsx`, `page.tsx`, `loading.tsx`, `error.tsx`, and more within each route segment.
    * Promotes splitting the application by `route/feature` instead of having a flat `pages/` structure.
 2. Route Groups
-   * Introduced to logically group routes without affecting the final URL (folders like `(groupName)` are ignored in the URL).
-   * Ideal for organizing large projects, e.g.:
-     ```
-
-       app/
-       ├── (marketing)/dashboard/page.tsx  →  /dashboard
-       ├── (admin)/users/page.tsx          →  /users
-       └── (authorization)/login/page.tsx  →  /login
-     ```
-   * Helps separate concerns while keeping URLs clean.
+   * Introduced to conceptually group routes without affecting the final URL (`(groupName)` folders).
+   * Ideal for organizing large projects (e.g., `(authorization)`, `(admin)`, `(marketing)`).
 3. Nested Layouts
    * Each folder in app/ can have a layout.tsx file that wraps all of its nested routes.
    * Eliminates the need for layout components in every page.
@@ -857,19 +849,8 @@ With the release of Next.js 13, the App Router introduces several new concepts t
    * Data fetching is now more flexible. You can fetch data directly in a Server Component (using standard `async/await`), or use RSC primitives like `fetch()`.
    * `layout.tsx` can also fetch data and pass it to child components as props.
 7. API Routes in `app/api/`
-   * Replaces `pages/api/` for server endpoints.
-   * Uses Request & Response objects instead of API handlers.
-   * Example:
-     ```
-
-      // app/api/posts/[id]/route.ts  →  Handles GET requests for /api/posts/:id
-
-      export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-        const post = await getPost(params.id);
-
-        return Response.json(post);
-      }
-     ```
+   * Replaces `pages/api/` for route handlers.
+   * Uses **Request** & **Response** objects instead of API handlers.
 8. `loading.tsx` and `error.tsx` for Better UX
    * `loading.tsx` shows a skeleton loader while fetching data.
    * `error.tsx` catches errors for that route.
