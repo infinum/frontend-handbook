@@ -186,7 +186,7 @@ When possible, *colocate* files related to a single component:
 * Tests (MyComponent.test.ts)
 * Types (MyComponent.types.ts if using TypeScript)
 
-You can read more about *Organizing components* ine the [Project Structure chapter](frontend/react/project-structure).
+You can read more about *Organizing components* in the [Project Structure chapter](frontend/react/project-structure).
 
 ### Code Splitting and Lazy Loading
 
