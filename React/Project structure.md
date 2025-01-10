@@ -834,7 +834,7 @@ With the release of Next.js 13, the App Router introduces several new concepts t
    * Introduced to conceptually group routes without affecting the final URL (`(groupName)` folders).
    * Ideal for organizing large projects (e.g., `(authorization)`, `(admin)`, `(marketing)`).
 3. Nested Layouts
-   * Each folder in app/ can have a layout.tsx file that wraps all of its nested routes.
+   * Each folder in app/ can have a `layout.tsx` file that wraps all of its nested routes.
    * Eliminates the need for layout components in every page.
    * Example:
      * `app/(marketing)/layout.tsx` wraps all `(marketing)` pages like `dashboard` and `about`.
