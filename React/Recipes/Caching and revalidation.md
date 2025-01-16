@@ -110,7 +110,7 @@ Edge caching is caching content at the network’s edge, physically closer to th
 
 When calling `fetch`, you can specify caching and revalidation behavior by using the standard cache values and Next.js-specific `next.revalidate`:
 
-```
+```jsx
 const data = await fetch("https://api.example.com/data", {
   cache: "force-cache", // or "no-store", "default", "reload", etc.
   next: { revalidate: 60 }, // revalidate after 60s
@@ -155,7 +155,7 @@ Revalidation is the process of invalidating stale content and serving an up-to-d
 
 In the App Router, you can configure ISR using `fetch` options or [metadata](#route-segment-config) in your route.
 
-```
+```jsx
 export default async function ProductsPage() {
   const products = await fetch("https://api.example.com/products", {
     cache: "force-cache",
@@ -208,7 +208,7 @@ You can control these states via the new `loading.tsx` and `error.tsx` files in 
 
 Fetch data from an external API and cache it for 5 minutes, then revalidate.
 
-```
+```jsx
 // app/(dashboard)/page.tsx
 type DashboardData = {
   totalUsers: number;
@@ -237,7 +237,7 @@ Show an up-to-date list of items after a user adds a new item.
 
 **Step 1: Create the Page**
 
-```
+```jsx
 // app/items/page.tsx
 import { ItemsList } from "./_components/ItemsList";
 import { ItemsForm } from "./_components/ItemsForm";
@@ -261,7 +261,7 @@ export const dynamic = "force-dynamic";
 
 **Step 2: Create a Server Action**
 
-```
+```jsx
 // app/actions/revalidateItems.ts
 "use server";
 
@@ -277,7 +277,7 @@ This Server Action manually triggers revalidation of the `/items` page. It force
 
 **Step 3: Create the ItemsList component**
 
-```
+```jsx
 // app/items/_components/ItemsList.tsx
 export async function ItemsList() {
   const data = await fetch("http://localhost:3000/api/items", {
@@ -306,7 +306,7 @@ This component fetches data from the API and displays the list of items.
 
 **Step 4: Create the ItemsForm component**
 
-```
+```jsx
 // app/items/_components/ItemsForm.tsx
 "use client";
 
@@ -368,7 +368,7 @@ export function ItemsForm() {
 
 **Step 5: Create `/api/items/` route handler**
 
-```
+```jsx
 // app/api/items.ts
 import { NextResponse } from "next/server";
 
@@ -438,23 +438,20 @@ Also, keep in mind that `startTransition()` will not update the `ItemsList` comp
 
 Simplify data fetching in server components with the built-in `use` hook.
 
-```
-
+```jsx
 // app/profile/page.tsx
 import { use } from "react";
 
 async function getProfileData(userId: string) {
-const res = await fetch(`https://api.example.com/user/${userId}`);
-return res.json();
+  const res = await fetch(`https://api.example.com/user/${userId}`);
+  return res.json();
 }
 
 export default function ProfilePage({ userId }: { userId: string }) {
-const data = use(getProfileData(userId));
+  const data = use(getProfileData(userId));
 
-return ( <div> <h1>{data.name}</h1> <p>{data.bio}</p> </div>
-);
+  return ( <div> <h1>{data.name}</h1> <p>{data.bio}</p> </div>);
 }
-
 ```
 
 The `use()` hook is also capable of reading React Context, you can read more about it in the [React Docs](https://react.dev/reference/react/use).
@@ -469,7 +466,7 @@ While not strictly a server-side caching strategy, Optimistic UI is a method to 
 
 As an example, you can use the code from [Mutate then Revalidate recipe](#mutate-then-revalidate) and change the `handleAddItem()` method in `ItemsForm` component:
 
-```
+```jsx
  const handleAddItem = async () => {
     const optimisticItem = newItem;
 
@@ -500,7 +497,7 @@ You can read howto configure custom Next.js Cache Handler in the [Next.js docs](
 
 ### Complex revalidation route handler with secret key guard
 
-```
+```jsx
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -611,7 +608,7 @@ This route handler demonstrates a secure, structured approach for revalidating N
 
 To use the `RequestTag` enum for on-demand or scheduled revalidation, you can pass it in the fetch options as shown below. When Next.js receives a subsequent request to this URL, it knows to cache (and later revalidate) based on the tag:
 
-```
+```jsx
 await fetch('/api/items', {
   next: {
     revalidate: 60 * 60, // 60 minutes
