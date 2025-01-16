@@ -79,32 +79,32 @@ Browser caching is the simplest form of caching:
 
 Content Delivery Networks (e.g. [AWS Cloudfront](https://aws.amazon.com/cloudfront/)) and reverse proxies (e.g. [Nginx](https://nginx.org/en/)) intercept requests and serve cached content:
 
-* ? Highly efficient for static assets, also for certain dynamic content if configured well.
-* ? Next.js on Vercel automatically integrates with edge caching for pages (especially in static generation scenarios).
-* \+ Gives massive performance gains for global users.
-* \+ Offloads traffic from your origin server.
-* \- Requires advanced setup for dynamic, user-specific data can be complex.
-* \- Might introduce cache invalidation complexities (stale data, etc.).
+* 📌 Highly efficient for static assets, also for certain dynamic content if configured well.
+* 📌 Next.js on Vercel automatically integrates with edge caching for pages (especially in static generation scenarios).
+* ✅ Gives massive performance gains for global users.
+* ✅ Offloads traffic from your origin server.
+* ⚠️ Requires advanced setup for dynamic, user-specific data can be complex.
+* ⚠️ Might introduce cache invalidation complexities (stale data, etc.).
 
 ### Next.js In-Memory Caching
 
 When fetching data in React Server Components, Next.js offers a built-in caching mechanism. You can leverage this by using the built-in `fetch` function’s caching options.
 
-* \+ Fully integrated with Next.js’ revalidation flow (*ISR*).
-* \+ Minimal configuration for typical use cases.
-* \- Not suitable for large amounts of data or data with immediate real-time requirements.
-* \- For advanced scenarios, you may need a dedicated caching solution (like [Redis](https://redis.io/)).
+* ✅ Fully integrated with Next.js’ revalidation flow (*ISR*).
+* ✅ Minimal configuration for typical use cases.
+* ⚠️ Not suitable for large amounts of data or data with immediate real-time requirements.
+* ⚠️ For advanced scenarios, you may need a dedicated caching solution (like [Redis](https://redis.io/)).
 
 ### Edge Caching
 
 Edge caching is caching content at the network’s edge, physically closer to the user:
 
-* ? Reduces [round-trip time (RTT)](https://aws.amazon.com/what-is/rtt-in-networking/).
-* ? Allows for [geographical load balancing](https://www.vmware.com/topics/load-balancing#:~:text=Geographic%20%E2%80%94%20Geographic%20load%20balancing%20redistributes,data%20centers%20in%20many%20locations.).
-* ? On Vercel, *Static Site Generation* pages are cached globally at edge locations. When using *Incremental Static Regeneration*, outdated pages are invalidated and [regenerated in the background](https://vercel.com/docs/incremental-static-regeneration/quickstart#background-revalidation).
-* \+ Speed improvements for global users.
-* \+ Integrates seamlessly with Next.js.
-* \- Some advanced dynamic use cases might require custom logic for invalidating or bypassing the cache.
+* 📌 Reduces [round-trip time (RTT)](https://aws.amazon.com/what-is/rtt-in-networking/).
+* 📌 Allows for [geographical load balancing](https://www.vmware.com/topics/load-balancing#:~:text=Geographic%20%E2%80%94%20Geographic%20load%20balancing%20redistributes,data%20centers%20in%20many%20locations.).
+* 📌 On Vercel, *Static Site Generation* pages are cached globally at edge locations. When using *Incremental Static Regeneration*, outdated pages are invalidated and [regenerated in the background](https://vercel.com/docs/incremental-static-regeneration/quickstart#background-revalidation).
+* ✅ Speed improvements for global users.
+* ✅ Integrates seamlessly with Next.js.
+* ⚠️ Some advanced dynamic use cases might require custom logic for invalidating or bypassing the cache.
 
 ## Data Fetching
 
