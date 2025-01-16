@@ -108,21 +108,38 @@ Edge caching is caching content at the network’s edge, physically closer to th
 
 ## Data Fetching
 
-When calling `fetch`, you can specify caching and revalidation behavior:
-
-* **cache**: `force-cache` | `no-store` | `only-if-cached`
-* **next.revalidate**: number of seconds to revalidate the data
+When calling `fetch`, you can specify caching and revalidation behavior by using the standard cache values and Next.js-specific `next.revalidate`:
 
 ```
 const data = await fetch("https://api.example.com/data", {
-  cache: "force-cache", // or "no-store"
+  cache: "force-cache", // or "no-store", "default", "reload", etc.
   next: { revalidate: 60 }, // revalidate after 60s
 });
 ```
 
-* **force-cache**: Enforces caching at the Next.js layer.
-* **no-store**: Bypasses caching and always fetches fresh data.
-* **revalidate**: Tells Next.js how long to keep the cached version before revalidating in the background.
+**Cache options**
+
+* `default`
+  Use the browser/Next.js default caching rules. Typically behaves like `no-cache` for cross-origin requests but can vary depending on context.
+
+* `no-store`
+  Do not read from or write to any caches. Always fetches fresh data on every request.
+
+* `reload`
+  Force the fetch to go to the network, bypassing any caches. The response can still be stored in the cache for subsequent requests if other settings allow it.
+
+* `no-cache`
+  The browser (and Next.js) will always validate the response with the server (using ETag, Last-Modified, etc.). If the resource has not changed, it may be served from a previously stored cache.
+
+* `force-cache`
+  Enforce retrieving the data from the Next.js (or browser) cache if available, or fetch it from the network and then cache it. Subsequent requests may be served from the cache if still valid.
+
+* `only-if-cached`
+  Return the response from the cache if it exists; otherwise, throw an error (typically a `504`). This mode is often restricted by browsers to same-origin requests.
+
+**Next revalidate**
+
+Tells Next.js how long to keep the cached version before revalidating in the background. This controls server-side caching behavior.
 
 ## Revalidation
 
