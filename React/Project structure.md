@@ -1,4 +1,5 @@
 ## Organizing components
+
 ### UI Components
 
 When adding UI components, you should be able to group them in three root domains:
@@ -14,8 +15,10 @@ Feature components are specific to a particular feature or section of the app. N
 
 Folder naming rules:
 
- 1. `kebab-case` folder name indicates domain name
- 2. `PascalCase` folders and filenames should be used for components naming
+1. `kebab-case` folder name indicates domain name
+2. `PascalCase` folders and filenames should be used for components naming
+
+#### Pages Router
 
 ```
 src
@@ -61,10 +64,11 @@ src
 
 ### *Core* domain
 
-We can refer to them as **_atoms_**, smallest building blocks, highly reusable and composable.
+We can refer to them as ***atoms***, smallest building blocks, highly reusable and composable.
 You can check the [Open UI](https://open-ui.org/components/card.research) standard proposal for inspiration how to split components into small segments. Components could be designed as [Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks) or Black-box Components with good ["inversion of control" interface](https://kentcdodds.com/blog/inversion-of-control) like [ReactSelect](https://react-select.com/components).
 
 Here are some examples of core components:
+
 <table>
   <tr>
     <th>Components</th>
@@ -117,7 +121,7 @@ Here are some examples of core components:
 
 ### *Shared* domain
 
-We can refer to them as **_molecules_**. They are more specific components built out of **_atoms_** (core components).
+We can refer to them as ***molecules***. They are more specific components built out of ***atoms*** (core components).
 They could be shared between feature components and encapsulates some specific logic of an feature.
 
 We can split them into three domains:
@@ -131,6 +135,7 @@ We can split them into three domains:
 Component name is always composed out of two parts `Context` + `Domain`, for example `InputField` where `Input` is context and `Field` is domain.
 
 Here are some examples of feature domain names:
+
 <table>
   <tr>
     <th>Domains</th>
@@ -191,7 +196,7 @@ Here are some examples of feature domain names:
 
 #### Shared *Entity* domain
 
-We can refer to them as **_molecules_** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
+We can refer to them as ***molecules*** also, but they are tied to some entity, for example Datx model, algolia resource, google map entity.
 
 Component name is always composed out of two parts `Entity` + `Context`, for example `TodoList` where `Todo` is entity and `List` is context.
 
@@ -282,7 +287,7 @@ src
 
 ## Elements
 
-If you have many style declarations inside your component file, making it difficult to read, create a separate file named `ComponentName.elements.ts to store your custom styled components.
+If you have many style declarations inside your component file, making it difficult to read, create a separate file named `ComponentName.elements.ts` to store your custom styled components.
 
 Example:
 
@@ -292,8 +297,8 @@ Example:
     └── WelcomeCard.elements.ts
 ```
 
-
 **WelcomeCard.tsx:**
+
 ```js
 import { chakra } from '@chakra-ui/react';
 
@@ -314,6 +319,7 @@ export const WelcomeCardTitle = chakra('h1', {
 ```
 
 **WelcomeCard.elements.ts:**
+
 ```js
 import { chakra } from '@chakra-ui/react';
 
@@ -336,10 +342,11 @@ export const WelcomeCardTitle = chakra('h1', {
 Moving things to .elements.tsx should be the last step in the development process and it should only be used for organizational purposes, i.e., when the main component becomes cluttered and unreadable.
 
 **Rules for Creating Elements:**
-- Use `.elements.tsx` for organizational purposes only.
-- Custom components in `.elements.tsx` should not be reused outside their root component.
-- Combining chakra factory and functional components is allowed.
-- Avoid using hooks inside elements.
+
+* Use `.elements.tsx` for organizational purposes only.
+* Custom components in `.elements.tsx` should not be reused outside their root component.
+* Combining chakra factory and functional components is allowed.
+* Avoid using hooks inside elements.
 
 > For more information check [Chakra UI - Style Props section](https://infinum.com/handbook/frontend/react/chakra-ui#style-props).
 
@@ -659,7 +666,6 @@ export async function fetchUser(store: AppCollection, id: string): Promise<User>
 
 You will use your fetcher functions with `useSwr` hook inside of your components.
 
-
 ## Setting up theming and styles
 
 When creating styles for your core components, you will create the `components` folder inside of the styles folder. The styles folder will contain all core stylings and the theme setup.
@@ -681,9 +687,9 @@ src
 
 When organizing test files, here are couple of quick rules:
 
-- Components, utils, fetchers... should have a test file in the same folder where they are placed
-- When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
-- All mocks should be placed in `__mocks__` folder
+* Components, utils, fetchers... should have a test file in the same folder where they are placed
+* When testing pages, create the `__tests__/pages` folder because of how Next.js treats pages folder.
+* All mocks should be placed in `__mocks__` folder
 
 For other in depth guides for testing take a look at the [testing guide](https://infinum.com/handbook/frontend/react/testing-best-practices).
 
@@ -810,3 +816,166 @@ src
     └── todo
         └── [id]
             └── index.tsx
+```
+
+## App Router
+
+By using the App Router, you gain more granular control over your layouts, data fetching, and code structure - yielding a cleaner, more scalable, and more performant application in the long run.
+
+### Key Differences from the Pages Router
+
+With the release of Next.js 13, the App Router introduces several new concepts that differ significantly from the Pages Router. Here are the key differences and benefits:
+
+1. `app/` Directory
+   * Replaces `pages/` as the main place for routing.
+   * Allows colocation of files like `layout.tsx`, `page.tsx`, `loading.tsx`, `error.tsx`, and more within each route segment.
+   * Promotes splitting the application by `route/feature` instead of having a flat `pages/` structure.
+2. Route Groups
+   * Introduced to conceptually group routes without affecting the final URL (`(groupName)` folders).
+   * Ideal for organizing large projects (e.g., `(authorization)`, `(admin)`, `(marketing)`).
+3. Nested Layouts
+   * Each folder in app/ can have a `layout.tsx` file that wraps all of its nested routes.
+   * Eliminates the need for layout components in every page.
+   * Example:
+     * `app/(marketing)/layout.tsx` wraps all `(marketing)` pages like `dashboard` and `about`.
+     * `app/(admin)/layout.tsx` applies only to admin pages.
+4. Improved File Organization
+   * You can colocate `_components`, `_hooks`, `_utils`, `_types`, etc. within each route directory.
+   * Encourages a feature-driven, modular code structure instead of a strictly pages-driven one.
+5. Server vs Client Components
+   * By default, files in `app/` are Server Components, offering better performance and reduced bundle sizes.
+   * You can opt into Client Components with `"use client"` directive when you need interactivity.
+6. No more `getStaticProps` or `getServerSideProps`
+   * Data fetching is now more flexible. You can fetch data directly in a Server Component (using standard `async/await`), or use RSC primitives like `fetch()`.
+   * `layout.tsx` can also fetch data and pass it to child components as props.
+7. API Routes in `app/api/`
+   * Replaces `pages/api/` for route handlers.
+   * Uses **Request** & **Response** objects instead of API handlers.
+8. `loading.tsx` and `error.tsx` for Better UX
+   * `loading.tsx` shows a skeleton loader while fetching data.
+   * `error.tsx` catches errors for that route.
+   * Works per-route or globally in `app/`.
+
+**Why it's better**
+
+1. More Flexible & Scalable
+   * Nested layouts and route groups let you organize complex UIs in a way that was harder or more verbose in the Pages Router.
+   * The file-system routing remains intuitive while providing new capabilities like colocation of components, hooks, and utilities.
+2. Performance & Bundle Size
+   * Server Components help keep initial payload sizes down by only shipping necessary code to the client.
+   * Automatic code splitting ensures only essential bits are loaded per route.
+3. Better Developer Experience
+   * Colocation of related files (tests, types, hooks) simplifies discovering and maintaining logic.
+   * The new data-fetching model (removing `getServerSideProps` and `getStaticProps`) feels more natural to React developers.
+4. Incremental Adoption
+   * You can run App Router and Pages Router in the same project if you are migrating gradually.
+   * This means no big-bang rewrite, so you can adopt new features at your own pace.
+
+### App Router structure
+
+Below is an example of a complete App Router folder structure, similar to what you have in the Pages Router section, but adapted to Next.js 13 best practices. This structure follows the **Colocation** principle, which encourages grouping related files together within their respective feature or route directories. This approach improves maintainability, reduces unnecessary imports, and keeps the project modular. You can learn more about Colocation in the [Next.js documentation](https://nextjs.org/docs/app/getting-started/project-structure#colocation). Note that this example includes route groups like `(authorization)`, `(admin)`, and `(marketing)`, a `[locale]` directory for **i18n**, plus an `api` folder for route handlers:
+
+```
+src
+├── app
+│   ├── api                              // Server API endpoints (App Router)
+│   │   ├── health                       // Example server endpoint: /api/health
+│   │   │   └── route.ts
+│   │   └── auth
+│   │       └── [..nextauth]
+│   │           └── route.ts            // NextAuth route
+│   └── [locale]                         // Top-level for i18n (e.g. /en, /fr)
+│       ├── layout.tsx                   // Root layout for everything under /[locale]
+│       ├── _components                  // Shared "global" components
+│       │   └── Button
+│       │       ├── Button.tsx
+│       │       └── Button.test.tsx
+│       ├── _hooks                       // Shared "global" hooks
+│       │   └── useResponsive
+│       │       ├── useResponsive.ts
+│       │       └── useResponsive.test.ts
+│       ├── _types                       // Shared "global" types/interfaces
+│       │   └── globalTypes.ts
+│       ├── _utils                       // Shared "global" utils/helpers
+│       |   └── fetchHelpers
+│       |       ├── fetchHelpers.ts
+│       |       └── fetchHelpers.test.ts
+│       ├── (root)
+|       |   ├── _components              // Components used only by the root page
+|       |   └── page.tsx                 // Root page -> /[locale]
+│       ├── (authorization)              // Route group for auth pages
+│       │   ├── layout.tsx               // Optional layout for (authorization) routes
+│       │   ├── login                    // /[locale]/login
+│       │   │   ├── page.tsx
+│       │   │   ├── _components
+│       │   │   │   └── LoginForm
+│       │   │   │       ├── LoginForm.tsx
+│       │   │   │       ├── LoginForm.test.tsx
+│       │   │   │       └── LoginForm.types.ts     // Types used by LoginForm (props interfaces, etc.)
+│       │   │   ├── _hooks
+│       │   │   │   └── useLogin
+│       │   │   │       ├── useLogin.ts
+│       │   │   │       ├── useLogin.test.ts
+│       │   │   │       └── useLogin.types.ts      // Types used only by useLogin hook
+│       │   │   ├── _types
+│       │   │   │   └── loginTypes.ts              // Shared types across login page
+│       │   │   └── _utils
+│       │   │       └── loginHelpers
+│       │   │           ├── loginHelpers.ts
+│       │   │           └── loginHelpers.test.ts
+│       │   └── signup                   // /[locale]/signup
+│       │       ├── page.tsx
+│       │       └── _components
+│       │           └── SignupForm
+│       │               ├── SignupForm.tsx
+│       │               └── SignupForm.test.tsx
+│       ├── (admin)                      // Route group for admin pages
+│       │   ├── layout.tsx               // Optional layout for (admin) routes
+│       │   └── users                    // /[locale]/users
+│       │       ├── page.tsx
+│       │       ├── _components
+│       │       │   └── UsersList
+│       │       │       ├── UsersList.tsx
+│       │       │       └── UsersList.test.tsx
+│       │       ├── _hooks
+│       │       │   └── useUsersList
+│       │       │       ├── useUsersList.ts
+│       │       │       └── useUsersList.test.ts
+│       │       ├── _types
+│       │       │   └── usersTypes.ts
+│       │       └── _utils
+│       │           └── usersHelpers
+│       │               ├── usersHelpers.ts
+│       │               └── usersHelpers.test.ts
+│       └── (marketing)                  // Route group for marketing pages
+│           ├── layout.tsx               // Optional layout for (marketing) routes
+│           ├── dashboard                // /[locale]/dashboard
+│           │   ├── page.tsx
+│           │   ├── _components
+│           │   │   ├── DashboardHeader
+│           │   │   │   ├── DashboardHeader.tsx
+│           │   │   │   └── DashboardHeader.test.tsx
+│           │   │   └── DashboardStats
+│           │   │       ├── DashboardStats.tsx
+│           │   │       └── DashboardStats.test.tsx
+│           │   ├── _hooks
+│           │   │   └── useDashboard
+│           │   │       ├── useDashboardData.ts
+│           │   │       └── useDashboardData.test.ts
+│           │   ├── _types
+│           │   │   └── dashboardTypes.ts
+│           │   └── _utils
+│           │       └── dashboardHelpers
+│           │           ├── dashboardHelpers.ts
+│           │           └── dashboardHelpers.test.ts
+│           ├── about                    // /[locale]/about
+│           │   └── page.tsx
+│           └── contact                  // /[locale]/contact
+│               └── page.tsx
+├── assets                                // Folder for images, icons, or other static assets
+│   └── images
+│       └── example.png
+└── lib                                   // External dependency config (CASL, Stripe, etc.)
+    ├── casl.ts
+    └── stripe.ts
+```
