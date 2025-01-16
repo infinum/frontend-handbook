@@ -1,6 +1,6 @@
 ## Introduction
 
-Caching is essential for building performant, reliable, and scalable applications. In the world of modern web development, being able to store and retrieve data efficiently can often mean the difference between a seamless user experience and a sluggish one. With Next.js’s new App Router and React Server Components, the way we approach caching and revalidation has evolved. The ability to fetch data on the server, cache it strategically, and revalidate content automatically (or *on-demand*) provides developers with powerful tools to keep apps both fast and up-to-date.
+Caching is essential for building performant, reliable, and scalable applications. In the world of modern web development, being able to store and retrieve data efficiently can often mean the difference between a seamless user experience and a sluggish one. With Next.js’s new *App Router* and *React Server Components*, the way we approach caching and revalidation has evolved. The ability to fetch data on the server, cache it strategically, and revalidate content automatically (or *on-demand*) provides developers with powerful tools to keep apps both fast and up-to-date.
 
 This chapter aims to:
 
@@ -13,7 +13,7 @@ This chapter aims to:
 
 ## Refresh on fundamentals
 
-Before diving into caching, let’s quickly refresh on how Next.js’s App Router and React Server Components (RSC) work together. Understanding these fundamentals sets the stage for how we’ll discuss caching in Next.js and how we can best leverage these new features to build more performant applications.
+Before diving into caching, let’s quickly refresh on how Next.js’s App Router and *React Server Components* (*RSC*) work together. Understanding these fundamentals sets the stage for how we’ll discuss caching in Next.js and how we can best leverage these new features to build more performant applications.
 
 ### App Router
 
@@ -79,50 +79,67 @@ Browser caching is the simplest form of caching:
 
 Content Delivery Networks (e.g. [AWS Cloudfront](https://aws.amazon.com/cloudfront/)) and reverse proxies (e.g. [Nginx](https://nginx.org/en/)) intercept requests and serve cached content:
 
-* ? Highly efficient for static assets, also for certain dynamic content if configured well.
-* ? Next.js on Vercel automatically integrates with edge caching for pages (especially in static generation scenarios).
-* \+ Gives massive performance gains for global users.
-* \+ Offloads traffic from your origin server.
-* \- Requires advanced setup for dynamic, user-specific data can be complex.
-* \- Might introduce cache invalidation complexities (stale data, etc.).
+* 📌 Highly efficient for static assets, also for certain dynamic content if configured well.
+* 📌 Next.js on Vercel automatically integrates with edge caching for pages (especially in static generation scenarios).
+* ✅ Gives massive performance gains for global users.
+* ✅ Offloads traffic from your origin server.
+* ⚠️ Requires advanced setup for dynamic, user-specific data can be complex.
+* ⚠️ Might introduce cache invalidation complexities (stale data, etc.).
 
 ### Next.js In-Memory Caching
 
 When fetching data in React Server Components, Next.js offers a built-in caching mechanism. You can leverage this by using the built-in `fetch` function’s caching options.
 
-* \+ Fully integrated with Next.js’ revalidation flow (*ISR*).
-* \+ Minimal configuration for typical use cases.
-* \- Not suitable for large amounts of data or data with immediate real-time requirements.
-* \- For advanced scenarios, you may need a dedicated caching solution (like [Redis](https://redis.io/)).
+* ✅ Fully integrated with Next.js’ revalidation flow (*ISR*).
+* ✅ Minimal configuration for typical use cases.
+* ⚠️ Not suitable for large amounts of data or data with immediate real-time requirements.
+* ⚠️ For advanced scenarios, you may need a dedicated caching solution (like [Redis](https://redis.io/)).
 
 ### Edge Caching
 
 Edge caching is caching content at the network’s edge, physically closer to the user:
 
-* ? Reduces [round-trip time (RTT)](https://aws.amazon.com/what-is/rtt-in-networking/).
-* ? Allows for [geographical load balancing](https://www.vmware.com/topics/load-balancing#:~:text=Geographic%20%E2%80%94%20Geographic%20load%20balancing%20redistributes,data%20centers%20in%20many%20locations.).
-* ? On Vercel, *Static Site Generation* pages are cached globally at edge locations. When using *Incremental Static Regeneration*, outdated pages are invalidated and [regenerated in the background](https://vercel.com/docs/incremental-static-regeneration/quickstart#background-revalidation).
-* \+ Speed improvements for global users.
-* \+ Integrates seamlessly with Next.js.
-* \- Some advanced dynamic use cases might require custom logic for invalidating or bypassing the cache.
+* 📌 Reduces [round-trip time (RTT)](https://aws.amazon.com/what-is/rtt-in-networking/).
+* 📌 Allows for [geographical load balancing](https://www.vmware.com/topics/load-balancing#:~:text=Geographic%20%E2%80%94%20Geographic%20load%20balancing%20redistributes,data%20centers%20in%20many%20locations.).
+* 📌 On Vercel, *Static Site Generation* pages are cached globally at edge locations. When using *Incremental Static Regeneration*, outdated pages are invalidated and [regenerated in the background](https://vercel.com/docs/incremental-static-regeneration/quickstart#background-revalidation).
+* ✅ Speed improvements for global users.
+* ✅ Integrates seamlessly with Next.js.
+* ⚠️ Some advanced dynamic use cases might require custom logic for invalidating or bypassing the cache.
 
 ## Data Fetching
 
-When calling `fetch`, you can specify caching and revalidation behavior:
-
-* **cache**: `force-cache` | `no-store` | `only-if-cached`
-* **next.revalidate**: number of seconds to revalidate the data
+When calling `fetch`, you can specify caching and revalidation behavior by using the standard cache values and Next.js-specific `next.revalidate`:
 
 ```
 const data = await fetch("https://api.example.com/data", {
-  cache: "force-cache", // or "no-store"
+  cache: "force-cache", // or "no-store", "default", "reload", etc.
   next: { revalidate: 60 }, // revalidate after 60s
 });
 ```
 
-* **force-cache**: Enforces caching at the Next.js layer.
-* **no-store**: Bypasses caching and always fetches fresh data.
-* **revalidate**: Tells Next.js how long to keep the cached version before revalidating in the background.
+**Cache options**
+
+* `default`
+  Use the browser/Next.js default caching rules. Typically behaves like `no-cache` for cross-origin requests but can vary depending on context.
+
+* `no-store`
+  Do not read from or write to any caches. Always fetches fresh data on every request.
+
+* `reload`
+  Force the fetch to go to the network, bypassing any caches. The response can still be stored in the cache for subsequent requests if other settings allow it.
+
+* `no-cache`
+  The browser (and Next.js) will always validate the response with the server (using ETag, Last-Modified, etc.). If the resource has not changed, it may be served from a previously stored cache.
+
+* `force-cache`
+  Enforce retrieving the data from the Next.js (or browser) cache if available, or fetch it from the network and then cache it. Subsequent requests may be served from the cache if still valid.
+
+* `only-if-cached`
+  Return the response from the cache if it exists; otherwise, throw an error (typically a `504`). This mode is often restricted by browsers to same-origin requests.
+
+**Next revalidate**
+
+Tells Next.js how long to keep the cached version before revalidating in the background. This controls server-side caching behavior.
 
 ## Revalidation
 
@@ -373,12 +390,12 @@ export async function POST(request: Request) {
 **Step 6: Testing Cache Behavior**
 
 1. Open Two Browser Windows
-   * Open the ItemsPage in two separate browser windows or tabs.
+   * Open the `ItemsPage` in two separate browser windows or tabs.
 2. Add a New Item in the First Window
-   * Enter a new item in the input field and click "Add Item."
+   * Enter a new item in the input field and click "*Add Item*"
    * If the checkbox is checked:
-     * The revalidateItems action is triggered, clearing the cache for /items.
-     * startTransition ensures that ItemsList re-renders automatically in the first window to show fresh data.
+     * The `revalidateItems()` action is triggered, clearing the cache for `/items`.
+     * `startTransition()` ensures that `ItemsList` re-renders automatically in the first window to show fresh data.
    * If the checkbox is unchecked:
      * The API route updates the data, but no revalidation occurs. Both windows continue showing cached data until the cache expires (e.g., 60 seconds).
 3. Check the Second Window
@@ -386,7 +403,7 @@ export async function POST(request: Request) {
      * The second window does not automatically update because it does not share the same React tree as the first window.
      * Manually refreshing the second window fetches fresh data because the cache has been invalidated.
 4. Wait for Cache Expiration
-   * If no revalidation is triggered, both windows will continue showing stale data until the cache expires based on next.revalidate.
+   * If no revalidation is triggered, both windows will continue showing stale data until the cache expires based on `next.revalidate`.
 
 **How It All Works Together**
 
@@ -477,7 +494,9 @@ As an example, you can use the code from [Mutate then Revalidate recipe](#mutate
 
 ### Using 3rd-Party Caching Layers (e.g. Redis)
 
-For high-traffic or data-intensive applications, you may need an external caching service like *Redis* - it's often used for ephemeral caches, session storage, and real-time data
+For high-traffic or data-intensive applications, you may need an external caching service like *Redis* - it's often used for ephemeral caches, session storage, and real-time data.
+
+You can read howto configure custom Next.js Cache Handler in the [Next.js docs](https://nextjs.org/docs/app/api-reference/config/next-config-js/incrementalCacheHandlerPath).
 
 ### Complex revalidation route handler with secret key guard
 
@@ -572,7 +591,7 @@ export const GET = withRevalidateCacheRouteGuard(async (req: NextRequest) => {
 
 > In a typical project, you’d place `RequestTag` in a dedicated utility file or an `_enums/` directory to make it reusable across the application, rather than keeping it directly inside a single route. This keeps your code organized and makes tags accessible to any component or function that needs them for revalidation logic.
 
-This route handler demonstrates a secure, structured approach for revalidating Next.js caches based on user-defined tags. It ensures that only valid requests carrying the correct API secret can initiate cache revalidation, enabling fine-grained control over which cached resources get updated. This can be especially useful in scenarios where you need to trigger cache revalidation on demand. For example, you may want to quickly revalidate certain tags when the content changed in database, ensuring that any outdated data is refreshed (if you don't have Webhook based on-demand revalidation). In such cases, you can send a `GET` request (via *cURL*, *Postman*, or a *CI script*) to this endpoint, including the required secret header.
+This route handler demonstrates a secure, structured approach for revalidating Next.js caches based on user-defined tags. It ensures that only valid requests carrying the correct API secret can initiate cache revalidation, enabling fine-grained control over which cached resources get updated. This can be especially useful in scenarios where you need to trigger cache revalidation on demand. For example, you may want to quickly revalidate certain tags when the content changed in database, ensuring that any outdated data is refreshed (if you don't have Webhook based *on-demand* revalidation). In such cases, you can send a `GET` request (via *cURL*, *Postman*, or a *CI script*) to this endpoint, including the required secret header.
 
 1. Purpose & Flow
    * Defines a secure endpoint that only accepts `GET` requests and requires a secret key to revalidate cached data.
@@ -584,7 +603,7 @@ This route handler demonstrates a secure, structured approach for revalidating N
    * When no specific tags are sent, all known tags are revalidated.
    * When specific tags are sent (comma-separated), each one is validated and then revalidated.
 4. Error Handling
-   * Employs a try/catch structure.
+   * Employs a *try/catch* structure.
    * Responds with detailed error messages in a consistent JSON format.
 5. Extensibility
    * Straightforward to add more tags in the enum or adapt for additional logic.
@@ -653,7 +672,7 @@ For example, if middleware adds a `Set-Cookie` header dynamically, Next.js might
 
 To prevent this, ensure middleware does not modify request attributes that contribute to cache keys unless intentional.
 
-### Misunderstaing Cache Revalidation
+### Misunderstanding Cache Revalidation
 
 A common misconception in Next.js caching is that triggering cache revalidation (e.g., using `revalidatePath()` or `revalidateTag()`) immediately removes old cached data from memory or disk. Many developers assume that revalidation "clears" the previous cache, freeing up memory or storage.
 
