@@ -6,7 +6,9 @@
 
 > 📌 Concurrency in React is not “multi-threading.” Everything still runs on one thread in the browser. It's about breaking work into chunks and prioritizing tasks so your app remains responsive.
 
-> 📌 React 18 integrates concurrency by default - there is no separate “Concurrent Mode” like in earlier previews. In day-to-day coding, you mostly see concurrency through:
+> 📌 React 18 integrates concurrency by default - there is no separate “Concurrent Mode” like in earlier previews.
+
+In day-to-day coding, you mostly see concurrency through:
 
 * Transitions (`useTransition()`) for deferring non-urgent updates.
 * *Suspense* for data fetching or code-splitting, showing fallbacks while content loads.
