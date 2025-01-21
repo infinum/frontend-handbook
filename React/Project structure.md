@@ -886,7 +886,6 @@ src
 │   │           └── route.ts            // NextAuth route
 │   └── [locale]                         // Top-level for i18n (e.g. /en, /fr)
 │       ├── layout.tsx                   // Root layout for everything under /[locale]
-│       ├── page.tsx                     // Root page -> /[locale]
 │       ├── _components                  // Shared "global" components
 │       │   └── Button
 │       │       ├── Button.tsx
@@ -897,10 +896,13 @@ src
 │       │       └── useResponsive.test.ts
 │       ├── _types                       // Shared "global" types/interfaces
 │       │   └── globalTypes.ts
-│       └── _utils                       // Shared "global" utils/helpers
-│           └── fetchHelpers
-│               ├── fetchHelpers.ts
-│               └── fetchHelpers.test.ts
+│       ├── _utils                       // Shared "global" utils/helpers
+│       |   └── fetchHelpers
+│       |       ├── fetchHelpers.ts
+│       |       └── fetchHelpers.test.ts
+│       ├── (root)
+|       |   ├── _components              // Components used only by the root page
+|       |   └── page.tsx                 // Root page -> /[locale]
 │       ├── (authorization)              // Route group for auth pages
 │       │   ├── layout.tsx               // Optional layout for (authorization) routes
 │       │   ├── login                    // /[locale]/login
