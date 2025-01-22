@@ -42,12 +42,13 @@ pnpm changeset
 
 This interactive prompt asks:
 
-* Which packages are affected? (*This question is skipped in single-package repositories*)
-  Use the space bar to select one or more packages in a monorepo.
+* Which packages are affected? (*This question is skipped in single-package repositories*) Use the space bar to select one or more packages in a monorepo.
+
 * Bump type (*patch, minor, major*)?
   * **patch** for backward-compatible bug fixes.
   * **minor** for new features that don’t break existing APIs.
   * **major** for incompatible API changes.
+
 * Summary for this change - Use an impersonal tone, focusing on what changed and why (like commit messages).
 
 2. **Commiting the changeset**
