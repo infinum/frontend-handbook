@@ -42,8 +42,7 @@ pnpm changeset
 
 This interactive prompt asks:
 
-* Which packages are affected? (*This question is skipped in single-package repositories*)
-  Use the space bar to select one or more packages in a monorepo.
+* Which packages are affected? (*This question is skipped in single-package repositories*) Use the space bar to select one or more packages in a monorepo.
 * Bump type (*patch, minor, major*)?
   * **patch** for backward-compatible bug fixes.
   * **minor** for new features that don’t break existing APIs.
