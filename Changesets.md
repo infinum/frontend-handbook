@@ -1,34 +1,115 @@
-> 🦋 A way to manage your versioning and changelogs with a focus on monorepos
+*Changesets* is a lightweight tool that helps you manage versions and generate changelogs for packages in a monorepo (or single-package repository). By adding a small file describing each change, *Changesets* can automatically bump versions, publish packages, and create release notes with minimal friction.
 
-## Features
+## Why Use Changesets?
 
-[`changesets`](https://github.com/changesets/changesets) offer a solution to the problem of organizing package releases and grouping changes effectively. Here's why you should consider using changesets:
+1. **Immediate Documentation**: Document your changes while opening a PR instead of waiting for the final release. This ensures you never forget important details.
+2. **Clear Separation of Concerns**: Changesets decouple the intent to change (patch, minor, major) from the act of publishing. Your changelogs and version bumps become transparent to the entire team.
+3. **Easy Collaboration & Review**: Each pull request can include a changeset file that explicitly states how the package version should be updated and why. This fosters more meaningful code reviews.
+4. **Automated Versioning**: When merged, changesets can automatically handle version bumps, changelog generation, and publishing. This saves time and reduces human error.
+5. **Monorepo Ready**: Designed for multi-package repositories, Changesets resolve inter-package dependencies, ensuring consistent and reliable versioning across the codebase.
 
-* **Capture Changes at the Right Time**: Changesets allow contributors to document changes during pull request (PR) submission, ensuring up-to-date and comprehensive information.
-* **Distinct Intent to Change**: Changesets separate the intent to change from changelogs and version bumps, providing clear versioning and changelog details.
-* **Efficient Versioning Process**: Add changesets in PRs, then combine them for version bumps, streamlining reviews and boosting confidence in versioning decisions.
-* **Streamlined Tooling**: Changesets come with CLI-generated tools, automated versioning, and surfaced changesets in PRs, reducing manual effort.
-* **Mono-repo Compatibility**: Designed for monorepos, changesets handle interdependencies and ensure compatibility, benefiting single-package repositories as well.
+For more info, see the [official Changesets documentation](https://github.com/changesets/changesets).
 
-Find more information about changesets in the [official documentation](http://github.com/changesets/changesets)
+## Getting started
 
-## Setup
+### Install and initialize
 
-### Install
-
-First, install the @changesets/cli package in the repository where you want to use changesets:
+Install the Changesets CLI in your repository:
 
 ```bash
 pnpm install -D -E @changesets/cli
 ```
 
-Once installed, initialize the repository to use changesets:
+Then, initialize *Changesets*:
 
 ```bash
 pnpm changeset init
 ```
 
-### Github Actions
+This creates a hidden folder, `.changeset/`, with a base configuration file. You’re now ready to track changes in your repo.
+
+### Adding a *Changeset* to every Pull Request
+
+Whenever you open a Pull Request, add a *changeset* to describe how the changes affect the package(s).
+
+1. **Creating a changeset**
+
+After committing your code changes, run:
+
+```bash
+pnpm changeset
+```
+
+This interactive prompt asks:
+
+* Which packages are affected? (*This question is skipped in single-package repositories*)
+  Use the space bar to select one or more packages in a monorepo.
+* Bump type (*patch, minor, major*)?
+  * **patch** for backward-compatible bug fixes.
+  * **minor** for new features that don’t break existing APIs.
+  * **major** for incompatible API changes.
+* Summary for this change - Use an impersonal tone, focusing on what changed and why (like commit messages).
+
+2. **Commiting the changeset**
+
+Once you select the affected packages, version bump type and write down summary of changes, a `.md` file is created in the `.changeset/` folder (the file name is automatically generated, e.g. `strange-bees-visit.md`):
+
+```md
+---
+"@infinum/some-package": minor
+---
+
+Introduce a new method `doSomethingAwesome` and fix a small bug in the `init` function.
+```
+
+You should commit the `.changeset` file:
+
+```bash
+git add .
+git commit -m "chore: add changeset for [feature or fix]"
+```
+
+And push your branch - this changeset becomes part of the PR for reviewers to see.
+
+> Note: You don't have to add changesets in separate commits,
+
+### Day-to-day example
+
+1. Pull Latest
+
+   ```bash
+   git pull origin master
+   ```
+
+2. Create or Switch to a Feature Branch
+
+   ```bash
+   git checkout -b feat/improve-logging
+   ```
+
+3. Make Your Code Changes
+
+   (Fix a bug, add a feature, etc.)
+
+4. Run `pnpm changeset` to create your changeset.
+
+5. Commit and Push
+
+   ```bash
+   git add .
+   git commit -m "feat(logging): improve error logging format"
+   git push -u origin feat/improve-logging
+   ```
+
+6. Open a PR
+
+   GitHub will show the changes, including the new `.md` in `.changeset/`.
+
+7. Review & Merge
+
+   Once approved and merged, the CI pipeline will handle version bumps and publishing automatically.
+
+### Continuous Integration Setup
 
 Although changesets can function without continuous integration (CI), it's recommended to use it with a CI system to automate versioning and publishing. You can utilize the [Github Action](https://github.com/changesets/action) provided by the changesets team.
 
@@ -97,81 +178,61 @@ Before using the action, ensure the following checklist is complete:
 
 ### Changeset Bot
 
-[Changeset bot](https://github.com/changesets/bot) is a GitHub bot that further automates package publishing. It's recommended to install it in the repository. Refer to the [official documentation](https://github.com/apps/changeset-bot) for more details. Ask your TL, TD, or PE to install it.
+You can install [Changeset Bot](https://github.com/changesets/bot) to get additional automated PR comments. Once installed, if a PR lacks a changeset, the bot will prompt you to add one. This is highly recommended for teams to maintain consistent usage.
 
-## Usage
+### Pre-Releases (Beta, Alpha, RC)
 
-When you finish making changes, create a PR as usual. The bot will add a comment with a link to add a changeset file. This action should be performed by a repo maintainer or someone responsible for releases. The changeset file will look like this:
+Pre-releases allow you to publish “unstable” versions (e.g., `1.2.0-beta.1`) for testing before a final release. See the [official docs](https://github.com/changesets/changesets/blob/main/docs/prereleases.md) for details.
 
-```md
----
-'@infinum/new-package': patch
----
+> ⚠️ Warning! Prereleases are very complicated! Using them requires a thorough understanding of all parts of npm publishes. Mistakes can lead to repository and publish states that are very hard to fix.
 
-This is a patch release because of a bug fix.
-```
+Typical workflow:
 
-Once the PR is merged, the GitHub Action will create a new release, bump the version, and publish the package to registry. It removes the generated changesets, preparing for the next release.
+1. Enter Pre-Release Mode
 
-When a release is ready, responsible person will merge the PR and the Github Action will publish the package to registry. It will also create a new tag and a Github release.
+   ```bash
+   pnpm changeset pre <tag>
+   ```
 
-## Pre-releases
+   Usually `<tag>` is `beta`, but you can use `alpha`, `rc`, `next`, etc.
 
-Changesets can be used to create pre-releases. It is not as easy as regular releases, but it is well documented in the [official documentation](https://github.com/changesets/changesets/blob/main/docs/prereleases.md).
+2. Version & Commit
 
-> Please proceed with caution when creating pre-releases.
+   ```bash
+   pnpm changeset version
+   git add .
+   git commit -m "chore: release beta"
+   ```
 
-First thing you need to do is to enter the pre-release mode:
+3. Publish the Pre-Release
 
-```bash
-pnpm changeset pre <tag>
-```
+   ```bash
+   pnpm changeset publish
+   ```
 
-Most often for `<tag>` we will use `beta` but you can use any tag you want - e.g. `alpha`, `rc`, `next`, etc.
+   > ⚠️ Important! Use `changeset publish` instead of `pnpm publish` to respect pre-release mode.
 
-As a result, a new file will be created in the `.changeset` folder. Next thing to do is to update the version of the package you want to release. You can do that by using the `changeset version` command:
+4. Push Tags
 
-```bash
-pnpm changeset version
-```
+   ```bash
+   git push --follow-tags
+   ```
 
-Now, we need to commit the version change and the changeset file:
+   You can also manually create a GitHub release if desired.
 
-```bash
-git add .
-git commit -m "chore: release <tag>"
-```
+5. Exit Pre-Release Mode
 
-Once commited, we can publish the package:
+   ```bash
+   pnpm changeset exit pre
+   git add .
+   git commit -m "chore: exit pre-release mode"
+   ```
 
-```bash
-pnpm changeset publish
-```
-
-> IMPORTANT: Make sure to use `changeset publish` command instead of `pnpm publish` because `pnpm` does not know that we are in prerelease mode.
-
-After publishing, we can push the tag to the origin and create a new release manually.
-
-```bash
-git push --follow-tags
-```
-
-Once you are done with the pre-release, you can exit the pre-release mode:
-
-```bash
-pnpm changeset exit pre
-```
-
-This will create changes in your code so make sure to also commit them.
-
-```bash
-git add .
-git commit -m "chore: exit pre-release mode"
-```
+After this, the packages return to normal versioning.
 
 ## See it in action
 
-Changesets are already implemented in a few repositories. Check them out to see how they work:
+*Changesets* are already implemented in a few repositories. Check them out to see how they work:
 
 * [js-linters](https://github.com/infinum/js-linters)
 * [polyglot-cli](https://github.com/infinum/js-polyglot-cli)
