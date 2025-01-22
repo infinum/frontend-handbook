@@ -72,7 +72,7 @@ git commit -m "chore: add changeset for [feature or fix]"
 
 And push your branch - this changeset becomes part of the PR for reviewers to see.
 
-> Note: You don't have to add changesets in separate commits,
+> Note: You don’t have to create a dedicated commit for your changeset. Feel free to include the changeset file in the same commit as your code changes. The key point is that the changeset exists for the release automation to reference, regardless of how it’s committed.
 
 ### Day-to-day example
 
