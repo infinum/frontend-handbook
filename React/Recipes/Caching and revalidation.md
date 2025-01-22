@@ -206,10 +206,11 @@ You can control these states via the new `loading.tsx` and `error.tsx` files in 
 
 ### Caching with `fetch`
 
-Fetch data from an external API and cache it for 5 minutes, then revalidate.
+[Fetch](https://nextjs.org/docs/app/api-reference/functions/fetch) data from an external API and cache it for 5 minutes, then [revalidate](https://nextjs.org/docs/app/api-reference/functions/fetch#optionsnextrevalidate).
 
 ```jsx
 // app/(dashboard)/page.tsx
+
 type DashboardData = {
   totalUsers: number;
   onlineUsers: number;
@@ -259,6 +260,8 @@ export const dynamic = "force-dynamic";
 * `ItemsForm`, a Client Component for adding items.
 * `ItemsList`, a Server Component for displaying the items.
 
+[`force-dynamic`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic) forces a page or layout to be dynamically rendered for each user at request time
+
 **Step 2: Create a Server Action**
 
 ```jsx
@@ -273,7 +276,7 @@ export async function revalidateItems() {
 }
 ```
 
-This Server Action manually triggers revalidation of the `/items` page. It forces Next.js to refresh all data for that route, including the `ItemsList` component.
+This [Server Action](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) manually triggers revalidation of the `/items` page. It forces Next.js to refresh all data for that route, including the `ItemsList` component.
 
 **Step 3: Create the ItemsList component**
 
@@ -298,7 +301,7 @@ export async function ItemsList() {
 
 This component fetches data from the API and displays the list of items.
 
-`next.revalidate: 60` caches the response for 60 seconds. This means:
+[`next.revalidate: 60`](https://nextjs.org/docs/app/building-your-application/caching#fetch-optionsnextrevalidate) caches the response for 60 seconds. This means:
 
 * If a user refreshes the page within 60 seconds, they see the cached data.
 * After 60 seconds, the cache expires, and a new request is made.
@@ -361,12 +364,12 @@ export function ItemsForm() {
 }
 ```
 
-* This component handles state (`useState`) and asynchronous actions (`useTransition`).
+* This component handles state (`useState`) and asynchronous actions ([`useTransition`](https://react.dev/reference/react/useTransition)).
 * The checkbox (`shouldRevalidate`) determines whether the `/items` route should be revalidated after a new item is added.
 * If the checkbox is checked, `revalidateItems()` is called to refresh the `/items` route immediately.
 * `startTransition` allows React to prioritize UI updates (like clearing the input field) while handling revalidation in the background without blocking.
 
-**Step 5: Create `/api/items/` route handler**
+**Step 5: Create `/api/items/` [route handler](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)**
 
 ```jsx
 // app/api/items.ts
@@ -671,7 +674,7 @@ To prevent this, ensure middleware does not modify request attributes that contr
 
 ### Misunderstanding Cache Revalidation
 
-A common misconception in Next.js caching is that triggering cache revalidation (e.g., using `revalidatePath()` or `revalidateTag()`) immediately removes old cached data from memory or disk. Many developers assume that revalidation "clears" the previous cache, freeing up memory or storage.
+A common misconception in Next.js caching is that triggering cache revalidation (e.g., using [`revalidatePath()`](https://nextjs.org/docs/app/api-reference/functions/revalidatePath) or [`revalidateTag()`](https://nextjs.org/docs/app/api-reference/functions/revalidateTag)) immediately removes old cached data from memory or disk. Many developers assume that revalidation "clears" the previous cache, freeing up memory or storage.
 
 However, cache revalidation does not delete the old data. Instead:
 
@@ -690,11 +693,11 @@ By default, Next.js caches `fetch` calls indefinitely when used in static site g
 
 For example, if your application fetches live stock prices but caches the response at build time, users will see outdated values until you trigger a new deployment.
 
-To prevent this, set `cache: 'no-store'` on `fetch()` for truly dynamic data. If partial caching is needed, use `next: { revalidate: X }` to refresh the data periodically while still benefiting from caching.
+To prevent this, set [`cache: 'no-store'`](https://nextjs.org/docs/app/api-reference/functions/fetch#optionscache) on `fetch()` for truly dynamic data. If partial caching is needed, use `next: { revalidate: X }` to refresh the data periodically while still benefiting from caching.
 
 ### `revalidate: 0` Misconception
 
-Setting `revalidate: 0` does not enable *ISR* - it actually forces server-side rendering on every request. This means every page load triggers a fresh request to the data source, which can significantly impact performance.
+Setting [`revalidate: 0`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate) does not enable *ISR* - it actually forces server-side rendering on every request. This means every page load triggers a fresh request to the data source, which can significantly impact performance.
 
 If your intent is to cache data but always refresh immediately, consider using a very low revalidate value instead (e.g., `revalidate: 1` for near real-time updates with caching).
 
