@@ -18,54 +18,7 @@ There are 3 main reasons to add SSR to an Angular app:
 2. Social media link sharing
 3. Improving initial page load performance on all types of devices and networks
 
-## Angular Universal
+## Setup
 
-Angular Universal is a tool which allows the server to render Angular application's HTML content.
-For a detailed guide, please check out
-the [official Angular Universal documentation](https://angular.dev/guide/ssr). We also recommend reading about some
-of the [gotchas](https://github.com/angular/universal/blob/main/docs/gotchas.md).
-
-To add Angular Universal run the following CLI command:
-
-```
-ng add @nguniversal/express-engine
-```
-
-The command creates the following folder structure:
-
-```text
-src
-|-- index.html                             // <-- app web page
-|-- main.ts                                // <-- bootstrapper for client app
-|-- main.server.ts                         // <-- * bootstrapper for server app
-|-- style.css                              // <-- styles for the app
-|-- app/  …                                // <-- application code
-|   |-- app.server.module.ts               // <-- * server-side application module
-|-- server.ts                              // <-- * express web server
-|-- tsconfig.json                          // <-- TypeScript base configuration
-|-- tsconfig.app.json                      // <-- TypeScript browser application configuration
-|-- tsconfig.server.json                   // <-- * TypeScript server application configuration
-|-- tsconfig.spec.json                     // <-- TypeScript tests configuration
-```
-
-The files marked with `*` are new added files after running the command.
-
-### Package.json file configuration
-
-In the package.json file update the following scripts:
-
-```json
-{
-  "start": "ng run APP_NAME:serve-ssr",
-  "build": "ng build && ng run APP_NAME:server",
-  "serve": "node dist/APP_NAME/server/main.js"
-}
-```
-
-_APP_NAME is application name. For example `js-infinum-website`._
-
-This configuration uses SSR for development as well, not just for production. This helps catch any SSR-specific errors
-during development. A slight trade-off is that the development server build times are a bit longer.
-
-
+For a detailed guide on setting up SSR in Angular, refer to the [official Angular Server-side rendering documentation](https://angular.dev/guide/ssr). We also recommend exploring some of the [gotchas](https://github.com/angular/universal/blob/main/docs/gotchas.md).
 
