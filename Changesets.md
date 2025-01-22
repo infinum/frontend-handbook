@@ -76,39 +76,39 @@ And push your branch - this changeset becomes part of the PR for reviewers to se
 
 ### Day-to-day example
 
-1. Pull Latest
+1\. Pull Latest
 
-   ```bash
-   git pull origin master
-   ```
+```bash
+git pull origin master
+```
 
-2. Create or Switch to a Feature Branch
+2\. Create or Switch to a Feature Branch
 
-   ```bash
-   git checkout -b feat/improve-logging
-   ```
+```bash
+git checkout -b feat/improve-logging
+```
 
-3. Make Your Code Changes
+3\. Make Your Code Changes
 
-   (Fix a bug, add a feature, etc.)
+(Fix a bug, add a feature, etc.)
 
-4. Run `pnpm changeset` to create your changeset.
+4\. Run `pnpm changeset` to create your changeset.
 
-5. Commit and Push
+5\. Commit and Push
 
-   ```bash
-   git add .
-   git commit -m "feat(logging): improve error logging format"
-   git push -u origin feat/improve-logging
-   ```
+```bash
+git add .
+git commit -m "feat(logging): improve error logging format"
+git push -u origin feat/improve-logging
+```
 
-6. Open a PR
+6\. Open a PR
 
-   GitHub will show the changes, including the new `.md` in `.changeset/`.
+GitHub will show the changes, including the new `.md` in `.changeset/`.
 
-7. Review & Merge
+7\. Review & Merge
 
-   Once approved and merged, the CI pipeline will handle version bumps and publishing automatically.
+Once approved and merged, the CI pipeline will handle version bumps and publishing automatically.
 
 ### Continuous Integration Setup
 
