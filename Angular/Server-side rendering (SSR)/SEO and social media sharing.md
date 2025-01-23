@@ -102,6 +102,11 @@ export interface ISEOContent {
     providedIn: 'root',
 })
 export class SeoService {
+    private readonly titleService =  inject(Title);
+    private readonly metaService =  inject(Meta);
+    private readonly translocoService =  inject(TranslocoService);
+    private readonly environmentVariablesService =  inject(EnvironmentVariablesService<EnvironmentVariable>);
+
     public readonly defaultDescriptionTranslationKey = 'seo.description';
     public readonly siteNameTranslationKey = 'seo.siteName';
     public readonly defaultImageUrl = urlJoin(
@@ -115,14 +120,6 @@ export class SeoService {
     public readonly defaultImageType = 'image/jpeg';
     public readonly defaultType = 'website';
     public readonly defaultTwitterCard = 'summary_large_image';
-
-    constructor(
-        private readonly titleService: Title,
-        private readonly metaService: Meta,
-        private readonly translocoService: TranslocoService,
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>
-    ) {
-    }
 
     public setSEO({
                       title,
@@ -302,54 +299,42 @@ To translate the content, we use `createTranslatedSeoContent` and `TranslocoServ
 guard:
 
 ```typescript
-@Injectable({
-    providedIn: 'root',
-})
-export class SeoContentGuard implements CanActivate {
-    constructor(
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
-        private readonly seoService: SeoService
-    ) {
-    }
+export const seoContentGuardGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
+	const environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
+	const seoService = inject(SeoService);
 
-    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        const titleTranslateKey = route.data[RouteData.Title];
-        const descriptionTranslateKey = route.data[RouteData.Description];
-        const url = `${this.environmentVariablesService.get(EnvironmentVariable.APP_URL)}${state.url}`;
-        const image = route.data[RouteData.Image];
-        const imageWidth = route.data[RouteData.ImageWidth];
-        const imageHeight = route.data[RouteData.ImageHeight];
-        const imageType = route.data[RouteData.ImageType];
-        const type = route.data[RouteData.Type];
-        const twitterCard = route.data[RouteData.TwitterCard];
+	const titleTranslateKey = route.data[RouteData.Title];
+	const descriptionTranslateKey = route.data[RouteData.Description];
+	const url = `${environmentVariablesService.get(EnvironmentVariable.APP_URL)}${state.url}`;
+	const image = route.data[RouteData.Image];
+	const imageWidth = route.data[RouteData.ImageWidth];
+	const imageHeight = route.data[RouteData.ImageHeight];
+	const imageType = route.data[RouteData.ImageType];
+	const type = route.data[RouteData.Type];
+	const twitterCard = route.data[RouteData.TwitterCard];
 
-        const translatedSeoContent$ = this.seoService.createTranslatedSeoContent(
-            titleTranslateKey,
-            descriptionTranslateKey
-        );
+	const translatedSeoContent$ = seoService.createTranslatedSeoContent(titleTranslateKey, descriptionTranslateKey);
 
-        return translatedSeoContent$.pipe(
-            take(1),
-            map(({title, description, siteName}) => {
-                this.seoService.setSEO({
-                    title,
-                    description,
-                    siteName,
-                    url,
-                    image,
-                    imageWidth,
-                    imageHeight,
-                    imageType,
-                    type,
-                    twitterCard,
-                });
+	return translatedSeoContent$.pipe(
+		take(1),
+		map(({ title, description, siteName }) => {
+			seoService.setSEO({
+				title,
+				description,
+				siteName,
+				url,
+				image,
+				imageWidth,
+				imageHeight,
+				imageType,
+				type,
+				twitterCard,
+			});
 
-                return true;
-            })
-        );
-    }
-}
-
+			return true;
+		})
+	);
+};
 ```
 
 If your application is not using translations just skip `createTranslatedSeoContent` function and provide content
@@ -362,13 +347,13 @@ directly.
     providedIn: 'root',
 })
 export class CanonicalUrlService {
+    private readonly environmentVariablesService = inject(EnvironmentVariablesService<EnvironmentVariable>);
+    private readonly rendererFactory = inject(RendererFactory2);
+    private readonly document = inject(DOCUMENT);
+
     private readonly renderer: Renderer2;
 
-    constructor(
-        private readonly environmentVariablesService: EnvironmentVariablesService<EnvironmentVariable>,
-        private readonly rendererFactory: RendererFactory2,
-        @Inject(DOCUMENT) private readonly document: Document
-    ) {
+    constructor() {
         this.renderer = rendererFactory.createRenderer(null, null);
     }
 

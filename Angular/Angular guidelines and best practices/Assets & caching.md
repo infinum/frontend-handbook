@@ -28,7 +28,7 @@ Keep reading for a detailed explanation of how to define paths to assets.
 
 ### Base href
 
-Angular documentation about deploying applications contains [The base tag](https://angular.io/guide/deployment#the-base-tag) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the `<base href>`](https://angular.io/guide/router#html5-urls-and-the--base-href).
+Angular documentation about deploying applications contains [The base tag](https://angular.dev/tools/cli/deployment#--deploy-url) chapter, describing how hyperlinking works in conjunction with the base href tag. There is another chapter in the Routing subsection - [HTML5 URLs and the `<base href>`](https://angular.dev/tools/cli/deployment#--deploy-url).
 
 ### Loading assets via HTML
 
@@ -190,3 +190,17 @@ server.get('*.*', express.static(distFolder, {
 This change will actually force re-validation for `index.html`, JS and CSS chunks as well, not only the `assets/` directory.
 
 Keep in mind that if there is a proxy in front of the Node.js SSR server, it should also be configured to handle these caching headers correctly.
+
+#### Use NgOptimizedImage directive
+
+When dealing with images in Angular, consider using [NgOptimizeImage](https://angular.dev/guide/image-optimization) directive. It is available as of Angular v15 and comes with many features which increase image loading performances. Basic usage is fairly simple, to learn more, check out the official documentation.
+
+```ts
+@Component(
+  imports: [NgOptimizedImage],
+  template: '<img ngSrc="infinum-logo.jpg">',
+  ...)
+export class ExampleComponent {
+  ...
+}
+```
