@@ -9,12 +9,10 @@ Install Angular CLI globally with `pnpm install -g @angular/cli` and check out w
 Use Angular CLI for the initial project setup:
 
 ```bash
-ng new my-app --strict
+ng new my-app
 ```
 
 As of version 7, there will be a quick wizard-like setup advising you about routing and styling. Choose depending on your needs. All of our Angular projects here at Infinum use routing and SCSS styling.
-
-We recommend using the `--strict` flag when creating a new project, as it enables some additional TypeScript and Angular template checks.
 
 ## Scaffolding
 
@@ -26,57 +24,11 @@ There are also some 3rd party schematics you can use or you can even create your
 
 ## Creating new modules
 
-Use `ng g m MyModule` to create a new module. If the module should have routes, you can generate a module with a routing skeleton with `ng g m MyModule --routing`.
+Use `ng g m MyModule` to create a new module. Note that there are almost no use cases for modules anymore, and all your components should be standalone if you are using Angular version 15 or higher.
 
 ## Creating new components
 
 Create components with `ng g c MyComponent` or `ng g c my-component`. In both cases, the resulting component class name will be `MyComponent`, and the directory name will be `my-component`.
-
-Usually, you want to create a component module when creating components. This makes the component more modular and ensures that everything that the component needs is provided by the component module. The component module should declare and export the component—you can think of it as a public API. The component module could also declare some other "internal" components, but it does not have to necessarily export those internal components. It is our recommendation that component modules export only one declared component.
-
-Having a module for each component makes managing component dependencies a lot easier.
-
-Also remember that a component can be declared only once (in one module), so it makes sense for reusable components to have their own module.
-
-Example:
-
-```bash
-# create a module
-ng g m Calendar
-
-# create the component - this will also automatically declare the component in the above created module
-ng g c Calendar
-
-# make sure to export CalendarComponent in CalendarModule
-
-cd calendar
-
-# add some "internal" components which are not exported
-ng g c WeekView
-ng g c DayView
-
-# WeekView and DayView do not have to be exported, as they are used only internally
-```
-
-Complete `CalendarModule` example:
-
-```typescript
-@NgModule({
-  imports: [
-    FormsModule,
-    MatButtonModule,
-  ],
-  declarations: [
-    CalendarComponent,
-    WeekViewComponent,
-    DayViewComponent,
-  ],
-  exports: [
-    CalendarComponent,
-  ]
-})
-export class CalendarModule { }
-```
 
 ## Creating new services
 
@@ -94,11 +46,11 @@ One good example of extending the CLI's Webpack config can be seen in [Guess.js'
 
 ## DevServer proxy
 
-If you have issues with CORS, it is OK to temporarily use the Webpack DevServer proxy for development purposes. You can do this without ejecting the Webpack config, [as instructed in the official documentation guide](https://angular.io/guide/build#proxying-to-a-backend-server).
+If you have issues with CORS, it is OK to temporarily use the Webpack DevServer proxy for development purposes. You can do this without ejecting the Webpack config, [as instructed in the official documentation guide](https://angular.dev/tools/cli/serve#proxying-to-a-backend-server).
 
 ## Other commands
 
-This handbook will not cover all `ng` commands; please check out [Angular CLI Documentation](https://angular.io/cli) for more info.
+This handbook will not cover all `ng` commands; please check out [Angular CLI Documentation](https://angular.dev/tools/cli) for more info.
 
 # [Typings](https://angular.io/guide/typescript-configuration)
 
@@ -118,8 +70,8 @@ If there are no typings available, you can create your own `typings.d.ts` file a
 At Infinum, we recommend using [VSCode](https://code.visualstudio.com/) for Angular development, as it has a great integration with TypeScript and has some handy Angular plugins:
 
 * [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)—IntelliSense in templates
-* [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
-* [stylelint](https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint)
+* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+* [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
 * [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
 * [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 

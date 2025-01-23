@@ -2,7 +2,7 @@ This chapter covers setup and use DatX data store within Angular project and how
 
 ## Resources
 
-You can read up on DatX at the official [docs site](https://datx.dev/docs/getting-started/installation). Infinum also published the [working with JSON API](https://infinum.com/the-capsized-eight/working-with-JSON-API) article with examples. We also have an [example repository](https://github.com/infinum/js-angular-datx-example) that you can take a look at when in doubt about how to set up DatX in an Angular project.
+You can read up on DatX at the official [docs site](https://datx.dev/docs/getting-started/installation). Infinum also published the [working with JSON API](https://infinum.com/the-capsized-eight/working-with-JSON-API) article with examples. We also have an [example repository](https://github.com/infinum/js-angular-datx-example) that you can take a look at when in doubt about how to set up DatX in an Angular project or visit Angular specific [setup section](https://www.npmjs.com/package/@datx/jsonapi-angular#setup).
 
 ## Why use DatX
 
@@ -64,21 +64,11 @@ This topic is heavily described in the resources above, please refer to them. By
 
 ## Store setup and injection
 
-To create and provide a single instance of Collection accross entire Angular app, you can create custom DI token eg. `APP_COLLECTION`, see [InjectionToken docs](https://angular.io/api/core/InjectionToken) and then provide said token in root module, like so:
-
-```ts
-// injection-tokens.ts
-import { InjectionToken } from '@angular/core';
-import { AppCollection } from '<path-to-collection-definition>';
-
-export const APP_COLLECTION = new InjectionToken<AppCollection>(
-  'APP_COLLECTION'
-);
-```
+To create and provide a single instance of Collection across entire Angular app, you must provide `APP_COLLECTION` injection token, in root module, like so:
 
 ```ts
 // app.module.ts
-import { APP_COLLECTION } from '<path-to-token-definition>';
+import { APP_COLLECTION } from '@datx/jsonapi-angular';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppCollection } from '<path-to-collection-definition>';
@@ -101,7 +91,7 @@ import { AppCollection } from '<path-to-collection-definition>';
 export class AppModule {}
 ```
 
-Whenever you want to work with the collection from within Angular's DI container, you can simply use the token above to inject the collection instance.
+Whenever you want to work with the collection from within Angular's DI container, you can simply use the same token above to inject the collection instance.
 
 ```ts
 // example.service.ts
@@ -113,9 +103,7 @@ import { AppCollection } from '<path-to-collection-definition>';
   providedIn: 'root',
 })
 export class ExampleService {
-  constructor(
-    @Inject(APP_COLLECTION) protected readonly collection: AppCollection // app.module.ts scoped instance of AppCollection
-  ) {}
+  protected readonly collection: AppCollection = inject(APP_COLLECTION) // app.module.ts scoped instance of AppCollection
 }
 ```
 
@@ -149,109 +137,9 @@ describe('ExampleService', () => {
 });
 ```
 
-## Configuring DatX HTTP calls interception
+## Abstracting entity related logic into separate service
 
-By default, DatX uses Fetch API when invoking HTTP calls, but this means that it also bypasses **HttpClient** from `@angular/common/http` and therefore any registered interception logic or similar kind of middleware. Luckily there is a way around that, see [official documentation guide](https://datx.dev/docs/jsonapi-angular/base-fetch).
-
-## Abstracting entity related login into separate service
-
-You might want to abstract away a bit of the tediousness of working with DatX and/or bind some special logic to a given entity. Since many of the Collection's methods require an Entity type as a parameter you can create separate service that will hide this small implementation detail for you. One way to do that would be to extend an abstract class similar to this one:
-
-```ts
-// collection.service.ts
-import { Inject } from '@angular/core';
-import { IModelConstructor, IRawModel, IType } from '@datx/core';
-import { IRequestOptions } from '@datx/jsonapi';
-import { IJsonapiModel, Response } from '@datx/jsonapi-angular';
-import { Observable } from 'rxjs';
-import { map, mapTo } from 'rxjs/operators';
-import { AppCollection } from '<path-to-collection-definition>';
-import { APP_COLLECTION } from '<path-to-token-definition>';
-
-export abstract class CollectionService<TModel extends IJsonapiModel> {
-  protected abstract readonly ctor: IModelConstructor<TModel>;
-
-  constructor(
-    @Inject(APP_COLLECTION) protected readonly collection: AppCollection
-  ) {}
-
-  public create(rawModel: IRawModel | Record<string, unknown>): TModel {
-    if (
-      rawModel.id === null ||
-      rawModel.id === undefined ||
-      rawModel.id === ''
-    ) {
-      delete rawModel.id;
-    }
-
-    return this.collection.add(rawModel, this.ctor);
-  }
-
-  public createAndSave(
-    rawModel: IRawModel | Record<string, unknown>
-  ): Observable<TModel> {
-    const model = this.create(rawModel);
-    return this.save(model);
-  }
-
-  public findAll(): Array<TModel> {
-    return this.collection.findAll<TModel>(this.ctor);
-  }
-
-	// *Model(s) suffix methods unpack the Model from what would else be a Response object,
-	// this mirrors the default HttpClient behavior where you also don't get Response metadata by default, just the body.
-
-	// get all entities without any sort of filter unless explicitly specified
-  public getAllModels(options?: IRequestOptions): Observable<Array<TModel>> {
-    return this.getMany(options,
-      queryParams: {
-        ...options?.queryParams,
-        custom: options?.queryParams?.custom || [],
-      },
-    }).pipe(map(({ data }: Response<TModel>) => data));
-  }
-
-  public getMany(options?: IRequestOptions): Observable<Response<TModel>> {
-    return this.collection.getMany<TModel>(this.ctor, options);
-  }
-
-  public getManyModels(options?: IRequestOptions): Observable<Array<TModel>> {
-    return this.getMany(options).pipe(
-      map(({ data }: Response<TModel>) => data)
-    );
-  }
-
-  public getOne(
-    id: IType,
-    options?: IRequestOptions
-  ): Observable<Response<TModel>> {
-    return this.collection.getOne(this.ctor, id.toString(), options);
-  }
-
-  public findOne(id: IType): TModel | null {
-    return this.collection.findOne(this.ctor, id);
-  }
-
-  public getOneModel(
-    id: IType,
-    options?: IRequestOptions
-  ): Observable<TModel | null> {
-    return this.getOne(id, options).pipe(
-      map(({ data }: Response<TModel>) => data)
-    );
-  }
-
-  public save(model: TModel): Observable<TModel> {
-    return model.save().pipe(mapTo(model));
-  }
-
-  public removeOne(id: IType): void {
-    this.collection.removeOne(this.ctor.type, id);
-  }
-}
-```
-
-And then just extend said class:
+[@datx/jsonapi-angular](https://www.npmjs.com/package/@datx/jsonapi-angular) package exposes a `CollectionService` in order to abstract away a bit of the tediousness of working with DatX and/or bind some special logic to a given entity. Since many of the Collection's methods require an Entity type as a parameter you can create separate service that will hide this small implementation detail for you. One way to do that would be to extend `CollectionService` like so:
 
 ```ts
 // entity.service.ts
@@ -259,19 +147,13 @@ import { Inject, Injectable } from '@angular/core';
 import { AppCollection } from '<path-to-collection-definition>';
 import { APP_COLLECTION } from '<path-to-token-definition>';
 import { Entity } from '<path-to-entity-definition>';
-import { CollectionService } from '<path-to-collection-service>';
+import { CollectionService } from '@datx/jsonapi-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EntityService extends CollectionService<Project> {
   protected readonly ctor = Entity;
-
-  constructor(
-    @Inject(APP_COLLECTION) protected readonly collection: AppCollection
-  ) {
-    super(collection);
-  }
 }
 ```
 
@@ -283,98 +165,13 @@ Such service can be injected from within DI container like any other:
 	...
 })
 export class EntityListComponent {
+  private readonly entity = inject(EntityService);
+
 	public readonly entities$ = this.entity.getAllModels();
-
-	constructor(private readonly entity: EntityService) {}
 }
 ```
 
-When testing these abstractions, it advisable to create test doubles that replace any methods that would make API calls with an implementation which works with in memory collection, like in this example **CollectionTestingService**:
-
-```ts
-// collection.testing.service.ts
-import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { IModelConstructor, IRawModel, IType } from '@datx/core';
-import { Response, IJsonapiModel } from '@datx/jsonapi-angular';
-import { Observable } from 'rxjs';
-import { AppCollection } from '<path-to-app-collection>';
-import { ExtractPublic } from '<path-to-extract-public-helper>';
-import { asyncData, asyncError } from '<path-to-helpers>';
-import { CollectionService } from '<path-to-collection-service>';
-
-@Injectable()
-export abstract class CollectionTestingService<TModel extends IJsonapiModel>
-  implements ExtractPublic<CollectionService<TModel>>
-{
-  protected abstract ctor: IModelConstructor<TModel>;
-
-  constructor(protected readonly collection: AppCollection) {}
-
-  public setData(
-    data: Array<IRawModel | Record<string, unknown>>
-  ): Array<TModel> {
-    this.collection.removeAll(this.ctor);
-    return this.collection.add(data, this.ctor);
-  }
-
-  public create(rawModel: IRawModel | Record<string, unknown>): TModel {
-    return this.collection.add(rawModel, this.ctor);
-  }
-
-  public createAndSave(
-    rawModel: IRawModel | Record<string, unknown>
-  ): Observable<TModel> {
-    const model = this.create(rawModel);
-    return this.save(model);
-  }
-
-  public findAll(): Array<TModel> {
-    return this.collection.findAll(this.ctor);
-  }
-
-  public getAllModels(): Observable<Array<TModel>> {
-    return asyncData(this.collection.findAll(this.ctor));
-  }
-
-  public getMany(): Observable<Response<TModel>> {
-    const data = this.collection.findAll(this.ctor);
-    return asyncData({
-      data,
-      meta: { total_count: data.length },
-    } as Response<TModel>);
-  }
-
-  public getManyModels(): Observable<Array<TModel>> {
-    return asyncData(this.collection.findAll(this.ctor));
-  }
-
-  public getOne(id: IType): Observable<Response<TModel>> {
-    return asyncData({
-      data: this.collection.findOne(this.ctor, id),
-    } as Response<TModel>);
-  }
-
-  public getOneModel(id: IType): Observable<TModel | null> {
-    const model = this.collection.findOne(this.ctor, id);
-    return model
-      ? asyncData(model)
-      : asyncError(new HttpErrorResponse({ status: 404 }));
-  }
-
-  public findOne(id: IType): TModel | null {
-    return this.collection.findOne(this.ctor, id);
-  }
-
-  public save(model: TModel): Observable<TModel> {
-    return asyncData(model);
-  }
-
-  public removeOne(id: IType): void {
-    this.collection.removeOne(this.ctor.type, id);
-  }
-}
-```
+When testing these abstractions, it advisable to create test doubles that replace any methods that would make API calls with an implementation which works with in memory collection. For this use-case the library exposes `CollectionTestingService`
 
 Where `ExtractPublic` is covered in [Testing chapter](/books/frontend/angular/angular-guidelines-and-best-practices/testing#typing-test-doubles). The `asyncData` and `asyncError` helpers make sure, that values provided are observed on next macrotask at soonest. This makes methods that would normally perform an HTTP call more alike their non-double counterparts.
 
@@ -410,12 +207,6 @@ export class EntityTestingService
   implements ExtractPublic<EntityService>
 {
   protected ctor = Entity;
-
-  constructor(
-    @Inject(APP_COLLECTION) protected readonly collection: AppCollection
-  ) {
-    super(collection);
-  }
 }
 ```
 

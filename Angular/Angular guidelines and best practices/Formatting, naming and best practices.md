@@ -8,10 +8,6 @@ Even when using `prettier`, there can still be some cases in which `prettier` is
 
 # Best practices
 
-## Use strict mode
-
-We recommend enabling strict mode when creating a new application (or enable it for already existing applications). This enables some additional checks for TypeScript and Angular templates. You can read more about it [here](https://angular.io/guide/strict-mode).
-
 ## Use a meaningful component prefix
 
 The following examples in this chapter are using `my-app` component selector prefix. For the purposes of future-proofing and avoiding conflicts with other libs, prefix all component selectors with something unique/app-specific. Specify the prefix in `angular.json`.
@@ -22,26 +18,26 @@ In the following example, property binding is unnecessary because we are assigni
 
 ```html
 <!-- bad -->
-<my-app-component [name]="'Steve'"></my-app-component>
+<my-app-component [name]="'Steve'" />
 
 <!-- good -->
-<my-app-component name="Steve"></my-app-component>
+<my-app-component name="Steve" />
 ```
 
 ## Prefix output handlers with `on`
 
 ```html
 <!-- bad -->
-<my-app-component (somethingHappened)="somethingHappened($event)">
+<my-app-component (somethingHappened)="somethingHappened($event)" />
 
 <!-- bad -->
-<my-app-component (onSomethingHappened)="somethingHappened($event)">
+<my-app-component (onSomethingHappened)="somethingHappened($event)" />
 
 <!-- bad -->
-<my-app-component (onSomethingHappened)="onSomethingHappened($event)">
+<my-app-component (onSomethingHappened)="onSomethingHappened($event)" />
 
 <!-- good -->
-<my-app-component (somethingHappened)="onSomethingHappened($event)">
+<my-app-component (somethingHappened)="onSomethingHappened($event)" />
 ```
 
 ## Name click handlers in a short and descriptive manner
@@ -64,35 +60,100 @@ In the following example, property binding is unnecessary because we are assigni
 
 ```html
 <!-- bad -->
-<div *ngIf="user && user.loggedIn"></div>
+  @if (user && user.loggedIn) {
+    <div>Logged in</div>
+  }
 
 <!-- good -->
-<div *ngIf="user?.loggedIn"></div>
+  @if (user?.loggedIn) {
+    <div>Logged in</div>
+  }
 ```
 
 ## Use `ng-container` when possible to reduce the amount of unnecessary DOM elements
 
 ```html
 <!-- bad - span is unnecessary -->
-<span *ngIf="something"></span>
+ @if (something) {
+    <span></span>
+  }
 
 <!-- good - span was unnecessary -->
-<ng-container *ngIf="something"></ng-container>
+  @if (something) {
+    <ng-container></ng-container>
+  }
 
 <!-- good - span is necessary because of the class -->
-<span *ngIf="something" class="i-need-this-class"></span>
+  @if (something) {
+    <span class="i-need-this-class"></span>
+  }
 ```
 
-## Use `*ngIf; else`
+## Use `@if; @else`
 
 ```html
 <!-- bad - we have to type the same condition twice and check it twice -->
-<ng-container *ngIf="something"></ng-container>
-<ng-container *ngIf="!something"></ng-container>
+  @if (something) {
+    <ng-container></ng-container>
+  }
+
+  @if (!something) {
+    <ng-container></ng-container>
+  }
 
 <!-- good -->
-<ng-container *ngIf="something; else anotherThing"></ng-container>
-<ng-template #anotherThing></ng-template>
+ @if (something) {
+  <ng-container></ng-container>
+} @else {
+  <ng-container></ng-container>
+}
+```
+
+## Built-in control flow
+Prefer to use the new template built-in [control flow](https://angular.dev/guide/templates/control-flow) instead of structural directives on Angular v17 or higher. While the `*ngIf` and other directives are not deprecated and will remain as one of the core features even in the future, the new template syntax brings some developer experience improvements.
+
+- `*ngIf` is a part of the `CommonModule` which we almost always imported in our components. With the new syntax, this is no longer necessary. Components generated using the Angular CLI will no longer import this module by default.
+- `*ngIf` has a small amount of overhead, which means the new syntax is at least a bit more performant.
+- Using if/else in the template no longer requires the usage of `ng-template`
+
+```html
+<!-- directives approach -->
+<div *ngIf="condition; else otherTemplate">
+  <component-1 />
+</div>
+
+<ng-template #otherTemplate>
+  <component-2 />
+</ng-template>
+
+<!-- built-in template syntax -->
+@if (condition) {
+  <component-1 />
+} @else {
+  <component-2 />
+}
+```
+
+## Deferrable views
+[Deferrable views](https://angular.dev/guide/defer) were added in the Angular v17 along with the new built-in control flow syntax. They consist of different blocks and triggers, please refer to the official documentation for the whole list. Arguably the most important block is the `@defer` which allows us to defer loading of the component until conditions are met. With deferrable views we increase performance by reducing the initial bundle size and defer components which may never be loaded. Since the syntax is quite new, the use cases and different powerful block/trigger combinations are yet to be discovered and put to a good use, but some of the obvious usages would be:
+
+- Component which are not visible by default, for example, behind `@if`. Often there are cases where a bigger page is split into sections which are expanded on user's action. If the page has many of those, `@defer` block will yield faster load times.
+- Heavy component which are not visible in the viewport when the page loads. For example if the heavy component is the last one on the bigger page, we can utilize `viewport` trigger to load it when the component enters the viewport. Perhaps, the user won't even scroll to the end of the page, so the component won't even be loaded.
+
+While you might be tempted to wrap everything into deferrable blocks, there is absolutely no need for such actions, use it where it makes sense. Analyze your code, check for potential bottlenecks and then defer loading of the component where necessary.
+
+## Prefer self-closing syntax
+Self-closing syntax was introduced in the Angular v15.1 and is basically just a syntactic sugar, but it often does reduce template code and increases readability. While there is nothing we wrong with regular syntax, prefer to use self-closing one whenever possible. Note that this will work with all Angular components, not just your own, Angular Material components are often overlooked. It can also be beneficial to add linter rule to help enforce the syntax.
+
+
+```html
+<!-- not preferred - we have extra tags bloating the template -->
+<my-component></my-component>
+<my-other-component></my-other-component>
+
+<!-- preferred more concise and readable -->
+<my-component />
+<my-other-component />
 ```
 
 ## Use attributes for transclusion selectors
@@ -118,7 +179,7 @@ Some other component's template:
 
 ## Order/group attributes and bindings
 
-1. Structural directives (`*ngFor`, `*ngIf`, etc.)
+1. Structural directives (`*ngTemplateOutlet`, etc.)
 2. Animation triggers (`@fade`, `[@fade]`)
 3. Element reference (`#myComponent`)
 4. HTML attributes (`class`, etc.)
@@ -139,7 +200,7 @@ Some other component's template:
   foo="bar"
   *ngIf="shouldShow"
   (someEvent)="onSomeEvent($event)"
-></my-app-component>
+/>
 
 <!-- good -->
 <my-app-component
@@ -152,7 +213,7 @@ Some other component's template:
   [(ngModel)]="fooBar"
   (click)="onClick($event)"
   (someEvent)="onSomeEvent($event)"
-></my-app-component>
+/>
 ```
 
 ## `[class]` vs `[ngClass]` syntax
@@ -187,62 +248,40 @@ class UserServiceStub implements IUserService { }
 
 ## Prefer interface over type
 
-When defining data structures, prefer using interfaces over types. Use types only for those things for which interfaces cannot be used—unions of different types.
+When defining data structures, prefer using types over interfaces. Use interfaces only for things you want to extend or implement, particularly when working with classes.
 
 ```typescript
 // bad
-export type User = {
-  name: string;
-};
+  export interface IUser {
+    name: string;
+  }
 
 // good
-export interface IUser {
-  name: string;
-}
+  export type User = {
+    name: string;
+  };
 
 // good
-export type CSSPropertyValue = number | string;
+  export type CSSPropertyValue = number | string;
+
+// good
+  export class LoadingDialogTestingService implements ExtractPublic<LoadingDialogService> {
+	...
+  }
+
+// good
+  export abstract class User {
+    public id: string;
+  }
+
+  export class AdminModel extends User {
+    public permissions: Array<Permission>;
+  }
+
+  export class AuthorModel extends User {
+    public posts: Array<Post>;
+  }
 ```
-
-You might be tempted to use a type for a union of models. For example, in some CMS solutions you might have `AdminModel` and `AuthorModel`. The user can log in using either admin or author credentials.
-
-```typescript
-export class AdminModel {
-  public id: string;
-  public permissions: Array<Permission>;
-}
-
-export class AuthorModel {
-  public id: string;
-  public posts: Array<Post>;
-}
-
-export type User = AdminModel | AuthorModel;
-
-// in some component
-@Input() public user: User;
-
-// in template
-User id: {{ user.id }}
-```
-
-This might seem fine at first, but it is actually an anti-pattern. What you should actually do in a case like this is create an abstraction above `AdminModel` and `AuthorModel`:
-
-```typescript
-export abstract class User {
-  public id: string;
-}
-
-export class AdminModel extends User {
-  public permissions: Array<Permission>;
-}
-
-export class AuthorModel extends User {
-  public posts: Array<Post>;
-}
-```
-
-**TL;DR:** Prefer interfaces and abstractions over types. Use types only when you need union types.
 
 ## Ordering the class members (including getters and lifecycle hooks)
 
@@ -263,13 +302,13 @@ class MyComponent implements OnInit, OnChanges {
   @Input() public i1: string;
   @Input() public i2: string;
   @Output() public o2: EventEmitter<string> = new EventEmitter();
-  public attr1: number;
+  protected attr1: number;
   protected attr2: string;
   private attr3: Date;
 
   constructor(...) { ... }
 
-  public get computedProp(): string { ... }
+  protected get computedProp(): string { ... }
 
   private get secretComputedProp(): number { ... }
 
@@ -277,7 +316,7 @@ class MyComponent implements OnInit, OnChanges {
 
   public ngOnChanges(): void { ... }
 
-  public onSomeButtonClick(event: MouseEvent): void { ... }
+  protected onSomeButtonClick(event: MouseEvent): void { ... }
 
   private someInternalAction(): void { ... }
 }
@@ -326,9 +365,10 @@ If `ngOnChanges` contains some logic, it is often a good idea to separate that l
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder)
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -346,9 +386,10 @@ class MyComponent {
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -372,9 +413,10 @@ We can even go one step further and make things _pure_:
 @Component(...)
 class MyComponent {
   @Input() public user: UserModel;
-  public userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+
+  protected userForm: FormGroup;
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.user) {
@@ -498,7 +540,7 @@ However, there are some cases where you will have to use `ngOnInit` or `ngOnChan
 @Component(...)
 class PersonDetailsComponent {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   constructor() {
     this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
@@ -514,7 +556,7 @@ If you try this, you will get an exception because `birthDate` will be undefined
 @Component(...)
 class PersonDetailsComponent implements OnInit {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   ngOnInit() {
     this.isLegalAge = new Date().getYear() - this.birthDate.getYear() > 18;
@@ -531,7 +573,7 @@ We still have one problem with this solution. If input binding changes again (af
 @Component(...)
 class PersonDetailsComponent implements OnChanges {
   @Input() public birthDate: Date;
-  public isLegalAge: boolean;
+  protected isLegalAge: boolean;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.birthDate) {
@@ -553,7 +595,7 @@ Since this check is simple and returns a primitive value, using a getter here is
 class PersonDetailsComponent {
   @Input() public birthDate: Date;
 
-  public get isLegalAge(): boolean {
+  protected get isLegalAge(): boolean {
     return new Date().getYear() - this.birthDate.getYear() > 18;
   }
 }
@@ -591,7 +633,7 @@ The `$` suffix is here to indicate and let you know it is something you can subs
 ```typescript
 class ExampleComponent {
   private _isLoading$ = new BehaviorSubject(false); // for internal use for "state management"
-  public isLoading$ = this._isLoading$.pipe(debounceTime(250)); // for use in template
+  protected isLoading$ = this._isLoading$.pipe(debounceTime(250)); // for use in template
 
   // to be called from some methods, for example during data fetching
   private updateLoadingState(state) {
@@ -679,7 +721,7 @@ Component:
 // bad
 @Component(...)
 export class ArticlesList {
-  public articles: Array<Article>;
+  protected articles: Array<Article>;
 
   constructor(...) {
     this.articleService.fetchArticles().subscribe((articles) => { // manual subscription
@@ -691,7 +733,7 @@ export class ArticlesList {
 // good
 @Component(...)
 export class ArticlesList {
-  public readonly articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
+  protected readonly articles$: Observable<Array<Article>> = this.articleService.fetchArticles();
 
   constructor(...) { }
 }
@@ -701,16 +743,53 @@ Template:
 
 ```html
 <!-- bad -->
-<my-app-article-details
-  *ngFor="let article of articles"
-  [article]="article"
-></my-app-article-details>
+@for (article of articles; track $index) {
+  <my-app-article-details
+    [article]="article"
+  />
+}
 
 <!-- good -->
-<my-app-article-details
-  *ngFor="let article of articles$ | async"
-  [article]="article"
-></my-app-article-details>
+ @for (article of articles$ | async; track $index) {
+  <my-app-article-details
+    [article]="article"
+  />
+}
+```
+
+However if you really need to subscribe manually, be sure to unsubscribe using some of the available approaches:
+
+# unsubscribe method
+Create `subscriptions` variable in your component and store all of your manual subscriptions. Then, call `unsubscribe` on it in the `ngOnDestroy`.
+
+```ts
+private readonly subscriptions = new Subscription();
+
+constructor() {
+	this.subscriptions.add(
+		this.exampleObservable().subscribe()
+	);
+}
+
+public ngOnDestroy() {
+	this.subscriptions.unsubscribe();
+}
+
+```
+# takeUntil
+[takeUntil](https://rxjs.dev/api/operators/takeUntil) operator is another way of unsubscribing. It accepts another observable and will unsubscribe as soon as the passed observable emits. In most cases it will be used in a `subject`/`ngOnDestroy` combination. If using this approach don't forget to complete the `subject` as well, as the `takeUntil` creates a subscription which you need to handle too.
+
+```ts
+private readonly destroy$ = new Subject<void>();
+
+constructor() {
+	this.exampleObservable().pipe(takeUntil(this.destroy$)).subscribe()
+}
+
+public ngOnDestroy() {
+	this.destroy$.next();
+	this.destroy$.complete();
+}
 ```
 
 ## Avoid concatenation of translation keys
@@ -727,9 +806,11 @@ enum ApprovalStatus{
 ```
 
 ```html
-<mat-radio-button *ngFor="let approvalStatus of approvalStatusOptions">
-  {{ 'enums.approvalStatus.' + approvalStatus | translate }}
-</mat-radio-button>
+@for (approvalStatus of approvalStatusOptions; track $index) {
+  <mat-radio-button>
+    {{ 'enums.approvalStatus.' + approvalStatus | translate }}
+  </mat-radio-button>
+}
 ```
 In the example above, you also have to make sure that you create `approvalStatusOptions` structure which will be iterable and used in the `ngFor` directive.
 In cases where enum keys don't match their values, there is also the question of storing translation keys in a way that will make the most sense. Should you use enum keys in the translations file, or should you use enum values corresponding to that key?
@@ -764,18 +845,19 @@ export const approvalStatusData: Record<ApprovalStatus, ITranslatableEnum> = {
 @Component({
   selector: 'demo-component',
   template: `
-  <mat-radio-button *ngFor="let approvalStatus of approvalStatusOptions">
-    {{ approvalStatus | enumProperty: approvalStatusData | translate}}
-  </mat-radio-button>
+  @for (approvalStatus of approvalStatusOptions; track $index) {
+    <mat-radio-button>
+      {{ approvalStatus | enumProperty: approvalStatusData | translate}}
+    </mat-radio-button>
+  }
   `
 })
 class DemoComponent{
-
-  public readonly ApprovalStatus = ApprovalStatus;
-  public readonly approvalStatusData = approvalStatusData;
+  protected readonly ApprovalStatus = ApprovalStatus;
+  protected readonly approvalStatusData = approvalStatusData;
 }
 ```
-By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record. 
+By using this approach, your translation keys are all in one place, easing refactoring and keeping the translation file clean and up to date. You will also get compilation errors if a new enum is added without adding a corresponding entry with the translation key in the record.
 You can further expand on this pattern by adding additional "metadata" about the enum to the record. For example, a `sortingIndex` property that is taken into account when the enum values are rendered as dropdown options.
 
 ## Avoid unnecessary creation of multiple observables and avoid subscriptions
@@ -788,21 +870,24 @@ In this example, we have to fetch the user by ID. The ID is read from route para
 // bad
 @Component({
   template: `
-  <ng-container *ngIf="user">
-    {{ user.name }}
-  </ng-container>
+  @if (user) {
+    <ng-container>
+      {{user.name}}
+    <ng-container>
+  }
   `,
   ...
 })
 class MyComponent {
-  public user: UserModel;
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
+
+  protected user: UserModel;
   private userSubscription: Subscription;
 
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {
-    this.userSubscription = this.route.params.pipe(switchMap((params: Params) => {
+
+  constructor() {
+    this.userSubscription = this.activatedRoute.params.pipe(switchMap((params: Params) => {
       return this.usersService.fetchById(params.userId);
     })).subscribe((user) => {
       this.user = user;
@@ -821,20 +906,20 @@ This is bad because it will not work correctly with OnPush change detection and 
 // even worse
 @Component({
   template: `
-  <ng-container *ngIf="user$ | async as user">
-    {{ user.name }}
-  </ng-container>
+   @if (user$ | async; as user ) {
+    <ng-container>
+      {{user.name}}
+    <ng-container>
+  }
   `,
   ...
 })
 class MyComponent {
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
 
-  public get user$(): Observable<UserModel> {
-    return this.route.params.pipe(switchMap((params: Params) => {
+  protected get user$(): Observable<UserModel> {
+    return this.activatedRoute.params.pipe(switchMap((params: Params) => {
       return this.usersService.fetchById(params.userId);
     }));
   }
@@ -847,21 +932,21 @@ Here we no longer have to take care of unsubscribing, but the issue now is that 
 // good
 @Component({
   template: `
-  <ng-container *ngIf="user$ | async as user">
-    {{ user.name }}
-  </ng-container>
+  @if (user$ | async; as user ) {
+    <ng-container>
+      {{user.name}}
+    <ng-container>
+  }
   `,
   ...
 })
 class MyComponent {
-  public user$: Observable<UserModel> = this.route.params.pipe(switchMap((params: Params) => {
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
+
+  protected user$: Observable<UserModel> = this.route.params.pipe(switchMap((params: Params) => {
     return this.usersService.fetchById(params.userId);
   }));
-
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
 }
 ```
 
@@ -873,12 +958,10 @@ If the observable creation pipeline gets larger, you can move it to a private me
 // good
 @Component(...)
 class MyComponent {
-  public user$: Observable<UserModel> = this.createUserObservable();
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private usersService: UsersService,
-  ) {}
+  protected user$: Observable<UserModel> = this.createUserObservable();
 
   private createUserObservable(): Observable<UserModel> {
     return this.route.params.pipe(switchMap((params: Params) => {
@@ -958,7 +1041,7 @@ Here is an example where an observable is unnecessary:
 @Component(...)
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
-  public readonly factorialOfTheNumber$ = new BehaviorSubject<number>(1);
+  protected readonly factorialOfTheNumber$ = new BehaviorSubject<number>(1);
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.someNumber) {
@@ -978,7 +1061,7 @@ export class MyComponent implements OnChanges {
 @Component(...)
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
-  public readonly factorialOfTheNumber = 1;
+  protected readonly factorialOfTheNumber = 1;
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.someNumber) {
@@ -996,7 +1079,7 @@ Remember, any property assignments that are done synchronously in `ngOnChanges` 
 
 Building on the previous example with unnecessary Observables, we will go one step further and try to eliminate the `ngOnChanges` lifecycle hook altogether.
 
-To do this, we have to understand how pipes work. Pipes can have multiple input values and one output value. Input values are mapped to the output value in the transformation method. Impure pipes will execute the transformation method on each change detection cycle. This is probably not optimal nor the desired behaviour in most situations. On the other hand, pure pipes will execute the transformation method only if some of the input values change. All pipes are pure by default, and that is great! You can read more about pipes [here](https://angular.io/guide/pipes).
+To do this, we have to understand how pipes work. Pipes can have multiple input values and one output value. Input values are mapped to the output value in the transformation method. Impure pipes will execute the transformation method on each change detection cycle. This is probably not optimal nor the desired behavior in most situations. On the other hand, pure pipes will execute the transformation method only if some of the input values change. All pipes are pure by default, and that is great! You can read more about pipes [here](https://angular.dev/guide/pipes).
 
 We can not utilize the knowledge of pure pipes and update our component:
 
@@ -1025,11 +1108,11 @@ We have greatly reduced the amount of code in our component and have created a r
 You might ask a question "But what if I need to use the factorial value inside my component code?". The solution depends on how and when you need to use the value that is calculated by the pipe. If you need to access the value on some user interaction, you can pass the calculated value from the template to the action handler method. This is great because it keeps your methods pure.
 
 ```html
-<ng-container *ngIf="someNumber | factorial as someNumberFactorial">
+if(someNumber | factorial; as someNumberFactorial) {
   {{ someNumber }}! = {{ someNumberFactorial }}
 
   <button (click)="saveFactorialValue(someNumberFactorial)">Save the factorial value</button>
-</ng-container>
+}
 ```
 
 ```typescript
@@ -1037,7 +1120,7 @@ You might ask a question "But what if I need to use the factorial value inside m
 export class MyComponent implements OnChanges {
   @Input() public someNumber: number = 0;
 
-  public saveFactorialValue(someNumberFactorial): void {
+  protected saveFactorialValue(someNumberFactorial): void {
     // do something with someNumberFactorial
   }
 }
@@ -1045,8 +1128,67 @@ export class MyComponent implements OnChanges {
 
 Some notes:
 
-- We wrapped everything in one `ng-container` to avoid calling the pipe twice
-- Be careful in case that your pipe can return a valid falsy value, as in that case the `*ngIf` will not render the content; in such case you might consider using a [custom `*ngLet`](https://github.com/ngrx-utils/ngrx-utils#nglet-directive) structural directive
+- We wrapped everything in one `@if` to avoid calling the pipe twice
+- Be careful in case that your pipe can return a valid falsy value, as in that case the `@if` will not render the content; in such case you might consider using a new [`@let`](https://blog.angular.dev/introducing-let-in-angular-686f9f383f0f) template variable syntax.
+
+```html
+@let count = count$ | async;
+<p>The count is {{count}}</p>
+```
+
+## Input transforms
+
+Often, you find yourself in a position to manipulate the value you pass to a component using inputs. You would often achieve this by either manipulating the data at the source, writing a custom pipe and send manipulated data to a child component or more rarely, use getters and setters in a child component to achieve desired result. You can avoid this code bloating by using [input transformation function](https://angular.dev/guide/components/inputs#input-transforms). You can basically do whatever you like, but some of the use cases include boolean transformations, string manipulations, working with dates etc.
+
+```ts
+@Component({...})
+export class ExampleComponent {
+  @Input({transform: (value: string) => value.toUpperCase()}) label = '';
+}
+```
+
+## Consider binding route params to component inputs
+
+For a long time the go-to way for accessing route params was to inject the `activatedRoute` into our component and subscribe to the `paramMap` observable. Angular v16 introduced a way to bind the route parameters directly to the components inputs which then allows us to react to the changes same as with all other inputs. In order to to enable this feature we must pass and call [withComponentInputBinding](https://angular.dev/guide/routing/common-router-tasks#add-withcomponentinputbinding) function into the `provideRouter`. This can be useful as it removes some boilerplate from the components and we avoid having separate observable for handling param changes.
+
+```ts
+// How we use it now
+const exampleRoutes: Routes = [
+	{
+		path: ':exampleParameter',
+		loadComponent: () => import('<path-to-component>'),
+	},
+];
+
+@Component(...)
+export class MyComponent {
+  private readonly activatedRoute = inject(ActivatedRoute);
+
+  constructor() {
+		this.activatedRoute.paramMap.pipe(map((paramMap) => paramMap.get('exampleParameter'))).subscribe(...);
+	}
+}
+
+// With input binding
+// main.ts
+bootstrapApplication(AppComponent, {
+	providers: [provideRouter(rootRoutes, withComponentInputBinding())],
+});
+
+// Input decorator version
+@Component(...)
+export class MyComponent implements OnChanges {
+  @Input() exampleParameter?: string;
+  // Behaves like regular input
+}
+
+// Signal input version
+@Component(...)
+export class MyComponent implements OnChanges {
+  public exampleParameter = input<string>();
+}
+```
+
 
 ## Auto unwrap default exports when lazy loading
 
@@ -1071,9 +1213,46 @@ export default class ExampleComponent { ... }
 }
 ```
 
+## Prefer functional over class guards and interceptors
+
+Since Angular v15, class based guards and interceptors are deprecated and you should prefer functional ones if you are using v15 or higher. If you are generating a guard using CLI on those versions, functional versions will be generated. The class based versions still work, however they will probably be removed at some point so if you have some in your project, it might be wise to refactor as it requires minimal amount of work in most cases.
+
+```ts
+// Old - class based
+class UserAuthorizedGuard implements CanActivate {
+  private authService = inject(AuthService)
+
+  canActivate(): Observable<boolean> {
+    return this.authService.isLoggedIn$
+  }
+}
+
+// New - functional
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+  const authService = inject(AuthService)
+
+  return authService.isLoggedIn$
+};
+```
+
+Note that with a function-based approach, it is possible to write functions directly in, for example, the route array without the need to create new separate files. While this can be helpful in some simpler cases, we do not recommend it for several reasons, such as:
+- Reusability: If you need this logic on several different routes, you will have to write it over and over again.
+- Maintainability: In case of a change, you will need to find all instances and refactor them in multiple places instead of just one.
+- Testability: You won't be able to unit test your guard easily.
+
+```ts
+const ROUTES: Routes = [
+	{
+		path: '',
+		component: ExampleComponent,
+		canActivate: [() => inject(UserService).isLoggedIn$],
+	},
+];
+```
+
 ## Favouring canMatch guard
 
-The [canMatch](https://angular.io/api/router/CanMatch) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls when the route can be used and as a side effect, whether we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different from `canLoad`, which won't load the chunk, but once the guard returns `true`, it won't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time, but that also means that chunk will be loaded in all cases. You can read more in the following [blog post](https://netbasal.com/introducing-the-canmatch-router-guard-in-angular-84e398046c9a) or in the [Angular team's PR description](https://github.com/angular/angular/pull/48180).
+The [canMatch](https://angular.dev/api/router/CanMatchFn) is the new type of guard introduced in Angular `v14.1`. It should be the preferred guard to use over `canActivate` or `canLoad`  which is deprecated in `v15`. `canMatch` has benefits of both worlds, it controls when the route can be used and as a side effect, whether we can download the code. In reality, this means that the chunk won't be loaded if the guard returns `false` but it will also be invoked/triggered every time the user tries to navigate. This is different from `canLoad`, which won't load the chunk, but once the guard returns `true`, it won't be called again which can cause some undesirable consequences, and `canActivate` which will be called every time, but that also means that chunk will be loaded in all cases. You can read more in the following [blog post](https://netbasal.com/introducing-the-canmatch-router-guard-in-angular-84e398046c9a) or in the [Angular team's PR description](https://github.com/angular/angular/pull/48180).
 
 ## No subscriptions in guards
 
@@ -1085,41 +1264,38 @@ We would like to implement a guard which allows only authenticated users to navi
 
 ```typescript
 // bad
-class UserAuthorizedGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+  const authService = inject(AuthService)
 
-  canActivate(): Observable<boolean> {
-    const authStatus$ = new Subject();
+  const authStatus$ = new Subject();
 
-    this.authService.getUserData().subscribe((user: User) => {
-      authStatus$.next(true);
-      authStatus$.complete();
-    }, (error) => {
-      console.error('User not authorized!', error);
+  authService.getUserData().subscribe((user: User) => {
+    authStatus$.next(true);
+    authStatus$.complete();
+  }, (error) => {
+    console.error('User not authorized!', error);
 
-      authStatus$.next(false);
-      authStatus$.complete();
-    })
+    authStatus$.next(false);
+    authStatus$.complete();
+  })
 
-    return authStatus$;
-  }
-}
+  return authStatus$;
+};
 
 // good
-class UserAuthorizedGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+export const userAuthorizedGuard: CanActivateFn = (): Observable<boolean> => {
+	const authService = inject(AuthService);
 
-  canActivate(): Observable<boolean> {
-    return this.authService.getUserData().pipe(
-      catchError((error) => {
-        console.error('User not authorized!', error);
+	return authService.getUserData().pipe(
+		catchError((error) => {
+			console.error('User not authorized!', error);
 
-        return observableOf(false);
-      }),
-      map(Boolean), // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
-    )
-  }
-}
+			return observableOf(false);
+		}),
+		map(Boolean) // we could technically omit this mapping to Boolean since User model will be a truthy value anyway
+	);
+};
+
 ```
 
 ## Be mindful of how and when the data is fetched
@@ -1131,7 +1307,7 @@ There are two basic approaches to data loading:
 
 **Resolve guards**
 
-A [resolve guard](https://angular.io/guide/router#resolve-pre-fetching-component-data) can be used to pre-fetch the data necessary for component rendering. The advantages of using resolve guards are:
+A [resolve guard](https://angular.dev/api/router/ResolveFn) can be used to pre-fetch the data necessary for component rendering. The advantages of using resolve guards are:
 
 - No need to fetch data on component initialization
   - Data is fetched during the routing event and ready when the component is initialized
@@ -1156,13 +1332,13 @@ Bottom line:
 Did you ever find yourself in the `ng-container` nesting hell? It might have looked something like this:
 
 ```html
-<ng-container *ngIf="frameworkName1$ | async as frameworkName1">
-  <ng-container *ngIf="frameworkName2$ | async as frameworkName2">
-    <ng-container *ngIf="frameworkName3$ | async as frameworkName3">
+@if (frameworkName1$ | async as frameworkName1) {
+  @if (frameworkName1$ | async as frameworkName1) {
+    @if (frameworkName1$ | async as frameworkName1) {
       {{ frameworkName1 }} is way better than {{ frameworkName2 }}. I will not even talk about {{ frameworkName3 }}.
-    </ng-container>
-  </ng-container>
-</ng-container>
+    }
+  }
+}
 ```
 
 There is a simple solution to this problem, and it is called the single data observable pattern. In short, this pattern takes advantage of the reactive programming paradigm introduced with RxJS to combine multiple observable streams into one, allowing us to reduce the amount of nested subscriptions in the template. In its purest form, it allows us to have only one subscription in the template (one `async` pipe). You can also utilize this pattern to create multiple combined observables instead of having many more individual subscriptions.
@@ -1176,7 +1352,7 @@ export class MyComponent {
   private readonly frameworkName2$ = ...;
   private readonly frameworkName3$ = ...;
 
-  public readonly frameworkNames$ = combineLatest([
+  protected readonly frameworkNames$ = combineLatest([
     frameworkName1$,
     frameworkName2$,
     frameworkName3$,
@@ -1195,9 +1371,9 @@ export class MyComponent {
 ```
 
 ```html
-<ng-container *ngIf="frameworkNames$ | async as frameworkNames">
+@if (frameworkNames$ | async; as frameworkNames) {
   {{ frameworkNames.frameworkName1 }} is way better than {{ frameworkNames.frameworkName2 }}. I will not even talk about {{ frameworkNames.frameworkName3 }}.
-</ng-container>
+}
 ```
 
 We will not go into the details of this pattern in this handbook. To learn more about this pattern, please check out these videos:
@@ -1217,8 +1393,7 @@ One example of a black box component would be a tree component to which you pass
 Example how such a component would be used:
 
 ```html
-<my-app-tree-view [rootNode]="navigationRoot">
-</my-app-tree-view>
+<my-app-tree-view [rootNode]="navigationRoot" />
 ```
 
 ```typescript
@@ -1230,7 +1405,7 @@ interface ITreeNode {
 
 @Component(...)
 export class ParentComponent {
-  public navigationRoot: ITreeNode = {
+  protected navigationRoot: ITreeNode = {
     title: 'Homepage',
     link: '/',
     children: [...]
