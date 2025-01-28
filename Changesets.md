@@ -177,6 +177,90 @@ Before using the action, ensure the following checklist is complete:
 * Verify that only relevant items will be published to the registry (e.g., no `__tests__` folder) by adding [a `.npmignore` file or using a files field in the `package.json` file](https://www.npmjs.com/package/npm-packlist) and running [pnpm pack](https://pnpm.io/cli/pack) command.
 * Confirm that the `package.json` file has the `repository` field (with `directory` for monorepos).
 
+### GitHub Actions Gotchas
+
+If you actually want to deploy applications with changesets, not just publish new packages to NPM registry, there are 2 gotchas:
+
+* Workflows can’t start other workflows.
+* You can't trigger 3+ workflows on `push tags` at the same time.
+
+But those issue can be tackled:
+
+* For triggering new workflows: use a `Fine-Grained Personal Access Token`, so "a real user" is creating new workflows instead of default GitHub Actions user when using `${{ secrets.GITHUB_TOKEN }}`
+* For triggering deploy workflows for multiple apps: switch to the `release published` trigger instead of `pushed tag`
+
+Example `release published` trigger:
+
+```yml
+on:
+  release:
+    types: [published]
+```
+
+It has some drawbacks — either your own user will be creating all commits, pull requests, tags, and releases needed for deployment, or you'll need to create a dedicated user for that. Some organizations may need to pay for an additional seat, but it's usually not a big deal.
+
+**Creating Fine-grained Personal Access Token**
+
+Required repository permissions:
+
+* **Contents** - Read and Write
+* **Pull requests** - Read and Write
+* **Metadata** - Read-only (mandatory by default)
+
+> ⚠️ Warning! If possible, create a dedicated user for that, and it should have access only to this single repository. Alternatively, create this token on an organization level and limit repository access as needed.
+
+After you’ve created the Fine-grained PAT, you have to add it to your repository secrets. In the examples below, it’s named `CHANGESETS_GITHUB_PAT`.
+
+**Updated Release workflow**
+
+Example `.github/workflows/release.yml`:
+
+```yml
+name: 📢 Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: 📢 Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.CHANGESETS_GITHUB_PAT }}'
+
+      - name: 💻 Node setup
+        uses: ./.github/actions/node-setup
+
+      - name: 🧑‍💻 Configure Git User
+        run: |
+          git config --global user.name "Bot Kamil"
+          git config --global user.email "kamil@infinum.com"
+
+      - name: 🏷️ Create Release Pull Request
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset tag
+          setupGitUser: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_GITHUB_PAT }}
+          HUSKY: 0
+```
+
+* Custom `token` in `actions/checkout@v4`: Automates all Git commands (commit, tag, push, etc.) as your custom user (from PAT) instead of the default GitHub Actions user.
+* *Node setup* step: Install dependencies.
+* *Configure Git User* step: Required so that `changesets/action` can commit version changes (e.g., “Version Packages”).
+* `with.publish: pnpm changeset tag`: Use this if you have any private repositories, or if you just want to tag instead of publishing to the NPM registry.
+* `with.setupGitUser: false`: Prevents `changesets/action` from overriding your previously configured Git user.
+* `GITHUB_TOKEN`: Should use the custom Fine-grained PAT.
+* `HUSKY: 0`: Disables any Git hooks — your app should be analyzed and tested before the Release workflow runs.
+
 ### Changeset Bot
 
 You can install [Changeset Bot](https://github.com/changesets/bot) to get additional automated PR comments. Once installed, if a PR lacks a changeset, the bot will prompt you to add one. This is highly recommended for teams to maintain consistent usage.
