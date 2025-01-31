@@ -70,36 +70,85 @@ Any state updates inside the `startTransition()` callback are scheduled as trans
 
 **Quick example**
 
-If you have a complex search results component that re-renders whenever a user types into a filter box, it could cause the UI to lag. By wrapping the set state call within `startTransition()`, you allow React to treat the update as a lower-priority task. As a result, the user can continue typing without delays:
+If you have a complex search results component that re-renders whenever a user types into a filter box, it could cause the UI to lag. By wrapping the expensive logic within `startTransition()`, you allow React to treat the update as a lower-priority task. As a result, the user can continue typing without delays:
 
 ```jsx
-function SearchComponent() {
-  const [searchQuery, setSearchQuery] = useState('');
+"use client";
+
+import React, { useState, useTransition } from "react";
+
+const ALL_ITEMS = [
+  "React",
+  "React Native",
+  "Next.js",
+  "Vue.js",
+  "Angular",
+  "Svelte",
+  "SolidJS",
+  // ...imagine a very large dataset
+];
+
+function UseTransitionExamplePage() {
+  // Synchronous input state
+  const [inputValue, setInputValue] = useState("");
+
+  // Transitional “filter” state
+  const [filterQuery, setFilterQuery] = useState("");
+
+  // The filtered results to display
+  const [filteredItems, setFilteredItems] = useState(ALL_ITEMS);
+
+  // useTransition gives us isPending + startTransition
   const [isPending, startTransition] = useTransition();
 
-  function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
-    const query = e.target.value;
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = e.target.value;
+    // Always update the text input immediately
+    setInputValue(newValue);
 
-    // Mark this state update as a transition
+    // Defer the expensive filtering in a transition
     startTransition(() => {
-      setSearchQuery(query);
+      setFilterQuery(newValue);
+      // Simulate a large or expensive filter operation
+      const filtered = ALL_ITEMS.filter((item) =>
+        item.toLowerCase().includes(newValue.toLowerCase())
+      );
+      setFilteredItems(filtered);
     });
   }
 
   return (
     <div>
-      <input type="text" onChange={handleSearchInput} placeholder="Type to search..." />
-      {isPending && <span>Updating results...</span>}
-      <SearchResults query={searchQuery} />
+      <h2>Filter List with Transition</h2>
+      <input
+        value={inputValue} // Controlled input updates instantly
+        onChange={handleChange}
+        placeholder="Type to filter..."
+      />
+      {/* Show a subtle loading indicator if the transition is in progress */}
+      {isPending && <p>Filtering in background...</p>}
+      <ul>
+        {filteredItems.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      <p>
+        <strong>Filter Query:</strong> {filterQuery}
+      </p>
     </div>
   );
 }
+
+export default UseTransitionExamplePage;
 ```
 
 In this snippet:
 
 * `isPending` can be used to show a subtle loading indicator or spinner, signaling to the user that a background update (the transitional update) is still in progress.
-* `startTransition()` groups `setSearchQuery(query)` under a less urgent priority, letting React keep the text input fully responsive. This drastically improves user experience for large or expensive components.
+* `inputValue` is updated synchronously on each keystroke, so the user sees their exact typing with no lag or delay.
+* `startTransition()` groups filtering functionality under a less urgent priority, letting React keep the text input fully responsive. This drastically improves user experience for large or expensive components.
+
+In summary, the user enjoys a responsive text field while React processes the filter operation. If the dataset is large, the UI won’t freeze during the recalculation.
 
 **How Transitions Work Under the Hood**
 
