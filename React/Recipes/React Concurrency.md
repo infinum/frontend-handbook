@@ -466,7 +466,7 @@ export default function OffscreenDemo() {
 
 Server Components in Next.js fetch data on the server and return serialized component trees to the client. Under concurrency, multiple fetches and renders can occur in parallel. If multiple parallel fetches modify or depend on the same shared resource (like an in-memory store or a global variable), you might end up with inconsistent data or unexpected overwrites.
 
-Concurrency means React can trigger different parts of the component tree simultaneously (especially with *Suspense boundaries*), so iff your server logic isn't idempotent or thread-safe, parallel requests might conflict.
+Concurrency means React can trigger different parts of the component tree simultaneously (especially with *Suspense boundaries*), so if your server logic isn't idempotent or thread-safe, parallel requests might conflict.
 
 ⚠️ Example:
 
