@@ -13,6 +13,7 @@ In day-to-day coding, you mostly see concurrency through:
 * Transitions (`useTransition()`) for deferring non-urgent updates.
 * *Suspense* for data fetching or code-splitting, showing fallbacks while content loads.
 * Streaming (SSR) in frameworks like Next.js, which lets you send partial HTML to the client.
+* `useDeferredValue()` hook for deferring expensive calculations while user input remains smooth.
 
 ## Next.js concurrency
 
