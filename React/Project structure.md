@@ -975,7 +975,10 @@ src
 ├── assets                                // Folder for images, icons, or other static assets
 │   └── images
 │       └── example.png
-└── lib                                   // External dependency config (CASL, Stripe, etc.)
-    ├── casl.ts
-    └── stripe.ts
+├── lib                                   // External dependency config (CASL, Stripe, etc.)
+│   ├── auth.ts
+│   ├── casl.ts    
+│   └── stripe.ts
+└── typings                               // Types for Module Augmentation
+    ├── next-auth.d.ts
 ```
