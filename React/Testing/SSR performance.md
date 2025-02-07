@@ -69,18 +69,20 @@ In your application root directory create `k6` folder, and recreate following st
 import http from 'k6/http';
 import { check } from 'k6';
 
-// URL of your frontend app
-const TEST_URL = 'http://localhost:3000';
+// Replace with your own test URL
+const TEST_URL = 'https://infinum.com';
 
 export let options = {
   scenarios: {
-    constant_request_rate: {
-      executor: 'constant-arrival-rate', // Type of executor
-      rate: 100, // Expected user load - 100 requests per {timeUnit}
-      timeUnit: '1s', // Time unit for the rate - '1s' means {rate} request per second
-      duration: '1h', // Duration of the test
-      preAllocatedVUs: 500, // Number of VUs to pre-allocate before the test
-      maxVUs: 1000, // Maximum number of VUs to run concurrently
+    soak_test: {
+      executor: 'ramping-vus',
+      startVUs: 1,
+      stages: [
+        { target: 100, duration: '10m' }, // Ramp up to 100 users in 10 minutes
+        { target: 100, duration: '5h' }, // Stay at 100 users for 5 hours
+        { target: 1, duration: '10m' }, // Ramp down to 1 user in 10 minutes
+      ],
+      maxVUs: 100,
     },
   },
 };
