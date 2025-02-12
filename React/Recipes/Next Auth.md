@@ -291,7 +291,10 @@ export function defineAbilitiesFor(params: { role: string; userId: string }) {
 
 ```ts
 // lib/auth.ts
-import { NextAuthOptions } from "next-auth";
+import {
+  getServerSession as getNextAuthServerSession,
+  NextAuthOptions,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const MOCK_USER = {
@@ -372,6 +375,9 @@ export const authOptions: NextAuthOptions = {
   //   error: '/login?error=CredentialsSignin', // example
   // },
 };
+
+// For better reusability, encapsulate the session logic in a separate hook
+export const getServerSession = () => getNextAuthServerSession(authOptions);
 ```
 
 **Typescript [Module Augmentation](https://next-auth.js.org/getting-started/typescript#module-augmentation)**:
