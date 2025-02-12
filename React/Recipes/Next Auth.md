@@ -47,11 +47,11 @@ Install NextAuth and any necessary provider packages:
 pnpm add -E next-auth
 ```
 
-> If you’re using a specific provider (e.g., Google), ensure to install any required packages as per the [NextAuth Providers documentation](https://next-auth.js.org/providers/).
+> If you’re using a specific provider (e.g., Google), make sure to install any required packages as outlined in the [NextAuth Providers documentation](https://next-auth.js.org/providers/).
 
 ### Secret Key
 
-In order to automatically generate example `AUTH_SECRET` in your `.env.local` file you can run:
+In order to automatically generate an example `AUTH_SECRET` in your `.env.local` file, you can run:
 
 ```bash
 pnpx auth secret
@@ -64,7 +64,10 @@ pnpx auth secret
 Create configuration file at `/lib/auth.ts` - include which providers you want to use and any session settings.
 
 ```ts
-import { NextAuthOptions } from "next-auth";
+import {
+  getServerSession as getNextAuthServerSession,
+  NextAuthOptions,
+} from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 // ...import any other providers or config as needed
 
@@ -89,6 +92,9 @@ export const authOptions: NextAuthOptions = {
   },
   // ...more NextAuth configuration
 };
+
+// For better reusability, encapsulate the session logic in a separate hook
+export const getServerSession = () => getNextAuthServerSession(authOptions);
 ```
 
 ### Authentication endpoint
@@ -145,11 +151,10 @@ export default function HomePage() {
 In Server Components (or server-side logic), you can use `getServerSession` from `next-auth` to ensure data is fetched only for authenticated users.
 
 ```jsx
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
 
   if (!session) {
     // You can redirect or throw an error
@@ -219,7 +224,7 @@ async session({ session, user }) {
 **Define abilities with CASL**
 
 ```ts
-// src/lib/casl.ts
+// lib/casl.ts
 import { AbilityBuilder, Ability } from "@casl/ability";
 
 export default function defineAbilitiesFor(user) {
@@ -229,7 +234,8 @@ export default function defineAbilitiesFor(user) {
     can("manage", "all");
   } else {
     can("read", "Post");
-    cannot("delete", "Post");
+    can("delete", "Post", { authorId: user.id }); // Only allow deleting own posts
+    cannot("delete", "Post").unless({ authorId: user.id }); // Prevent deleting others' posts
     // etc.
   }
 
@@ -407,12 +413,11 @@ declare module "next-auth/jwt" {
 **Example server component**:
 
 ```jsx
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth";
 import { defineAbilitiesFor } from "@/lib/casl";
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
 
   if (!session?.user) {
     return <div>Please sign in first.</div>;
@@ -511,12 +516,11 @@ export default function LoginPage() {
 ```ts
 // app/api/protected-resource/route.ts
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth";
 import { defineAbilitiesFor } from "@/lib/casl";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
 
   if (!session?.user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
