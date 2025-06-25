@@ -27,11 +27,27 @@ Use Tailwind's `dark:` variant together with CSS custom properties:
 
 ```css
 @theme {
-  --brand-500: 22 119 255;
+  --color-sidebar-border: var(--color-slate-200);
+  --color-sidebar-background: var(--color-slate-100);
 }
 
-.dark {
-  --brand-500: 147 197 253;
+@layer theme {
+  .dark {
+    --color-sidebar-border: var(--color-slate-800);
+    --color-sidebar-background: var(--color-slate-900);
+  }
+}
+```
+
+You can also do it like this:
+
+```css
+:root {
+  --acme-canvas-color: oklch(0.967 0.003 264.542);
+}
+
+[data-theme="dark"] {
+  --acme-canvas-color: oklch(0.21 0.034 264.665);
 }
 ```
 
@@ -42,6 +58,26 @@ className = "bg-brand-500 dark:bg-brand-500/80";
 ```
 
 Switching the dark class on `<html>` node flips every token instantly without component re-renders.
+
+Check the [Colors documentation](https://tailwindcss.com/docs/colors) to learn more.
+
+### How do I handle responsive design with Tailwind?
+
+Tailwind CSS follows a mobile-first approach using breakpoint prefixes. You write base styles without a prefix and override them using responsive modifiers:
+
+```tsx
+<div class="p-2 md:p-4 lg:p-6">
+  <!-- Small screens: 0.5rem, Medium: 1rem, Large: 1.5rem padding -->
+</div>
+```
+
+You can also add hover:, focus:, and more within breakpoints:
+
+```tsx
+<button class="text-sm md:hover:text-lg">Click me</button>
+```
+
+For a deeper dive, check out Tailwind's [Responsive Design guide](https://tailwindcss.com/docs/responsive-design) - it covers customizing breakpoints, stacking multiple modifiers (like md:hover:), and other advanced patterns for building complex, fluid layouts.
 
 ### What is the `@utility` directive and when should I reach for it?
 
@@ -107,11 +143,25 @@ With `cssVarEnabled` set to true, Tailwind classes applied via `className` or `s
 
 Only when a third-party library injects an inline style or a high-specificity rule that you cannot control. Scope the override to the smallest selector possible, document the reason, and keep a TODO to remove it once the upstream lib allows custom classes.
 
+```tsx
+<!-- Third-party widget injects an inline red background we can’t control -->
+<div className="p-4 text-white !bg-blue-500">
+  The “!” prefix turns bg-blue-500 into bg-blue-500 !important,
+  overriding the inline style without raising overall specificity.
+</div>
+
+<!-- You can combine it with other modifiers too -->
+<div className="bg-gray-100 md:!bg-blue-500">
+  On small screens: gray background
+  On ≥ md screens: blue background !important
+</div>
+```
+
 ### I keep typing align-center instead of items-center. How do I memorise Tailwind's naming?
 
 Tailwind mirrors **justify-** for main-axis alignment and **items-** for cross-axis. A quick mnemonic: “Flex items cross the axis”. Also make sure to turn on IntelliSense - misspelled utilities show a red underline and the correct suggestion in the hover tooltip.
 
-If you really can't remember ANY Tailwind naming, just keep the [Tailwind Cheat Sheet](https://nerdcave.com/tailwind-cheat-sheet) opened.
+If you really can't remember ANY Tailwind naming, just keep the [Tailwind Cheat Sheet](https://nerdcave.com/tailwind-cheat-sheet) opened, or get yourself the [Raycast Addon](https://www.raycast.com/vimtor/tailwindcss).
 
 ### Why is Tailwind IntelliSense considered mandatory?
 
@@ -267,6 +317,4 @@ tailwindFunctions: ['cva', 'cn'], // Enables sorting of Tailwind classes in "cva
 ## Common Pitfalls and How to Dodge Them
 
 - **Arbitrary values explosion** - every unique `shadow-[...]` makes a rule. Centralise rare values with `@apply` inside a utility class
-- **Gradient angle confusion** - Tailwind v4 uses `bg-linear-45` not `bg-gradient-to-*`. Convert snippets from blogs or run the codemod
 - **Missing plugin utilities** - classes like `animate-in` need `tailwindcss-animate`
-- **Invalid purge paths** - keep the `content` array up to date so new `.mdx` or `.tsx` folders are scanned
