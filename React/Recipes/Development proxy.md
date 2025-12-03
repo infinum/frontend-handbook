@@ -19,7 +19,7 @@ Prerequisites:
 * Install [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware): `npm install http-proxy-middleware`
 * NextJS [API Routes](https://nextjs.org/docs/api-routes/introduction) with the [Optional catch all API route](https://nextjs.org/docs/api-routes/dynamic-api-routes#optional-catch-all-api-routes)
 * NextJS [API middleware](https://nextjs.org/docs/api-routes/api-middlewares) using [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware)
-* a way to pick the proper URL to the proxy (`PROXY_ENV` in this case)
+* a way to set the proper URL for the proxy (`NEXT_PUBLIC_BASE_URL` in this case)
 
 You can create a reusable `createProxy` in your code base, and then use it in your API routes:
 
