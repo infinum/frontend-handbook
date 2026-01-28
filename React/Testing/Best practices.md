@@ -42,14 +42,6 @@ Use [testing-library/user-event](https://github.com/testing-library/user-event) 
 pnpm install -D -E @testing-library/user-event
 ```
 
-### Testing hooks
-
-Use [react-hooks-testing-library](https://github.com/testing-library/react-hooks-testing-library) for testing hooks:
-
-```bash
-pnpm install -D -E @testing-library/react-hooks
-```
-
 ## Utils
 
 ### Mock providers and store
@@ -730,7 +722,8 @@ test("TodoComponent renders correct number of rows", async () => {
 
 ## Hooks
 
-`react-hooks-testing-library` creates a simple test harness for React hooks that handles running them within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This library aims to provide a testing experience as close as possible to how your hook is used in a real component.
+`@testing-library/react` provides `renderHook` and `act` for testing custom hooks. These utilities create a simple test harness that handles running hooks within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This approach provides a testing experience as close as possible to how your hook is used in a real component.
+
 
 ### Example hook:
 
