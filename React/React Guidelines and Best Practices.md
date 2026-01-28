@@ -52,33 +52,22 @@ const UserProfile = ({ user }) => (
 * Use composition over inheritance.
 * Avoid massive components that do “everything.”
 
-### Avoid Inline Functions and Objects (When It Matters)
+### Functions and Objects in Components
 
-Defining functions or object literals inside the component render creates new references on each render. This is **only a problem** when:
-- Passing to memoized child components (`React.memo`)
-- Used as dependencies in `useEffect`/`useMemo`/`useCallback`
+Functions and objects defined inside a component are recreated every render—whether inline in JSX or assigned to a variable first. This only matters for performance when:
 
-For simple cases like the example below, inline functions are **perfectly fine** and the standard pattern:
+* Passing to `React.memo` children
+* Used as hook dependencies (`useEffect`, `useMemo`, `useCallback`)
 
-```jsx
-// FINE - native elements don't care about reference equality
-const MyComponent = () => {
-  const handleClick = () => {
-    console.log('Clicked');
-  };
-
-  return <button onClick={handleClick}>Click me</button>;
-};
-```
+In those cases, use `useCallback`/`useMemo` for stable references:
 
 ```jsx
-// ONLY OPTIMIZE when passing to memoized children
 const MemoizedButton = React.memo(({ onClick, children }) => (
   <button onClick={onClick}>{children}</button>
 ));
 
-// Here, useCallback prevents MemoizedButton from re-rendering unnecessarily
 const MyComponent = () => {
+  // useCallback keeps the reference stable across renders
   const handleClick = useCallback(() => {
     console.log('Clicked');
   }, []);
@@ -87,7 +76,7 @@ const MyComponent = () => {
 };
 ```
 
-**Rule of thumb:** Don't optimize unless you've profiled and confirmed a performance issue. Most inline functions are fast and readable.
+Otherwise, don't optimize prematurely—new references are harmless when nothing is checking for reference equality.
 
 ### Memoize Expensive Calculations
 
