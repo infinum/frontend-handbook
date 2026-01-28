@@ -52,12 +52,16 @@ const UserProfile = ({ user }) => (
 * Use composition over inheritance.
 * Avoid massive components that do “everything.”
 
-### Avoid Inline Functions and Objects
+### Avoid Inline Functions and Objects (When It Matters)
 
-Defining functions or object literals inside the component render can trigger unnecessary re-renders because each render creates new references.
+Defining functions or object literals inside the component render creates new references on each render. This is **only a problem** when:
+- Passing to memoized child components (`React.memo`)
+- Used as dependencies in `useEffect`/`useMemo`/`useCallback`
+
+For simple cases like the example below, inline functions are **perfectly fine** and the standard pattern:
 
 ```jsx
-// BAD
+// FINE - native elements don't care about reference equality
 const MyComponent = () => {
   const handleClick = () => {
     console.log('Clicked');
@@ -68,17 +72,22 @@ const MyComponent = () => {
 ```
 
 ```jsx
-// GOOD
-const handleClick = () => {
-  console.log('Clicked');
-};
+// ONLY OPTIMIZE when passing to memoized children
+const MemoizedButton = React.memo(({ onClick, children }) => (
+  <button onClick={onClick}>{children}</button>
+));
 
-const MyComponent = () => (
-  <button onClick={handleClick}>Click me</button>
-);
+// Here, useCallback prevents MemoizedButton from re-rendering unnecessarily
+const MyComponent = () => {
+  const handleClick = useCallback(() => {
+    console.log('Clicked');
+  }, []);
+
+  return <MemoizedButton onClick={handleClick}>Click me</MemoizedButton>;
+};
 ```
 
-**However**, if you need dynamic logic or closure over component state, you may define the function inside—but do so cautiously or use useCallback to memoize.
+**Rule of thumb:** Don't optimize unless you've profiled and confirmed a performance issue. Most inline functions are fast and readable.
 
 ### Memoize Expensive Calculations
 
