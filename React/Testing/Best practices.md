@@ -688,7 +688,7 @@ For more info about testing asynchronous code read [docs](https://jestjs.io/docs
 Example:
 
 ```tsx
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 const apiEndpoint = "http://localhost:3000";
@@ -697,8 +697,8 @@ const mockTodoData = [{ title: "Todo #1", todos: [] }];
 
 const server = setupServer(
   // Describe the requests to mock.
-  rest.post(`${apiEndpoint}/api/todo-lists`, (req, res, ctx) => {
-    return res(ctx.json(mockTodoData));
+  http.post(`${apiEndpoint}/api/todo-lists`, () => {
+    return HttpResponse.json(mockTodoData);
   })
 );
 
@@ -723,7 +723,6 @@ test("TodoComponent renders correct number of rows", async () => {
 ## Hooks
 
 `@testing-library/react` provides `renderHook` and `act` for testing custom hooks. These utilities create a simple test harness that handles running hooks within the body of a function component, as well as providing various useful utility functions for updating the inputs and retrieving the outputs of your custom hook. This approach provides a testing experience as close as possible to how your hook is used in a real component.
-
 
 ### Example hook:
 

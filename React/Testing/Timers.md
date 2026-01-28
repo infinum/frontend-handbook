@@ -56,10 +56,12 @@ _Properly mocking and controlling timeouts can lead to more consistent, faster, 
 A simple example is waiting for our component to fetch an external resource from an API endpoint (_We are using **MSW** to mock the endpoint_). `waitForElementToBeRemoved` function from React Testing Library, which `awaits` for the `queryByText` to return `true`.
 
 ```jsx
+import { http, HttpResponse } from "msw";
+
 it("should show empty state", async () => {
   server.use(
-    rest.get("/api/lists", (req, res, ctx) => {
-      return res(ctx.json([]));
+    http.get("/api/lists", () => {
+      return HttpResponse.json([]);
     })
   );
 

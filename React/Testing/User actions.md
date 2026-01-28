@@ -182,12 +182,12 @@ Many times, we have complex forms that are very important to our business runnin
 First, we set up **MSW** (Mock Service Worker) to handle API requests made by the form. This will ensure we have more control over the responses, so we can test for different scenarios.
 
 ```jsx
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 const server = setupServer(
-  rest.post(testApiUrl("/api/login"), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(true));
+  http.post(testApiUrl("/api/login"), () => {
+    return HttpResponse.json(true, { status: 200 });
   })
 );
 
