@@ -66,7 +66,7 @@ Check the following chapters for specifics about Prettier, ESLint and Stylelint.
 
 ![Bikeshedding](/img/work.png)
 
-*Source: [XKCD](https://xkcd.com/1741/)*
+_Source: [XKCD](https://xkcd.com/1741/)_
 
 Many people are very passionate about the way they format their code. While we appreciate everyone's opinion, we believe it is best to leave this bikeshedding to automated tooling. It might not format the code in a way that is satisfying to everyone, but it will be consistent across projects and, more importantly, it will format the code written by different people in the same way. This also eliminates discussions around formatting.
 
@@ -171,14 +171,14 @@ Even though [TSLint](https://palantir.github.io/tslint/) is deprecated, it is st
 
 ### ESLint configuration
 
-To maintain high code quality and consistency across Angular applications, follow a strict linting strategy. This configuration combines industry standards for JavaScript, TypeScript, and Angular-specific best practices.
+To maintain high code quality and consistency across JavaScript applications, follow a strict linting strategy. This configuration combines industry standards for JavaScript, TypeScript, and Framework-specific best practices.
 
 #### Angular projects
 
 When initializing or updating a project, extend the following recommended configurations to ensure a robust baseline:
 
-| Config                        | Description                                               |
-| ----------------------------- | --------------------------------------------------------- |
+| Config                          | Description                                               |
+| ------------------------------- | --------------------------------------------------------- |
 | `angular.configs.tsRecommended` | Official Angular linting for TypeScript.                  |
 | `angular.configs.templateAll`   | Strict rules for Angular HTML templates.                  |
 | `eslint.configs.recommended`    | Core JavaScript rules.                                    |
@@ -219,10 +219,208 @@ Add these to your overrides section:
 }
 ```
 
-
 #### React projects
 
-TODO @DarkoKukovec @kamdubiel
+For React and Next.js projects, use local ESLint flat configs (`eslint.config.mjs`) instead of shared legacy plugin presets.
+
+Why:
+
+- `js-linters` (`@infinum/eslint-plugin`) is deprecated for React/Next.js use cases.
+- Maintaining one shared package across Angular, React, Next.js and different project constraints created too much maintenance overhead and upgrade friction.
+- Local config composition is easier to evolve per project and lowers breaking-change risk.
+
+Reference starter: [infinum/JS-React-Example](https://github.com/infinum/JS-React-Example).
+
+`JS-React-Example` keeps reusable ESLint configs in `packages/configs`; each use case has its own module (`base`, `react`, `nextjs`, `typescript`, etc.), and projects build their lint setup by composing those modules.
+
+##### Recommended configuration stack (React + Next.js)
+
+Use these baseline config sets in React/Next.js apps:
+
+| Config / Preset                         | Description                                                     |
+| --------------------------------------- | --------------------------------------------------------------- |
+| `pluginJs.configs.recommended`          | Core JavaScript correctness rules from `@eslint/js`.            |
+| `tseslint.configs.stylisticTypeChecked` | Type-aware TypeScript rules and stylistic consistency.          |
+| `pluginReact.configs['jsx-runtime']`    | React JSX runtime rules (no legacy `React` import requirement). |
+| `pluginReactHooks.configs.recommended`  | Hooks safety (`rules-of-hooks` and dependency checks).          |
+| `pluginNext.configs.recommended`        | Next.js framework rules.                                        |
+| `pluginNext.configs['core-web-vitals']` | Additional Next.js performance and quality rules.               |
+| `eslint-plugin-prettier/recommended`    | Prevents style-rule conflicts and integrates Prettier.          |
+
+Required dev dependencies for flat config:
+
+```bash
+pnpm add -D eslint@^9 @eslint/js typescript-eslint eslint-plugin-react eslint-plugin-react-hooks @next/eslint-plugin-next eslint-plugin-prettier eslint-config-prettier globals
+```
+
+If `eslint-plugin-react-hooks` still expects older rule APIs in your setup, wrap it with `fixupPluginRules` from `@eslint/compat` (as done in `JS-React-Example`).
+
+Minimal composition example:
+
+```js
+import baseConfig from "@infinum/configs/eslint/base";
+import typescriptConfig from "@infinum/configs/eslint/typescript";
+import reactConfig from "@infinum/configs/eslint/react";
+import nextConfig from "@infinum/configs/eslint/nextjs";
+import jestConfig from "@infinum/configs/eslint/jest";
+
+export default [
+  ...baseConfig,
+  ...typescriptConfig,
+  ...reactConfig,
+  ...nextConfig,
+  ...jestConfig,
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.eslint.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+];
+```
+
+##### Project-specific React/Next rules
+
+On top of recommended presets, keep these extra rules where applicable:
+
+```js
+{
+	files: ['**/*.{ts,tsx,js,jsx}'],
+	rules: {
+		'react/no-unknown-property': ['error', { ignore: ['css'] }],
+		'react/self-closing-comp': ['warn', { component: true, html: true }],
+		'react/prop-types': ['error', { skipUndeclared: true }],
+		'react-hooks/exhaustive-deps': ['error', { additionalHooks: '(useSafeLayoutEffect|useUpdateEffect)' }],
+	},
+}
+```
+
+##### Custom Next.js rule: no hooks in `pages/` folder
+
+If a project still uses the **Pages Router** (`pages/` or `src/pages/`), keep this custom rule.
+For pure **App Router** projects (`app/` only), this rule is usually not needed.
+
+```ts
+import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+
+const createRule = ESLintUtils.RuleCreator(() => "");
+
+export default createRule({
+  name: "no-hooks-in-pages-folder",
+  meta: {
+    type: "problem",
+    docs: { description: "Disallow React hooks in `pages` folder" },
+    schema: [],
+    messages: {
+      noHooksInPagesFolder:
+        "React hook '{{hookName}}' not allowed in {{filename}}",
+    },
+  },
+  defaultOptions: [],
+  create(context) {
+    const forbiddenFolderRegex = /((\/|^)src\/pages\/|(\/|^)pages\/)/;
+
+    const isReactHook = (node: TSESTree.CallExpression) =>
+      node.callee.type === "Identifier" && node.callee.name.startsWith("use");
+
+    return {
+      CallExpression(node) {
+        const filename = context.filename;
+        if (!forbiddenFolderRegex.test(filename)) return;
+        if (!isReactHook(node)) return;
+
+        context.report({
+          node,
+          messageId: "noHooksInPagesFolder",
+          data: {
+            hookName: (node.callee as TSESTree.Identifier).name,
+            filename,
+          },
+        });
+      },
+    };
+  },
+});
+```
+
+Register it in flat config as a local plugin:
+
+```js
+import noHooksInPagesFolder from "./src/rules/no-hooks-in-pages-folder";
+
+export default [
+  // ...other config arrays
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    plugins: {
+      local: {
+        rules: {
+          "no-hooks-in-pages-folder": noHooksInPagesFolder,
+        },
+      },
+    },
+    rules: {
+      "local/no-hooks-in-pages-folder": "error",
+    },
+  },
+];
+```
+
+##### Migration from `js-linters`
+
+If an existing project still uses legacy `extends` with `@infinum/eslint-plugin`, migrate it to flat config composition.
+
+Legacy (`.eslintrc`):
+
+```json
+{
+  "extends": [
+    "plugin:@infinum/core",
+    "plugin:@infinum/typescript",
+    "plugin:@infinum/react",
+    "plugin:@infinum/next-js",
+    "plugin:@infinum/chakra-ui"
+  ]
+}
+```
+
+Target (`eslint.config.mjs`):
+
+```js
+import baseConfig from "@infinum/configs/eslint/base";
+import typescriptConfig from "@infinum/configs/eslint/typescript";
+import reactConfig from "@infinum/configs/eslint/react";
+import nextConfig from "@infinum/configs/eslint/nextjs";
+
+export default [
+  ...baseConfig,
+  ...typescriptConfig,
+  ...reactConfig,
+  ...nextConfig,
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.eslint.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+];
+```
+
+Migration checklist:
+
+- Move from `.eslintrc*` to `eslint.config.mjs` (flat config).
+- Upgrade `eslint` to v9 before enabling flat config composition.
+- Install flat-config dependencies (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `@next/eslint-plugin-next`).
+- Replace plugin preset strings with imported config arrays.
+- Keep TypeScript parser `project` config for typed rules (`tsconfig.eslint.json`).
+- Re-add any project-specific overrides explicitly (they are no longer inherited implicitly).
+- Add local custom rules (like `no-hooks-in-pages-folder`) only where they match the routing architecture.
 
 #### Automation & License Headers
 
@@ -233,9 +431,6 @@ To ensure compliance across the team, we automate the maintenance of license hea
 - Workflow: Combine this with Husky and lint-staged to automatically check or inject headers during the pre-commit phase.
 
 Note: This automation ensures that no file is pushed to the repository without the proper legal boilerplate, reducing manual overhead during code reviews.
-
-
-
 
 ### Stylelint
 
@@ -326,7 +521,7 @@ pnpm i -D -E concurrently husky lint-staged stylelint stylelint-prettier prettie
 
 Some notes:
 
-* it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
-* `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
-* `concurrently` speeds up things by running tsc checks in parallel
-* `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
+- it is important to run `tsc` on all files because changes in staged files can affect compilation of unmodified files
+- `tsc` is run on both the application `tsconfig` files and tests `tsconfig` files
+- `concurrently` speeds up things by running tsc checks in parallel
+- `prettier --write` is run separately for `.ts` and other files in order to prevent any possible race conditions before running TSLint (via `lint:ng`) and Prettier
