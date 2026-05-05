@@ -1,22 +1,22 @@
 # directories
-Angular/** @fvoska
-Code\ Quality/** @fvoska
+Angular/** @thabalija
+Code\ Quality/** @kamdubiel
 Design/** @DarkoKukovec
 Node/** @DarkoKukovec
 React/** @kamdubiel
 React\ Native/** @veksi
-SASS\ Styleguide/** @fvoska
+SASS\ Styleguide/** @kamdubiel
 
 # individual files
-Useful\ links.md @DarkoKukovec @fvoska
+Useful\ links.md @DarkoKukovec @kamdubiel
 Accessibility.md @kamdubiel
 Assets.md @kamdubiel
 Email\ Templates.md @DarkoKukovec
-How\ to\ CSS.md @DarkoKukovec @safo6m @darrac @fvoska
+How\ to\ CSS.md @DarkoKukovec @safo6m @darrac @kamdubiel
 Predeployment\ checklist.md @DarkoKukovec
-README.md @DarkoKukovec @safo6m @darrac @fvoska
-Styleguide.md @DarkoKukovec @safo6m @darrac @fvoska
+README.md @DarkoKukovec @safo6m @darrac @kamdubiel
+Styleguide.md @DarkoKukovec @safo6m @darrac @kamdubiel
 Vue.md @DarkoKukovec
-intro.slim @DarkoKukovec @safo6m @darrac @fvoska
+intro.slim @DarkoKukovec @safo6m @darrac @kamdubiel
 Auth.md @DarkoKukovec @kamdubiel
 Testing.md @mislavmiocevic @kamdubiel
